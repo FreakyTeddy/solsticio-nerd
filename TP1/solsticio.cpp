@@ -5,11 +5,11 @@
 #include "GL/glut.h"
 #include <stdlib.h>
 
-#include "lineas.h"
+#include "Primitivas Graficas/Linea/linea.h"
 
 
-#define ANCHO	400
-#define ALTO	300
+#define ANCHO	800
+#define ALTO	600
 
 char caption[]="Solsticio Nerd";
 
@@ -28,19 +28,22 @@ void init(void)
 
 void display(void)
 {
+
+	Linea linea;
 	///
 	glClear(GL_COLOR_BUFFER_BIT);
    	glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
+  glBegin(GL_POINTS);
+		glColor3f(0,1.0,1.0);
+		linea.lineaBresenham(10,10,300,200);
+	
+		glColor3f(255.0,0,6.0);		
+		linea.lineaDDA(500, 5, 6, 750);
 
-
-    glBegin(GL_POINTS);
-	glColor3f(0,1.0,1.0);
 	glEnd();
-
-	lineaBresenham(10,10,300,200);
-
+	
 	///
   	glutSwapBuffers();
 	///
