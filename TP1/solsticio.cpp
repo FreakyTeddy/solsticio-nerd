@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 #include "Primitivas Graficas/Linea/linea.h"
+#include "Primitivas Graficas/Poligono.h"
 
 
 #define ANCHO	800
@@ -28,19 +29,24 @@ void init(void)
 
 void display(void)
 {
-
-	Linea linea;
+	Poligono p;  //TODO esta para testear :P
+	p.agregarVertice(10,10);
+	p.agregarVertice(200,100);
+	p.agregarVertice(150,300);
+	//Linea linea;
 	///
 	glClear(GL_COLOR_BUFFER_BIT);
    	glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-  glBegin(GL_POINTS);
-		glColor3f(0,1.0,1.0);
-		linea.lineaBresenham(10,10,300,200);
-	
-		glColor3f(255.0,0,6.0);		
-		linea.lineaDDA(500, 5, 6, 750);
+    glBegin(GL_POINTS);
+//		glColor3f(0,1.0,1.0);
+//		linea.lineaBresenham(10,10,300,200);
+//
+		glColor3f(255.0,0,6.0);
+//		linea.lineaDDA(500, 5, 6, 750);
+
+    p.dibujar();
 
 	glEnd();
 	
