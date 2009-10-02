@@ -46,8 +46,8 @@ inline void Numero::crearUno() {
 	agregarVertice(60,10);
 	agregarVertice(60,100);
 	agregarVertice(40,100);
-	agregarVertice(0,50);
-	agregarVertice(10,40);
+	agregarVertice(20,70);
+	agregarVertice(20,50);
 	agregarVertice(40,80);
 	agregarVertice(40,10);
 	agregarVertice(20,10);
@@ -70,8 +70,22 @@ inline void Numero::crearCinco()
 {
 }
 
-inline void Numero::crearCuatro()
-{
+inline void Numero::crearCuatro() {
+	agregarVertice(10,50);
+	agregarVertice(10,40);
+	agregarVertice(50,40);
+	agregarVertice(50,0);
+	agregarVertice(70,0);
+	agregarVertice(70,40);
+	agregarVertice(90,40);
+	agregarVertice(90,50);
+	agregarVertice(10,50);
+	agregarVertice(50,100);
+	agregarVertice(70,100);
+	agregarVertice(70,50);
+	agregarVertice(50,50);
+	agregarVertice(50,80);
+	agregarVertice(30,50);
 }
 
 inline void Numero::crearSiete()

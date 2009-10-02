@@ -37,7 +37,7 @@ void display(void)
 //	p.agregarVertice(200,100);
 //	p.agregarVertice(150,300);
 //	p.agregarVertice(600,100);
-	Numero n(UNO);
+	Numero n(CUATRO);
 
 	//Linea linea;
 	///
