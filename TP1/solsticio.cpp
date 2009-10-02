@@ -9,6 +9,7 @@
 
 #include "Primitivas Graficas/Linea/linea.h"
 #include "Primitivas Graficas/Poligono.h"
+#include "Primitivas Graficas/Numero.h"
 
 
 #define ANCHO	800
@@ -31,11 +32,13 @@ void init(void)
 
 void display(void)
 {
-	Poligono p;  //TODO esta para testear :P
-	p.agregarVertice(10,10);
-	p.agregarVertice(200,100);
-	p.agregarVertice(150,300);
-	p.agregarVertice(600,100);
+//	Poligono p;  //TODO esta para testear :P
+//	p.agregarVertice(10,10);
+//	p.agregarVertice(200,100);
+//	p.agregarVertice(150,300);
+//	p.agregarVertice(600,100);
+	Numero n(UNO);
+
 	//Linea linea;
 	///
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -49,7 +52,8 @@ void display(void)
 		glColor3f(255.0,0,6.0);
 //		linea.lineaDDA(500, 5, 6, 750);
 
-    p.dibujar();
+    //p.dibujar();
+		n.dibujar();
 
 	glEnd();
 	
