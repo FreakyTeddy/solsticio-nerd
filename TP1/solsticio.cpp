@@ -5,6 +5,8 @@
 #include "GL/glut.h"
 #include <stdlib.h>
 
+#include <iostream> //TODO sacar
+
 #include "Primitivas Graficas/Linea/linea.h"
 #include "Primitivas Graficas/Poligono.h"
 
@@ -33,6 +35,7 @@ void display(void)
 	p.agregarVertice(10,10);
 	p.agregarVertice(200,100);
 	p.agregarVertice(150,300);
+	p.agregarVertice(600,100);
 	//Linea linea;
 	///
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -63,14 +66,42 @@ void display(void)
 void keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
-	{
+	{		//toma solo las minusculas
+	case 0x2B:
+		std::cout<<".....+......"<<std::endl;
+		break;
+	case 0x2D:
+		std::cout<<".....-......"<<std::endl;
+		break;
+	case 0x62:
+		std::cout<<".....b......"<<std::endl;
+		break;
+	case 0x64:
+		std::cout<<"......d......"<<std::endl;
+		break;
 	case 0x1b:
 		exit (1);
 		break;
 	}
 }
 
+void specialKeys(int key,int x, int y) {
 
+	switch(key) {
+	case GLUT_KEY_LEFT:
+		std::cout<<"........izquierda........"<<std::endl;
+		break;
+	case GLUT_KEY_RIGHT:
+		std::cout<<"..........derecha.........."<<std::endl;
+		break;
+	case GLUT_KEY_UP:
+		std::cout<<".........arriba........"<<std::endl;
+		break;
+	case GLUT_KEY_DOWN:
+		std::cout<<"......abajo........"<<std::endl;
+		break;
+	}
+}
 
 int main(int argc, char** argv)
 {
@@ -81,6 +112,7 @@ int main(int argc, char** argv)
    glutCreateWindow (caption);
    init ();
    glutKeyboardFunc(keyboard);
+   glutSpecialFunc(specialKeys);
    glutDisplayFunc(display);
    glutReshapeFunc(reshape);
    glutMainLoop();
