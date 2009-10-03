@@ -2,11 +2,10 @@
 
 void Relleno::insertEdge(Edge* list, Edge* edge) {
 	
-	Edge* p,* q= list;
+	Edge *p, *q= list;
 	p= q->next;
 	
-	while(p != NULL) {
-		
+	while(p) {
 		if(edge->xIntersect < p->xIntersect)
 			p= NULL;
 		else {
@@ -14,19 +13,21 @@ void Relleno::insertEdge(Edge* list, Edge* edge) {
 			p= p->next;
 		}	
 	}
+	edge->next= q->next;
+	q->next= edge;
 }
 
 int Relleno::yNext(int k, int cnt, dcPt* pts) {
 	
 	int j;
 	
-	if(k+1 > cnt-1)
+	if((k+1) > (cnt-1))
 		j= 0;
 	else
 		j= k+1;
 	
 	while(pts[k].y == pts[j].y) {
-		if(j+1 > cnt-1)
+		if((j+1) > (cnt-1))
 			j= 0;
 		else
 			j++;
@@ -39,7 +40,7 @@ void Relleno::makeEdgeRec(dcPt lower, dcPt upper, int yComp, Edge* edge, Edge* e
 	edge->dxPerScan= (float) (upper.x - lower.x) / (upper.y - lower.y);
 	edge->xIntersect= lower.x;
 	
-	if(upper.y > yComp)
+	if(upper.y < yComp)
 		edge->yUpper= upper.y - 1;
 	else
 		edge->yUpper= upper.y;
@@ -61,16 +62,14 @@ void Relleno::buildEdgeList(int cnt, dcPt* pts, Edge* edges[]) {
 		if(v1.y != v2.y) { //No lineas horizontales
 			edge= new Edge();
 			
-			if(v1.y < v2.y)
+			if(v1.y < v2.y)  //Creciente
 				makeEdgeRec(v1, v2, yNext(i, cnt, pts), edge, edges);
-			else
+			else	//Decreciente
 				makeEdgeRec(v1, v2, yPrev, edge, edges);
 		}
-		
 		yPrev= v1.y;
 		v1= v2;
 	}
-	
 }
 
 void Relleno::buildActiveList(int scan, Edge* active, Edge* edges[]) {
@@ -88,13 +87,18 @@ void Relleno::buildActiveList(int scan, Edge* active, Edge* edges[]) {
 void Relleno::fillScan(int scan, Edge* active) {
 
 	Edge *p1, *p2;
-	p1= p1->next;
+	p1= active->next;
 	
 	while(p1) {
 		p2= p1->next;
+
+		std::cout << "p1->xIntersect: " << p1->xIntersect << std::endl;
+		std::cout << "p2->xIntersect: " << p2->xIntersect << std::endl;
 		
-		for(int i= p1->xIntersect; i<p2->xIntersect; i++)
+		for(int i= p1->xIntersect; i<p2->xIntersect; i++) {
+			std::cout << "Pinto: i,scan" << std::endl;
 			glVertex2i((int) i, scan);
+		}
 		p1= p2->next;
 	}
 	
@@ -138,7 +142,7 @@ void Relleno::resortActiveList(Edge* active) {
 
 void Relleno::scanLine(int cnt, dcPt* pts) {
 	
-	Edge* edges[WINDOW_HEIGHT], *active;
+	Edge *edges[WINDOW_HEIGHT], *active;
 	
 	for(int i=0; i < WINDOW_HEIGHT; i++) {
 		edges[i]= new Edge();
@@ -146,17 +150,28 @@ void Relleno::scanLine(int cnt, dcPt* pts) {
 	} 
 	
 	buildEdgeList(cnt, pts, edges);
+	
+	std::cout << "Paso buildEdgeList" << std::endl;
+	
 	active= new Edge();
 	active->next= NULL;
 	
 	for(int scan= 0; scan < WINDOW_HEIGHT; scan++) {
 		
 		buildActiveList(scan, active, edges);
+		std::cout << "Paso buildActiveList" << std::endl;
+
 		if(active->next) {
+
+			std::cout << "Tengo next" << std::endl;
+
 			fillScan(scan, active);
 			updateActiveList(scan, active);
 			resortActiveList(active);
 		}
+		
+		std::cout << "Scan:" << scan << std::endl;
+		std::cout << "WINDOW_HEIGHT:" << WINDOW_HEIGHT << std::endl;
 	}
 	
 	//TODO: liberar

@@ -4,20 +4,20 @@
 #include <iostream>
 #include "GL/glut.h"
 
-#define WINDOW_HEIGHT 100
+#define WINDOW_HEIGHT 600
 
 struct dcPt {
 	int x;
 	int y;
 };
 
-
 class Relleno {
 	
 	private:
 		struct Edge {
 			int yUpper;
-			float xIntersect, dxPerScan;
+			float xIntersect; 
+			float dxPerScan;
 			struct Edge* next;
 		};	
 
