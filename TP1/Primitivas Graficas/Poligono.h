@@ -2,15 +2,11 @@
 #define POLIGONO_H_
 
 #include "Linea/linea.h"
+#include "Vertice.h"
 #include <list>
 
 class Poligono {
 private:
-	struct Vertice {
-		int x;
-		int y;
-	};
-
 	bool relleno; //indica si el poligono es relleno o solo contorno
 	bool esDDA;
 	std::list<Vertice> vertices; //vertices del poligono TODO ver si sirve esta implementacion :P

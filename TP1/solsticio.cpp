@@ -136,20 +136,20 @@ void specialKeys(int key,int x, int y) {
 		break;
 	}
 }
-
-int main(int argc, char** argv)
-{
-   glutInit(&argc, argv);
-   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-   glutInitWindowSize (ANCHO, ALTO);
-   glutInitWindowPosition (100, 100);
-   glutCreateWindow (caption);
-   init ();
-   glutKeyboardFunc(keyboard);
-   glutSpecialFunc(specialKeys);
-   glutDisplayFunc(display);
-   glutReshapeFunc(reshape);
-   glutMainLoop();
-
-   return 0;
-}
+//
+//int main(int argc, char** argv)
+//{
+//   glutInit(&argc, argv);
+//   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
+//   glutInitWindowSize (ANCHO, ALTO);
+//   glutInitWindowPosition (100, 100);
+//   glutCreateWindow (caption);
+//   init ();
+//   glutKeyboardFunc(keyboard);
+//   glutSpecialFunc(specialKeys);
+//   glutDisplayFunc(display);
+//   glutReshapeFunc(reshape);
+//   glutMainLoop();
+//
+//   return 0;
+//}

@@ -47,6 +47,7 @@ void ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vright,
 		t = q[i] / p[i];
 		std::cout << "paso: "<<i<<" t=" << t << std::endl;
 		if((t >= 0) && (t <= 1)){
+			std::cout<<"p: "<<p[i]<<std::endl;
 			if(p[i] < 0){
 				if(t > t0) t0 = t;
 			}else{
