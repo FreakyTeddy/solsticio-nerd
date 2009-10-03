@@ -1,10 +1,5 @@
 #include "linea.h"
-
-void Linea::swap(int &n1, int &n2) {
-	int aux = n1;
-	n1 = n2;
-	n2 = aux;
-}
+#include "../../Funciones.h"
 
 void Linea::lineaBresenham(int x0, int y0, int x1, int y1)
 {
@@ -17,8 +12,8 @@ void Linea::lineaBresenham(int x0, int y0, int x1, int y1)
 	}
 
 	if (x0>x1) {
-		swap(x0,y0);
-		swap(x1,y1);
+		Funciones::swap(&x0,&y0);
+		Funciones::swap(&x1,&y1);
 	}
 	int dx = x1-x0;
 	int dy = y1-y0;

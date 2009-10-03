@@ -37,7 +37,7 @@ void display(void)
 //	p.agregarVertice(200,100);
 //	p.agregarVertice(150,300);
 //	p.agregarVertice(600,100);
-	Numero n(CUATRO);
+	Numero n(3);
 
 	//Linea linea;
 	///
@@ -71,6 +71,36 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{		//toma solo las minusculas
+	case 0x30:
+		std::cout<<" 0 "<<std::endl;
+		break;
+	case 0x31:
+		std::cout<<" 1 "<<std::endl;
+		break;
+	case 0x32:
+		std::cout<<" 2 "<<std::endl;
+		break;
+	case 0x33:
+		std::cout<<" 3 "<<std::endl;
+		break;
+	case 0x34:
+		std::cout<<" 4 "<<std::endl;
+		break;
+	case 0x35:
+		std::cout<<" 5 "<<std::endl;
+		break;
+	case 0x36:
+		std::cout<<" 6 "<<std::endl;
+		break;
+	case 0x37:
+		std::cout<<" 7 "<<std::endl;
+		break;
+	case 0x38:
+		std::cout<<" 8 "<<std::endl;
+		break;
+	case 0x39:
+		std::cout<<" 9 "<<std::endl;
+		break;
 	case 0x2B:
 		std::cout<<".....+......"<<std::endl;
 		break;

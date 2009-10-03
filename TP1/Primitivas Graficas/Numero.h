@@ -33,6 +33,7 @@ private:
 public:
 
 	/* se crea un numero con la forma especificada por num */
+	/* los numeros tienen una escala de 100x100 */
 	Numero(int num);
 
 	~Numero();
