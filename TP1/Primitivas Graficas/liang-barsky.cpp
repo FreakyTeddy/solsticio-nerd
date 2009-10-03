@@ -15,19 +15,7 @@ void ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vright,
 {
 	float dx = x1 - x0;
 	float dy = y1 - y0;
-	float aux = 0;
-	if(x0 > x1){
-		  dx = x0 - x1;
-		  aux = x1;
-		  x1 = x0;
-		  x0 = aux;
-	}
-	if(y0 > y1) {
-		 dy = y0 - y1;
-		 aux = y1;
-		 y1 = y0;
-		 y0 = aux;
-	}
+
 	if(!dx || !dy) return;
 	float p[4];
 	float q[4];
@@ -47,7 +35,6 @@ void ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vright,
 		t = q[i] / p[i];
 		std::cout << "paso: "<<i<<" t=" << t << std::endl;
 		if((t >= 0) && (t <= 1)){
-			std::cout<<"p: "<<p[i]<<std::endl;
 			if(p[i] < 0){
 				if(t > t0) t0 = t;
 			}else{
@@ -65,10 +52,12 @@ void ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vright,
 	std::cout << "Puntos antes de calcular: x0=" << x0 << " y0= " << y0 << " x1= " << x1 << " y1= " << y1 << std::endl;
 	std::cout << "parametros: t0= " << t0 << " t1= " << t1 << std::endl;
 	std::cout << "deltas: dx= " << dx << " dy= " << dy << std::endl;
+	y1 = y0 + (t1 * dy);
+	x1 = x0 + (t1 * dx);
 	x0 = x0 + (t0 * dx);
 	y0 = y0 + (t0 * dy);
-	x1 = x0 + (t1 * dx);
-	y1 = y0 + (t1 * dy);
+
+
 	std::cout << "Puntos despues de calcular: x0=" << x0 << " y0= " << y0 << " x1= " << x1 << " y1= " << y1 << std::endl;
 	
 }

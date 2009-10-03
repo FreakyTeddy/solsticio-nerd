@@ -4,10 +4,10 @@
 
 int main (int argc, char** argv){
 	ClippingPoligonos clipper;
-	float x0 = 0.0;
-	float y0 = 10.0;
-	float x1 = 75.0;
-	float y1 = 35.0;
+	float x0 = 3.0;
+	float y0 = 32.0;
+	float x1 = 72.0;
+	float y1 = 21.0;
 	int Vtop = 40;
 	int Vbottom = 5;
 	int Vleft = 5;
