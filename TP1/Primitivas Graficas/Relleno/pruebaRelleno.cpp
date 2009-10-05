@@ -39,54 +39,50 @@ void display(void)
   Linea linea;
   Relleno relleno;
 	
-	dcPt* ptos[4];
+	dcPt* ptos[3];
 	
-	for(int i=0; i<4; i++)
+	for(int i=0; i<3; i++)
 		ptos[i]= new dcPt();
 	
 	ptos[0]->x= 300;
-	ptos[0]->y= 20;
+	ptos[0]->y= 40;
 
-	ptos[1]->x= 300;
+	ptos[1]->x= 500;
 	ptos[1]->y= 500;	
 
-	ptos[2]->x= 500;
-	ptos[2]->y= 20;  
+	ptos[2]->x= 100;
+	ptos[2]->y= 500;  
 
-	ptos[3]->x= 500;
-	ptos[3]->y= 500;  
-
-   
 	glBegin(GL_POINTS);
 	
-	
-	//Dibujo rectangulo
-	//linea.lineaDDA(300, 20, 500, 20);
-	//linea.lineaDDA(300, 20, 300, 500);
-	//linea.lineaDDA(300, 500, 500, 500);
-	//linea.lineaDDA(500, 20, 500, 500);
+	glColor3f(0,0,1.0);
+	//Dibujo triangulo
+	linea.lineaDDA(300, 40, 500, 500);
+	linea.lineaDDA(300, 40, 100, 500);
+	linea.lineaDDA(100, 500, 500, 500);
 
 	//Pinto rectangulo
-	//relleno.scanLine(4, ptos[0]);
+	glColor3f(1.0,0,0);
+	relleno.scanLine(3, ptos[0]);
 	
-	/*PRUEBA Bresenham*/
-	//PENDIENTES POSITIVAS
-	glColor3f(0,1.0,1.0);
-	//Pendiente 0,74
-	linea.lineaBresenham(400,300,5,5);
-	//Pendiente 1
-	linea.lineaBresenham(5,5,400,400);
-	//Pendiente 1,65
-	linea.lineaBresenham(100,5,400,500);
-
-	//PENDIENTES NEGATIVAS
-	glColor3f(0.0,0.0,1.0);
-	//Pendiente -0,84
-	linea.lineaBresenham(400,5,50,300);
-	//Pendiente -1
-	linea.lineaBresenham(4,500,500,4);
-	//Pendiente -1,32
-	linea.lineaBresenham(400,5,100,400);
+//	/*PRUEBA Bresenham*/
+//	//PENDIENTES POSITIVAS
+//	glColor3f(0,1.0,1.0);
+//	//Pendiente 0,74
+//	linea.lineaBresenham(400,300,5,5);
+//	//Pendiente 1
+//	linea.lineaBresenham(5,5,400,400);
+//	//Pendiente 1,65
+//	linea.lineaBresenham(100,5,400,500);
+//
+//	//PENDIENTES NEGATIVAS
+//	glColor3f(0.0,0.0,1.0);
+//	//Pendiente -0,84
+//	linea.lineaBresenham(400,5,50,300);
+//	//Pendiente -1
+//	linea.lineaBresenham(4,500,500,4);
+//	//Pendiente -1,32
+//	linea.lineaBresenham(400,5,100,400);
 	
 	glEnd();
 	

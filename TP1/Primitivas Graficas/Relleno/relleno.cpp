@@ -65,7 +65,7 @@ void Relleno::buildEdgeList(int cnt, dcPt* pts, Edge* edges[]) {
 			if(v1.y < v2.y)  //Creciente
 				makeEdgeRec(v1, v2, yNext(i, cnt, pts), edge, edges);
 			else	//Decreciente
-				makeEdgeRec(v1, v2, yPrev, edge, edges);
+				makeEdgeRec(v2, v1, yPrev, edge, edges);
 		}
 		yPrev= v1.y;
 		v1= v2;
@@ -91,10 +91,11 @@ void Relleno::fillScan(int scan, Edge* active) {
 	
 	while(p1) {
 		p2= p1->next;
-
-		for(int i= p1->xIntersect; i<p2->xIntersect; i++)
-			glVertex2i((int) i, scan);
-
+		
+		if(p2) {
+			for(int i= p1->xIntersect; i<p2->xIntersect; i++)
+				glVertex2i(i, scan);
+		}
 		p1= p2->next;
 	}
 	
