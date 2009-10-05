@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include "../../Funciones.h"
 
+#include <iostream>
+
 class Linea {
 
 	public:

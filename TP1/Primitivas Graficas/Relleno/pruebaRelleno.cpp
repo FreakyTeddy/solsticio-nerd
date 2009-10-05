@@ -55,15 +55,25 @@ void display(void)
 
 	glBegin(GL_POINTS);
 	
-	glColor3f(0,0,1.0);
 	//Dibujo triangulo
-	linea.lineaDDA(300, 40, 500, 500);
+	glColor3f(0,1.0,0);
+	
+	glVertex2i(300, 40);
+	glVertex2i(100, 500);
+	glVertex2i(500, 500);	
+
 	linea.lineaDDA(300, 40, 100, 500);
+//	linea.lineaBresenham(300, 40, 100, 500);
+
+	linea.lineaDDA(300, 40, 500, 500);
+//	linea.lineaBresenham(300, 40, 500, 500);
+	
 	linea.lineaDDA(100, 500, 500, 500);
+//	linea.lineaBresenham(100, 500, 500, 500);
 
 	//Pinto rectangulo
 	glColor3f(1.0,0,0);
-	relleno.scanLine(3, ptos[0]);
+	//relleno.scanLine(3, ptos[0]);
 	
 //	/*PRUEBA Bresenham*/
 //	//PENDIENTES POSITIVAS

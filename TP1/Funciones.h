@@ -6,7 +6,7 @@ public:
 	Funciones(){};
 	~Funciones(){};
 
-	static void swap(void*,void*);
+	static void swap(int* a,int* b);
 };
 
 #endif /* FUNCIONES_H_ */

@@ -7,8 +7,8 @@
 
 #include "Funciones.h"
 
-void Funciones::swap(void* a, void* b) {
-	void* aux = a;
-	a = b;
-	b = aux;
+void Funciones::swap(int* a, int* b) {
+	int aux= *a;
+	*a= *b;
+	*b= aux;
 }
