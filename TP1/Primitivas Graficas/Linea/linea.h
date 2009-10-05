@@ -2,7 +2,9 @@
 #define LINEA_H_
 
 #include "GL/glut.h"
-#include "math.h"
+#include <math.h>
+#include <stdlib.h>
+#include "../../Funciones.h"
 
 class Linea {
 

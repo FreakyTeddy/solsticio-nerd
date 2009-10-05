@@ -92,13 +92,9 @@ void Relleno::fillScan(int scan, Edge* active) {
 	while(p1) {
 		p2= p1->next;
 
-		std::cout << "p1->xIntersect: " << p1->xIntersect << std::endl;
-		std::cout << "p2->xIntersect: " << p2->xIntersect << std::endl;
-		
-		for(int i= p1->xIntersect; i<p2->xIntersect; i++) {
-			std::cout << "Pinto: i,scan" << std::endl;
+		for(int i= p1->xIntersect; i<p2->xIntersect; i++)
 			glVertex2i((int) i, scan);
-		}
+
 		p1= p2->next;
 	}
 	
@@ -150,28 +146,19 @@ void Relleno::scanLine(int cnt, dcPt* pts) {
 	} 
 	
 	buildEdgeList(cnt, pts, edges);
-	
-	std::cout << "Paso buildEdgeList" << std::endl;
-	
+		
 	active= new Edge();
 	active->next= NULL;
 	
 	for(int scan= 0; scan < WINDOW_HEIGHT; scan++) {
 		
 		buildActiveList(scan, active, edges);
-		std::cout << "Paso buildActiveList" << std::endl;
 
 		if(active->next) {
-
-			std::cout << "Tengo next" << std::endl;
-
 			fillScan(scan, active);
 			updateActiveList(scan, active);
 			resortActiveList(active);
 		}
-		
-		std::cout << "Scan:" << scan << std::endl;
-		std::cout << "WINDOW_HEIGHT:" << WINDOW_HEIGHT << std::endl;
 	}
 	
 	//TODO: liberar
