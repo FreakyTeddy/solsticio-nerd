@@ -73,11 +73,18 @@ void Poligono::dibujar() {
 		Transform2D t(800, 600, 100, 100, origen);
 		Vertice vert; 
 		Vertice vertNext; 
+//		MatrizTrans2D matTrans;
+//		//Escalo
+//		Vertice fixedPt;
+//		fixedPt.x= 0;
+//		fixedPt.y= 0;
+//		matTrans.scale2D(0.1, 0.1, fixedPt);
+//		t.setMatTrans(&matTrans);	
+
 
 		if (esDDA) {
 			//lineaDDA			
 			while (next != end) {
-				
 				vert= t.transformVerts2D(*it);
 				vertNext= t.transformVerts2D(*next);
 				
