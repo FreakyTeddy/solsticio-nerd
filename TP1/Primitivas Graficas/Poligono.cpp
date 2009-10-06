@@ -4,10 +4,12 @@
 
 Poligono::Poligono() {
 	relleno = false;
+	contorno = true;
 	esDDA = true;
 }
 Poligono::Poligono(bool relleno) {
 	this->relleno = relleno;
+	this->contorno = false;
 	this->esDDA = true;
 }
 
@@ -17,6 +19,10 @@ Poligono::~Poligono() {
 
 void Poligono::setRelleno(bool relleno) {
 	this->relleno = relleno;
+}
+
+void Poligono::setContorno(bool contorno) {
+	this->contorno = contorno;
 }
 
 void Poligono::setBresenham() {
@@ -35,7 +41,7 @@ void Poligono::agregarVertice(int x, int y) {
 }
 
 void Poligono::dibujar() {
-	//TODO implementar!
+
 	if (relleno) {
 		//algoritmo de relleno de poligonos
 	     dcPt* ptos;
@@ -49,7 +55,8 @@ void Poligono::dibujar() {
 	     Relleno relleno;
 	     relleno.scanLine(vertices.size(), ptos);
 	}
-	else {
+
+	if(contorno) {
 		Linea linea;
 		std::list<Vertice>::iterator it = vertices.begin();
 		std::list<Vertice>::iterator next = vertices.begin();
@@ -81,5 +88,3 @@ void Poligono::dibujar() {
 		}
 	}
 }
-
-

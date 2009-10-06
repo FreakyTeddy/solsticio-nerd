@@ -8,11 +8,12 @@
 #include "relleno.h"
 #include "../Linea/linea.h"
 #include "../Numero.h"
+#include "../Boton.h"
 
 #define ANCHO	800
 #define ALTO	600
 
-char caption[]="PRUEBAS VERO";
+char caption[]="PRUEBAS NAdaremos en el mar";
 
 
 void reshape(int w, int h)
@@ -39,7 +40,7 @@ void display(void)
   /*Variables*/
   Linea linea;
   Relleno relleno;
-	
+  Boton b;
 	//dcPt* ptos[3];
 	dcPt* ptos;
 	
@@ -80,7 +81,8 @@ void display(void)
 	ptos[9].y= 0;
   
 
-	Numero n(9);
+	Numero n(3);
+	//b.setNumero(&n);
 	glBegin(GL_POINTS);
 	
 	//Dibujo triangulo
@@ -103,10 +105,13 @@ void display(void)
 	
 	relleno.scanLine(10, ptos);
 
-	glColor3f(1.0,1.0,0);
-	n.setRelleno(1);
-	n.dibujar();
+	glColor3f(0.95,0.95,0.95);
+	//n.setRelleno(1);
+	//n.dibujar();
 	
+	//boton
+	b.dibujar();
+
 //	/*PRUEBA Bresenham*/
 //	//PENDIENTES POSITIVAS
 //	glColor3f(0,1.0,1.0);
