@@ -157,8 +157,7 @@ inline void Numero::crearSeis() {
 	agregarVertice(50,40);
 	agregarVertice(40,30);
 	agregarVertice(50,20);
-
-
+	//TODO no me gustaaaaaaaaaaaa
 }
 
 inline void Numero::crearSiete() {
@@ -172,11 +171,89 @@ inline void Numero::crearSiete() {
 }
 
 inline void Numero::crearOcho() {
+	agregarVertice(30,100);
+	agregarVertice(10,80);
+	agregarVertice(10,60);
+	agregarVertice(20,50);
+	agregarVertice(10,40);
+	agregarVertice(10,20);
+	agregarVertice(30,0);
+	agregarVertice(70,0);
+	agregarVertice(90,20);
+	agregarVertice(90,40);
+	agregarVertice(80,50);
+	agregarVertice(90,60);
+	agregarVertice(90,80);
+	agregarVertice(70,100);
+	agregarVertice(30,100);
+	//agujeros
+	agregarVertice(30,70);
+	agregarVertice(40,80);
+	agregarVertice(60,80);
+	agregarVertice(70,70);
+	agregarVertice(60,60);
+	agregarVertice(40,60);
+	agregarVertice(30,70);
+	agregarVertice(30,30);
+	agregarVertice(40,40);
+	agregarVertice(60,40);
+	agregarVertice(70,30);
+	agregarVertice(60,20);
+	agregarVertice(40,20);
+	agregarVertice(30,30);
 }
 
 inline void Numero::crearNueve() {
+
+	agregarVertice(30,100);
+	agregarVertice(10,80);
+	agregarVertice(10,60);
+	agregarVertice(30,40);
+	agregarVertice(50,40);
+	agregarVertice(70,50);
+	agregarVertice(70,30);
+	agregarVertice(60,20);
+	agregarVertice(20,20);
+	agregarVertice(20,0);
+	agregarVertice(70,0);
+	agregarVertice(90,20);
+	agregarVertice(90,80);
+	agregarVertice(70,100);
+
+	agregarVertice(30,100);
+	agregarVertice(40,80);
+	agregarVertice(50,80);
+	agregarVertice(60,70);
+	agregarVertice(50,60);
+	agregarVertice(40,60);
+	agregarVertice(30,70);
+	agregarVertice(40,80);
 }
 
 
 inline void Numero::crearCero() {
+
+	agregarVertice(30,100);
+	agregarVertice(20,90);
+	agregarVertice(10,70);
+	agregarVertice(10,30);
+	agregarVertice(20,10);
+	agregarVertice(30,0);
+	agregarVertice(70,0);
+	agregarVertice(80,10);
+	agregarVertice(90,30);
+	agregarVertice(90,70);
+	agregarVertice(80,90);
+	agregarVertice(70,100);
+	agregarVertice(30,100);
+	agregarVertice(40,80);
+	agregarVertice(30,70);
+	agregarVertice(30,30);
+	agregarVertice(40,20);
+	agregarVertice(60,20);
+	agregarVertice(70,30);
+	agregarVertice(70,70);
+	agregarVertice(60,80);
+	agregarVertice(40,80);
+
 }

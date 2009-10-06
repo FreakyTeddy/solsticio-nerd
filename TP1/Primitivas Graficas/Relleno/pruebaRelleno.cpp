@@ -80,7 +80,7 @@ void display(void)
 	ptos[9].y= 0;
   
 
-	Numero n(6);
+	Numero n(9);
 	glBegin(GL_POINTS);
 	
 	//Dibujo triangulo
