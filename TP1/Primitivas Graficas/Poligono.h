@@ -3,6 +3,7 @@
 
 #include "Linea/linea.h"
 #include "Vertice.h"
+#include "Transformacion2D/transformacion2D.h"
 #include <list>
 
 class Poligono {

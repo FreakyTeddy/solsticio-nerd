@@ -67,7 +67,10 @@ void Relleno::buildEdgeList(int cnt, dcPt* pts, Edge* edges[]) {
 			else	//Decreciente
 				makeEdgeRec(v2, v1, yPrev, edge, edges);
 		} else {
-			std::cout << "JAJAJAJA" << std::endl;
+			
+
+			
+			
 		}
 		yPrev= v1.y;
 		v1= v2;
@@ -91,7 +94,6 @@ void Relleno::fillScan(int scan, Edge* active) {
 	Edge *p1, *p2;
 	p1= active->next;
 	
-
 	while(p1 && p1->next) {
 		p2= p1->next;
 	     

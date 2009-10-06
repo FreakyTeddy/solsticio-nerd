@@ -81,36 +81,32 @@ void display(void)
 	ptos[9].y= 0;
   
 
-	Numero n(3);
+	Numero n(5);
 	//b.setNumero(&n);
 	glBegin(GL_POINTS);
 	
 	//Dibujo triangulo
 	glColor3f(0,1.0,0);
 	
-	glVertex2i(300, 40);
-	glVertex2i(100, 500);
-	glVertex2i(500, 500);	
-
-//	linea.lineaDDA(300, 40, 100, 500);
-	linea.lineaBresenham(300, 40, 100, 500);
-//	linea.lineaDDA(300, 40, 500, 500);
-	linea.lineaBresenham(300, 40, 500, 500);
-	
-//	linea.lineaDDA(100, 500, 500, 500);
-	linea.lineaBresenham(100, 500, 500, 500);
+////	linea.lineaDDA(300, 40, 100, 500);
+//	linea.lineaBresenham(300, 40, 100, 500);
+////	linea.lineaDDA(300, 40, 500, 500);
+//	linea.lineaBresenham(300, 40, 500, 500);
+//	
+////	linea.lineaDDA(100, 500, 500, 500);
+//	linea.lineaBresenham(100, 500, 500, 500);
 
 	//Pinto rectangulo
 	glColor3f(1.0,0,0);
 	
-	relleno.scanLine(10, ptos);
+//	relleno.scanLine(10, ptos);
 
 	glColor3f(0.95,0.95,0.95);
 	//n.setRelleno(1);
-	//n.dibujar();
+	n.dibujar();
 	
 	//boton
-	b.dibujar();
+	//b.dibujar();
 
 //	/*PRUEBA Bresenham*/
 //	//PENDIENTES POSITIVAS

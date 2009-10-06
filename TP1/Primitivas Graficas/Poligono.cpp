@@ -65,26 +65,45 @@ void Poligono::dibujar() {
 
 		if (it == end)
 			return;
+		
+		Vertice origen;
+		origen.x= 0;
+		origen.y= 0;
+		
+		Transform2D t(800, 600, 100, 100, origen);
+		Vertice vert; 
+		Vertice vertNext; 
 
 		if (esDDA) {
-			//lineaDDA
+			//lineaDDA			
 			while (next != end) {
-				linea.lineaDDA((*it).x, (*it).y, (*next).x, (*next).y);
+				
+				vert= t.transformVerts2D(*it);
+				vertNext= t.transformVerts2D(*next);
+				
+				linea.lineaDDA(vert.x, vert.y, vertNext.x, vertNext.y);
 				it++;
 				next++;
 			}
-			next = vertices.begin(); //uno el ultimo con el primero
-			linea.lineaDDA((*it).x, (*it).y, (*next).x, (*next).y);
+			//next = vertices.begin(); //uno el ultimo con el primero
+			vert= t.transformVerts2D(*vertices.begin());
+			
+			linea.lineaDDA(vert.x, vert.y, vertNext.x, vertNext.y);
 		}
 		else {
 			//linea Bresenham
 			while (next != end) {
-				linea.lineaBresenham((*it).x, (*it).y, (*next).x, (*next).y);
+				vert= t.transformVerts2D(*it);
+				vertNext= t.transformVerts2D(*next);
+				
+				linea.lineaBresenham(vert.x, vert.y, vertNext.x, vertNext.y);
 				it++;
 				next++;
 			}
-			next = vertices.begin(); //uno el ultimo con el primero
-			linea.lineaBresenham((*it).x, (*it).y, (*next).x, (*next).y);
+//			next = vertices.begin(); //uno el ultimo con el primero
+			vert= t.transformVerts2D(*vertices.begin());
+
+			linea.lineaBresenham(vert.x, vert.y, vertNext.x, vertNext.y);
 		}
 	}
 }
