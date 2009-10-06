@@ -76,28 +76,6 @@ inline void Numero::crearDos() {
 
 inline void Numero::crearTres() {
 
-//	agregarVertice(20,100);
-//	agregarVertice(20,90);
-//	agregarVertice(50,90);
-//	agregarVertice(60,80);
-//	agregarVertice(60,70);
-//	agregarVertice(50,60);
-//	agregarVertice(30,60);
-//	agregarVertice(30,50);
-//	agregarVertice(50,50);
-//	agregarVertice(60,40);
-//	agregarVertice(60,20);
-//	agregarVertice(20,20);
-//	agregarVertice(20,0);
-//	agregarVertice(60,0);
-//	agregarVertice(80,20);
-//	agregarVertice(80,40);
-//	agregarVertice(60,60);
-//	agregarVertice(70,70);
-//	agregarVertice(70,90);
-//	agregarVertice(60,100);
-//quedo horrible!! XD
-
 	agregarVertice(20,100);
 	agregarVertice(20,80);
 	agregarVertice(60,80);
@@ -157,6 +135,30 @@ inline void Numero::crearCinco() {
 }
 
 inline void Numero::crearSeis() {
+	agregarVertice(20,0);
+	agregarVertice(80,0);
+	agregarVertice(90,20);
+	agregarVertice(90,40);
+	agregarVertice(80,60);
+	agregarVertice(40,60);
+	agregarVertice(30,40);
+	agregarVertice(30,60);
+	agregarVertice(40,80);
+	agregarVertice(80,80);
+	agregarVertice(80,100);
+	agregarVertice(30,100);
+	agregarVertice(10,70);
+	agregarVertice(10,20);
+	agregarVertice(20,0);
+	agregarVertice(50,20);
+	agregarVertice(60,20);
+	agregarVertice(70,30);
+	agregarVertice(60,40);
+	agregarVertice(50,40);
+	agregarVertice(40,30);
+	agregarVertice(50,20);
+
+
 }
 
 inline void Numero::crearSiete() {

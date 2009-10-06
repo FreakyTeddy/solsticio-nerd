@@ -3,7 +3,6 @@
 #include <iostream> //TODO sacar!
 
 Poligono::Poligono() {
-	std::cout<<"Poligono"<<std::endl;
 	relleno = false;
 	esDDA = true;
 }
@@ -36,7 +35,6 @@ void Poligono::agregarVertice(int x, int y) {
 }
 
 void Poligono::dibujar() {
-	std::cout<<"dibujar"<<std::endl;
 	//TODO implementar!
 	if (relleno) {
 		//algoritmo de relleno de poligonos
@@ -64,19 +62,22 @@ void Poligono::dibujar() {
 		if (esDDA) {
 			//lineaDDA
 			while (next != end) {
-				std::cout<<(*it).x<<"-"<< (*it).y<<"-"<< (*next).x<<"-"<< (*next).y<<std::endl;
 				linea.lineaDDA((*it).x, (*it).y, (*next).x, (*next).y);
 				it++;
 				next++;
 			}
 			next = vertices.begin(); //uno el ultimo con el primero
-			std::cout<<(*it).x<<"-"<< (*it).y<<"-"<< (*next).x<<"-"<< (*next).y<<std::endl;
 			linea.lineaDDA((*it).x, (*it).y, (*next).x, (*next).y);
-			std::cout<<"---------------------------"<<std::endl<<std::endl;
-			std::cout.flush();
 		}
 		else {
 			//linea Bresenham
+			while (next != end) {
+				linea.lineaBresenham((*it).x, (*it).y, (*next).x, (*next).y);
+				it++;
+				next++;
+			}
+			next = vertices.begin(); //uno el ultimo con el primero
+			linea.lineaBresenham((*it).x, (*it).y, (*next).x, (*next).y);
 		}
 	}
 }
