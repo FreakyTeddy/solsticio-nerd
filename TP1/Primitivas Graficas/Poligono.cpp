@@ -42,15 +42,30 @@ void Poligono::agregarVertice(int x, int y) {
 
 void Poligono::dibujar() {
 
+		Vertice origen;
+		origen.x= 0;
+		origen.y= 0;
+		
+		Transform2D t(800, 600, 100, 100, origen);
+		Vertice vert; 
+		Vertice vertNext; 
+		MatrizTrans2D matTrans;
+		//Escalo
+		Vertice fixedPt;
+		fixedPt.x= 0;
+		fixedPt.y= 0;
+		matTrans.scale2D(0.1, 0.1, fixedPt);
+		t.setMatTrans(&matTrans);	
+
 	if (relleno) {
 		//algoritmo de relleno de poligonos
 	     dcPt* ptos;
 	     ptos = new dcPt[vertices.size()];
 	     std::list<Vertice>::iterator it = vertices.begin();
 	     for(int i=0;it!=vertices.end();it++,i++){
-		  ptos[i].x = (*it).x;
-		  ptos[i].y = (*it).y;
-
+		  		vert= t.transformVerts2D(*it);
+		  		ptos[i].x = vert.x;
+		  		ptos[i].y = vert.y;
 	     }
 	     Relleno relleno;
 	     relleno.scanLine(vertices.size(), ptos);
@@ -66,22 +81,6 @@ void Poligono::dibujar() {
 		if (it == end)
 			return;
 		
-		Vertice origen;
-		origen.x= 0;
-		origen.y= 0;
-		
-		Transform2D t(800, 600, 100, 100, origen);
-		Vertice vert; 
-		Vertice vertNext; 
-//		MatrizTrans2D matTrans;
-//		//Escalo
-//		Vertice fixedPt;
-//		fixedPt.x= 0;
-//		fixedPt.y= 0;
-//		matTrans.scale2D(0.1, 0.1, fixedPt);
-//		t.setMatTrans(&matTrans);	
-
-
 		if (esDDA) {
 			//lineaDDA			
 			while (next != end) {
