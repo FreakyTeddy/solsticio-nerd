@@ -66,6 +66,8 @@ void Relleno::buildEdgeList(int cnt, dcPt* pts, Edge* edges[]) {
 				makeEdgeRec(v1, v2, yNext(i, cnt, pts), edge, edges);
 			else	//Decreciente
 				makeEdgeRec(v2, v1, yPrev, edge, edges);
+		} else {
+			std::cout << "JAJAJAJA" << std::endl;
 		}
 		yPrev= v1.y;
 		v1= v2;
@@ -89,16 +91,15 @@ void Relleno::fillScan(int scan, Edge* active) {
 	Edge *p1, *p2;
 	p1= active->next;
 	
-	while(p1) {
+
+	while(p1 && p1->next) {
 		p2= p1->next;
-		
-		if(p2) {
-			for(int i= p1->xIntersect; i<p2->xIntersect; i++)
-				glVertex2i(i, scan);
-		}
-		p1= p2->next;
+	     
+	  for(int i= p1->xIntersect; i<p2->xIntersect; i++)
+			glVertex2i(i, scan);
+	     
+	   p1= p2->next;
 	}
-	
 }
 
 void Relleno::deleteAfter(Edge* q) {
@@ -106,7 +107,7 @@ void Relleno::deleteAfter(Edge* q) {
 	Edge* p= q->next;
 	q->next= p->next;
 	
-	delete p;
+//	delete p;
 }
 
 void Relleno::updateActiveList(int scan, Edge* active) {

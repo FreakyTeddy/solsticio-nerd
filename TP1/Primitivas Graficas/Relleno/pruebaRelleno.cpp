@@ -7,6 +7,7 @@
 
 #include "relleno.h"
 #include "../Linea/linea.h"
+#include "../Numero.h"
 
 #define ANCHO	800
 #define ALTO	600
@@ -39,20 +40,47 @@ void display(void)
   Linea linea;
   Relleno relleno;
 	
-	dcPt* ptos[3];
+	//dcPt* ptos[3];
+	dcPt* ptos;
 	
-	for(int i=0; i<3; i++)
-		ptos[i]= new dcPt();
+	//for(int i=0; i<3; i++)
+	//	ptos[i]= new dcPt();
+		
+	// OJO, los puntos tienen que estar contiguos en memoria!!!!!
+	ptos = new dcPt[10];
 	
-	ptos[0]->x= 300;
-	ptos[0]->y= 40;
+	ptos[0].x= 50;
+	ptos[0].y= 50;
 
-	ptos[1]->x= 500;
-	ptos[1]->y= 500;	
+	ptos[1].x= 350;
+	ptos[1].y= 50;	
 
-	ptos[2]->x= 100;
-	ptos[2]->y= 500;  
+	ptos[2].x= 350;
+	ptos[2].y= 350;  
 
+	ptos[3].x= 300;
+	ptos[3].y= 350;  
+
+	ptos[4].x= 300;
+	ptos[4].y= 100;  
+
+ 	ptos[5].x= 100;
+	ptos[5].y= 100;  
+
+ 	ptos[6].x= 100;
+	ptos[6].y= 150;  
+
+ 	ptos[7].x= 400;
+	ptos[7].y= 0;  
+
+ 	ptos[8].x= 100;
+	ptos[8].y= 350;
+  
+ 	ptos[9].x= 150;
+	ptos[9].y= 0;
+  
+
+	Numero n(7);
 	glBegin(GL_POINTS);
 	
 	//Dibujo triangulo
@@ -64,7 +92,6 @@ void display(void)
 
 //	linea.lineaDDA(300, 40, 100, 500);
 	linea.lineaBresenham(300, 40, 100, 500);
-
 //	linea.lineaDDA(300, 40, 500, 500);
 	linea.lineaBresenham(300, 40, 500, 500);
 	
@@ -73,7 +100,12 @@ void display(void)
 
 	//Pinto rectangulo
 	glColor3f(1.0,0,0);
-	//relleno.scanLine(3, ptos[0]);
+	
+	relleno.scanLine(10, ptos);
+
+	glColor3f(1.0,1.0,0);
+	n.setRelleno(1);
+	n.dibujar();
 	
 //	/*PRUEBA Bresenham*/
 //	//PENDIENTES POSITIVAS
@@ -96,10 +128,10 @@ void display(void)
 	
 	glEnd();
 	
-  
 	///
   	glutSwapBuffers();
 	///
+	delete[] ptos;
 }
 
 

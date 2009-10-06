@@ -1,4 +1,5 @@
 #include "Poligono.h"
+#include "Relleno/relleno.h"
 #include <iostream> //TODO sacar!
 
 Poligono::Poligono() {
@@ -39,6 +40,16 @@ void Poligono::dibujar() {
 	//TODO implementar!
 	if (relleno) {
 		//algoritmo de relleno de poligonos
+	     dcPt* ptos;
+	     ptos = new dcPt[vertices.size()];
+	     std::list<Vertice>::iterator it = vertices.begin();
+	     for(int i=0;it!=vertices.end();it++,i++){
+		  ptos[i].x = (*it).x;
+		  ptos[i].y = (*it).y;
+
+	     }
+	     Relleno relleno;
+	     relleno.scanLine(vertices.size(), ptos);
 	}
 	else {
 		Linea linea;
