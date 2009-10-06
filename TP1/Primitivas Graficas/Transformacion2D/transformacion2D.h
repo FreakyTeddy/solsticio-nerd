@@ -8,10 +8,35 @@ class Transform2D {
 	
 	private:
 		MatrizTrans2D* matTrans;
+		MatrizTrans2D matView;
+		MatrizTrans2D matComposite;
+		
+		/* Carga la matriz de vista.
+		 */
+		void loadMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown);
 	
 	public:
-		Transform2D();
+		/* Construye una transformacion 2D
+		 * 
+		 * @param Wp El ancho de la pantalla
+		 * @param Hp El alto de la pantalla
+		 * @param Wm El ancho del mundo 2D
+		 * @param Hm El alto del mundo 2D
+		 * @param leftDown El vertice inferior izquiero del mundo 2D.
+		 * */
+		Transform2D(int Wp, int Hp, int Wm, int Hm, Vertice leftDown);
+		
+		/* Modifica la matriz de transformacion	
+		 * */
 		void setMatTrans(MatrizTrans2D* matTrans);
+
+		/* Modifica la matriz de vista	
+		 * */
+		void setMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown);
+		
+		/* Con las matrices de vista y transformacion calcula la transformacion
+		 * desde el mundo real a la pantalla
+		 * */
 		Vertice transformVerts2D(Vertice vert);
 };
 

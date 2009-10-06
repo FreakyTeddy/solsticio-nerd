@@ -8,14 +8,12 @@ class Matriz {
 	private:
 		float** matriz;
 		int dim;
-	
-	protected:
-		void preMultiply(Matriz &mat);
 					
 	public:
 		Matriz(int dim);
 		~Matriz();
 		void loadIdentity();
+		void preMultiply(Matriz &mat);
 		float** getMatriz();
 };
 
