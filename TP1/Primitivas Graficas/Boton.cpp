@@ -90,6 +90,6 @@ void Boton::cargarVertices() {
 
 }
 
-void Boton::esDDA(bool dda) {
+void Boton::setDDA(bool dda) {
 	this->esDDA = dda;
 }

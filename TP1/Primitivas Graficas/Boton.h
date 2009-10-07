@@ -30,8 +30,8 @@ public:
 	/* Numero del boton */
 	void setNumero(Numero *num);
 
-	/* indica si dibujar el numero con DDA o Bresenham */
-	void esDDA(bool dda);
+	/* indica si dibujar el numero con DDA(true) o Bresenham(false) */
+	void setDDA(bool dda);
 };
 
 #endif /* BOTON_H_ */

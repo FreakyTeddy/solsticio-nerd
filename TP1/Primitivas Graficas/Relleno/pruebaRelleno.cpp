@@ -105,7 +105,7 @@ void display(void)
 	//n.dibujarConRelleno();
 	
 	//boton
-	b.esDDA(false);
+	b.setDDA(false);
 	b.dibujar();
 
 //	/*PRUEBA Bresenham*/
