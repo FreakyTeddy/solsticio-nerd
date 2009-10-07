@@ -26,11 +26,17 @@ void Boton::dibujar() {
 	//matrices!!!!!
 
 	//luz arriba
-	glColor3f(0.99,0.99,0.99);
+	if (apretado)
+		glColor3f(0.55,0.55,0.55);
+	else
+		glColor3f(0.99,0.99,0.99);
 	sombra[0].dibujarConRelleno();
 
 	//luz derecha
-	glColor3f(0.95,0.95,0.95);
+	if (apretado)
+		glColor3f(0.66,0.66,0.66);
+	else
+		glColor3f(0.95,0.95,0.95);
 	sombra[1].dibujarConRelleno();
 
 	//sombra abajo
@@ -41,11 +47,17 @@ void Boton::dibujar() {
 	glColor3f(0.7,0.7,0.7);
 	sombra[3].dibujarConRelleno();
 
-	glColor3f(0.90,0.90,0.90);
+	if (apretado)
+		glColor3f(0.50,0.50,0.50);
+	else
+		glColor3f(0.90,0.90,0.90);
 	centro.dibujarConRelleno();
 
 	if (numero != NULL) {//VER esto no deberia pasar nunca
-		glColor3f(0,0.5,1.0);
+		if(apretado)
+			glColor3f(1.0,1.0,0);
+		else
+			glColor3f(0,0.5,1.0);
 		//trasladar numero
 		numero->dibujarContorno(esDDA);//TODO
 	}

@@ -9,7 +9,7 @@ Poligono::~Poligono() {
 	vertices.clear();
 }
 
-void Poligono::agregarVertice(int x, int y) {
+void Poligono::agregarVertice(float x, float y) {
 	Vertice v;
 	v.x = x;
 	v.y = y;

@@ -37,7 +37,8 @@ void display(void)
 //	p.agregarVertice(200,100);
 //	p.agregarVertice(150,300);
 //	p.agregarVertice(600,100);
-	Numero n(3);
+	Numero n(SIETE);
+	Numero n2(DOS);
 
 	//Linea linea;
 	///
@@ -49,11 +50,13 @@ void display(void)
 //		glColor3f(0,1.0,1.0);
 //		linea.lineaBresenham(10,10,300,200);
 //
-		glColor3f(255.0,0,6.0);
+		glColor3f(255.0,0,0);
 //		linea.lineaDDA(500, 5, 6, 750);
 
     //p.dibujar();
 		n.dibujar();
+		glColor3f(0,1.0,0);
+		n2.dibujar();
 
 	glEnd();
 	
@@ -110,6 +113,9 @@ void keyboard(unsigned char key, int x, int y)
 	case 0x62:
 		std::cout<<".....b......"<<std::endl;
 		break;
+	case 0x63:
+		std::cout<<".....c......"<<std::endl;//limpia la pantalla del cel
+		break;
 	case 0x64:
 		std::cout<<"......d......"<<std::endl;
 		break;
@@ -136,20 +142,20 @@ void specialKeys(int key,int x, int y) {
 		break;
 	}
 }
-//
-//int main(int argc, char** argv)
-//{
-//   glutInit(&argc, argv);
-//   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-//   glutInitWindowSize (ANCHO, ALTO);
-//   glutInitWindowPosition (100, 100);
-//   glutCreateWindow (caption);
-//   init ();
-//   glutKeyboardFunc(keyboard);
-//   glutSpecialFunc(specialKeys);
-//   glutDisplayFunc(display);
-//   glutReshapeFunc(reshape);
-//   glutMainLoop();
-//
-//   return 0;
-//}
+
+int main(int argc, char** argv)
+{
+   glutInit(&argc, argv);
+   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
+   glutInitWindowSize (ANCHO, ALTO);
+   glutInitWindowPosition (100, 100);
+   glutCreateWindow (caption);
+   init ();
+   glutKeyboardFunc(keyboard);
+   glutSpecialFunc(specialKeys);
+   glutDisplayFunc(display);
+   glutReshapeFunc(reshape);
+   glutMainLoop();
+
+   return 0;
+}

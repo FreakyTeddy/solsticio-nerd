@@ -23,7 +23,7 @@ public:
 	/* dibuja el contorno del poligono con linea DDA o Bresenham */
 	void dibujarContorno(bool esDDA);
 
-	void agregarVertice(int x, int y);
+	void agregarVertice(float x, float y);
 };
 
 #endif /* POLIGONO_H_ */
