@@ -11,6 +11,7 @@ class Celular {
 private:
 	Poligono cel; //carcasa del celular
 	Poligono sombra[4]; //sombras del celular
+	Poligono visagra;
 	Poligono botonera;
 	Pantalla pantalla;
 	Boton boton;

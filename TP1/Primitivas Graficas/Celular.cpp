@@ -56,21 +56,17 @@ void Celular::crearCarcasa() {
 }
 
 void Celular::crearSombras() {
+
 	//sombra arriba
-//	sombra[0].agregarVertice(25,160);
-//	sombra[0].agregarVertice(17,150);
-//	sombra[0].agregarVertice(17,90);
-//	sombra[0].agregarVertice(25,83);
-//	sombra[0].agregarVertice(30,77);
-//	sombra[0].agregarVertice(40,77);
-//	sombra[0].agregarVertice(43,83);
-//	sombra[0].agregarVertice(58,83);
-//	sombra[0].agregarVertice(61,77);
-//	sombra[0].agregarVertice(69,77);
-//	sombra[0].agregarVertice(69,81);
-//	sombra[0].agregarVertice();
-
-
+	sombra[0].agregarVertice(19,155);
+	sombra[0].agregarVertice(17,152);
+	sombra[0].agregarVertice(16,145);
+	sombra[0].agregarVertice(16,90);
+	sombra[0].agregarVertice(19,85);
+	sombra[0].agregarVertice(21,84);
+	sombra[0].agregarVertice(24,82);
+	sombra[0].agregarVertice(21,86);
+	sombra[0].agregarVertice(19,90);
 
 	//sombra abajo
 	sombra[1].agregarVertice(19,70);
@@ -94,6 +90,19 @@ void Celular::crearSombras() {
 	sombra[2].agregarVertice(24,6);
 	sombra[2].agregarVertice(22,10);
 
+	//sombra clara arriba
+	sombra[3].agregarVertice(22,157);
+	sombra[3].agregarVertice(19,154);
+	sombra[3].agregarVertice(19,145);
+	sombra[3].agregarVertice(19,90);
+	sombra[3].agregarVertice(22,85);
+	sombra[3].agregarVertice(24,84);
+	sombra[3].agregarVertice(27,82);
+	sombra[3].agregarVertice(24,86);
+	sombra[3].agregarVertice(22,90);
+
+	//hacer visagra TODO
+
 }
 
 
@@ -101,14 +110,16 @@ void Celular::dibujar() {
 	//transformar
 	std::cout<<"------------cel--------------------------"<<std::endl;
 
-	glColor3f(0.5,0.5,0.5);
+	glColor3f(0.3,0.3,0.3);
 	cel.dibujarConRelleno();
 
-	glColor3f(0.3,0.3,0.3);
+	glColor3f(0.25,0.25,0.25);
 	sombra[1].dibujarConRelleno();
+	sombra[0].dibujarConRelleno();
 
-	glColor3f(0.4,0.4,0.4);
+	glColor3f(0.28,0.28,0.28);
 	sombra[2].dibujarConRelleno();
+	sombra[3].dibujarConRelleno();
 
 	std::cout<<"------------cel Done--------------------------"<<std::endl;
 	glColor3f(1.0,0.5,1.0);
