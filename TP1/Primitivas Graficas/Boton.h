@@ -9,7 +9,6 @@ class Boton {
 private:
 	bool apretado;
 	bool esDDA;
-	Numero *numero;
 	Poligono centro;
 	Poligono sombra[4];
 
@@ -24,11 +23,7 @@ public:
 	void soltar();
 
 	/* dibuja el boton con su numero */
-	/* se debe setear el numero antes de dibujar */
-	void dibujar();
-
-	/* Numero del boton */
-	void setNumero(Numero *num);
+	void dibujar(Numero *numero);
 
 	/* indica si dibujar el numero con DDA(true) o Bresenham(false) */
 	void setDDA(bool dda);

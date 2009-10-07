@@ -11,9 +11,9 @@ class Celular {
 private:
 	Poligono cel; //carcasa del celular
 	Poligono botonera;
-//	Pantalla pantalla;
+	Pantalla pantalla;
 	Boton boton;
-//	Numero *numero[10]; //todo ver!
+	Numero *numero[10]; //todo ver!
 
 	void crearCarcasa();
 

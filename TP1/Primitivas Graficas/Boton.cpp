@@ -3,7 +3,6 @@
 Boton::Boton() {
 	apretado = false;
 	esDDA = true;
-	numero = NULL;
 	cargarVertices();
 }
 
@@ -17,11 +16,7 @@ void Boton::soltar() {
 	apretado = false;
 }
 
-void Boton::setNumero(Numero *num) {
-	numero = num;
-}
-
-void Boton::dibujar() {
+void Boton::dibujar(Numero *numero) {
 
 	//matrices!!!!!
 

@@ -2,16 +2,16 @@
 #include <iostream>
 
 Celular::Celular() {
-//	for (int i=0; i<10; i++) {
-//		numero[i] = new Numero(i);
-//	}
+	for (int i=0; i<10; i++) {
+		numero[i] = new Numero(i);
+	}
 	crearCarcasa();
 }
 
 Celular::~Celular() {
-//	for (int i=0; i<10; i++) {
-//		delete numero[i];
-//	}
+	for (int i=0; i<10; i++) {
+		delete numero[i];
+	}
 }
 
 void Celular::crearCarcasa() {
@@ -42,7 +42,6 @@ void Celular::crearCarcasa() {
 	cel.agregarVertice(75,0);
 
 	//botonera
-	glColor3f(1.0,1.0,0);
 	botonera.agregarVertice(70,10);
 	botonera.agregarVertice(75,15);
 	botonera.agregarVertice(75,60);
@@ -66,5 +65,10 @@ void Celular::dibujar() {
 	glColor3f(1.0,0.5,1.0);
 	botonera.dibujarConRelleno();
 	std::cout<<"------------botonera Done--------------------------"<<std::endl;
-	//boton.dibujar();
+	glColor3f(0.9,0.9,0.9);
+	pantalla.dibujar();
+	std::cout<<"------------Pantalla Done--------------------------"<<std::endl;
+
+	//trasladar y dibujar cada boton con su numero correspondiente
+	//boton.dibujar(numero[i]);
 }
