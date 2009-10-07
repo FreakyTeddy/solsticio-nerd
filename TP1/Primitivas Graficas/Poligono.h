@@ -8,9 +8,6 @@
 
 class Poligono {
 private:
-	bool relleno; //indica si el poligono es relleno
-	bool contorno; //indica si dibujar el contorno
-	bool esDDA;
 	std::list<Vertice> vertices; //vertices del poligono TODO ver si sirve esta implementacion :P
 
 public:
@@ -18,23 +15,13 @@ public:
 	/* poligono por defecto sin relleno, con contorno y linea DDA*/
 	Poligono();
 
-	Poligono(bool relleno);
-
 	virtual ~Poligono();
 
-	/* indica si el poligono es relleno */
-	void setRelleno(bool relleno);
+	/* dibuja el poligono relleno */
+	void dibujarConRelleno();
 
-	/* indica si se dibuja el contorno del poligono */
-	void setContorno(bool contorno);
-
-	/* indica que el contorno es linea DDA */
-	void setDDA();
-
-	/* indica que el contorno es linea Bresenham */
-	void setBresenham();
-
-	void dibujar();
+	/* dibuja el contorno del poligono con linea DDA o Bresenham */
+	void dibujarContorno(bool esDDA);
 
 	void agregarVertice(int x, int y);
 };

@@ -102,11 +102,11 @@ void display(void)
 //	relleno.scanLine(10, ptos);
 
 	glColor3f(0.95,0.95,0.95);
-	n.setRelleno(1);
-	n.dibujar();
+	//n.dibujarConRelleno();
 	
 	//boton
-	//b.dibujar();
+	b.esDDA(false);
+	b.dibujar();
 
 //	/*PRUEBA Bresenham*/
 //	//PENDIENTES POSITIVAS

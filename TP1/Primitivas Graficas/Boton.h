@@ -8,7 +8,8 @@ class Boton {
 
 private:
 	bool apretado;
-	Numero *numero; //TODO no tengo mucha idea de como hacer esta parte XD
+	bool esDDA;
+	Numero *numero;
 	Poligono centro;
 	Poligono sombra[4];
 
@@ -28,6 +29,9 @@ public:
 
 	/* Numero del boton */
 	void setNumero(Numero *num);
+
+	/* indica si dibujar el numero con DDA o Bresenham */
+	void esDDA(bool dda);
 };
 
 #endif /* BOTON_H_ */

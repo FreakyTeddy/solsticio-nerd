@@ -2,14 +2,9 @@
 
 Boton::Boton() {
 	apretado = false;
+	esDDA = true;
 	numero = NULL;
 	cargarVertices();
-	centro.setRelleno(true);
-	centro.setContorno(false);
-	for (int i=0;i<4;i++) {
-		sombra[i].setRelleno(true);
-		sombra[i].setContorno(false);
-	}
 }
 
 Boton::~Boton() {}
@@ -28,33 +23,31 @@ void Boton::setNumero(Numero *num) {
 
 void Boton::dibujar() {
 
-	//TODO color y matrices!!!!!
+	//matrices!!!!!
 
 	//luz arriba
 	glColor3f(0.99,0.99,0.99);
-	sombra[0].dibujar();
+	sombra[0].dibujarConRelleno();
 
 	//luz derecha
 	glColor3f(0.95,0.95,0.95);
-	sombra[1].dibujar();
+	sombra[1].dibujarConRelleno();
 
 	//sombra abajo
 	glColor3f(0.6,0.6,0.6);
-	sombra[2].dibujar();
+	sombra[2].dibujarConRelleno();
 
 	//sombra derecha
 	glColor3f(0.7,0.7,0.7);
-	sombra[3].dibujar();
+	sombra[3].dibujarConRelleno();
 
 	glColor3f(0.90,0.90,0.90);
-	centro.dibujar();
+	centro.dibujarConRelleno();
 
 	if (numero != NULL) {//VER esto no deberia pasar nunca
-		numero->setRelleno(true);
 		glColor3f(0,0.5,1.0);
-		numero->setContorno(true);
 		//trasladar numero
-		numero->dibujar();
+		numero->dibujarContorno(esDDA);//TODO
 	}
 }
 
@@ -95,4 +88,8 @@ void Boton::cargarVertices() {
 	sombra[3].agregarVertice(15,75);
 	sombra[3].agregarVertice(20,70);
 
+}
+
+void Boton::esDDA(bool dda) {
+	this->esDDA = dda;
 }
