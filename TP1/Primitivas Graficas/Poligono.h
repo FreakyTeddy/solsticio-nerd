@@ -24,6 +24,9 @@ public:
 	void dibujarContorno(bool esDDA);
 
 	void agregarVertice(float x, float y);
+	
+	std::list<Vertice>& obtenerVertices();
+	
 };
 
 #endif /* POLIGONO_H_ */

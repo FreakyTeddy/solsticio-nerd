@@ -102,3 +102,7 @@ void Poligono::dibujarContorno(bool esDDA) {
 		linea.lineaBresenham(vert.x, vert.y, vertNext.x, vertNext.y);
 		}
 }
+
+std::list<Vertice>& Poligono::obtenerVertices(){
+	return this->vertices;
+}

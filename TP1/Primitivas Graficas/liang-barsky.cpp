@@ -62,6 +62,99 @@ void ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vright,
 	
 }
 
+Poligono* ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vright, Poligono* poligono, int numVerticeInicial)
+{
+	std::list<Vertice> verticesOriginales = poligono->obtenerVertices();
+	std::list<Vertice>::iterator it = verticesOriginales.begin();
+	Poligono* poligonoClippeado = new Poligono();
+	int i = 0;
+	bool encontrado = false;
+	float x0 = 0;
+	float x1 = 0;
+	float y0 = 0;
+	float y1 = 0;
+	for(it = verticesOriginales.begin(); it != verticesOriginales.end() && !encontrado; it++,i++){
+		if(i == numVerticeInicial){
+			x0 = (*it).x;
+			y0 = (*it).y;
+		}else{
+			if(i > numVerticeInicial){
+				encontrado = true;
+				x1= (*it).x;
+				y1 = (*it).y;
+			}
+		}
+	}
+	
+	float dx = x1 - x0;
+	float dy = y1 - y0;
+
+	if(!dx || !dy) return NULL;
+	float p[4];
+	float q[4];
+	p[0] = -dx;	
+	p[1] = dx;
+	p[2] = -dy;
+	p[3] = dy;
+	q[0] = x0 - Vleft;
+	q[1] = Vright - x0;
+	q[2] = y0 - Vbottom;
+	q[3] = Vtop - y0;
+	float t = 0;
+	float t0 = 0;
+	float t1 = 1;
+	
+	for(int i = 0; i < 4; i++){
+		t = q[i] / p[i];
+		std::cout << "paso: "<<i<<" t=" << t << std::endl;
+		if((t >= 0) && (t <= 1)){
+			if(p[i] < 0){
+				if(t > t0) t0 = t;
+			}else{
+				if(t < t1) t1 = t;
+			}
+		}
+		
+		//TODO agregar vertices
+		
+//		x0 = x0 + (t0 * dx);
+//		y0 = y0 + (t0 * dy);
+//		x1 = x0 + (t1 * dx);
+//		y1 = y0 + (t1 * dy);
+	}
+	std::cout << "Puntos antes de calcular: x0=" << x0 << " y0= " << y0 << " x1= " << x1 << " y1= " << y1 << std::endl;
+	std::cout << "parametros: t0= " << t0 << " t1= " << t1 << std::endl;
+	std::cout << "deltas: dx= " << dx << " dy= " << dy << std::endl;
+	Vertice vertice0;
+	Vertice vertice1;
+	
+	vertice1.y = y0 + (t1 * dy);
+	vertice1.x = x0 + (t1 * dx);
+	vertice0.x = x0 + (t0 * dx);
+	vertice0.y = y0 + (t0 * dy);
+	
+	// agrego vertices
+	std::list<Vertice> verticesClippeados = poligonoClippeado->obtenerVertices();
+	i = 0;
+	for(it = verticesOriginales.begin() ; it != verticesOriginales.end() ; it++, i++){
+		if(i == numVerticeInicial){
+			verticesClippeados.push_back(vertice0);
+			
+		}else{
+			if (i == numVerticeInicial+1){
+				verticesClippeados.push_back(vertice1);
+			}else{
+				verticesClippeados.push_back(*it);
+			}
+		}
+	}
+
+	std::cout << "Puntos despues de calcular: x0=" << x0 << " y0= " << y0 << " x1= " << x1 << " y1= " << y1 << std::endl;
+	
+	return poligonoClippeado;
+}
+
+
 ClippingPoligonos::~ClippingPoligonos()
 {
 	
