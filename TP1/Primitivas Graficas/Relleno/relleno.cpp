@@ -67,10 +67,7 @@ void Relleno::buildEdgeList(int cnt, dcPt* pts, Edge* edges[]) {
 			else	//Decreciente
 				makeEdgeRec(v2, v1, yPrev, edge, edges);
 		} else {
-			
-
-			
-			
+			std::cout << "HORIZONTALES" << std::endl;
 		}
 		yPrev= v1.y;
 		v1= v2;
@@ -109,7 +106,7 @@ void Relleno::deleteAfter(Edge* q) {
 	Edge* p= q->next;
 	q->next= p->next;
 	
-//	delete p;
+	delete p;
 }
 
 void Relleno::updateActiveList(int scan, Edge* active) {
@@ -165,5 +162,5 @@ void Relleno::scanLine(int cnt, dcPt* pts) {
 		}
 	}
 	
-	//TODO: liberar
+	delete active;
 }
