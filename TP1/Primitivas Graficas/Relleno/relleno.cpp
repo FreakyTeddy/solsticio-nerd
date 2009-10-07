@@ -45,7 +45,14 @@ void Relleno::makeEdgeRec(dcPt lower, dcPt upper, int yComp, Edge* edge, Edge* e
 	else
 		edge->yUpper= upper.y;
 	
-	insertEdge(edges[lower.y], edge);
+	//TODO: HARCODEOOOO
+	std::cout << lower.y << std::endl; 
+	if(lower.y<WINDOW_HEIGHT && lower.y>0)
+		insertEdge(edges[lower.y], edge);
+	else if(lower.y>WINDOW_HEIGHT)
+		insertEdge(edges[WINDOW_HEIGHT-1], edge);
+	else
+		insertEdge(edges[0], edge);
 }
 
 void Relleno::buildEdgeList(int cnt, dcPt* pts, Edge* edges[]) {
