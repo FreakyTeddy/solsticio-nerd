@@ -35,7 +35,7 @@ void MatrizTrans2D::scale2D(float sx, float sy, Vertice fixedPt) {
 	matS[0][0]= sx;
 	matS[0][2]= (1-sx)*fixedPt.x;
 	matS[1][1]= sy;
-	matS[1][2]= (1-sx)*fixedPt.y;
+	matS[1][2]= (1-sy)*fixedPt.y;
 	
 	preMultiply(matScale);
 }	
