@@ -11,8 +11,8 @@ void Transform2D::setMatTrans(MatrizTrans2D* matTrans) {
 	
 	this->matTrans= matTrans;	
 	matComposite.loadIdentity();	
-	matComposite.preMultiply(matView);
-	matComposite.preMultiply(*matTrans);	
+	matComposite.preMultiply(*matTrans);
+	matComposite.preMultiply(matView);	
 }
 
 void Transform2D::loadMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {
@@ -34,9 +34,9 @@ void Transform2D::setMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {
 	
 	loadMatView(Wp, Hp, Wm, Hm, leftDown);
 	matComposite.loadIdentity();	
-	matComposite.preMultiply(matView);
 	if(matTrans)
 		matComposite.preMultiply(*matTrans);					
+	matComposite.preMultiply(matView);
 }
 
 Vertice Transform2D::transformVerts2D(Vertice vert) {
