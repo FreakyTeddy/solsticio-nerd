@@ -6,6 +6,7 @@ Celular::Celular() {
 		numero[i] = new Numero(i);
 	}
 	crearCarcasa();
+	crearSombras();
 }
 
 Celular::~Celular() {
@@ -54,6 +55,47 @@ void Celular::crearCarcasa() {
 
 }
 
+void Celular::crearSombras() {
+	//sombra arriba
+//	sombra[0].agregarVertice(25,160);
+//	sombra[0].agregarVertice(17,150);
+//	sombra[0].agregarVertice(17,90);
+//	sombra[0].agregarVertice(25,83);
+//	sombra[0].agregarVertice(30,77);
+//	sombra[0].agregarVertice(40,77);
+//	sombra[0].agregarVertice(43,83);
+//	sombra[0].agregarVertice(58,83);
+//	sombra[0].agregarVertice(61,77);
+//	sombra[0].agregarVertice(69,77);
+//	sombra[0].agregarVertice(69,81);
+//	sombra[0].agregarVertice();
+
+
+
+	//sombra abajo
+	sombra[1].agregarVertice(19,70);
+	sombra[1].agregarVertice(17,69);
+	sombra[1].agregarVertice(16,65);
+	sombra[1].agregarVertice(16,10);
+	sombra[1].agregarVertice(19,5);
+	sombra[1].agregarVertice(21,4);
+	sombra[1].agregarVertice(24,2);
+	sombra[1].agregarVertice(21,6);
+	sombra[1].agregarVertice(19,10);
+
+	//sombra clara abajo
+	sombra[2].agregarVertice(22,71);
+	sombra[2].agregarVertice(19,70);
+	sombra[2].agregarVertice(19,65);
+	sombra[2].agregarVertice(19,10);
+	sombra[2].agregarVertice(22,5);
+	sombra[2].agregarVertice(24,4);
+	sombra[2].agregarVertice(27,2);
+	sombra[2].agregarVertice(24,6);
+	sombra[2].agregarVertice(22,10);
+
+}
+
 
 void Celular::dibujar() {
 	//transformar
@@ -61,6 +103,13 @@ void Celular::dibujar() {
 
 	glColor3f(0.5,0.5,0.5);
 	cel.dibujarConRelleno();
+
+	glColor3f(0.3,0.3,0.3);
+	sombra[1].dibujarConRelleno();
+
+	glColor3f(0.4,0.4,0.4);
+	sombra[2].dibujarConRelleno();
+
 	std::cout<<"------------cel Done--------------------------"<<std::endl;
 	glColor3f(1.0,0.5,1.0);
 	botonera.dibujarConRelleno();
