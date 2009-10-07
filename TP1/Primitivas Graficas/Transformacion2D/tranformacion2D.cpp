@@ -24,7 +24,7 @@ void Transform2D::loadMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) 
 	Vertice origen;
 	origen.x= 0;
 	origen.y= 0;
-	matView.scale2D(Wp/Wm, -Hp/Hm, origen);
+	matView.scale2D((float)Wp/Wm, (float)-Hp/Hm, origen);
 	
 	//Reflejo en el eje y
 	matView.translate2D(0, Hp);
