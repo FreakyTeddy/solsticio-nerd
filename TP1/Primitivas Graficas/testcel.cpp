@@ -49,7 +49,6 @@ void display(void)
 
     glBegin(GL_POINTS);
 
-    glColor3f(1.0, 0.5,0.2);
     celu.dibujar();
 
 

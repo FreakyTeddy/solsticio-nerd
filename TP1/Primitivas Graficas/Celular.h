@@ -10,7 +10,7 @@
 class Celular {
 private:
 	Poligono cel; //carcasa del celular
-//	Poligono botonera;
+	Poligono botonera;
 //	Pantalla pantalla;
 	Boton boton;
 //	Numero *numero[10]; //todo ver!

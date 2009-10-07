@@ -22,7 +22,7 @@ void Poligono::dibujarConRelleno() {
 		origen.x= 0;
 		origen.y= 0;
 		
-		Transform2D t(800, 600, 100, 100, origen);
+		Transform2D t(800, 600, 100, 160, origen);
 		Vertice vert; 
 		Vertice vertNext; 
 		MatrizTrans2D matTrans;
@@ -30,7 +30,7 @@ void Poligono::dibujarConRelleno() {
 		Vertice fixedPt;
 		fixedPt.x= 0;
 		fixedPt.y= 0;
-		matTrans.scale2D(0.1, 0.1, fixedPt);
+		matTrans.scale2D(0.5, 1, fixedPt);
 		t.setMatTrans(&matTrans);	
 
 		//algoritmo de relleno de poligonos
@@ -59,7 +59,7 @@ void Poligono::dibujarContorno(bool esDDA) {
 	Vertice fixedPt;
 	fixedPt.x= 0;
 	fixedPt.y= 0;
-	matTrans.scale2D(0.1, 0.1, fixedPt);
+	matTrans.scale2D(1, 1, fixedPt);
 	t.setMatTrans(&matTrans);
 
 	Linea linea;
