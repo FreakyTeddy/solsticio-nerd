@@ -145,8 +145,8 @@ void Celular::dibujar() {
 	 fixedPt.x= 50;
 	 fixedPt.y= 50;
 	matTransPantalla.postMultiply(matTrans);
-//	matTransPantalla.translate2D(-18.5,35);
-//	matTransPantalla.scale2D(0.6,0.6, fixedPt);
+	matTransPantalla.translate2D(-18.5,35);
+	matTransPantalla.scale2D(0.6,0.6, fixedPt);
 
 
 	pantalla.dibujar(matTransPantalla);
