@@ -45,8 +45,8 @@ void Pantalla::dibujar(	MatrizTrans2D &matTrans) {
 	fixedPt.x= 50;
 	fixedPt.y= 50;
 
-	float x0 = -16;
-	float y0 = -25;
+	float x0 = 200;
+	float y0 = 450;
 	int tam = numeros.size(), i=0;
 	Numero *num;
 
@@ -57,9 +57,9 @@ void Pantalla::dibujar(	MatrizTrans2D &matTrans) {
 			if (i == tam)
 				break;
 
-			matTransNumero.preMultiply(matTrans);
-			matTransNumero.translate2D(x0+(10*k), y0+(15*j));
 			matTransNumero.scale2D(0.1, 0.1, fixedPt);
+			matTransNumero.translate2D(x0+(80*k), y0-(100*j));
+			matTransNumero.preMultiply(matTrans);
 
 			//obtengo el frente y lo acolo
 			num = numeros.front();

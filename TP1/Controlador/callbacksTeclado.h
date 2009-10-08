@@ -4,7 +4,7 @@
 #include <time.h>
 #include "../Primitivas Graficas/Celular.h"
 
-#define SECONDS 1
+#define SECONDS 0.5
 #define STEP 5
 #define ZOOM 10
 
