@@ -5,6 +5,7 @@ Celular::Celular() {
 	for (int i=0; i<10; i++) {
 		numero[i] = new Numero(i);
 	}
+	botonera.setNumeros(numero);
 	crearCarcasa();
 	crearSombras();
 }
@@ -41,17 +42,7 @@ void Celular::crearCarcasa() {
 	cel.agregarVertice(85,10);
 	cel.agregarVertice(82,4);
 	cel.agregarVertice(75,0);
-
-	//botonera
-	botonera.agregarVertice(70,10);
-	botonera.agregarVertice(75,15);
-	botonera.agregarVertice(75,60);
-	botonera.agregarVertice(70,65);
-	botonera.agregarVertice(30,65);
-	botonera.agregarVertice(25,60);
-	botonera.agregarVertice(25,15);
-	botonera.agregarVertice(30,10);
-	botonera.agregarVertice(70,10);
+	cel.setDimensiones(100,160);
 
 }
 
@@ -101,6 +92,8 @@ void Celular::crearSombras() {
 	sombra[3].agregarVertice(24,86);
 	sombra[3].agregarVertice(22,90);
 
+	for (int i=0; i<4;i++)
+		sombra[i].setDimensiones(100,160);
 	//hacer visagra TODO
 
 }
@@ -108,27 +101,43 @@ void Celular::crearSombras() {
 
 void Celular::dibujar() {
 	//transformar
+	MatrizTrans2D matTrans;
+	Vertice fixed; // centro del poligono	
+	fixed.x = 50;
+	fixed.y = 80;
+	matTrans.scale2D(0.8,1.0, fixed);
+	
 	std::cout<<"------------cel--------------------------"<<std::endl;
 
 	glColor3f(0.3,0.3,0.3);
-	cel.dibujarConRelleno();
+	cel.dibujarConRelleno(matTrans);
 
 	glColor3f(0.25,0.25,0.25);
-	sombra[1].dibujarConRelleno();
-	sombra[0].dibujarConRelleno();
+	sombra[1].dibujarConRelleno(matTrans);
+	sombra[0].dibujarConRelleno(matTrans);
 
 	glColor3f(0.28,0.28,0.28);
-	sombra[2].dibujarConRelleno();
-	sombra[3].dibujarConRelleno();
+	sombra[2].dibujarConRelleno(matTrans);
+	sombra[3].dibujarConRelleno(matTrans);
 
 	std::cout<<"------------cel Done--------------------------"<<std::endl;
-	glColor3f(1.0,0.5,1.0);
-	botonera.dibujarConRelleno();
-	std::cout<<"------------botonera Done--------------------------"<<std::endl;
-	glColor3f(0.9,0.9,0.9);
-	pantalla.dibujar();
-	std::cout<<"------------Pantalla Done--------------------------"<<std::endl;
+	
+	MatrizTrans2D matTransPantalla;
+	matTransPantalla.preMultiply(matTrans);
 
-	//trasladar y dibujar cada boton con su numero correspondiente
-	//boton.dibujar(numero[i]);
+	fixed.x= 50;
+	fixed.y= 50;
+	matTransPantalla.scale2D(0.9,0.6, fixed);
+	matTransPantalla.translate2D(0,-30);
+	glColor3f(0.9,0.9,0.9);
+	pantalla.dibujar(matTransPantalla);
+	std::cout<<"------------Pantalla Done--------------------------"<<std::endl;
+	
+	Vertice fixedPt; // centro del poligono
+	fixedPt.x= 50;
+	fixedPt.y= 50;
+	matTrans.scale2D(1.0,0.6, fixedPt);
+	matTrans.translate2D(0,-30);
+	botonera.dibujar(matTrans);
+		
 }

@@ -24,7 +24,7 @@ public:
 	void agregarNumero(Numero *numero);
 
 	/* dibuja la pantalla con los numeros */
-	void dibujar();
+	void dibujar(MatrizTrans2D &matTrans);
 };
 
 #endif /* PANTALLA_H_ */

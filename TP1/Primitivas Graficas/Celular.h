@@ -5,16 +5,17 @@
 #include "Pantalla.h"
 #include "Numero.h"
 #include "Poligono.h"
-
+#include "Botonera.h"
 
 class Celular {
 private:
 	Poligono cel; //carcasa del celular
 	Poligono sombra[4]; //sombras del celular
 	Poligono visagra;
-	Poligono botonera;
+	
+	Botonera botonera;
 	Pantalla pantalla;
-	Boton boton;
+	
 	Numero *numero[10]; //todo ver!
 
 	void crearCarcasa();

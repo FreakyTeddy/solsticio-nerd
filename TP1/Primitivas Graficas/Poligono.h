@@ -9,23 +9,29 @@
 class Poligono {
 private:
 	std::list<Vertice> vertices; //vertices del poligono TODO ver si sirve esta implementacion :P
+	//dimensiones
+	int ancho;
+	int alto;
 
 public:
 
-	/* poligono por defecto sin relleno, con contorno y linea DDA*/
+	/* poligono por defecto sin relleno, con contorno y linea DDA de 100x100*/
 	Poligono();
 
 	virtual ~Poligono();
 
 	/* dibuja el poligono relleno */
-	void dibujarConRelleno();
+	void dibujarConRelleno(MatrizTrans2D &matTrans);
 
 	/* dibuja el contorno del poligono con linea DDA o Bresenham */
-	void dibujarContorno(bool esDDA);
+	void dibujarContorno(bool esDDA, MatrizTrans2D &matTrans);
 
 	void agregarVertice(float x, float y);
 	
 	std::list<Vertice>& obtenerVertices();
+	
+	/* especificar las dimensiones del poligono */
+	void setDimensiones(int ancho, int alto);
 	
 };
 

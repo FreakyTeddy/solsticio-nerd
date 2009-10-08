@@ -1,42 +1,56 @@
 #include "transformacion2D.h"
 
-Transform2D::Transform2D(int Wp, int Hp, int Wm, int Hm, Vertice leftDown): 
+Transform2D::Transform2D(): 
 matTrans(NULL), matView(), matComposite() {
-					
-	loadMatView(Wp, Hp, Wm, Hm, leftDown);
-	matComposite.preMultiply(matView);																					
+
+	matView.loadIdentity();						
+	matComposite.loadIdentity();	
+}
+
+void Transform2D::setIdentity() {
+
+	matView.loadIdentity();						
+	matComposite.loadIdentity();		
 }
 
 void Transform2D::setMatTrans(MatrizTrans2D* matTrans) {
 	
 	this->matTrans= matTrans;	
 	matComposite.loadIdentity();	
-	matComposite.preMultiply(*matTrans);
-	matComposite.preMultiply(matView);	
+	matComposite.postMultiply(matView);
+	matComposite.postMultiply(*matTrans);
+	//matComposite.preMultiply(*matTrans);
+	//matComposite.preMultiply(matView);	
 }
 
 void Transform2D::loadMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {
 	
-	//Estoy suponiendo que el NDC esta normalizado.
-	matView.translate2D(-leftDown.x, -leftDown.y);
-		
+	//Reflejo en el eje y
+	matView.translate2D(0, Hp);
+	
 	//Escalo a la pantalla, respecto del origen
 	Vertice origen;
 	origen.x= 0;
 	origen.y= 0;
 	matView.scale2D((float)Wp/Wm, (float)-Hp/Hm, origen);
-	
-	//Reflejo en el eje y
-	matView.translate2D(0, Hp);
+		
+	//Estoy suponiendo que el NDC esta normalizado.
+	matView.translate2D(-leftDown.x, -leftDown.y);
 }	
 
 void Transform2D::setMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {
 	
 	loadMatView(Wp, Hp, Wm, Hm, leftDown);
 	matComposite.loadIdentity();	
+	
+	matComposite.postMultiply(matView);
 	if(matTrans)
-		matComposite.preMultiply(*matTrans);					
-	matComposite.preMultiply(matView);
+		matComposite.postMultiply(*matTrans);
+
+	//if(matTrans)
+	//	matComposite.preMultiply(*matTrans);	
+	//matComposite.preMultiply(matView);
+
 }
 
 Vertice Transform2D::transformVerts2D(Vertice vert) {

@@ -17,20 +17,24 @@ class Transform2D {
 	
 	public:
 		/* Construye una transformacion 2D
-		 * 
+		 * */
+		Transform2D();
+		
+		/* Convierte la matriz total de transformacion y la de vista en matriz identidad	
+		 * */
+		void setIdentity();
+
+		/* Modifica la matriz de transformacion	
+		 * */
+		void setMatTrans(MatrizTrans2D* matTrans);
+
+		/* Modifica la matriz de vista
+		 *
 		 * @param Wp El ancho de la pantalla
 		 * @param Hp El alto de la pantalla
 		 * @param Wm El ancho del mundo 2D
 		 * @param Hm El alto del mundo 2D
 		 * @param leftDown El vertice inferior izquiero del mundo 2D.
-		 * */
-		Transform2D(int Wp, int Hp, int Wm, int Hm, Vertice leftDown);
-		
-		/* Modifica la matriz de transformacion	
-		 * */
-		void setMatTrans(MatrizTrans2D* matTrans);
-
-		/* Modifica la matriz de vista	
 		 * */
 		void setMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown);
 		

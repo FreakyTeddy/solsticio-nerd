@@ -14,6 +14,7 @@ class Matriz {
 		~Matriz();
 		void loadIdentity();
 		void preMultiply(Matriz &mat);
+		void postMultiply(Matriz &mat);
 		float** getMatriz();
 };
 

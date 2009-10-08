@@ -50,3 +50,23 @@ void Matriz::preMultiply(Matriz &mat) {
 			matriz[row][col]= matTemp[row][col] ;
 	}
 }
+
+void Matriz::postMultiply(Matriz &mat) {
+	
+	float** m1= mat.getMatriz();
+	
+	Matriz matComposite(dim);
+	float** matTemp= matComposite.getMatriz();
+	
+	for(int row= 0; row<dim; row++) {
+		for(int col= 0; col<dim; col++)
+			matTemp[row][col]= matriz[row][0] * m1[0][col] +
+												 matriz[row][1] * m1[1][col] +
+												 matriz[row][2] * m1[2][col];
+	}
+	
+	for(int row= 0; row<dim; row++) {
+		for(int col= 0; col<dim; col++)
+			matriz[row][col]= matTemp[row][col] ;
+	}
+}

@@ -20,7 +20,8 @@ void Pantalla::cargarPantalla() {
 	pantalla.agregarVertice(65,90);
 }
 
-void Pantalla::dibujar() {
-	pantalla.dibujarConRelleno();
+void Pantalla::dibujar(	MatrizTrans2D &matTrans) {
+
+	pantalla.dibujarConRelleno(matTrans);
 }
 

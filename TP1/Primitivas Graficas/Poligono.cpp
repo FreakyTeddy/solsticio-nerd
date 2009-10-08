@@ -3,6 +3,8 @@
 #include <iostream> //TODO sacar!
 
 Poligono::Poligono() {
+	ancho = 100;
+	alto = 100;
 }
 
 Poligono::~Poligono() {
@@ -16,50 +18,44 @@ void Poligono::agregarVertice(float x, float y) {
 	vertices.push_back(v);
 }
 
-void Poligono::dibujarConRelleno() {
+void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
 
 		Vertice origen;
 		origen.x= 0;
 		origen.y= 0;
 		
-		Transform2D t(800, 600, 100, 160, origen);
+		Transform2D t;
+		t.setMatView(800, 600, ancho, alto, origen);  
 		Vertice vert; 
 		Vertice vertNext; 
-		MatrizTrans2D matTrans;
+		
 		//Escalo
-		Vertice fixedPt;
-		fixedPt.x= 0;
-		fixedPt.y= 0;
-		matTrans.scale2D(0.5, 1, fixedPt);
 		t.setMatTrans(&matTrans);	
 
 		//algoritmo de relleno de poligonos
-	     dcPt* ptos;
-	     ptos = new dcPt[vertices.size()];
-	     std::list<Vertice>::iterator it = vertices.begin();
-	     for(int i=0;it!=vertices.end();it++,i++){
-		  		vert= t.transformVerts2D(*it);
-		  		ptos[i].x = vert.x;
-		  		ptos[i].y = vert.y;
-	     }
-	     Relleno relleno;
-	     relleno.scanLine(vertices.size(), ptos);
+     dcPt* ptos;
+     ptos = new dcPt[vertices.size()];
+     std::list<Vertice>::iterator it = vertices.begin();
+     for(int i=0;it!=vertices.end();it++,i++){
+	  		vert= t.transformVerts2D(*it);
+	  		ptos[i].x = vert.x;
+	  		ptos[i].y = vert.y;
+     }
+     Relleno relleno;
+     relleno.scanLine(vertices.size(), ptos);
 }
 
-void Poligono::dibujarContorno(bool esDDA) {
+void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 
 	Vertice origen;
-	origen.x= 0;
-	origen.y= 0;
-	Transform2D t(800, 600, 100, 100, origen);
+		origen.x= 0;
+		origen.y= 0;
+	Transform2D t;
+	t.setMatView(800, 600, ancho, alto, origen);
 	Vertice vert;
 	Vertice vertNext;
-	MatrizTrans2D matTrans;
+	
 	//Escalo
-	Vertice fixedPt;
-	fixedPt.x= 0;
-	fixedPt.y= 0;
-	matTrans.scale2D(1, 1, fixedPt);
 	t.setMatTrans(&matTrans);
 
 	Linea linea;
@@ -106,3 +102,9 @@ void Poligono::dibujarContorno(bool esDDA) {
 std::list<Vertice>& Poligono::obtenerVertices(){
 	return this->vertices;
 }
+
+void Poligono::setDimensiones(int ancho, int alto) {
+	this->ancho  = ancho;
+	this->alto = alto;
+}	
+	

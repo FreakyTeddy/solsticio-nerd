@@ -23,7 +23,7 @@ public:
 	void soltar();
 
 	/* dibuja el boton con su numero */
-	void dibujar(Numero *numero);
+	void dibujar(Numero *numero, MatrizTrans2D &matTrans);
 
 	/* indica si dibujar el numero con DDA(true) o Bresenham(false) */
 	void setDDA(bool dda);

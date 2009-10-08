@@ -24,6 +24,8 @@
 
 char caption[]="Solsticio Nerd";
 
+Celular celular;
+
 void reshape(int w, int h)
 {
    glViewport (0, 0, (GLsizei) w, (GLsizei) h);
@@ -34,8 +36,8 @@ void reshape(int w, int h)
 
 void init(void)
 {
+	glClearColor(1.0,1.0,1.0,0.0);
 }
-
 
 void display(void)
 {
@@ -44,12 +46,9 @@ void display(void)
    	glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-     Celular celu;
-
-
     glBegin(GL_POINTS);
 
-    celu.dibujar();
+   celular.dibujar();
 
 
 
@@ -144,12 +143,14 @@ int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
+   
    glutInitWindowSize (ANCHO, ALTO);
    glutInitWindowPosition (100, 100);
    glutCreateWindow (caption);
    init ();
    glutKeyboardFunc(keyboard);
    glutSpecialFunc(specialKeys);
+   
    glutDisplayFunc(display);
    glutReshapeFunc(reshape);
    glutMainLoop();

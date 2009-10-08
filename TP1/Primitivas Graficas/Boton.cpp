@@ -16,45 +16,50 @@ void Boton::soltar() {
 	apretado = false;
 }
 
-void Boton::dibujar(Numero *numero) {
-
-	//matrices!!!!!
+void Boton::dibujar(Numero *numero, MatrizTrans2D &matTrans) {
 
 	//luz arriba
 	if (apretado)
 		glColor3f(0.55,0.55,0.55);
 	else
 		glColor3f(0.99,0.99,0.99);
-	sombra[0].dibujarConRelleno();
+	sombra[0].dibujarConRelleno(matTrans);
 
 	//luz derecha
 	if (apretado)
 		glColor3f(0.66,0.66,0.66);
 	else
 		glColor3f(0.95,0.95,0.95);
-	sombra[1].dibujarConRelleno();
+	sombra[1].dibujarConRelleno(matTrans);
 
 	//sombra abajo
 	glColor3f(0.6,0.6,0.6);
-	sombra[2].dibujarConRelleno();
+	sombra[2].dibujarConRelleno(matTrans);
 
 	//sombra derecha
 	glColor3f(0.7,0.7,0.7);
-	sombra[3].dibujarConRelleno();
+	sombra[3].dibujarConRelleno(matTrans);
 
 	if (apretado)
 		glColor3f(0.50,0.50,0.50);
 	else
 		glColor3f(0.90,0.90,0.90);
-	centro.dibujarConRelleno();
+	centro.dibujarConRelleno(matTrans);
+numero = NULL;
 
-	if (numero != NULL) {//VER esto no deberia pasar nunca
+	if(numero != NULL) {
 		if(apretado)
 			glColor3f(1.0,1.0,0);
 		else
 			glColor3f(0,0.5,1.0);
-		//trasladar numero
-		numero->dibujarContorno(esDDA);//TODO
+		
+		//escalar numero
+		
+		Vertice fixedPt; // centro del poligono
+		fixedPt.x= 50;
+		fixedPt.y= 50;
+		matTrans.scale2D(0.3, 0.34, fixedPt);
+		numero->dibujarContorno(esDDA, matTrans);
 	}
 }
 
@@ -65,6 +70,7 @@ void Boton::cargarVertices() {
 	centro.agregarVertice(80,70);
 	centro.agregarVertice(80,30);
 	centro.agregarVertice(20,30);
+	centro.setDimensiones(100,100);
 
 	//sombra
 	sombra[0].agregarVertice(15,75);
@@ -94,6 +100,9 @@ void Boton::cargarVertices() {
 	sombra[3].agregarVertice(10,70);
 	sombra[3].agregarVertice(15,75);
 	sombra[3].agregarVertice(20,70);
+
+	for (int i=0; i<4;i++)
+		sombra[i].setDimensiones(100,100);
 
 }
 
