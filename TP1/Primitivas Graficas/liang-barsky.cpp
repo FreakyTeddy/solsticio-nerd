@@ -71,11 +71,12 @@ Poligono* ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vr
      float y0 = (*it).y;
      float y1 = 0;
 
-     xo0=x0;
-     yo0=y0;
+     vertice0.x=x0;
+     vertice0.y=y0;
 
-     it++;
-     for(;it!=verticesOriginales.end();it++,x0=xo1,y0=yo1){
+     verticesOriginales.push_back(vertice0);
+
+     for(it=verticesOriginales.begin();it!=verticesOriginales.end();it++,x0=xo1,y0=yo1){
 	  xo1=x1=(*it).x;
 	  yo1=y1=(*it).y;
 
@@ -97,26 +98,8 @@ Poligono* ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vr
 	  poligonoClippeado->agregarVertice(x0,y0);
 	  poligonoClippeado->agregarVertice(x1,y1);
      }
-
-	  x1=xo0;
-	  y1=yo0;
-
-	  std::cout << "x0: " << x0 << " y0: " << y0 << std::endl;
-	  std::cout << "x1: " << x1 << " y1: " << y1 << std::endl;
-
-
-	  clippingLB(Vtop,Vbottom,Vleft,Vright, x0,x1,y0,y1);
-
-	  std::cout << "x0: " << x0 << " y0: " << y0 << std::endl;
-	  std::cout << "x1: " << x1 << " y1: " << y1 << std::endl;
-
-	  std::cout << "----------------------------------\n";
-
-	  poligonoClippeado->agregarVertice(x0,y0);
-	  poligonoClippeado->agregarVertice(x1,y1);
-
-
-	  return poligonoClippeado;
+     
+     return poligonoClippeado;
 }
 
 
