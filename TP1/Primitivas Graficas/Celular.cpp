@@ -8,22 +8,7 @@ Celular::Celular() {
 	botonera.setNumeros(numero);
 	crearCarcasa();
 	crearSombras();
-	//para probar pantalla :)
-
-//	pantalla.agregarNumero(numero[1]);
-//	pantalla.agregarNumero(numero[2]);
-//	pantalla.agregarNumero(numero[3]);
-//	pantalla.agregarNumero(numero[4]);
-//	pantalla.agregarNumero(numero[1]);
-//	pantalla.agregarNumero(numero[2]);
-//	pantalla.agregarNumero(numero[3]);
-//	pantalla.agregarNumero(numero[1]);
-//	pantalla.agregarNumero(numero[5]);
-//	pantalla.agregarNumero(numero[1]);
-//	pantalla.agregarNumero(numero[2]);
-//	pantalla.agregarNumero(numero[9]);
-//	pantalla.agregarNumero(numero[8]);
-
+	pantalla.agregarNumero(numero[3]);
 }
 
 Celular::~Celular() {
@@ -163,8 +148,10 @@ void Celular::dibujar() {
 }
 
 void Celular::apretarBoton(int boton) {
-	
-	botonera.apretarBoton(boton);
+	if (boton >=0){
+		botonera.apretarBoton(boton);
+		pantalla.agregarNumero(numero[boton]);
+	}
 }
 
 void Celular::soltarBoton() {
@@ -180,8 +167,3 @@ void Celular::cambiarLinea(char tipo) {
 void Celular::limpiarPantalla() {
 	pantalla.limpiar();
 }
-
-void Celular::mostrarNumero(int num) {
-	pantalla.agregarNumero(numero[num]);
-}
-

@@ -7,7 +7,14 @@ void CallBacksTeclado::setCelular(Celular* celular) {
 	
 void CallBacksTeclado::pressedNumber(int number) {
 	
-	celular->apretarBoton(number);
+	glBegin(GL_POINTS);
+
+		celular->apretarBoton(number);
+		celular->dibujar();
+
+	glEnd();
+
+	glutSwapBuffers();
 
 	std::cout << "TIMER" << std::endl;
 
@@ -17,24 +24,59 @@ void CallBacksTeclado::pressedNumber(int number) {
   while(t <= endWait) { t = time( NULL ); }
 
 	std::cout << "FIN TIMER" << std::endl;
+	glBegin(GL_POINTS);
+
+		celular->soltarBoton();
+		celular->dibujar();
+
+	glEnd();
+	glutSwapBuffers();
 	
-	celular->soltarBoton();
 }
 
 void CallBacksTeclado::changeLine(char type) {
 	
-	celular->cambiarLinea(type);	
+	celular->cambiarLinea(type);
+	glBegin(GL_POINTS);
+
+		celular->dibujar();
+
+	glEnd();
+
+	glutSwapBuffers();
 }	
 
 void CallBacksTeclado::zoom(char type) {
-	
+	//hacer zoom
+	glBegin(GL_POINTS);
+
+		celular->dibujar();
+
+	glEnd();
+
+	glutSwapBuffers();
 }	
 
 void CallBacksTeclado::moveView(char orientation) {
+	//mover vista
 	
+	glBegin(GL_POINTS);
+
+		celular->dibujar();
+
+	glEnd();
+
+	glutSwapBuffers();
 }
 
 void CallBacksTeclado::clearScreen() {
 	
 	celular->limpiarPantalla();
+	glBegin(GL_POINTS);
+
+		celular->dibujar();
+
+	glEnd();
+
+	glutSwapBuffers();
 }

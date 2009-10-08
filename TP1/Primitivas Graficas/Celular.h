@@ -26,9 +26,12 @@ public:
 	Celular();
 	~Celular();
 
+	//TODO !!!!!!!!!! falta que reciba una matriz
 	void dibujar();
 	
 	/* recibe -1 si no hay botones apretados */
+	/* recibe el numero que se tiene que ver por pantalla */
+	/* el numero debe estar entre 0-9 */
 	void apretarBoton(int boton);
 	void soltarBoton();
 	
@@ -36,8 +39,7 @@ public:
 	
 	void limpiarPantalla();
 
-	/* recibe el numero que se tiene que ver por pantalla */
-	/* el numero debe estar entre 0-9 */
+
 	void mostrarNumero(int num);
 
 };
