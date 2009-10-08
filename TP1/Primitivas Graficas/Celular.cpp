@@ -42,7 +42,7 @@ void Celular::crearCarcasa() {
 	cel.agregarVertice(85,10);
 	cel.agregarVertice(82,4);
 	cel.agregarVertice(75,0);
-	cel.setDimensiones(100,160);
+	cel.setDimensiones(160,160);
 
 }
 
@@ -93,7 +93,7 @@ void Celular::crearSombras() {
 	sombra[3].agregarVertice(22,90);
 
 	for (int i=0; i<4;i++)
-		sombra[i].setDimensiones(100,160);
+		sombra[i].setDimensiones(160,160);
 	//hacer visagra TODO
 
 }
@@ -102,12 +102,14 @@ void Celular::crearSombras() {
 void Celular::dibujar() {
 	//transformar
 	MatrizTrans2D matTrans;
-	Vertice fixed; // centro del poligono	
-	fixed.x = 50;
+	Vertice fixed;  /* escala del celular */
+	fixed.x = 80;
 	fixed.y = 80;
-	matTrans.scale2D(0.7,1.0, fixed);
+	//matTrans.scale2D(0.5,0.5, fixed); Desfasado
+	//matTrans.translate2D(10,10); desfasado!!!!
+	matTrans.scale2D(1,1, fixed);
+	matTrans.translate2D(0,0);
 	
-	std::cout<<"------------cel--------------------------"<<std::endl;
 
 	glColor3f(0.3,0.3,0.3);
 	cel.dibujarConRelleno(matTrans);
@@ -120,25 +122,27 @@ void Celular::dibujar() {
 	sombra[2].dibujarConRelleno(matTrans);
 	sombra[3].dibujarConRelleno(matTrans);
 
-	std::cout<<"------------cel Done--------------------------"<<std::endl;
-	
 	MatrizTrans2D matTransPantalla;
-	matTransPantalla.preMultiply(matTrans);
 
-	fixed.x= 50;
-	fixed.y= 50;
-	matTransPantalla.scale2D(0.9,0.6, fixed);
-	matTransPantalla.translate2D(0,-30);
-	glColor3f(0.9,0.9,0.9);
-	pantalla.dibujar(matTransPantalla);
-	std::cout<<"------------Pantalla Done--------------------------"<<std::endl;
-	
+
 	Vertice fixedPt; // centro del poligono
-	fixedPt.x= 50;
-	fixedPt.y= 50;
-	matTrans.scale2D(1.0,0.6, fixedPt);
-	matTrans.translate2D(0,-30);
-	botonera.dibujar(matTrans);
+	 fixedPt.x= 50;
+	 fixedPt.y= 50;
+	matTransPantalla.postMultiply(matTrans);
+	matTransPantalla.translate2D(-18.5,35);
+	matTransPantalla.scale2D(0.6,0.6, fixedPt);
+
+
+	pantalla.dibujar(matTransPantalla);
+	
+	MatrizTrans2D matTransBotonera;
+
+	matTransBotonera.postMultiply(matTrans);
+	matTransBotonera.translate2D(-18.5,-18.0);//no escala bien vertical!!!
+	matTransBotonera.scale2D(0.6,0.65, fixedPt);
+
+
+	botonera.dibujar(matTransBotonera);
 		
 }
 
