@@ -35,17 +35,17 @@ void Botonera::dibujar(MatrizTrans2D &matTrans) {
 	fixedPt.y= 50;
 		
 	
-	float x0 = 260;
-	float y0 = 270;
+	float x0 = 190;
+	float y0 = 180;
 	int i=1;
 	
 	//Dibujo boton
 	
-	for (int j=2; j>=0;j--){
+	for (int j=0; j<=2;j++){
 		for (int k=0; k<3;k++) {
 			
-			matTransBoton.scale2D(0.15, 0.15, fixedPt); //escalo el boton			
-			matTransBoton.translate2D(x0+(15*k), y0+(15*j));
+			matTransBoton.scale2D(0.15, 0.15, fixedPt); //escalo el boton
+			matTransBoton.translate2D(x0+(110*k), y0+(80*j));
 			matTransBoton.preMultiply(matTrans);
 			
 			if (i == b_apretado)
@@ -60,9 +60,10 @@ void Botonera::dibujar(MatrizTrans2D &matTrans) {
 	}
 	
 	//dibujo el cero
-	matTransBoton.preMultiply(matTrans);
-	matTransBoton.translate2D(x0+15, y0-15);
+
 	matTransBoton.scale2D(0.15,0.15, fixedPt);
+	matTransBoton.translate2D(x0+110, y0+250);
+	matTransBoton.preMultiply(matTrans);
 	if (0 == b_apretado)
 			boton.apretar();
 	boton.dibujar(numero[0], matTransBoton);	

@@ -8,7 +8,6 @@ Celular::Celular() {
 	botonera.setNumeros(numero);
 	crearCarcasa();
 	crearSombras();
-	pantalla.agregarNumero(numero[3]);
 }
 
 Celular::~Celular() {
@@ -106,6 +105,7 @@ void Celular::dibujar() {
 	fixed.x = 80;
 	fixed.y = 80;
 	matTrans.translate2D(140,0);
+	matTrans.scale2D(1,1,fixed);
 	
 	glColor3f(0.3,0.3,0.3);
 	cel.dibujarConRelleno(matTrans);
