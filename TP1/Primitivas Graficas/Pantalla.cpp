@@ -46,7 +46,7 @@ void Pantalla::dibujar(	MatrizTrans2D &matTrans) {
 	fixedPt.y= 50;
 
 	float x0 = 200;
-	float y0 = 450;
+	float y0 = 420;
 	int tam = numeros.size(), i=0;
 	Numero *num;
 
