@@ -28,13 +28,18 @@ public:
 
 	void dibujar();
 	
-		/* recibe -1 si no hay botones apretados */
+	/* recibe -1 si no hay botones apretados */
 	void apretarBoton(int boton);
 	void soltarBoton();
 	
 	void cambiarLinea(char tipo);	
 	
 	void limpiarPantalla();
+
+	/* recibe el numero que se tiene que ver por pantalla */
+	/* el numero debe estar entre 0-9 */
+	void mostrarNumero(int num);
+
 };
 
 #endif /* CELULAR_H_ */
