@@ -1,7 +1,6 @@
 #ifndef CALLBACKSTECLADO_H_
 #define CALLBACKSTECLADO_H_
 
-#include <stdio.h>
 #include <time.h>
 #include "../Primitivas Graficas/Celular.h"
 

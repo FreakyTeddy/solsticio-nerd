@@ -12,9 +12,9 @@ void CallBacksTeclado::pressedNumber(int number) {
 	std::cout << "TIMER" << std::endl;
 
 	//Timer
-	clock_t endwait;
-  endwait= clock () + SECONDS * CLOCKS_PER_SEC ;
-  while (clock() < endwait) {}
+	unsigned int t= time(NULL);
+  unsigned int endWait = t+SECONDS;
+  while(t <= endWait) { t = time( NULL ); }
 
 	std::cout << "FIN TIMER" << std::endl;
 	
