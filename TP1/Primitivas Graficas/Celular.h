@@ -27,6 +27,14 @@ public:
 	~Celular();
 
 	void dibujar();
+	
+		/* recibe -1 si no hay botones apretados */
+	void apretarBoton(int boton);
+	void soltarBoton();
+	
+	void cambiarLinea(char tipo);	
+	
+	void limpiarPantalla();
 };
 
 #endif /* CELULAR_H_ */

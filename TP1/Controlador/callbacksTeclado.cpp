@@ -1,17 +1,33 @@
 #include "callbacksTeclado.h"
 
-void callBacksTeclado::pressedNumber(int number) {
+CallBacksTeclado::CallBacksTeclado(Celular celular): celular(celular) {}
+	
+void CallBacksTeclado::pressedNumber(int number) {
+	
+	celular.apretarBoton(number);
+
+	//Timer
+	clock_t endwait;
+  endwait= clock () + SECONDS * CLOCKS_PER_SEC ;
+  while (clock() < endwait) {}
+	
+	celular.soltarBoton();
+}
+
+void CallBacksTeclado::changeLine(char type) {
+	
+	celular.cambiarLinea(type);	
+}	
+
+void CallBacksTeclado::zoom(char type) {
+	
+}	
+
+void CallBacksTeclado::moveView(char orientation) {
 	
 }
 
-void callBacksTeclado::changeLine(char type) {
+void CallBacksTeclado::clearScreen() {
 	
-}	
-
-void callBacksTeclado::zoom(char type) {
-	
-}	
-
-void callBacksTeclado::moveView(char orientation) {
-	
+	celular.limpiarPantalla();
 }

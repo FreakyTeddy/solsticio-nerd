@@ -22,9 +22,9 @@ public:
 
 	/* recibe -1 si no hay botones apretados */
 	void apretarBoton(int boton);
-
 	void soltarBoton();
 	
+	void cambiarLinea(char tipo);	
 };
 
 #endif /*BOTONERA_H_*/

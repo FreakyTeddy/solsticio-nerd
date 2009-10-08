@@ -141,3 +141,22 @@ void Celular::dibujar() {
 	botonera.dibujar(matTrans);
 		
 }
+
+void Celular::apretarBoton(int boton) {
+	
+	botonera.apretarBoton(boton);
+}
+
+void Celular::soltarBoton() {
+	
+	botonera.apretarBoton(-1);
+}
+
+void Celular::cambiarLinea(char tipo) {
+	
+	botonera.cambiarLinea(tipo);
+}	
+
+void Celular::limpiarPantalla() {
+	
+}

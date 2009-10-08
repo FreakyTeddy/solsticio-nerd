@@ -73,3 +73,11 @@ void Botonera::dibujar(MatrizTrans2D &matTrans) {
 void Botonera::apretarBoton(int boton) {
 	b_apretado = boton;
 }
+
+void Botonera::cambiarLinea(char tipo) {
+	
+	if('D')
+		boton.setDDA(true);
+	else
+		boton.setDDA(false);		
+}	
