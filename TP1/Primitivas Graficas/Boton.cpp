@@ -54,12 +54,16 @@ void Boton::dibujar(Numero *numero, MatrizTrans2D &matTrans) {
 			glColor3f(0,0.5,1.0);
 		
 		//escalar numero
+		MatrizTrans2D matTransNumero;
 		
+
 		Vertice fixedPt; // centro del poligono
 		fixedPt.x= 50;
 		fixedPt.y= 50;
-		matTrans.scale2D(0.3, 0.34, fixedPt);
-		numero->dibujarContorno(esDDA, matTrans);
+		matTransNumero.scale2D(0.3, 0.35, fixedPt);
+		matTransNumero.translate2D(230,160);
+		matTransNumero.preMultiply(matTrans);
+		numero->dibujarContorno(esDDA, matTransNumero);
 	}
 }
 
