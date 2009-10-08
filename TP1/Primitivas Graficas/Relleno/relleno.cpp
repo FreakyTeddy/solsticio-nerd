@@ -45,12 +45,10 @@ void Relleno::makeEdgeRec(dcPt lower, dcPt upper, int yComp, Edge* edge, Edge* e
 	else
 		edge->yUpper= upper.y;
 	
-	//TODO: HARCODEOOOO
-	//std::cout << lower.y << std::endl;
-	if(lower.y<WINDOW_HEIGHT && lower.y>0)
+	if(lower.y<ALTO && lower.y>0)
 		insertEdge(edges[lower.y], edge);
-	else if(lower.y>WINDOW_HEIGHT)
-		insertEdge(edges[WINDOW_HEIGHT-1], edge);
+	else if(lower.y>ALTO)
+		insertEdge(edges[ALTO-1], edge);
 	else
 		insertEdge(edges[0], edge);
 }
@@ -73,8 +71,6 @@ void Relleno::buildEdgeList(int cnt, dcPt* pts, Edge* edges[]) {
 				makeEdgeRec(v1, v2, yNext(i, cnt, pts), edge, edges);
 			else	//Decreciente
 				makeEdgeRec(v2, v1, yPrev, edge, edges);
-		} else {
-		//	std::cout << "HORIZONTALES" << std::endl;
 		}
 		yPrev= v1.y;
 		v1= v2;
@@ -146,9 +142,9 @@ void Relleno::resortActiveList(Edge* active) {
 
 void Relleno::scanLine(int cnt, dcPt* pts) {
 	
-	Edge *edges[WINDOW_HEIGHT], *active;
+	Edge *edges[ALTO], *active;
 	
-	for(int i=0; i < WINDOW_HEIGHT; i++) {
+	for(int i=0; i < ALTO; i++) {
 		edges[i]= new Edge();
 		edges[i]->next= NULL; 
 	} 
@@ -158,7 +154,7 @@ void Relleno::scanLine(int cnt, dcPt* pts) {
 	active= new Edge();
 	active->next= NULL;
 	
-	for(int scan= 0; scan < WINDOW_HEIGHT; scan++) {
+	for(int scan= 0; scan < ALTO; scan++) {
 		
 		buildActiveList(scan, active, edges);
 

@@ -3,8 +3,7 @@
 
 #include <iostream>
 #include "GL/glut.h"
-
-#define WINDOW_HEIGHT 600
+#include "../../Constantes.h"
 
 struct dcPt {
 	int x;
