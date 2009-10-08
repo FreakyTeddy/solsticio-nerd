@@ -7,19 +7,16 @@
 
 #include <iostream> //TODO sacar
 
+#include "Primitivas Graficas/Celular.h"
 #include "Controlador/callbacksTeclado.h"
 
-
-//TODO: ESTO TIENE QUE SER PARAMETRO!!!!!!
 #define ANCHO	800
 #define ALTO	600
 
-char caption[]="El Celular";
+char caption[]= "El Celular";
 
-/* Variables globales
- * */
 Celular celular;
-CallBacksTeclado callbacks(celular);
+CallBacksTeclado callbacks;
 
 void reshape(int w, int h)
 {
@@ -32,20 +29,23 @@ void reshape(int w, int h)
 void init(void)
 {
 	glClearColor(1.0,1.0,1.0,0.0);
+	callbacks.setCelular(&celular);
 }
-
 
 void display(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-   	glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
 
-    glBegin(GL_POINTS);
+	glClear(GL_COLOR_BUFFER_BIT);
+ 	glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+	glBegin(GL_POINTS);
+
+	celular.dibujar();
 
 	glEnd();
-	
-  	glutSwapBuffers();
+
+ 	glutSwapBuffers();
 }
 
 /* x, y coordenadas mouse cuando se presiona key
@@ -146,12 +146,14 @@ int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
+   
    glutInitWindowSize (ANCHO, ALTO);
    glutInitWindowPosition (100, 100);
    glutCreateWindow (caption);
-   init ();
+   init();
    glutKeyboardFunc(keyboard);
    glutSpecialFunc(specialKeys);
+   
    glutDisplayFunc(display);
    glutReshapeFunc(reshape);
    glutMainLoop();

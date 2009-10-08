@@ -5,17 +5,17 @@
 #include <time.h>
 #include "../Primitivas Graficas/Celular.h"
 
-#define SECONDS 10
+#define SECONDS 2
 #define STEP 5
 #define ZOOM 10
 
 class CallBacksTeclado {
 	
 	private:
-		Celular& celular;
+		Celular* celular;
 	
 	public:
-		CallBacksTeclado(Celular celular);
+		void setCelular(Celular* celular);
 		void pressedNumber(int number);
 		void changeLine(char type);	
 		void zoom(char type);	
