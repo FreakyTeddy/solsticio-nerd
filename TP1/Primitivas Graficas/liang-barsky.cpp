@@ -58,15 +58,14 @@ void ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vright,
 	
 }
 
+//implementacion de Liang-Barsky segun Van dam
+
 Poligono* ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vright, Poligono* poligono){
      std::list<Vertice> verticesOriginales = poligono->obtenerVertices();
      std::list<Vertice>::iterator it = verticesOriginales.begin();
      Poligono* poligonoClippeado = new Poligono();
-     std::list<Vertice> verticesClippeados = poligonoClippeado->obtenerVertices();
      Vertice vertice0;
-     Vertice vertice1;
      float xo0,xo1,yo0,yo1; //pares x,y originales
-     bool encontrado = false;
      float x0 = (*it).x;
      float x1 = 0;
      float y0 = (*it).y;
@@ -76,12 +75,11 @@ Poligono* ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vr
      vertice0.y=y0;
 
      verticesOriginales.push_back(vertice0);
-
      
-     int xIn, xOut, yIn, yOut;                   // Coordinates of entry and exit points  
-     int tOut1, tIn2, tOut2;                     // Parameter values of same  
-     int tInX, tOutX, tInY, tOutY;               // Parameter values for intersection  
-     int deltaX, deltaY;                         // Direction of edge  
+     float xIn, xOut, yIn, yOut;                   // Coordinates of entry and exit pofloats  
+     float tOut1, tIn2, tOut2;                     // Parameter values of same  
+     float tInX, tOutX, tInY, tOutY;               // Parameter values for floatersection  
+     float deltaX, deltaY;                         // Direction of edge  
      int i;  
 
      for(it=verticesOriginales.begin();it!=verticesOriginales.end();it++,x0=xo1,y0=yo1){
@@ -103,14 +101,14 @@ Poligono* ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vr
 	  }
 		    
 	  if(deltaX != 0) {  
-	       tOutX = ((xOut - x0)*256) / deltaX;  
+	       tOutX = ((xOut - x0)*256.0) / deltaX;  
 	  } else if(x0 <= Vright && Vleft <= x0)  
 	       tOutX = INFINITY;  
 	  else  
 	       tOutX = -INFINITY;  
 	  
 	  if(deltaY != 0) {  
-	       tOutY = ((yOut - y0)*256) / deltaY;  
+	       tOutY = ((yOut - y0)*256.0) / deltaY;  
 	  } else if(y0 <= Vtop && Vbottom <= y0)  
 	       tOutY = INFINITY;  
 	  else  
@@ -126,12 +124,12 @@ Poligono* ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vr
 	  if(tOut2 > 0) {  
 	       
 	       if(deltaX != 0)  
-		    tInX = ((xIn - x0)*256) / deltaX;  
+		    tInX = ((xIn - x0)*256.0) / deltaX;  
 	       else  
 		    tInX = -INFINITY;  
 	       
 	       if(deltaY != 0)  
-		    tInY = ((yIn - y0)*256) / deltaY;  
+		    tInY = ((yIn - y0)*256.0) / deltaY;  
 	       else  
 		    tInY = -INFINITY;  
 	       
@@ -153,20 +151,20 @@ Poligono* ClippingPoligonos::clippingLB(int Vtop, int Vbottom, int Vleft, int Vr
 	       } else {
    
 		    // line crosses though window  
-		    if(0 < tOut1 && tIn2 <= 256) {  
+		    if(0 < tOut1 && tIn2 <= 256.0) {  
 			 if(0 <= tIn2) {  // visible segment  
 			      if(tInX > tInY) {  
-				   poligonoClippeado->agregarVertice(xIn, y0 + ((tInX * deltaY)>>8));
+				   poligonoClippeado->agregarVertice(xIn, y0 + ((tInX * deltaY)/256.0));
 			      } else {
-				   poligonoClippeado->agregarVertice(x0 + ((tInY * deltaX)>>8), yIn);
+				   poligonoClippeado->agregarVertice(x0 + ((tInY * deltaX)/256.0), yIn);
 			      }
 			 }
    
 			 if((1<<8) >= tOut1) {  
 			      if(tOutX < tOutY) {  
-				   poligonoClippeado->agregarVertice(xOut, y0 + ((tOutX * deltaY)>>8));
+				   poligonoClippeado->agregarVertice(xOut, y0 + ((tOutX * deltaY)/256.0));
 			      } else {
-				   poligonoClippeado->agregarVertice(x0 + ((tOutY * deltaX)>>8), yOut);
+				   poligonoClippeado->agregarVertice(x0 + ((tOutY * deltaX)/256.0), yOut);
 			      }
 			 } else { 
 			      poligonoClippeado->agregarVertice(x1,y1);
