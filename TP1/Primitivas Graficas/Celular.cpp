@@ -99,19 +99,14 @@ void Celular::crearSombras() {
 
 }
 
-
 void Celular::dibujar() {
 	//transformar
 	MatrizTrans2D matTrans;
 	Vertice fixed;  /* escala del celular */
 	fixed.x = 80;
 	fixed.y = 80;
-	//matTrans.scale2D(0.5,0.5, fixed); Desfasado
-	//matTrans.translate2D(10,10); desfasado!!!!
-	matTrans.scale2D(1,1, fixed);
-	matTrans.translate2D(0,0);
+	matTrans.translate2D(140,0);
 	
-
 	glColor3f(0.3,0.3,0.3);
 	cel.dibujarConRelleno(matTrans);
 
@@ -125,26 +120,22 @@ void Celular::dibujar() {
 
 	MatrizTrans2D matTransPantalla;
 
-
 	Vertice fixedPt; // centro del poligono
-	 fixedPt.x= 50;
-	 fixedPt.y= 50;
-	matTransPantalla.postMultiply(matTrans);
-	matTransPantalla.translate2D(-18.5,35);
-	matTransPantalla.scale2D(0.6,0.6, fixedPt);
-
-
+	fixedPt.x= 50;
+	fixedPt.y= 50;
+	matTransPantalla.scale2D(0.6,0.6,fixedPt);
+	matTransPantalla.translate2D(-8,-100);
+	matTransPantalla.preMultiply(matTrans);
+		
 	pantalla.dibujar(matTransPantalla);
 	
 	MatrizTrans2D matTransBotonera;
 
-	matTransBotonera.postMultiply(matTrans);
-	matTransBotonera.translate2D(-18.5,-18.0);//no escala bien vertical!!!
-	matTransBotonera.scale2D(0.6,0.65, fixedPt);
-
+	matTransBotonera.scale2D(0.6,0.65,fixedPt);
+	matTransBotonera.translate2D(-8,190);
+	matTransBotonera.preMultiply(matTrans);
 
 	botonera.dibujar(matTransBotonera);
-		
 }
 
 void Celular::apretarBoton(int boton) {

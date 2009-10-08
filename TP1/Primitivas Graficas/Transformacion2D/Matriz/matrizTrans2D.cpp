@@ -9,8 +9,8 @@ void MatrizTrans2D::translate2D(float tx, float ty) {
 	matT[0][2]= tx;
 	matT[1][2]= ty;
 	
-	postMultiply(matTrans); // OK ;)
-	//preMultiply(matTrans);
+	//postMultiply(matTrans); // OK ;)
+	preMultiply(matTrans);
 }
 
 void MatrizTrans2D::rotate2D(float theta, Vertice pivPt) {
@@ -25,8 +25,8 @@ void MatrizTrans2D::rotate2D(float theta, Vertice pivPt) {
 	matR[1][1]= cos(theta);
 	matR[1][2]= pivPt.y*(1-cos(theta)) - pivPt.x*sin(theta);	
 
-	postMultiply(matRot);
-	//preMultiply(matRot);
+	//postMultiply(matRot);
+	preMultiply(matRot);
 }		
 
 void MatrizTrans2D::scale2D(float sx, float sy, Vertice fixedPt) {
@@ -39,6 +39,7 @@ void MatrizTrans2D::scale2D(float sx, float sy, Vertice fixedPt) {
 	matS[1][1]= sy;
 	matS[1][2]= (1-sy)*fixedPt.y;
 	
-	postMultiply(matScale);
-	//preMultiply(matScale);
+	//postMultiply(matScale);
+	preMultiply(matScale);
 }	
+	

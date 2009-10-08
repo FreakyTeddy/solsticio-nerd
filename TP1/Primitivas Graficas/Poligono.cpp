@@ -29,7 +29,7 @@ void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
 		Vertice vert; 
 		Vertice vertNext; 
 		
-		//Escalo
+		//matriz de transformada
 		t.setMatTrans(&matTrans);	
 
 		//algoritmo de relleno de poligonos
@@ -51,11 +51,13 @@ void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 		origen.x= 0;
 		origen.y= 0;
 	Transform2D t;
+
+	//Agrego matriz de vista
 	t.setMatView(800, 600, ancho, alto, origen);
 	Vertice vert;
 	Vertice vertNext;
 	
-	//Escalo
+	//Agrego matriz de transformacion
 	t.setMatTrans(&matTrans);
 
 	Linea linea;
