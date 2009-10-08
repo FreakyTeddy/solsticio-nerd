@@ -9,6 +9,9 @@
 
 class Celular {
 private:
+
+	Numero *numero[10]; //todo ver!
+
 	Poligono cel; //carcasa del celular
 	Poligono sombra[4]; //sombras del celular
 	Poligono visagra;
@@ -16,8 +19,6 @@ private:
 	Botonera botonera;
 	Pantalla pantalla;
 	
-	Numero *numero[10]; //todo ver!
-
 	void crearCarcasa();
 	void crearSombras();
 

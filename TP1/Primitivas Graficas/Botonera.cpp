@@ -64,7 +64,7 @@ void Botonera::dibujar(MatrizTrans2D &matTrans) {
 	matTransBoton.translate2D(x0+15, y0-15);
 	matTransBoton.scale2D(0.15,0.15, fixedPt);
 	if (0 == b_apretado)
-				boton.apretar();			 
+			boton.apretar();
 	boton.dibujar(numero[0], matTransBoton);	
 	boton.soltar();
 	

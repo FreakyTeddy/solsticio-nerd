@@ -105,7 +105,7 @@ void Celular::dibujar() {
 	Vertice fixed; // centro del poligono	
 	fixed.x = 50;
 	fixed.y = 80;
-	matTrans.scale2D(0.8,1.0, fixed);
+	matTrans.scale2D(0.7,1.0, fixed);
 	
 	std::cout<<"------------cel--------------------------"<<std::endl;
 

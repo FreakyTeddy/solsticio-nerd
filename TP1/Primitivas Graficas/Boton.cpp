@@ -45,7 +45,7 @@ void Boton::dibujar(Numero *numero, MatrizTrans2D &matTrans) {
 	else
 		glColor3f(0.90,0.90,0.90);
 	centro.dibujarConRelleno(matTrans);
-numero = NULL;
+
 
 	if(numero != NULL) {
 		if(apretado)
