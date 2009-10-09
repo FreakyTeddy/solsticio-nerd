@@ -2,18 +2,12 @@
 #include "Relleno/relleno.h"
 #include <iostream> //TODO sacar!
 #include "liang-barsky.h"
+#include "../Constantes.h"
 
 Poligono::Poligono() {
 	ancho = 100;
 	alto = 100;
 }
-
-//Poligono::Poligono(const Poligono &p) {
-//	std::list<Vertice>::iterator it = p.vertices.begin();
-//	for(int i = 0; it != p.vertices.end(); it++){
-//			this->agregarVertice((*it).x, (*it).y);
-//	}
-//}
 
 Poligono::~Poligono() {
 	vertices.clear();
@@ -53,7 +47,7 @@ void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
 	 //recorte del poligono transformado
      ClippingPoligonos clipper;
      Poligono *cortado;
-     cortado = clipper.clippingLB(600,0,0,800,&transformado);
+     cortado = clipper.clippingLB(Viewtop,Viewbottom,Viewleft,Viewright,&transformado);
 
       //algoritmo de relleno de poligonos Rellena el poligono clippeado
 	 dcPt* ptos;
@@ -99,7 +93,7 @@ void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 	 //recorte del poligono transformado
 	  ClippingPoligonos clipper;
 	  Poligono *cortado;
-	  cortado = clipper.clippingLB(600,0,0,800,&transformado);
+	  cortado = clipper.clippingLB(Viewtop,Viewbottom,Viewleft,Viewright,&transformado);
 
 	Linea linea;
 	it = cortado->vertices.begin();

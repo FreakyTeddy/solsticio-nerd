@@ -18,8 +18,6 @@ public:
 	/* poligono por defecto sin relleno, con contorno y linea DDA de 100x100*/
 	Poligono();
 
-	Poligono(const Poligono &p);
-
 	virtual ~Poligono();
 
 	/* dibuja el poligono relleno */

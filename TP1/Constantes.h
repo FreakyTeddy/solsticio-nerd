@@ -11,6 +11,12 @@
 #define Vancho 800
 #define Valto 600
 
+//limites del viewport
+#define Viewtop 600
+#define Viewbottom 0
+#define Viewright 800
+#define Viewleft 0
+
 
 
 
