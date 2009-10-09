@@ -10,7 +10,7 @@
 class Celular {
 private:
 
-	Numero *numero[10]; //todo ver!
+	Numero *numero[10];
 
 	Poligono cel; //carcasa del celular
 	Poligono sombra[4]; //sombras del celular

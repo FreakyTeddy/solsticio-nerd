@@ -55,43 +55,33 @@ void keyboard(unsigned char key, int x, int y)
 	switch (key)
 	{		//toma solo las minusculas
 	case 0x30:
-		std::cout<<" 0 "<<std::endl;
 		callbacks.pressedNumber(0);
 		break;
 	case 0x31:
-		std::cout<<" 1 "<<std::endl;
 		callbacks.pressedNumber(1);
 		break;
 	case 0x32:
-		std::cout<<" 2 "<<std::endl;
 		callbacks.pressedNumber(2);
 		break;
 	case 0x33:
-		std::cout<<" 3 "<<std::endl;
 		callbacks.pressedNumber(3);
 		break;
 	case 0x34:
-		std::cout<<" 4 "<<std::endl;
 		callbacks.pressedNumber(4);
 		break;
 	case 0x35:
-		std::cout<<" 5 "<<std::endl;
 		callbacks.pressedNumber(5);
 		break;
 	case 0x36:
-		std::cout<<" 6 "<<std::endl;
 		callbacks.pressedNumber(6);
 		break;
 	case 0x37:
-		std::cout<<" 7 "<<std::endl;
 		callbacks.pressedNumber(7);
 		break;
 	case 0x38:
-		std::cout<<" 8 "<<std::endl;
 		callbacks.pressedNumber(8);
 		break;
 	case 0x39:
-		std::cout<<" 9 "<<std::endl;
 		callbacks.pressedNumber(9);
 		break;
 	case 0x2B:
@@ -103,15 +93,13 @@ void keyboard(unsigned char key, int x, int y)
 		callbacks.zoom('-');
 		break;
 	case 0x62:
-		std::cout<<".....b......"<<std::endl;
 		callbacks.changeLine('B');
 		break;
 	case 0x63:
-		std::cout<<".....c......"<<std::endl;//limpia la pantalla del cel
+		//limpia la pantalla del cel
 		callbacks.clearScreen();
 		break;
 	case 0x64:
-		std::cout<<"......d......"<<std::endl;
 		callbacks.changeLine('D');
 		break;
 	case 0x1b:

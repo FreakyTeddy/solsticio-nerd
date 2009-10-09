@@ -93,7 +93,6 @@ void Celular::crearSombras() {
 
 	for (int i=0; i<4;i++)
 		sombra[i].setDimensiones(160,160);
-	//hacer visagra TODO
 
 }
 

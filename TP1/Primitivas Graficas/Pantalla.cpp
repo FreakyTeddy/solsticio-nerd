@@ -2,7 +2,7 @@
 
 Pantalla::Pantalla() {
 	cargarPantalla();
-	max = 12; //VER!!
+	max = 12;
 }
 
 Pantalla::~Pantalla() {

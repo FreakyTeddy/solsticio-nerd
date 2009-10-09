@@ -157,7 +157,6 @@ inline void Numero::crearSeis() {
 	agregarVertice(50,40);
 	agregarVertice(40,30);
 	agregarVertice(50,20);
-	//TODO no me gustaaaaaaaaaaaa
 }
 
 inline void Numero::crearSiete() {

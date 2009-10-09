@@ -8,7 +8,7 @@
 class Pantalla {
 private:
 	Poligono pantalla;
-	unsigned int max; //maximo de numeros visibles todo ver que cantidad de numeros
+	unsigned int max; //maximo de numeros visibles
 	std::queue<Numero*> numeros; //cola con los numeros de la pantalla
 
 	void cargarPantalla();

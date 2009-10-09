@@ -8,7 +8,7 @@
 
 class Poligono {
 private:
-	std::list<Vertice> vertices; //vertices del poligono TODO ver si sirve esta implementacion :P
+	std::list<Vertice> vertices; //vertices del poligono
 	//dimensiones
 	int ancho;
 	int alto;

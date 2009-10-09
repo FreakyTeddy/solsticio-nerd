@@ -16,14 +16,11 @@ void CallBacksTeclado::pressedNumber(int number) {
 
 	glutSwapBuffers();
 
-	std::cout << "TIMER" << std::endl;
-
 	//Timer
 	unsigned int t= time(NULL);
-  unsigned int endWait = t+SECONDS;
-  while(t <= endWait) { t = time( NULL ); }
+	unsigned int endWait = t+SECONDS;
+	while(t <= endWait) { t = time( NULL ); }
 
-	std::cout << "FIN TIMER" << std::endl;
 	glBegin(GL_POINTS);
 
 		celular->soltarBoton();

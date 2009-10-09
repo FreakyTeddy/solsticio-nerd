@@ -13,7 +13,7 @@
 //#include "GL/glut.h"
 //#include <stdlib.h>
 //
-//#include <iostream> //TODO sacar
+//#include <iostream>
 //
 //#include "Celular.h"
 //
