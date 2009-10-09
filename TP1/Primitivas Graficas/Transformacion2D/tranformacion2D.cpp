@@ -31,7 +31,7 @@ void Transform2D::loadMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) 
 	matView.scale2D((float)Wp/Wm, (float)-Hp/Hm, origen);
 
 	//Estoy suponiendo que el NDC esta normalizado.
-	matView.translate2D(300,300);//-leftDown.x, -leftDown.y);500,400
+	matView.translate2D(ANCHO/2,ALTO/2);/*(400,300);*///-leftDown.x, -leftDown.y);500,400
 }	
 
 void Transform2D::setMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {

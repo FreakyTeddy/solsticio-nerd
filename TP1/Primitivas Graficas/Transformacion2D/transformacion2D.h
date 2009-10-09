@@ -3,7 +3,7 @@
 
 #include "Matriz/matrizTrans2D.h"
 #include "../Vertice.h"
-
+#include "../../Constantes.h"
 class Transform2D {
 	
 	private:
