@@ -85,7 +85,7 @@ void Celular::crearSombras() {
 	//sombra clara arriba
 	sombra[3].agregarVertice(52,157);
 	sombra[3].agregarVertice(49,154);
-	sombra[3].agregarVertice(59,145);
+	sombra[3].agregarVertice(49,145);
 	sombra[3].agregarVertice(49,90);
 	sombra[3].agregarVertice(52,85);
 	sombra[3].agregarVertice(54,84);
