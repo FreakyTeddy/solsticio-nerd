@@ -12,10 +12,10 @@
 #define Valto 600
 
 //limites del viewport
-#define Viewtop 600
-#define Viewbottom 0
-#define Viewright 800
-#define Viewleft 0
+#define Viewtop 400
+#define Viewbottom 100
+#define Viewright 500
+#define Viewleft 200
 
 
 
