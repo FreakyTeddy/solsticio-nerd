@@ -65,7 +65,7 @@ void Relleno::buildEdgeList(int cnt, dcPt* pts, Edge* edges[]) {
 	for(int i= 0; i<cnt; i++) {
 		v2= pts[i];
 		if(v1.y != v2.y) { //No lineas horizontales
-			edge= new Edge();//TODO donde se libera esto?
+			edge= new Edge();
 			
 			if(v1.y < v2.y)  //Creciente
 				makeEdgeRec(v1, v2, yNext(i, cnt, pts), edge, edges);

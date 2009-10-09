@@ -2,8 +2,7 @@
 #include "GL/glut.h"
 #include <stdlib.h>
 
-#include <iostream> //TODO sacar
-
+#include <iostream>
 #include "Poligono.h"
 #include "Linea/linea.h"
 #include "liang-barsky.h"

@@ -26,7 +26,6 @@ public:
 	Celular();
 	~Celular();
 
-	//TODO !!!!!!!!!! falta que reciba una matriz
 	void dibujar();
 	
 	/* recibe -1 si no hay botones apretados */
