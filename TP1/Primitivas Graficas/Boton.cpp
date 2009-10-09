@@ -60,8 +60,8 @@ void Boton::dibujar(Numero *numero, MatrizTrans2D &matTrans) {
 		Vertice fixedPt; // centro del poligono
 		fixedPt.x= 50;
 		fixedPt.y= 50;
+		matTransNumero.translate2D(20,0);
 		matTransNumero.scale2D(0.3, 0.35, fixedPt);
-		matTransNumero.translate2D(230,160);
 		matTransNumero.preMultiply(matTrans);
 		numero->dibujarContorno(esDDA, matTransNumero);
 	}

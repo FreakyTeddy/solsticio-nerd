@@ -19,7 +19,7 @@ void Pantalla::cargarPantalla() {
 	pantalla.agregarVertice(25,10);
 	pantalla.agregarVertice(30,5);
 
-	pantalla.setDimensiones(100,100);
+	pantalla.setDimensiones(0,0);
 }
 
 void Pantalla::limpiar() {
@@ -45,20 +45,20 @@ void Pantalla::dibujar(	MatrizTrans2D &matTrans) {
 	fixedPt.x= 50;
 	fixedPt.y= 50;
 
-	float x0 = 200;
-	float y0 = 420;
+	float x0 = -150;
+	float y0 = 50;
 	int tam = numeros.size(), i=0;
 	Numero *num;
 
-	for (int j=2; j>=0;j--){
+	for (int j=0; j<=2;j++){
 		for (int k=0; k<4;k++) {
 
 			//MUGRE!! XD
 			if (i == tam)
 				break;
 
+			matTransNumero.translate2D(x0+(100*k), y0-(200*j));
 			matTransNumero.scale2D(0.1, 0.1, fixedPt);
-			matTransNumero.translate2D(x0+(80*k), y0-(100*j));
 			matTransNumero.preMultiply(matTrans);
 
 			//obtengo el frente y lo acolo

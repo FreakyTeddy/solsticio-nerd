@@ -20,19 +20,20 @@ void Poligono::agregarVertice(float x, float y) {
 
 void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
 
-		Vertice origen;
-		origen.x= 0;
-		origen.y= 0;
-		
-		Transform2D t;
-		t.setMatView(800, 600, ancho, alto, origen);  
-		Vertice vert; 
-		Vertice vertNext; 
-		
-		//matriz de transformada
-		t.setMatTrans(&matTrans);	
-
-		//algoritmo de relleno de poligonos
+     Vertice origen;
+     origen.x= ancho;
+     origen.y= alto;
+     
+     Transform2D t;
+     
+     Vertice vert; 
+     Vertice vertNext; 
+     
+     //matriz de transformada
+     t.setMatTrans(&matTrans);	
+     t.setMatView(800, 600, 160,160,origen);//ancho, alto, origen);  
+     
+     //algoritmo de relleno de poligonos
      dcPt* ptos;
      ptos = new dcPt[vertices.size()];
      std::list<Vertice>::iterator it = vertices.begin();
@@ -42,23 +43,27 @@ void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
 	  		ptos[i].y = vert.y;
      }
      Relleno relleno;
+//     ClippingPoligonos cl;
+     //   Poligono *p;
+//     p = cl.clippingLB(400,0,5,795,this);
      relleno.scanLine(vertices.size(), ptos);
 }
 
 void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 
 	Vertice origen;
-		origen.x= 0;
-		origen.y= 0;
+		origen.x= ancho;
+		origen.y= alto;
 	Transform2D t;
 
 	//Agrego matriz de vista
-	t.setMatView(800, 600, ancho, alto, origen);
+	t.setMatTrans(&matTrans);
+	t.setMatView(800, 600, 160,160, origen); //ancho, alto, origen);
 	Vertice vert;
 	Vertice vertNext;
 	
 	//Agrego matriz de transformacion
-	t.setMatTrans(&matTrans);
+
 
 	Linea linea;
 	std::list<Vertice>::iterator it = vertices.begin();

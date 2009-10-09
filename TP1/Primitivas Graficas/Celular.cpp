@@ -42,8 +42,7 @@ void Celular::crearCarcasa() {
 	cel.agregarVertice(115,10);
 	cel.agregarVertice(112,4);
 	cel.agregarVertice(105,0);
-	cel.setDimensiones(160,160);
-
+	cel.setDimensiones(0,0);
 }
 
 void Celular::crearSombras() {
@@ -100,42 +99,39 @@ void Celular::crearSombras() {
 
 void Celular::dibujar() {
 	//transformar
-	MatrizTrans2D matTrans;
-	Vertice fixed;  /* escala del celular */
-	fixed.x = 80;
-	fixed.y = 80;
-	matTrans.translate2D(140,0);
-	matTrans.scale2D(1,1,fixed);
+	 MatrizTrans2D matTrans;
+	 Vertice fixed;  /* escala del celular */
+	 fixed.x = 80;
+	 fixed.y = 80;
+
+	  matTrans.translate2D(-80,-80);
 	
-	glColor3f(0.3,0.3,0.3);
-	cel.dibujarConRelleno(matTrans);
+	 glColor3f(0.3,0.3,0.3);
+	 cel.dibujarConRelleno(matTrans);
 
-	glColor3f(0.25,0.25,0.25);
-	sombra[1].dibujarConRelleno(matTrans);
-	sombra[0].dibujarConRelleno(matTrans);
+	 glColor3f(0.25,0.25,0.25);
+	 // sombra[1].dibujarConRelleno(matTrans);
+	 // sombra[0].dibujarConRelleno(matTrans);
 
-	glColor3f(0.28,0.28,0.28);
-	sombra[2].dibujarConRelleno(matTrans);
-	sombra[3].dibujarConRelleno(matTrans);
+	 // glColor3f(0.28,0.28,0.28);
+	 // sombra[2].dibujarConRelleno(matTrans);
+	 // sombra[3].dibujarConRelleno(matTrans);
 
-	MatrizTrans2D matTransPantalla;
+	 MatrizTrans2D matTransPantalla;
 
-	Vertice fixedPt; // centro del poligono
-	fixedPt.x= 50;
-	fixedPt.y= 50;
-	matTransPantalla.scale2D(0.6,0.6,fixedPt);
-	matTransPantalla.translate2D(-8,-100);
-	matTransPantalla.preMultiply(matTrans);
-		
-	pantalla.dibujar(matTransPantalla);
+	 Vertice fixedPt; // centro del poligono
+	 fixedPt.x= 50;
+	 fixedPt.y= 50;
+	 matTransPantalla.translate2D(-50,-35);
+	 matTransPantalla.translate2D(0,40);
+//	 matTransPantalla.preMultiply(matTrans);
+	 pantalla.dibujar(matTransPantalla);
 	
-	MatrizTrans2D matTransBotonera;
 
-	matTransBotonera.scale2D(0.6,0.65,fixedPt);
-	matTransBotonera.translate2D(-8,190);
-	matTransBotonera.preMultiply(matTrans);
-
-	botonera.dibujar(matTransBotonera);
+	 MatrizTrans2D matTransBotonera;
+	 matTransBotonera.translate2D(-50,-35);
+	 matTransBotonera.translate2D(0,-40);
+	 botonera.dibujar(matTransBotonera);
 }
 
 void Celular::apretarBoton(int boton) {

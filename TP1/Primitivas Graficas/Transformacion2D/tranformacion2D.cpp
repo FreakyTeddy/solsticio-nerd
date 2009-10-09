@@ -22,9 +22,7 @@ void Transform2D::setMatTrans(MatrizTrans2D* matTrans) {
 }
 
 void Transform2D::loadMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {
-	
-	//Estoy suponiendo que el NDC esta normalizado.
-	matView.translate2D(-leftDown.x, -leftDown.y);
+	//Reflejo en el eje y
 
 	//Escalo a la pantalla, respecto del origen
 	Vertice origen;
@@ -32,8 +30,8 @@ void Transform2D::loadMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) 
 	origen.y= 0;
 	matView.scale2D((float)Wp/Wm, (float)-Hp/Hm, origen);
 
-	//Reflejo en el eje y
-	matView.translate2D(0, Hp);		
+	//Estoy suponiendo que el NDC esta normalizado.
+	matView.translate2D(500,400);//-leftDown.x, -leftDown.y);
 }	
 
 void Transform2D::setMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {
@@ -42,7 +40,7 @@ void Transform2D::setMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {
 	matComposite.loadIdentity();	
 
 	if(matTrans)
-		matComposite.preMultiply(*matTrans);		
+	     matComposite.preMultiply(*matTrans);		
 	matComposite.preMultiply(matView);
 }
 
