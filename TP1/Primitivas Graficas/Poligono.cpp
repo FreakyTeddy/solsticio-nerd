@@ -35,27 +35,40 @@ void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
      Transform2D t;
      
      Vertice vert; 
-     Vertice vertNext; 
      
      //matriz de transformada
      t.setMatTrans(&matTrans);	
      t.setMatView(800, 600, 160,160,origen);//ancho, alto, origen);  
      
+
+     //creo un poligono nuevo transformado
+     Poligono transformado;
+
+	 std::list<Vertice>::iterator it = vertices.begin();
+	 while(it!=vertices.end()){
+			vert= t.transformVerts2D(*it);
+			transformado.agregarVertice(vert.x,vert.y);
+			it++;
+	 }
+
+	 //recorte del poligono transformado
      ClippingPoligonos clipper;
      Poligono *cortado;
-     cortado = clipper.clippingLB(400,200,545,295,this);
+     cortado = clipper.clippingLB(600,0,0,800,&transformado);
 
-      //algoritmo de relleno de poligonos Rellena el poligono clippeado
+      //algoritmo de relleno de poligonos. Rellena el poligono clippeado
 	 dcPt* ptos;
 	 ptos = new dcPt[cortado->vertices.size()];
-	 std::list<Vertice>::iterator it = cortado->vertices.begin();
+
+	 it = cortado->vertices.begin();
 	 for(int i=0;it!=cortado->vertices.end();it++,i++){
-			vert= t.transformVerts2D(*it);
 			ptos[i].x = vert.x;
 			ptos[i].y = vert.y;
 	 }
+
 	 Relleno relleno;
 	 relleno.scanLine(cortado->vertices.size(), ptos);
+
 	 delete []ptos;
 	 delete cortado;
 
