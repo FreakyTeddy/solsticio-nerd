@@ -40,7 +40,6 @@ void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
      t.setMatTrans(&matTrans);	
      t.setMatView(800, 600, 160,160,origen);//ancho, alto, origen);  
      
-
      //creo un poligono nuevo transformado
      Poligono transformado;
 
@@ -56,14 +55,14 @@ void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
      Poligono *cortado;
      cortado = clipper.clippingLB(600,0,0,800,&transformado);
 
-      //algoritmo de relleno de poligonos. Rellena el poligono clippeado
+      //algoritmo de relleno de poligonos Rellena el poligono clippeado
 	 dcPt* ptos;
 	 ptos = new dcPt[cortado->vertices.size()];
 
 	 it = cortado->vertices.begin();
 	 for(int i=0;it!=cortado->vertices.end();it++,i++){
-			ptos[i].x = vert.x;
-			ptos[i].y = vert.y;
+			ptos[i].x = (*it).x;
+			ptos[i].y = (*it).y;
 	 }
 
 	 Relleno relleno;
@@ -71,7 +70,6 @@ void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
 
 	 delete []ptos;
 	 delete cortado;
-
 }
 
 void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
@@ -87,10 +85,26 @@ void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 
 	Vertice vert;
 	Vertice vertNext;
+
+	//creo un poligono nuevo transformado
+	 Poligono transformado;
+
+	 std::list<Vertice>::iterator it = vertices.begin();
+	 while(it!=vertices.end()){
+			vert= t.transformVerts2D(*it);
+			transformado.agregarVertice(vert.x,vert.y);
+			it++;
+	 }
+
+	 //recorte del poligono transformado
+	  ClippingPoligonos clipper;
+	  Poligono *cortado;
+	  cortado = clipper.clippingLB(600,0,0,800,&transformado);
+
 	Linea linea;
-	std::list<Vertice>::iterator it = vertices.begin();
-	std::list<Vertice>::iterator next = vertices.begin();
-	std::list<Vertice>::iterator end = vertices.end();
+	it = cortado->vertices.begin();
+	std::list<Vertice>::iterator next = cortado->vertices.begin();
+	std::list<Vertice>::iterator end = cortado->vertices.end();
 	next++;
 
 	//crear un poligono copia, transformarlo y pasarlo al clipper.. despues dibujar
@@ -101,32 +115,29 @@ void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 	if (esDDA) {
 		//lineaDDA
 		while (next != end) {
-			vert= t.transformVerts2D(*it);
-			vertNext= t.transformVerts2D(*next);
-
-			linea.lineaDDA(vert.x, vert.y, vertNext.x, vertNext.y);
+			linea.lineaDDA((*it).x, (*it).y, (*next).x, (*next).y);
 			it++;
 			next++;
 		}
-		vert= t.transformVerts2D(*vertices.begin());
+		next = cortado->vertices.begin();
 
-		linea.lineaDDA(vert.x, vert.y, vertNext.x, vertNext.y);
+		linea.lineaDDA((*it).x, (*it).y, (*next).x, (*next).y);
 	}
 	else {
 		//linea Bresenham
 		while (next != end) {
-			vert= t.transformVerts2D(*it);
-			vertNext= t.transformVerts2D(*next);
 
-			linea.lineaBresenham(vert.x, vert.y, vertNext.x, vertNext.y);
+			linea.lineaBresenham((*it).x, (*it).y, (*next).x, (*next).y);
 			it++;
 			next++;
 		}
+		next = cortado->vertices.begin();
 
-		vert= t.transformVerts2D(*vertices.begin());
-
-		linea.lineaBresenham(vert.x, vert.y, vertNext.x, vertNext.y);
+		linea.lineaBresenham((*it).x, (*it).y, (*next).x, (*next).y);
 	}
+
+	delete cortado;
+
 }
 
 std::list<Vertice>& Poligono::obtenerVertices(){
