@@ -1,11 +1,19 @@
 #include "Poligono.h"
 #include "Relleno/relleno.h"
 #include <iostream> //TODO sacar!
+#include "liang-barsky.h"
 
 Poligono::Poligono() {
 	ancho = 100;
 	alto = 100;
 }
+
+//Poligono::Poligono(const Poligono &p) {
+//	std::list<Vertice>::iterator it = p.vertices.begin();
+//	for(int i = 0; it != p.vertices.end(); it++){
+//			this->agregarVertice((*it).x, (*it).y);
+//	}
+//}
 
 Poligono::~Poligono() {
 	vertices.clear();
@@ -33,20 +41,24 @@ void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
      t.setMatTrans(&matTrans);	
      t.setMatView(800, 600, 160,160,origen);//ancho, alto, origen);  
      
-     //algoritmo de relleno de poligonos
-     dcPt* ptos;
-     ptos = new dcPt[vertices.size()];
-     std::list<Vertice>::iterator it = vertices.begin();
-     for(int i=0;it!=vertices.end();it++,i++){
-	  		vert= t.transformVerts2D(*it);
-	  		ptos[i].x = vert.x;
-	  		ptos[i].y = vert.y;
-     }
-     Relleno relleno;
-//     ClippingPoligonos cl;
-     //   Poligono *p;
-//     p = cl.clippingLB(400,0,5,795,this);
-     relleno.scanLine(vertices.size(), ptos);
+     ClippingPoligonos clipper;
+     Poligono *cortado;
+     cortado = clipper.clippingLB(400,200,545,295,this);
+
+      //algoritmo de relleno de poligonos Rellena el poligono clippeado
+	 dcPt* ptos;
+	 ptos = new dcPt[cortado->vertices.size()];
+	 std::list<Vertice>::iterator it = cortado->vertices.begin();
+	 for(int i=0;it!=cortado->vertices.end();it++,i++){
+			vert= t.transformVerts2D(*it);
+			ptos[i].x = vert.x;
+			ptos[i].y = vert.y;
+	 }
+	 Relleno relleno;
+	 relleno.scanLine(cortado->vertices.size(), ptos);
+	 delete []ptos;
+	 delete cortado;
+
 }
 
 void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
@@ -56,20 +68,19 @@ void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 		origen.y= alto;
 	Transform2D t;
 
-	//Agrego matriz de vista
+	//Agrego matriz de transformacion
 	t.setMatTrans(&matTrans);
 	t.setMatView(800, 600, 160,160, origen); //ancho, alto, origen);
+
 	Vertice vert;
 	Vertice vertNext;
-	
-	//Agrego matriz de transformacion
-
-
 	Linea linea;
 	std::list<Vertice>::iterator it = vertices.begin();
 	std::list<Vertice>::iterator next = vertices.begin();
 	std::list<Vertice>::iterator end = vertices.end();
 	next++;
+
+	//crear un poligono copia, transformarlo y pasarlo al clipper.. despues dibujar
 
 	if (it == end)
 		return;
@@ -84,7 +95,6 @@ void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 			it++;
 			next++;
 		}
-		//next = vertices.begin(); //uno el ultimo con el primero
 		vert= t.transformVerts2D(*vertices.begin());
 
 		linea.lineaDDA(vert.x, vert.y, vertNext.x, vertNext.y);
@@ -99,11 +109,11 @@ void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 			it++;
 			next++;
 		}
-//			next = vertices.begin(); //uno el ultimo con el primero
+
 		vert= t.transformVerts2D(*vertices.begin());
 
 		linea.lineaBresenham(vert.x, vert.y, vertNext.x, vertNext.y);
-		}
+	}
 }
 
 std::list<Vertice>& Poligono::obtenerVertices(){

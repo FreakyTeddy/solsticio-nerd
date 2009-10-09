@@ -4,7 +4,6 @@
 #include "GL/glut.h"
 #include <math.h>
 #include <stdlib.h>
-#include "../../Funciones.h"
 
 #include <iostream>
 

@@ -1,6 +1,8 @@
 #include "liang-barsky.h"
 #include <iostream>
 
+//typedef Class Poligono;
+
 #define INFINITY  2147483647
 
 ClippingPoligonos::ClippingPoligonos()
