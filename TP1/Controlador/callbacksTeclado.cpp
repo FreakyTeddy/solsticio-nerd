@@ -46,7 +46,20 @@ void CallBacksTeclado::changeLine(char type) {
 void CallBacksTeclado::zoom(char type) {
 	//hacer zoom
 	glBegin(GL_POINTS);
-
+	extern int anchoventanaM;
+	extern int altoventanaM;
+	switch(type){
+		case '+':
+			anchoventanaM -= 0.1 * anchoventanaM;
+			altoventanaM -= 0.1 * altoventanaM;
+			break;
+		case '-':
+			anchoventanaM += 0.1 * anchoventanaM;
+			altoventanaM += 0.1 * altoventanaM;
+			break;
+		default:
+			break;
+	}
 		celular->dibujar();
 
 	glEnd();

@@ -29,10 +29,11 @@ void Poligono::dibujarConRelleno(MatrizTrans2D &matTrans) {
      Transform2D t;
      
      Vertice vert; 
-     
+     extern int anchoventanaM;
+     extern int altoventanaM;
      //matriz de transformada
      t.setMatTrans(&matTrans);	
-     t.setMatView(800, 600, 160,160,origen);//ancho, alto, origen);  
+     t.setMatView(800, 600, anchoventanaM,altoventanaM,origen);//ancho, alto, origen);  
      
      //creo un poligono nuevo transformado
      Poligono transformado;
@@ -72,10 +73,11 @@ void Poligono::dibujarContorno(bool esDDA, MatrizTrans2D &matTrans) {
 		origen.x= ancho;
 		origen.y= alto;
 	Transform2D t;
-
+	extern int anchoventanaM;
+    extern int altoventanaM;
 	//Agrego matriz de transformacion
 	t.setMatTrans(&matTrans);
-	t.setMatView(800, 600, 160,160, origen); //ancho, alto, origen);
+	t.setMatView(800, 600, anchoventanaM,altoventanaM, origen); //ancho, alto, origen);
 
 	Vertice vert;
 	Vertice vertNext;

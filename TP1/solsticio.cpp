@@ -18,6 +18,9 @@ char caption[]= "El Celular";
 Celular celular;
 CallBacksTeclado callbacks;
 
+int anchoventanaM = 160;
+int altoventanaM = 160;
+
 void reshape(int w, int h)
 {
    glViewport (0, 0, (GLsizei) w, (GLsizei) h);
@@ -30,6 +33,7 @@ void init(void)
 {
 	glClearColor(1.0,1.0,1.0,0.0);
 	callbacks.setCelular(&celular);
+
 }
 
 void display(void)
