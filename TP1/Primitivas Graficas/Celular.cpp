@@ -1,6 +1,8 @@
 #include "Celular.h"
 #include <iostream>
 
+
+
 Celular::Celular() {
 	for (int i=0; i<10; i++) {
 		numero[i] = new Numero(i);
@@ -109,12 +111,12 @@ void Celular::dibujar() {
 	 cel.dibujarConRelleno(matTrans);
 
 	 glColor3f(0.25,0.25,0.25);
-	 // sombra[1].dibujarConRelleno(matTrans);
-	 // sombra[0].dibujarConRelleno(matTrans);
+	  sombra[1].dibujarConRelleno(matTrans);
+	  sombra[0].dibujarConRelleno(matTrans);
 
-	 // glColor3f(0.28,0.28,0.28);
-	 // sombra[2].dibujarConRelleno(matTrans);
-	 // sombra[3].dibujarConRelleno(matTrans);
+	  glColor3f(0.28,0.28,0.28);
+	  sombra[2].dibujarConRelleno(matTrans);
+	  sombra[3].dibujarConRelleno(matTrans);
 
 	 MatrizTrans2D matTransPantalla;
 
