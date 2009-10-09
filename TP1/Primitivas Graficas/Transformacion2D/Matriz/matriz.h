@@ -1,8 +1,6 @@
 #ifndef MATRIZ_H_
 #define MATRIZ_H_
 
-#include <iostream>
-
 class Matriz {                      
 	
 	private:

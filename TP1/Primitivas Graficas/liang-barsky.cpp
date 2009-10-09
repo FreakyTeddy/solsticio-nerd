@@ -1,5 +1,4 @@
 #include "liang-barsky.h"
-#include <iostream>
 
 #define INFINITY  2147483647
 

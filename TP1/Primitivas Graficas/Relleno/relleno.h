@@ -1,7 +1,6 @@
 #ifndef RELLENO_H_
 #define RELLENO_H_
 
-#include <iostream>
 #include "GL/glut.h"
 #include "../../Constantes.h"
 

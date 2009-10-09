@@ -1,4 +1,5 @@
 #include "transformacion2D.h"
+#include <iostream>
 
 Transform2D::Transform2D(): 
 matTrans(NULL), matView(), matComposite() {
@@ -22,16 +23,18 @@ void Transform2D::setMatTrans(MatrizTrans2D* matTrans) {
 }
 
 void Transform2D::loadMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {
-	//Reflejo en el eje y
 
+	//Reflejo en el eje y
 	//Escalo a la pantalla, respecto del origen
 	Vertice origen;
 	origen.x= 0;
 	origen.y= 0;
 	matView.scale2D((float)Wp/Wm, (float)-Hp/Hm, origen);
 
+	extern int desplazamientoX;
+	extern int desplazamientoY;
 	//Estoy suponiendo que el NDC esta normalizado.
-	matView.translate2D(ANCHO/2,ALTO/2);/*(400,300);*///-leftDown.x, -leftDown.y);500,400
+	matView.translate2D((ANCHO/2) + desplazamientoX, (ALTO/2) + desplazamientoY);
 }	
 
 void Transform2D::setMatView(int Wp, int Hp, int Wm, int Hm, Vertice leftDown) {

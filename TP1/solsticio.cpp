@@ -5,8 +5,6 @@
 #include "GL/glut.h"
 #include <stdlib.h>
 
-#include <iostream> //TODO sacar
-
 #include "Primitivas Graficas/Celular.h"
 #include "Controlador/callbacksTeclado.h"
 
@@ -18,8 +16,11 @@ char caption[]= "El Celular";
 Celular celular;
 CallBacksTeclado callbacks;
 
+//dimensiones de la ventana del mundo
 int anchoventanaM = 160;
 int altoventanaM = 160;
+int desplazamientoX = 0;
+int desplazamientoY = 0;
 
 void reshape(int w, int h)
 {
@@ -89,11 +90,9 @@ void keyboard(unsigned char key, int x, int y)
 		callbacks.pressedNumber(9);
 		break;
 	case 0x2B:
-		std::cout<<".....+......"<<std::endl;
 		callbacks.zoom('+');
 		break;
 	case 0x2D:
-		std::cout<<".....-......"<<std::endl;
 		callbacks.zoom('-');
 		break;
 	case 0x62:
@@ -116,19 +115,15 @@ void specialKeys(int key,int x, int y) {
 
 	switch(key) {
 	case GLUT_KEY_LEFT:
-		std::cout<<"........izquierda........"<<std::endl;
 		callbacks.moveView('L');
 		break;
 	case GLUT_KEY_RIGHT:
-		std::cout<<"..........derecha.........."<<std::endl;
 		callbacks.moveView('R');
 		break;
 	case GLUT_KEY_UP:
-		std::cout<<".........arriba........"<<std::endl;
 		callbacks.moveView('U');
 		break;
 	case GLUT_KEY_DOWN:
-		std::cout<<"......abajo........"<<std::endl;
 		callbacks.moveView('D');
 		break;
 	}

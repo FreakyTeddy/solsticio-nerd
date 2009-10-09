@@ -1,6 +1,5 @@
 #include "Poligono.h"
 #include "Relleno/relleno.h"
-#include <iostream> //TODO sacar!
 #include "liang-barsky.h"
 #include "../Constantes.h"
 

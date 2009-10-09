@@ -47,8 +47,10 @@ void CallBacksTeclado::zoom(char type) {
 	//hacer zoom
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_POINTS);
+
 	extern int anchoventanaM;
 	extern int altoventanaM;
+
 	switch(type){
 		case '+':
 			anchoventanaM -= 0.1 * anchoventanaM;
@@ -70,7 +72,25 @@ void CallBacksTeclado::zoom(char type) {
 
 void CallBacksTeclado::moveView(char orientation) {
 	//mover vista
+	extern int desplazamientoX;
+	extern int desplazamientoY;
 	
+	switch (orientation) {
+	case 'L' :
+		desplazamientoX -= 20;
+		break;
+	case 'R' :
+		desplazamientoX += 20;
+		break;
+	case 'D' :
+		desplazamientoY += 20;
+		break;
+	case 'U' :
+		desplazamientoY -= 20;
+		break;
+	}
+
+	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_POINTS);
 
 		celular->dibujar();

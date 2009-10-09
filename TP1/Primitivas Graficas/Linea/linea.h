@@ -5,8 +5,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include <iostream>
-
 class Linea {
 
 	public:
