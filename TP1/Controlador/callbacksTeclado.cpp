@@ -45,6 +45,7 @@ void CallBacksTeclado::changeLine(char type) {
 
 void CallBacksTeclado::zoom(char type) {
 	//hacer zoom
+	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_POINTS);
 	extern int anchoventanaM;
 	extern int altoventanaM;
