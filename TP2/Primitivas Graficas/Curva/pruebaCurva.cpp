@@ -35,40 +35,41 @@ void display(void)
     
   Curva curva;  
   
-  int numberOfPoints= 4;
-  
-  Vertice2D* cp;
-  cp= new Vertice2D[numberOfPoints];
-  
- 		cp[0].x= 100;
-		cp[0].y= 100;  
-		
- 		cp[1].x= 200;
-		cp[1].y= 200;
+  std::list<Vertice2D> ptosControl;
 
- 		cp[2].x= 300;
-		cp[2].y= 100;
+  Vertice2D cp0;  
+ 		cp0.x= 100;
+		cp0.y= 400;  
+		ptosControl.push_back(cp0);
+ 	
+ 	 Vertice2D cp1;  	
+ 		cp1.x= 200;
+		cp1.y= 100;
+		ptosControl.push_back(cp1);
 
- 		cp[3].x= 400;
-		cp[3].y= 200;
-    
-  Vertice2D* curve;
-  curve= new Vertice2D[numberOfPoints];   
+	 Vertice2D cp2;  
+ 		cp2.x= 600;
+		cp2.y= 100;
+		ptosControl.push_back(cp2);
 
-	glBegin(GL_LINE_STRIP);
-	
-	glColor3f(1.0,0,0);
-		glVertex2i(cp[0].x, cp[0].y);
-		glVertex2i(cp[1].x, cp[1].y);
-		glVertex2i(cp[2].x, cp[2].y);
-    glVertex2i(cp[3].x, cp[3].y);
+	 Vertice2D cp3;   
+ 		cp3.x= 700;
+		cp3.y= 400;
+		ptosControl.push_back(cp3);
+
+	glColor3f(1.0,0,0);    
+	glBegin(GL_POINTS);
+		glVertex2i(cp0.x, cp0.y);
+		glVertex2i(cp1.x, cp1.y);
+		glVertex2i(cp2.x, cp2.y);
+    glVertex2i(cp3.x, cp3.y);
+	glEnd();
 
 	glColor3f(0,0,1.0);
-	curva.Bezier(cp, numberOfPoints, curve);
-	
+	glBegin(GL_LINE_STRIP);
+		curva.BezierCubica(ptosControl);
 	glEnd();
 	
-  
 	///
   	glutSwapBuffers();
 	///

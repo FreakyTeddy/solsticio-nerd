@@ -2,24 +2,20 @@
 #define CURVA_H_
 
 #include "GL/glut.h"
+#include <list>
  
 typedef struct {
     float x;
     float y;
 } Vertice2D;
 
-
 class Curva {
 	
-	
-	public:
-		/*
- 			ComputeBezier fills an array of Point2D structs with the curve   
- 		  points generated from the control points cp. Caller must 
- 			allocate sufficient memory for the result, which is 
- 			<sizeof(Point2D) numberOfPoints>
-		*/
-		void Bezier(Vertice2D* cp, int numberOfPoints, Vertice2D* curve);
+	public:		
+		/* Dibuja los vertices de la curva, apartir de los puntos de control
+		 * pasados en la lista (P0, P1, P2, P3).
+		 * */ 		
+		void BezierCubica(std::list<Vertice2D> ptosControl);
 };
 
 #endif /*CURVA_H_*/
