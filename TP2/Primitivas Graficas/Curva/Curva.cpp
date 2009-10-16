@@ -58,7 +58,10 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
   }
 }
 
-void Curva::setFactorBezier(int factor) {
+void Curva::modificarFactorBezier(int cantidad) {
 
-	factorBezier= factor;
+	factorBezier+= cantidad;
+
+	if(factorBezier <= 0)
+		factorBezier= 1;
 }

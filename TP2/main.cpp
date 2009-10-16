@@ -4,10 +4,15 @@
 ///
 #include "GL/glut.h" 
 #include <stdlib.h>
-#include "Curva.h"
+#include <iostream>
+#include "Primitivas Graficas/Curva/Curva.h"
+#include "Controlador/Controlador.h"
 
 #define ANCHO	800
 #define ALTO	600
+
+Curva curva;
+Controlador controlador(&curva);
 
 char caption[]= "-- Curvas --";
 
@@ -33,8 +38,8 @@ void display(void)
         glLoadIdentity();
 	///
     
-  Curva curva;  
-  
+	/*PRUEBA CURVA BEZIER*/ 
+	/*-------------------*/ 
   std::list<Vertice2D> ptosControl;
 
   Vertice2D cp0;  
@@ -69,6 +74,8 @@ void display(void)
 	glBegin(GL_LINE_STRIP);
 		curva.BezierCubica(ptosControl);
 	glEnd();
+
+	/*-------------------*/ 
 	
 	///
   	glutSwapBuffers();
@@ -81,22 +88,30 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
+	case 0x71:
+		std::cout << "Q: aumenta el paso bezier" << std::endl;
+		controlador.aumentarPasoBezier();
+		glutPostRedisplay();
+		break;
+	case 0x77:
+		std::cout << "w: disminuye el paso bezier" << std::endl;
+		controlador.disminuirPasoBezier();
+		glutPostRedisplay();
+		break;
 	case 0x1b:
-		exit (1);
+		exit(1);
 		break;
 	}
 }
 
-
-
 int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
-   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-   glutInitWindowSize (ANCHO, ALTO); 
+   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+   glutInitWindowSize(ANCHO, ALTO); 
    glutInitWindowPosition (100, 100);
-   glutCreateWindow (caption);
-   init ();
+   glutCreateWindow(caption);
+   init();
    glutKeyboardFunc(keyboard);
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape); 

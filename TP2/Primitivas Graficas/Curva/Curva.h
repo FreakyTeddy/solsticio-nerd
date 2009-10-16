@@ -16,7 +16,9 @@ class Curva {
 	private:
 		int factorBezier;
 	
-	public:		
+	public:
+		/* Crea una curva con factores de paso por defecto.
+		 * */		
 		Curva();
 	
 		/* Dibuja los vertices de la curva, apartir de los puntos de control
@@ -24,7 +26,10 @@ class Curva {
 		 * */ 		
 		void BezierCubica(std::list<Vertice2D> ptosControl);
 
-		void setFactorBezier(int factor);
+		/* Suma al factor del paso de Bezier la cantidad pasada por
+		 * parametro.
+		 * */ 		
+		void modificarFactorBezier(int cantidad);
 };
 
 #endif /*CURVA_H_*/
