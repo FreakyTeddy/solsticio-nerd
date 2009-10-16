@@ -49,7 +49,7 @@ void display(void)
 
 	 Vertice2D cp2;  
  		cp2.x= 600;
-		cp2.y= 100;
+		cp2.y= 700;
 		ptosControl.push_back(cp2);
 
 	 Vertice2D cp3;   
@@ -74,9 +74,6 @@ void display(void)
   	glutSwapBuffers();
 	///
 }
-
-
-
 
 /* x, y coordenadas mouse cuando se presiona key
 */

@@ -1,5 +1,8 @@
 #include "Curva.h"
 
+Curva::Curva(): factorBezier(FACTOR_BEZIER_INICIAL) { };
+
+
 Vertice2D& find(std::list<Vertice2D> vertices, unsigned int position) {
 	
 	std::list<Vertice2D>::iterator it= vertices.begin();
@@ -13,18 +16,19 @@ Vertice2D& find(std::list<Vertice2D> vertices, unsigned int position) {
 } 
 
 void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
-
-  float dt=(float) 1.0 / (ptosControl.size() - 1);
 	
-	std::list<Vertice2D>::iterator it;
-	int i= 0;
+  float dt=(float) 1.0 / (ptosControl.size()*factorBezier);
+	
+	std::list<Vertice2D>::iterator it= ptosControl.end();
 
 	float   ax, bx, cx;
   float   ay, by, cy;
   float   t, tSquared, tCubed;
   Vertice2D result;
 	 
-  for(it= ptosControl.begin(); it != ptosControl.end(); it++, i++) {
+	bool end= false; 
+	 
+	for(int i= 0; !end; i++) {
  
  		t= dt*i;
  	
@@ -37,15 +41,24 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
 	  by = 3.0 * (find(ptosControl, 2).y - find(ptosControl, 1).y) - cy;
 	  ay = find(ptosControl, 3).y - find(ptosControl, 0).y - cy - by;
  
-	  // cálculo del punto de la curva en el valor de parámetro t	 
-	  // t es el valor del parámetro, 0 <= t <= 1
+	  //cálculo del punto de la curva en el valor de parámetro t	 
+	  //t es el valor del parámetro, 0 <= t <= 1
 	  
-	  tSquared = t * t;
-	  tCubed = tSquared * t;
+	  tSquared= t * t;
+	  tCubed= tSquared * t;
 	 
-	  result.x = (ax * tCubed) + (bx * tSquared) + (cx * t) + find(ptosControl, 0).x;
-	  result.y = (ay * tCubed) + (by * tSquared) + (cy * t) + find(ptosControl, 0).y;
+	  result.x= (ax * tCubed) + (bx * tSquared) + (cx * t) + find(ptosControl, 0).x;
+	  result.y= (ay * tCubed) + (by * tSquared) + (cy * t) + find(ptosControl, 0).y;
 	 
 	 	glVertex2i(result.x, result.y);
+	 	
+	 	//Llegamos al P3
+	 	if(result.x == it->x && result.y == it->y)
+	 		end= true;
   }
+}
+
+void Curva::setFactorBezier(int factor) {
+
+	factorBezier= factor;
 }
