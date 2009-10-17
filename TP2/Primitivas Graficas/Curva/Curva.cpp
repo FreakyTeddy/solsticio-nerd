@@ -31,15 +31,15 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
 	for(int i= 0; !end; i++) {
  
  		t= dt*i;
- 	
+ 		 		
 	  // cálculo de los coeficientes polinomiales	 
-	  cx = 3.0 * (find(ptosControl, 1).x - find(ptosControl, 0).x);
-	  bx = 3.0 * (find(ptosControl, 2).x - find(ptosControl, 1).x) - cx;
-	  ax = find(ptosControl, 3).x - find(ptosControl, 0).x - cx - bx;
+	  cx= 3.0 * (find(ptosControl, 1).x - find(ptosControl, 0).x);
+	  bx= 3.0 * (find(ptosControl, 2).x - find(ptosControl, 1).x) - cx;
+	  ax= find(ptosControl, 3).x - find(ptosControl, 0).x - cx - bx;
 	 
-	  cy = 3.0 * (find(ptosControl, 1).y - find(ptosControl, 0).y);
-	  by = 3.0 * (find(ptosControl, 2).y - find(ptosControl, 1).y) - cy;
-	  ay = find(ptosControl, 3).y - find(ptosControl, 0).y - cy - by;
+	  cy= 3.0 * (find(ptosControl, 1).y - find(ptosControl, 0).y);
+	  by= 3.0 * (find(ptosControl, 2).y - find(ptosControl, 1).y) - cy;
+	  ay= find(ptosControl, 3).y - find(ptosControl, 0).y - cy - by;
  
 	  //cálculo del punto de la curva en el valor de parámetro t	 
 	  //t es el valor del parámetro, 0 <= t <= 1
@@ -62,6 +62,8 @@ void Curva::modificarFactorBezier(int cantidad) {
 
 	factorBezier+= cantidad;
 
-	if(factorBezier <= 0)
+	if(factorBezier <= FACTOR_MIN)
 		factorBezier= 1;
+	if(factorBezier > FACTOR_MAX)
+		factorBezier= FACTOR_MAX;
 }
