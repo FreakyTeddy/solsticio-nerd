@@ -22,11 +22,18 @@ class Curva {
 		/* Crea una curva con factores de paso por defecto.
 		 * */		
 		Curva();
-	
+
+//TODO en lugar de dibujar deberian devolver los puntos no? porque nos sirven :P
+
 		/* Dibuja los vertices de la curva, apartir de los puntos de control
 		 * pasados en la lista (P0, P1, P2, P3).
 		 * */ 		
 		void BezierCubica(std::list<Vertice2D> ptosControl);
+
+		/* Dibuja una curva Bspline cubica uniforme a partir de los puntos de control
+		 * requiere al menos 4 puntos de control
+		 * */
+		void Bspline(std::list<Vertice2D> ptosControl);
 
 		/* Suma al factor del paso de Bezier la cantidad pasada por
 		 * parametro.

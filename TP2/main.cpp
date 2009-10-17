@@ -54,7 +54,7 @@ void display(void)
 
 	 Vertice2D cp2;  
  		cp2.x= 600;
-		cp2.y= 700;
+		cp2.y= 200;
 		ptosControl.push_back(cp2);
 
 	 Vertice2D cp3;   
@@ -62,17 +62,31 @@ void display(void)
 		cp3.y= 400;
 		ptosControl.push_back(cp3);
 
+	Vertice2D cp4;
+		cp4.x= 500;
+		cp4.y= 400;
+		ptosControl.push_back(cp4);
+
+	Vertice2D cp5;
+		cp5.x= 600;
+		cp5.y= 100;
+		ptosControl.push_back(cp5);
+		ptosControl.push_back(cp5);
+		ptosControl.push_back(cp5);
+
 	glColor3f(1.0,0,0);    
 	glBegin(GL_POINTS);
 		glVertex2i(cp0.x, cp0.y);
 		glVertex2i(cp1.x, cp1.y);
 		glVertex2i(cp2.x, cp2.y);
-    glVertex2i(cp3.x, cp3.y);
+		glVertex2i(cp3.x, cp3.y);
+		glVertex2i(cp4.x, cp4.y);
+		glVertex2i(cp5.x, cp5.y);
 	glEnd();
 
 	glColor3f(0,0,1.0);
 	glBegin(GL_LINE_STRIP);
-		curva.BezierCubica(ptosControl);
+		curva.Bspline(ptosControl);
 	glEnd();
 
 	/*-------------------*/ 

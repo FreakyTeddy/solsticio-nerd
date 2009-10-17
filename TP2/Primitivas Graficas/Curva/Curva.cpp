@@ -1,4 +1,5 @@
 #include "Curva.h"
+#include <iostream>
 
 Curva::Curva(): factorBezier(FACTOR_BEZIER_INICIAL) { };
 
@@ -66,4 +67,81 @@ void Curva::modificarFactorBezier(int cantidad) {
 		factorBezier= 1;
 	if(factorBezier > FACTOR_MAX)
 		factorBezier= FACTOR_MAX;
+}
+
+void Curva::Bspline(std::list<Vertice2D> ptosControl) {
+
+	if (ptosControl.size() < 4)
+		return;
+
+	float base_u[4]; //tiene (u^3, u^2, u, 1)
+
+	const int B[][4] = { { -1 , 3 , -3 , 1 },
+						{ 3 , -6 , 3 , 0 },
+						{ -3 , 0 , 3 , 0 },
+						{ 1 , 4 , 1 , 0 }
+					  };
+
+	Vertice2D puntos[4]; //VER tal vez se puede usar una cola (aunque yo usaria una pila =O)
+
+	std::list<Vertice2D>::iterator it = ptosControl.begin();
+
+	//itero por los puntos de control
+	for (unsigned int i=0; i<(ptosControl.size()-3); i++, it++) {
+
+		Vertice2D result[4];
+
+		for (int j= 0; j<4; j++, it++) {
+			//tomo los 4 puntos de control
+			puntos[j].x = (*it).x;
+			puntos[j].y = (*it).y;
+
+			result[j].x = 0;	//inicializo
+			result[j].y = 0;
+		}
+		//decremento el it
+		for (int j= 0; j<4; j++, it--){}
+		std::cout<<"Result"<<std::endl;
+		//multiplico B con los puntos
+		for (int k=0; k<4; k++) {
+			for (int m=0; m<4; m++) {
+
+				result[k].x += B[k][m] * puntos[m].x;
+				result[k].y += B[k][m] * puntos[m].y;
+
+			}
+			std::cout<<"x: "<<result[k].x<<"   y: "<<result[k].y<<std::endl;
+		}
+std::cout<<"dividido 6"<<std::endl;
+		//multiplico por 1/6
+		for (int j= 0; j<4; j++) {
+			result[j].x /= 6;
+			result[j].y /= 6;
+			std::cout<<"x: "<<result[j].x<<"   y: "<<result[j].y<<std::endl;
+		}
+
+std::cout<<"Puntos Finales"<<std::endl;
+		//multiplico por el parametro TODO paso u hardcodeado!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		for (float u=0; u<=1; u+=0.1) {
+
+			base_u[0] = u*u*u;
+			base_u[1] = u*u;
+			base_u[2] = u;
+			base_u[3] = 1;
+
+			Vertice2D v;
+			v.x=0;
+			v.y=0;
+			for (int j= 0; j<4; j++) {
+				v.x += base_u[j] * result[j].x;
+				v.y += base_u[j] * result[j].y;
+			}
+
+			std::cout<<"x: "<<v.x<<"   y: "<<v.y<<std::endl;
+			glVertex2i(v.x, v.y);
+
+		}
+		std::cout<<std::endl<<std::endl;
+	}
+
 }
