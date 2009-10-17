@@ -1,5 +1,4 @@
 #include "Curva.h"
-#include <iostream>
 
 Curva::Curva(): factorBezier(FACTOR_BEZIER_INICIAL) { };
 
@@ -82,7 +81,7 @@ void Curva::Bspline(std::list<Vertice2D> ptosControl) {
 						{ 1 , 4 , 1 , 0 }
 					  };
 
-	Vertice2D puntos[4]; //VER tal vez se puede usar una cola (aunque yo usaria una pila =O)
+	Vertice2D puntos[4];
 
 	std::list<Vertice2D>::iterator it = ptosControl.begin();
 
@@ -92,6 +91,7 @@ void Curva::Bspline(std::list<Vertice2D> ptosControl) {
 		Vertice2D result[4];
 
 		for (int j= 0; j<4; j++, it++) {
+
 			//tomo los 4 puntos de control
 			puntos[j].x = (*it).x;
 			puntos[j].y = (*it).y;
@@ -99,9 +99,10 @@ void Curva::Bspline(std::list<Vertice2D> ptosControl) {
 			result[j].x = 0;	//inicializo
 			result[j].y = 0;
 		}
+
 		//decremento el it
 		for (int j= 0; j<4; j++, it--){}
-		std::cout<<"Result"<<std::endl;
+
 		//multiplico B con los puntos
 		for (int k=0; k<4; k++) {
 			for (int m=0; m<4; m++) {
@@ -110,17 +111,14 @@ void Curva::Bspline(std::list<Vertice2D> ptosControl) {
 				result[k].y += B[k][m] * puntos[m].y;
 
 			}
-			std::cout<<"x: "<<result[k].x<<"   y: "<<result[k].y<<std::endl;
 		}
-std::cout<<"dividido 6"<<std::endl;
-		//multiplico por 1/6
+
+		//divido por seis
 		for (int j= 0; j<4; j++) {
 			result[j].x /= 6;
 			result[j].y /= 6;
-			std::cout<<"x: "<<result[j].x<<"   y: "<<result[j].y<<std::endl;
 		}
 
-std::cout<<"Puntos Finales"<<std::endl;
 		//multiplico por el parametro TODO paso u hardcodeado!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		for (float u=0; u<=1; u+=0.1) {
 
@@ -132,16 +130,15 @@ std::cout<<"Puntos Finales"<<std::endl;
 			Vertice2D v;
 			v.x=0;
 			v.y=0;
+
 			for (int j= 0; j<4; j++) {
 				v.x += base_u[j] * result[j].x;
 				v.y += base_u[j] * result[j].y;
 			}
 
-			std::cout<<"x: "<<v.x<<"   y: "<<v.y<<std::endl;
 			glVertex2i(v.x, v.y);
 
 		}
-		std::cout<<std::endl<<std::endl;
 	}
 
 }
