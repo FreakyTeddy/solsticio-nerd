@@ -1,13 +1,14 @@
-SOURCES=Primitivas\ Graficas/Curva/Curva.cpp
+SOURCES=Primitivas\ Graficas/Curva/Curva.cpp \
+	Controlador/Controlador.cpp
 
 
 TESTSOURCES=Primitivas\ Graficas/Curva/pruebaCurva.cpp
 
-MAIN=solsticio.cpp
+MAIN=mainPrincipal.cpp
 
 CFLAGS=-g -lGL -lGLU -lglut
 CC=g++
-EXECUTABLE=Tp1
+EXECUTABLE=Tp2
 
 OBJECTS=$(SOURCES:.cpp=.o)
 TESTOBJECTS=$(TESTSOURCES:.cpp=.o)
