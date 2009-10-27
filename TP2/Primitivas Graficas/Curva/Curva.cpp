@@ -27,34 +27,51 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
   Vertice2D result;
 	 
 	bool end= false; 
+	bool last= false; 
+	
+	Vertice2D ptos[4];
+	int first= 0;
+	
+	while(!last) {	 
 	 
-	for(int i= 0; !end; i++) {
- 
- 		t= dt*i;
- 		 		
-	  // cálculo de los coeficientes polinomiales	 
-	  cx= 3.0 * (find(ptosControl, 1).x - find(ptosControl, 0).x);
-	  bx= 3.0 * (find(ptosControl, 2).x - find(ptosControl, 1).x) - cx;
-	  ax= find(ptosControl, 3).x - find(ptosControl, 0).x - cx - bx;
+	 	for(int j= 0; j<4; j++) {
+	 		ptos[j].x= find(ptosControl, first+j).x;
+	 		ptos[j].y= find(ptosControl, first+j).y;	 
+	 	}
 	 
-	  cy= 3.0 * (find(ptosControl, 1).y - find(ptosControl, 0).y);
-	  by= 3.0 * (find(ptosControl, 2).y - find(ptosControl, 1).y) - cy;
-	  ay= find(ptosControl, 3).y - find(ptosControl, 0).y - cy - by;
- 
-	  //cálculo del punto de la curva en el valor de parámetro t	 
-	  //t es el valor del parámetro, 0 <= t <= 1
-	  
-	  tSquared= t * t;
-	  tCubed= tSquared * t;
+		for(int i= 0; !end; i++) { 	 	
+	 		t= dt*i;
+	 		 		
+		  // cálculo de los coeficientes polinomiales	 
+		  cx= 3.0 * (ptos[1].x - ptos[0].x);
+		  bx= 3.0 * (ptos[2].x - ptos[1].x) - cx;
+		  ax= ptos[3].x - ptos[0].x - cx - bx;
+		 
+		  cy= 3.0 * (ptos[1].y - ptos[0].y);
+		  by= 3.0 * (ptos[2].y - ptos[1].y) - cy;
+		  ay= ptos[3].y - ptos[0].y - cy - by;
 	 
-	  result.x= (ax * tCubed) + (bx * tSquared) + (cx * t) + find(ptosControl, 0).x;
-	  result.y= (ay * tCubed) + (by * tSquared) + (cy * t) + find(ptosControl, 0).y;
-	 
-	 	glVertex2i(result.x, result.y);
-	 	
-	 	//Llegamos al P3
-	 	if(result.x == it->x && result.y == it->y)
-	 		end= true;
+		  //cálculo del punto de la curva en el valor de parámetro t	 
+		  //t es el valor del parámetro, 0 <= t <= 1
+		  tSquared= t * t;
+		  tCubed= tSquared * t;
+		 
+		  result.x= (ax * tCubed) + (bx * tSquared) + (cx * t) + ptos[0].x;
+		  result.y= (ay * tCubed) + (by * tSquared) + (cy * t) + ptos[0].y;
+		 
+		 	glVertex2i(result.x, result.y);
+		 	
+		 	//Llegamos al P3
+		 	if(result.x == ptos[3].x && result.y == ptos[3].y)
+		 		end= true;
+		}
+		
+		//Avanzo a los proximos 4 ptos de control
+		if(ptos[3].x != it->x || ptos[3].y != it->y) {
+			first= first+3;
+			end= false;
+		} else
+			last= true;
   }
 }
 

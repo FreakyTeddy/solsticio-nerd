@@ -3,10 +3,12 @@
 
 #include "GL/glut.h"
 #include <list>
+
+#include <iostream>
  
 #define FACTOR_BEZIER_INICIAL 10 
 #define FACTOR_MIN 0 
-#define FACTOR_MAX 30 
+#define FACTOR_MAX 10 
  
 typedef struct {
     float x;
