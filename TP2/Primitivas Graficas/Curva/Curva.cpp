@@ -46,17 +46,23 @@ bool load(std::list<Vertice2D> ptosControl, Vertice2D ptos[4], unsigned int &fir
 	return complete;	
 }
 
-void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
+void Curva::BezierCubica(std::list<Vertice2D> ptosControl, std::list<Vertice2D> &ptosCurva,
+												 std::list<Vertice2D> &ptosTangente, std::list<Vertice2D> &ptosNormal) {
+
 	
   float dt=(float) 1.0 / factorBezier;
 	
 	std::list<Vertice2D>::iterator it= ptosControl.end();
 
-	float   ax, bx, cx;
-  float   ay, by, cy;
-  float   t, tSquared, tCubed;
+  float	u, uSquared, uCubed;
+  float	uSquaredLess, uCubedLess;
+  float c0, c1, c2, c3;
+  float dc0, dc1, dc2, dc3;
+  float ddc0, ddc1, ddc2, ddc3;
+  
   Vertice2D result;
-	Vertice2D tangente;
+	Vertice2D tangent;
+	Vertice2D normal;
 	 
 	bool end= false; 
 	bool last= false; 
@@ -69,39 +75,51 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
 		complete= load(ptosControl, ptos, first);
 		
 		for(int i= 0; !end && complete; i++) { 	 	
-	 		t= dt*i;
-	 		 		
-		  // cálculo de los coeficientes polinomiales	 
-		  cx= 3.0 * (ptos[1].x - ptos[0].x);
-		  bx= 3.0 * (ptos[2].x - ptos[1].x) - cx;
-		  ax= ptos[3].x - ptos[0].x - cx - bx;
-		 
-		  cy= 3.0 * (ptos[1].y - ptos[0].y);
-		  by= 3.0 * (ptos[2].y - ptos[1].y) - cy;
-		  ay= ptos[3].y - ptos[0].y - cy - by;
-	 
-		  //cálculo del punto de la curva en el valor de parámetro t	 
-		  //t es el valor del parámetro, 0 <= t <= 1
-		  tSquared= t * t;
-		  tCubed= tSquared * t;
-		 
-		  result.x= (ax * tCubed) + (bx * tSquared) + (cx * t) + ptos[0].x;
-		  result.y= (ay * tCubed) + (by * tSquared) + (cy * t) + ptos[0].y;
-		 	
-		 	tangente.x= (3* ax * tSquared) + (2* bx * t)+ cx;
-		 	tangente.y= (3* ay * tSquared) + (2* by * t)+ cy;
-		 	
-		 	
-		 		glVertex2i(result.x, result.y);
-		 //		glVertex2i(tangente.x, tangente.y);
-		 	
+	 		
+	 		u= dt*i;
+	 		 			
+			uSquared= u * u;
+		  uCubed= uSquared * u;
+			uSquaredLess= (1-u) * (1-u); 
+			uCubedLess= uSquaredLess * (1-u); 
+			
+			c0= uCubedLess;
+			c1= 3 * u * uSquaredLess;
+			c2= 3 * uSquared * (1-u);
+			c3= uCubed;
+			
+			dc0= 3 * uSquaredLess;
+			dc1= 3 * uSquaredLess - 6 * u * (1-u);
+			dc2= 6 * u * (1-u) - 3 * uSquared;
+			dc3= 3 * uSquared;
+
+			ddc0= 6 * (1-u);
+			ddc1= 6 * (1-u) - 6 * (1-u) + 6 * u;
+			ddc2= 6 * (1-u) - 6 * u - 6 * u;
+			ddc3= 6 * u;
+
+			result.x= c0*ptos[0].x + c1*ptos[1].x + c2*ptos[2].x + c3*ptos[3].x;
+			result.y= c0*ptos[0].y + c1*ptos[1].y + c2*ptos[2].y + c3*ptos[3].y;
+
+			tangent.x= dc0*ptos[0].x + dc1*ptos[1].x + dc2*ptos[2].x + dc3*ptos[3].x;
+			tangent.y= dc0*ptos[0].y + dc1*ptos[1].y + dc2*ptos[2].y + dc3*ptos[3].y;
+			
+			normal.x= ddc0*ptos[0].x + ddc1*ptos[1].x + ddc2*ptos[2].x + ddc3*ptos[3].x;
+			normal.y= ddc0*ptos[0].y + ddc1*ptos[1].y + ddc2*ptos[2].y + ddc3*ptos[3].y;
+
+			ptosCurva.push_back(result);
+			ptosTangente.push_back(result);
+			ptosTangente.push_back(tangent);
+			ptosNormal.push_back(result);
+			ptosNormal.push_back(normal);
+			
 		 	std::cout << "result.x: " << result.x << std::endl;
 		 	std::cout << "result.y: " << result.y << std::endl;
-		 	
-		 	std::cout << "tangente.x: " << tangente.x << std::endl;
-		 	std::cout << "tangente.y: " << tangente.y << std::endl;
-		 	
-		 	
+			std::cout << "tangent.x: " << tangent.x << std::endl;
+			std::cout << "tangent.y: " << tangent.y << std::endl;  
+			std::cout << "normal.x: " << normal.x << std::endl;
+			std::cout << "normal.y: " << normal.y << std::endl;  
+
 		 	//Llegamos al P3
 		 	if(result.x == ptos[3].x && result.y == ptos[3].y)
 		 		end= true;
@@ -111,7 +129,7 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
 			end= false;
 		else
 			last= true;
-  }
+  }  
 }
 
 void Curva::modificarFactorBezier(int cantidad) {

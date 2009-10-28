@@ -30,7 +30,8 @@ class Curva {
 		/* Dibuja los vertices de la curva, apartir de los puntos de control
 		 * pasados en la lista (P0, P1, P2, P3).
 		 * */ 		
-		void BezierCubica(std::list<Vertice2D> ptosControl);
+		void BezierCubica(std::list<Vertice2D> ptosControl, std::list<Vertice2D> &ptosCurva,
+											std::list<Vertice2D> &ptosTangente, std::list<Vertice2D> &ptosNormal);
 
 		/* Dibuja una curva Bspline cubica uniforme a partir de los puntos de control
 		 * requiere al menos 4 puntos de control
