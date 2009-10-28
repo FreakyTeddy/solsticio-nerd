@@ -46,6 +46,8 @@ GLfloat window_size[2];
 Curva curva;
 Controlador controlador(&curva);
 
+bool mouseDown = false; //indica si se apreta el boton izquierdo del mouse
+
 void OnIdle (void)
 {
 	rotate_sphere += 0.1;
@@ -224,18 +226,74 @@ void keyboard (unsigned char key, int x, int y)
    }
 }
 
+void mouse(int button, int state, int x, int y) {
+
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+
+		std::cout<<"boton izquierdo presionado x:"<<x<<" y:"<<y<<std::endl;
+		std::cout<<"x0: "<<TOP_VIEW_POSX<<" x1: "<<(TOP_VIEW_POSX + TOP_VIEW_W)<<
+					" y0: "<<TOP_VIEW_POSY<< " y1:"<< (TOP_VIEW_POSY - TOP_VIEW_H)<<std::endl;
+
+		if (edit_panel) { 	//si el edit panel esta habilitado capturo el x e y para dibujar el punto de control
+
+			if ( x > TOP_VIEW_POSX && x < (TOP_VIEW_POSX + TOP_VIEW_W)) {
+				if ( y < TOP_VIEW_POSY && y > (TOP_VIEW_POSY - TOP_VIEW_H)) {
+
+					mouseDown = false; //lo deshabilito para que no rote
+					std::cout<<"dibujar punto en x: "<<x<<" y: "<<y<<std::endl;
+
+					//todavia no funciona bien por un problema de que los TOP_VIEW son constantes y
+					//falla  cuando se redimensiona la pantalla
+//					SetPanelTopEnv();
+//					glMatrixMode(GL_MODELVIEW);
+//					glLoadIdentity();
+//					gluLookAt (0, 0, 0.5, 0, 0, 0, 0, 1, 0);
+//
+//					glDisable(GL_LIGHTING);
+//					glBegin(GL_POINTS);
+//					glColor3f(1.0,0,0);
+//					glVertex2i(x,y);
+//					glEnd();
+//					glEnable(GL_LIGHTING);
+//
+//					glutPostRedisplay();
+				}
+			}
+			else
+				mouseDown = true;
+		}
+	}
+	else
+		mouseDown = false;
+}
+
+void mouseMotion(int x, int y) {
+
+	if (mouseDown) {
+//		yrot = x - xdiff;TODO
+//		xrot = y + ydiff;
+		std::cout<<"rotar :P"<<std::endl;
+		std::cout<<"."<<std::endl;
+//		glutPostRedisplay();
+	}
+}
+
+
+
 int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
    glutInitWindowSize(1024, 768); 
    glutInitWindowPosition(0, 0);
-   glutCreateWindow(argv[0]);
+   glutCreateWindow("TP2 - Sistemas Graficos");
    glutFullScreen();
    init();
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape);
    glutKeyboardFunc(keyboard);
+   glutMouseFunc(mouse);
+   glutMotionFunc(mouseMotion);
    glutIdleFunc(OnIdle);
    glutMainLoop();
    return 0;
