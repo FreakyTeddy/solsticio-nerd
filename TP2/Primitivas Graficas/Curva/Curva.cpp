@@ -55,10 +55,15 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl, std::list<Vertice2D> 
 	std::list<Vertice2D>::iterator it= ptosControl.end();
 
   float	u, uSquared, uCubed;
-  float	uSquaredLess, uCubedLess;
-  float c0, c1, c2, c3;
-  float dc0, dc1, dc2, dc3;
-  float ddc0, ddc1, ddc2, ddc3;
+  float c0Cubed, c1Cubed, c2Cubed, c3Cubed;
+  
+  float c0Squared, c1Squared, c2Squared;
+  float deltab0x, deltab1x, deltab2x, deltab0y, deltab1y, deltab2y;
+  float ducx, ducy;  
+
+  float c0, c1;
+  float delta2b0x, delta2b1x, delta2b0y, delta2b1y;
+  float dducx, dducy;  
   
   Vertice2D result;
 	Vertice2D tangent;
@@ -75,41 +80,58 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl, std::list<Vertice2D> 
 		complete= load(ptosControl, ptos, first);
 		
 		for(int i= 0; !end && complete; i++) { 	 	
-	 		
 	 		u= dt*i;
 	 		 			
 			uSquared= u * u;
 		  uCubed= uSquared * u;
-			uSquaredLess= (1-u) * (1-u); 
-			uCubedLess= uSquaredLess * (1-u); 
 			
-			c0= uCubedLess;
-			c1= 3 * u * uSquaredLess;
-			c2= 3 * uSquared * (1-u);
-			c3= uCubed;
-			
-			dc0= 3 * uSquaredLess;
-			dc1= 3 * uSquaredLess - 6 * u * (1-u);
-			dc2= 6 * u * (1-u) - 3 * uSquared;
-			dc3= 3 * uSquared;
+			//Polinomios de Bernstein cubicos 
+			c0Cubed= -uCubed + 3 * uSquared - 3 * u + 1;
+			c1Cubed= 3 * uCubed - 6 * uSquared + 3 * u;
+			c2Cubed= -3 * uCubed + 3 * uSquared;
+			c3Cubed= uCubed;
 
-			ddc0= 6 * (1-u);
-			ddc1= 6 * (1-u) - 6 * (1-u) + 6 * u;
-			ddc2= 6 * (1-u) - 6 * u - 6 * u;
-			ddc3= 6 * u;
-
-			result.x= c0*ptos[0].x + c1*ptos[1].x + c2*ptos[2].x + c3*ptos[3].x;
-			result.y= c0*ptos[0].y + c1*ptos[1].y + c2*ptos[2].y + c3*ptos[3].y;
-
-			tangent.x= dc0*ptos[0].x + dc1*ptos[1].x + dc2*ptos[2].x + dc3*ptos[3].x;
-			tangent.y= dc0*ptos[0].y + dc1*ptos[1].y + dc2*ptos[2].y + dc3*ptos[3].y;
-			
-			normal.x= ddc0*ptos[0].x + ddc1*ptos[1].x + ddc2*ptos[2].x + ddc3*ptos[3].x;
-			normal.y= ddc0*ptos[0].y + ddc1*ptos[1].y + ddc2*ptos[2].y + ddc3*ptos[3].y;
-
+			result.x= c0Cubed*ptos[0].x + c1Cubed*ptos[1].x + c2Cubed*ptos[2].x + c3Cubed*ptos[3].x;
+			result.y= c0Cubed*ptos[0].y + c1Cubed*ptos[1].y + c2Cubed*ptos[2].y + c3Cubed*ptos[3].y;
 			ptosCurva.push_back(result);
+
+			//Derivada primera - Tangente			
+			//Polinomios de Bernstein cuadraticos 
+			c0Squared= uSquared - 2 * u + 1;
+			c1Squared= -2 * uSquared + 2 * u;
+			c2Squared= uSquared;
+
+			deltab0x= ptos[1].x - ptos[0].x;
+			deltab1x= ptos[2].x - ptos[1].x;
+			deltab2x= ptos[3].x - ptos[2].x;
+			deltab0y= ptos[1].y - ptos[0].y;
+			deltab1y= ptos[2].y - ptos[1].y;
+			deltab2y= ptos[3].y - ptos[2].y;
+
+			ducx= 6 * ((deltab0x * c0Squared) + (deltab1x * c1Squared) + (deltab2x * c2Squared));   
+			ducy= 6 * ((deltab0y * c0Squared) + (deltab1y * c1Squared) + (deltab2y * c2Squared));   
+
+			tangent.x= ducx * (ptos[0].x + ptos[1].x + ptos[2].x + ptos[3].x);
+			tangent.y= ducy * (ptos[0].y + ptos[1].y + ptos[2].y + ptos[3].y);
 			ptosTangente.push_back(result);
 			ptosTangente.push_back(tangent);
+
+			//Derivada segunda - Normal
+			//Polinomios de Bernstein lineal 
+			c0= 1 - u;
+			c1= u;
+
+			delta2b0x= deltab1x - deltab0x;
+			delta2b1x= deltab2x - deltab1x;
+			delta2b0y= deltab1y - deltab0y;
+			delta2b1y= deltab2y - deltab1y;
+
+			dducx= 3 * ((delta2b0x * c0) + (delta2b1x * c1));   
+			dducy= 3 * ((delta2b0y * c0) + (delta2b1y * c1));   
+			
+			normal.x= dducx * (ptos[0].x + ptos[1].x + ptos[2].x);
+			normal.y= dducy * (ptos[0].y + ptos[1].y + ptos[2].y);
+
 			ptosNormal.push_back(result);
 			ptosNormal.push_back(normal);
 			
