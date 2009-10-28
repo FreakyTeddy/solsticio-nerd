@@ -2,7 +2,6 @@
 
 Curva::Curva(): factorBezier(FACTOR_BEZIER_INICIAL) { };
 
-
 Vertice2D& find(std::list<Vertice2D> vertices, unsigned int position) {
 	
 	std::list<Vertice2D>::iterator it= vertices.begin();
@@ -15,9 +14,41 @@ Vertice2D& find(std::list<Vertice2D> vertices, unsigned int position) {
 	return *it;
 } 
 
+bool load(std::list<Vertice2D> ptosControl, Vertice2D ptos[4], unsigned int &first) {
+
+	Vertice2D last;	
+	bool complete= false;
+	unsigned int position= 0;
+	unsigned int size= ptosControl.size();
+	
+	ptos[position].x= find(ptosControl, first).x;
+ 	ptos[position].y= find(ptosControl, first).y;	 
+	last= ptos[position];
+	position++;
+	first++;
+		
+	while(!complete && first<size) {
+		
+		ptos[position].x= find(ptosControl, first).x;
+ 		ptos[position].y= find(ptosControl, first).y;
+ 		
+ 		if(last.x != ptos[position].x || ptos[position].y != ptos[3].y) {
+			last= ptos[position];
+			position++;
+ 		}
+
+ 		if(position == 4)
+ 			complete= true;
+		else
+			first++;
+	}
+	
+	return complete;	
+}
+
 void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
 	
-  float dt=(float) 1.0 / (ptosControl.size()*factorBezier);
+  float dt=(float) 1.0 / factorBezier;
 	
 	std::list<Vertice2D>::iterator it= ptosControl.end();
 
@@ -25,21 +56,19 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
   float   ay, by, cy;
   float   t, tSquared, tCubed;
   Vertice2D result;
+	Vertice2D tangente;
 	 
 	bool end= false; 
 	bool last= false; 
+	bool complete;
 	
 	Vertice2D ptos[4];
-	int first= 0;
+	unsigned int first= 0;
 	
 	while(!last) {	 
-	 
-	 	for(int j= 0; j<4; j++) {
-	 		ptos[j].x= find(ptosControl, first+j).x;
-	 		ptos[j].y= find(ptosControl, first+j).y;	 
-	 	}
-	 
-		for(int i= 0; !end; i++) { 	 	
+		complete= load(ptosControl, ptos, first);
+		
+		for(int i= 0; !end && complete; i++) { 	 	
 	 		t= dt*i;
 	 		 		
 		  // cálculo de los coeficientes polinomiales	 
@@ -58,19 +87,29 @@ void Curva::BezierCubica(std::list<Vertice2D> ptosControl) {
 		 
 		  result.x= (ax * tCubed) + (bx * tSquared) + (cx * t) + ptos[0].x;
 		  result.y= (ay * tCubed) + (by * tSquared) + (cy * t) + ptos[0].y;
-		 
-		 	glVertex2i(result.x, result.y);
+		 	
+		 	tangente.x= (3* ax * tSquared) + (2* bx * t)+ cx;
+		 	tangente.y= (3* ay * tSquared) + (2* by * t)+ cy;
+		 	
+		 	
+		 		glVertex2i(result.x, result.y);
+		 //		glVertex2i(tangente.x, tangente.y);
+		 	
+		 	std::cout << "result.x: " << result.x << std::endl;
+		 	std::cout << "result.y: " << result.y << std::endl;
+		 	
+		 	std::cout << "tangente.x: " << tangente.x << std::endl;
+		 	std::cout << "tangente.y: " << tangente.y << std::endl;
+		 	
 		 	
 		 	//Llegamos al P3
 		 	if(result.x == ptos[3].x && result.y == ptos[3].y)
 		 		end= true;
 		}
 		
-		//Avanzo a los proximos 4 ptos de control
-		if(ptos[3].x != it->x || ptos[3].y != it->y) {
-			first= first+3;
+		if((ptos[3].x != it->x || ptos[3].y != it->y) && ((ptosControl.size() - first) >= 4))
 			end= false;
-		} else
+		else
 			last= true;
   }
 }
@@ -157,5 +196,4 @@ void Curva::Bspline(std::list<Vertice2D> ptosControl) {
 
 		}
 	}
-
 }

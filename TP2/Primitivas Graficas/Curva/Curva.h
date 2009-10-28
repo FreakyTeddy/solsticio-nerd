@@ -6,9 +6,9 @@
 
 #include <iostream>
  
-#define FACTOR_BEZIER_INICIAL 10 
+#define FACTOR_BEZIER_INICIAL 20 
 #define FACTOR_MIN 0 
-#define FACTOR_MAX 10 
+#define FACTOR_MAX 30 
  
 typedef struct {
     float x;
