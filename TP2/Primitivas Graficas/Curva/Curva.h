@@ -15,6 +15,8 @@ typedef struct {
     float y;
 } Vertice2D;
 
+typedef std::list<Vertice2D> VertexList;  //TODO en realidad debe ser 3d ;)
+
 class Curva {
 	
 	private:
@@ -33,10 +35,12 @@ class Curva {
 		void BezierCubica(std::list<Vertice2D> ptosControl, std::list<Vertice2D> &ptosCurva,
 											std::list<Vertice2D> &ptosTangente, std::list<Vertice2D> &ptosNormal);
 
-		/* Dibuja una curva Bspline cubica uniforme a partir de los puntos de control
-		 * requiere al menos 4 puntos de control
+		/* Guarda en curva los puntos a unir para dibujar
+		 * una curva Bspline cubica uniforme a partir de los puntos de control
+		 *
+		 * requiere al menos 4 puntos de control para dibujar algo
 		 * */
-		void Bspline(std::list<Vertice2D> ptosControl);
+		void Bspline(VertexList ptosControl, VertexList *curva);
 
 		/* Suma al factor del paso de Bezier la cantidad pasada por
 		 * parametro.

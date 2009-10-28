@@ -142,76 +142,76 @@ void Curva::modificarFactorBezier(int cantidad) {
 		factorBezier= FACTOR_MAX;
 }
 
-void Curva::Bspline(std::list<Vertice2D> ptosControl) {
+void Curva::Bspline(std::list<Vertice2D> ptosControl, VertexList *curva) {
 
-	if (ptosControl.size() < 4)
-		return;
+	if (ptosControl.size() >= 4) {
 
-	float base_u[4]; //tiene (u^3, u^2, u, 1)
+		float base_u[4]; //tiene (u^3, u^2, u, 1)
 
-	const int B[][4] = { { -1 , 3 , -3 , 1 },
-						{ 3 , -6 , 3 , 0 },
-						{ -3 , 0 , 3 , 0 },
-						{ 1 , 4 , 1 , 0 }
-					  };
+		const int B[][4] = { { -1 , 3 , -3 , 1 },
+							{ 3 , -6 , 3 , 0 },
+							{ -3 , 0 , 3 , 0 },
+							{ 1 , 4 , 1 , 0 }
+						  };
 
-	Vertice2D puntos[4];
+		Vertice2D puntos[4];
 
-	std::list<Vertice2D>::iterator it = ptosControl.begin();
+		VertexList::iterator it = ptosControl.begin();
 
-	//itero por los puntos de control
-	for (unsigned int i=0; i<(ptosControl.size()-3); i++, it++) {
+		//itero por los puntos de control
+		for (unsigned int i=0; i<(ptosControl.size()-3); i++, it++) {
 
-		Vertice2D result[4];
+			Vertice2D result[4];
 
-		for (int j= 0; j<4; j++, it++) {
+			for (int j= 0; j<4; j++, it++) {
 
-			//tomo los 4 puntos de control
-			puntos[j].x = (*it).x;
-			puntos[j].y = (*it).y;
+				//tomo los 4 puntos de control
+				puntos[j].x = (*it).x;
+				puntos[j].y = (*it).y;
 
-			result[j].x = 0;	//inicializo
-			result[j].y = 0;
-		}
-
-		//decremento el it
-		for (int j= 0; j<4; j++, it--){}
-
-		//multiplico B con los puntos
-		for (int k=0; k<4; k++) {
-			for (int m=0; m<4; m++) {
-
-				result[k].x += B[k][m] * puntos[m].x;
-				result[k].y += B[k][m] * puntos[m].y;
-
+				result[j].x = 0;	//inicializo
+				result[j].y = 0;
 			}
-		}
 
-		//divido por seis
-		for (int j= 0; j<4; j++) {
-			result[j].x /= 6;
-			result[j].y /= 6;
-		}
+			//decremento el it
+			for (int j= 0; j<4; j++, it--){}
 
-		//multiplico por el parametro TODO paso u hardcodeado!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		for (float u=0; u<=1; u+=0.1) {
+			//multiplico B con los puntos
+			for (int k=0; k<4; k++) {
+				for (int m=0; m<4; m++) {
 
-			base_u[0] = u*u*u;
-			base_u[1] = u*u;
-			base_u[2] = u;
-			base_u[3] = 1;
+					result[k].x += B[k][m] * puntos[m].x;
+					result[k].y += B[k][m] * puntos[m].y;
 
-			Vertice2D v;
-			v.x=0;
-			v.y=0;
+				}
+			}
 
+			//divido por seis
 			for (int j= 0; j<4; j++) {
-				v.x += base_u[j] * result[j].x;
-				v.y += base_u[j] * result[j].y;
+				result[j].x /= 6;
+				result[j].y /= 6;
 			}
 
-			glVertex2i(v.x, v.y);
+			//multiplico por el parametro TODO paso u hardcodeado!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			for (float u=0; u<=1; u+=0.1) {
 
+				base_u[0] = u*u*u;
+				base_u[1] = u*u;
+				base_u[2] = u;
+				base_u[3] = 1;
+
+				Vertice2D v;
+				v.x=0;
+				v.y=0;
+
+				for (int j= 0; j<4; j++) {
+					v.x += base_u[j] * result[j].x;
+					v.y += base_u[j] * result[j].y;
+				}
+
+				curva->push_back(v);	//agrego el vertice a la curva
+
+			}
 		}
 	}
 }
