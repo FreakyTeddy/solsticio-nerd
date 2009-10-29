@@ -222,6 +222,7 @@ void display(void)
 
 		glEnable(GL_LIGHTING);
 
+
 		glCallList(DL_AXIS2D_TOP);
 	}
 	//
@@ -273,20 +274,23 @@ void mouse(int button, int state, int x, int y) {
 
 		std::cout<<"boton izquierdo presionado x:"<<x<<" y: "<<y<<std::endl;
 
-		int x0 = (float)W_WIDTH*0.60;
-		int x1 = x0 + (float)W_WIDTH*0.40;
-		int y0 = W_HEIGHT - (float)W_HEIGHT*0.60;
-		int alto = (float)W_HEIGHT*0.40*0.95;
-		int y1 = y0-alto; 	//limite superior
+		int x0 = (float)W_WIDTH*0.60; 			//limite izq
+		int x1 = x0 + (float)W_WIDTH*0.40;		//limite der
+		int y0 = W_HEIGHT - (float)W_HEIGHT*0.60;//limite abajo
+		int alto = (float)W_HEIGHT*0.40;
+		int y1 = y0-alto; 						//limite arriba
 
+//^tiene que tener las mismas coordenadas que el cuadrado que se ve para graficar
+// si coincide con el viewport entonces el click coincide con el punto que sale.. supongo
 
 		std::cout<<"x0: "<<x0<<" x1: "<<x1<<" y0: "<<y0<< " y1:"<< y1<<" alto: "<<alto<<std::endl;
 
 		if (edit_panel) { 	//si el edit panel esta habilitado capturo el x e y para dibujar el punto de control
 
-			Vertice2D v;
+			Vertice v;
+
 			v.x = (float)(x - x0) / (float) (x1-x0) ;
-			v.y = (float)(y0 - y) / (float) (alto);
+			v.y = (float)(y0 - y) / (float) (y0-y1);
 
 
 			std::cout<<std::endl<<"dibujar punto en x: "<<v.x<<" y: "<<v.y<<std::endl<<std::endl;

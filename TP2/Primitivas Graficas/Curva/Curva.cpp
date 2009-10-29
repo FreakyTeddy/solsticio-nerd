@@ -178,7 +178,7 @@ void Curva::modificarFactorBezier(int cantidad) {
 		factorBezier= FACTOR_MAX;
 }
 
-void Curva::Bspline(std::list<Vertice2D> ptosControl, VertexList *curva) {
+void Curva::Bspline(VertexList ptosControl, VertexList *curva) {
 
 	if (ptosControl.size() >= 4) {
 
@@ -190,14 +190,14 @@ void Curva::Bspline(std::list<Vertice2D> ptosControl, VertexList *curva) {
 							{ 1 , 4 , 1 , 0 }
 						  };
 
-		Vertice2D puntos[4];
+		Vertice puntos[4];
 
 		VertexList::iterator it = ptosControl.begin();
 
 		//itero por los puntos de control
 		for (unsigned int i=0; i<(ptosControl.size()-3); i++, it++) {
 
-			Vertice2D result[4];
+			Vertice result[4];
 
 			for (int j= 0; j<4; j++, it++) {
 
@@ -236,7 +236,7 @@ void Curva::Bspline(std::list<Vertice2D> ptosControl, VertexList *curva) {
 				base_u[2] = u;
 				base_u[3] = 1;
 
-				Vertice2D v;
+				Vertice v;
 				v.x=0;
 				v.y=0;
 

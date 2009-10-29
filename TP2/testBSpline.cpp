@@ -40,35 +40,35 @@ void display(void)
     
 //	/*PRUEBA CURVA BSPLINE*/ 
 //	/*--------------------*/ 
-  std::list<Vertice2D> ptosControl;
+  VertexList ptosControl;
 
-  Vertice2D cp0;
+  Vertice cp0;
  		cp0.x= 100;
 		cp0.y= 400;
 		ptosControl.push_back(cp0);
 
 
- 	 Vertice2D cp1;
+ 	 Vertice cp1;
  		cp1.x= 150;
 		cp1.y= 200;
 		ptosControl.push_back(cp1);
 
-	 Vertice2D cp2;
+	 Vertice cp2;
  		cp2.x= 200;
 		cp2.y= 200;
 		ptosControl.push_back(cp2);
 
-	 Vertice2D cp3;
+	 Vertice cp3;
  		cp3.x= 250;
 		cp3.y= 400;
 		ptosControl.push_back(cp3);
 
-	Vertice2D cp4;
+	Vertice cp4;
 		cp4.x= 350;
 		cp4.y= 200;
 		ptosControl.push_back(cp4);
 
-	Vertice2D cp5;
+	Vertice cp5;
 		cp5.x= 400;
 		cp5.y= 200;
 		ptosControl.push_back(cp5);

@@ -16,7 +16,7 @@ typedef struct {
     float y;
 } Vertice2D;
 
-typedef std::list<Vertice2D> VertexList;  //TODO en realidad debe ser 3d ;)
+typedef std::list<Vertice> VertexList;  //TODO en realidad debe ser 3d ;)
 
 class Curva {
 	
