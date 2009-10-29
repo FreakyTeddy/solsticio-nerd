@@ -41,45 +41,45 @@ void display(void)
 	/*-------------------*/ 
 	/*PRUEBA CURVA BEZIER*/ 
 	/*-------------------*/ 
-  std::list<Vertice2D> ptosControlBezier;
-	std::list<Vertice2D> ptosCurva;
-	std::list<Vertice2D> ptosTangente;
-	std::list<Vertice2D> ptosNormal;
+  std::list<Vertice> ptosControlBezier;
+	std::list<Vertice> ptosCurva;
+	std::list<Vertice> ptosTangente;
+	std::list<Vertice> ptosNormal;
 	
-  Vertice2D cp00;  
+  Vertice cp00;  
  		cp00.x= 50;
 		cp00.y= 400;  
 		ptosControlBezier.push_back(cp00);
  	
- 	 Vertice2D cp01;  	
+ 	 Vertice cp01;  	
  		cp01.x= 250;
 		cp01.y= 100;
 		ptosControlBezier.push_back(cp01);
 
-	 Vertice2D cp02;  
+	 Vertice cp02;  
  		cp02.x= 450;
 		cp02.y= 500;
 		ptosControlBezier.push_back(cp02);
 
-	 Vertice2D cp03;   
+	 Vertice cp03;   
  		cp03.x= 550;
 		cp03.y= 200;
 		ptosControlBezier.push_back(cp03);
 
-	 Vertice2D cp04;   
+	 Vertice cp04;   
  		cp04.x= 400;
 		cp04.y= 200;
-//		ptosControlBezier.push_back(cp04);
+		ptosControlBezier.push_back(cp04);
 
-	 Vertice2D cp05;   
+	 Vertice cp05;   
  		cp05.x= 500;
 		cp05.y= 200;
-//		ptosControlBezier.push_back(cp05);
+		ptosControlBezier.push_back(cp05);
 
-	Vertice2D cp06;   
+	Vertice cp06;   
  		cp06.x= 600;
 		cp06.y= 400;
-//		ptosControlBezier.push_back(cp06);
+		ptosControlBezier.push_back(cp06);
 
 	glColor3f(1.0,0,0);    
 	glBegin(GL_POINTS);
@@ -87,14 +87,14 @@ void display(void)
 		glVertex2i(cp01.x, cp01.y);
 		glVertex2i(cp02.x, cp02.y);
 		glVertex2i(cp03.x, cp03.y);
-//		glVertex2i(cp04.x, cp04.y);
-//		glVertex2i(cp05.x, cp05.y);
-//		glVertex2i(cp06.x, cp06.y);		
+		glVertex2i(cp04.x, cp04.y);
+		glVertex2i(cp05.x, cp05.y);
+		glVertex2i(cp06.x, cp06.y);		
 	glEnd();
 
 	curva.BezierCubica(ptosControlBezier, ptosCurva, ptosTangente, ptosNormal);
 
-	std::list<Vertice2D>::iterator it;
+	std::list<Vertice>::iterator it;
 	glColor3f(0,1.0,0);    
 	glBegin(GL_LINE_STRIP);
 	

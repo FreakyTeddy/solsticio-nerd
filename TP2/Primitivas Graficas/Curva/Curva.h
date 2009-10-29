@@ -3,6 +3,7 @@
 
 #include "GL/glut.h"
 #include <list>
+#include "../Vertice/Vertice.h"
 
 #include <iostream>
  
@@ -27,13 +28,11 @@ class Curva {
 		 * */		
 		Curva();
 
-//TODO en lugar de dibujar deberian devolver los puntos no? porque nos sirven :P
-
 		/* Dibuja los vertices de la curva, apartir de los puntos de control
 		 * pasados en la lista (P0, P1, P2, P3).
 		 * */ 		
-		void BezierCubica(std::list<Vertice2D> ptosControl, std::list<Vertice2D> &ptosCurva,
-											std::list<Vertice2D> &ptosTangente, std::list<Vertice2D> &ptosNormal);
+		void BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva, 
+		                  std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal);
 
 		/* Guarda en curva los puntos a unir para dibujar
 		 * una curva Bspline cubica uniforme a partir de los puntos de control
