@@ -24,6 +24,7 @@ float rotate_sphere = 0;
 bool view_grid = true;
 bool view_axis = true;
 bool edit_panel = true;
+bool view_curves = true;	//indica si se ven las curvas de control
 
 
 // Handle para el control de las Display Lists
@@ -44,6 +45,8 @@ GLfloat window_size[2];
 
 // Variables globales
 Curva curva;
+VertexList pControl;	//puntos de control dibujados con el mouse
+VertexList curva_cam;	//curva que describe la camara
 Controlador controlador(&curva);
 
 bool mouseDown = false; //indica si se apreta el boton izquierdo del mouse
@@ -177,6 +180,10 @@ void display(void)
 	
 	if (view_grid)
 		 glCallList(DL_GRID);
+
+	if (view_curves) {
+		//dibujar las curvas
+	}
 	//
 	///////////////////////////////////////////////////
 
@@ -189,6 +196,32 @@ void display(void)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		gluLookAt (0, 0, 0.5, 0, 0, 0, 0, 1, 0);
+
+		glDisable(GL_LIGHTING);
+
+		VertexList::iterator it;
+
+		//dibujo los puntos de control
+		glColor3f(1.0,0,1.0);
+		glBegin(GL_POINTS);
+		glVertex3f(1.0,1.0,0);
+		glVertex3f(0,0,0);
+			for (it = pControl.begin(); it != pControl.end(); it++)
+				glVertex3f(it->x, it->y, 0.0);
+		glEnd();
+
+		//dibujo el poligono de control
+		glColor3f(0.0,1.0,1.0);
+		glBegin(GL_LINE_STRIP);
+			for (it = pControl.begin(); it != pControl.end(); it++)
+				glVertex3f(it->x, it->y, 0.0);
+		glEnd();
+
+		//dibujo la curva
+		//curva.BezierCubica(pControl,,,);
+
+		glEnable(GL_LIGHTING);
+
 		glCallList(DL_AXIS2D_TOP);
 	}
 	//
@@ -201,6 +234,8 @@ void reshape (int w, int h)
 {
    	W_WIDTH  = w;
 	W_HEIGHT = h;
+
+	std::cout<<"W: "<<W_WIDTH<< " H: "<<W_HEIGHT<<std::endl<<std::endl;
 }
 
 void keyboard (unsigned char key, int x, int y)
@@ -221,6 +256,12 @@ void keyboard (unsigned char key, int x, int y)
 		  edit_panel = !edit_panel;
 		  glutPostRedisplay();
 			break;
+	  case 't':
+		  view_curves = !view_curves;
+		  glutPostRedisplay();
+	  case 'c':
+		  pControl.clear(); //borra los puntos de control de la curva VER!!!!!!
+		  glutPostRedisplay();
     default:
     	break;
    }
@@ -230,33 +271,41 @@ void mouse(int button, int state, int x, int y) {
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 
-		std::cout<<"boton izquierdo presionado x:"<<x<<" y:"<<y<<std::endl;
-		std::cout<<"x0: "<<TOP_VIEW_POSX<<" x1: "<<(TOP_VIEW_POSX + TOP_VIEW_W)<<
-					" y0: "<<TOP_VIEW_POSY<< " y1:"<< (TOP_VIEW_POSY - TOP_VIEW_H)<<std::endl;
+		std::cout<<"boton izquierdo presionado x:"<<x<<" y: "<<y<<std::endl;
+
+		int x0 = (float)W_WIDTH*0.60;
+		int x1 = x0 + (float)W_WIDTH*0.40;
+		int y0 = W_HEIGHT - (float)W_HEIGHT*0.60;
+		int alto = (float)W_HEIGHT*0.40*0.95;
+		int y1 = y0-alto; 	//limite superior
+
+
+		std::cout<<"x0: "<<x0<<" x1: "<<x1<<" y0: "<<y0<< " y1:"<< y1<<" alto: "<<alto<<std::endl;
 
 		if (edit_panel) { 	//si el edit panel esta habilitado capturo el x e y para dibujar el punto de control
 
-			if ( x > TOP_VIEW_POSX && x < (TOP_VIEW_POSX + TOP_VIEW_W)) {
-				if ( y < TOP_VIEW_POSY && y > (TOP_VIEW_POSY - TOP_VIEW_H)) {
+			Vertice2D v;
+			v.x = (float)(x - x0) / (float) (x1-x0) ;
+			v.y = (float)(y0 - y) / (float) (alto);
+
+
+			std::cout<<std::endl<<"dibujar punto en x: "<<v.x<<" y: "<<v.y<<std::endl<<std::endl;
+
+			if ( x > x0 && x < x1) {
+				if ( y < y0 && y > y1) {
 
 					mouseDown = false; //lo deshabilito para que no rote
-					std::cout<<"dibujar punto en x: "<<x<<" y: "<<y<<std::endl;
-
 					//todavia no funciona bien por un problema de que los TOP_VIEW son constantes y
 					//falla  cuando se redimensiona la pantalla
-//					SetPanelTopEnv();
-//					glMatrixMode(GL_MODELVIEW);
-//					glLoadIdentity();
-//					gluLookAt (0, 0, 0.5, 0, 0, 0, 0, 1, 0);
+
+//					Vertice2D v;
+//					v.x = (float)(x-TOP_VIEW_POSX) / (float) W_WIDTH;
+//					v.y = 1- ((float)(y- TOP_VIEW_POSY) / (float) W_HEIGHT);
 //
-//					glDisable(GL_LIGHTING);
-//					glBegin(GL_POINTS);
-//					glColor3f(1.0,0,0);
-//					glVertex2i(x,y);
-//					glEnd();
-//					glEnable(GL_LIGHTING);
-//
-//					glutPostRedisplay();
+//					std::cout<<std::endl<<"dibujar punto en x: "<<v.x<<" y: "<<v.y<<std::endl;
+
+					pControl.push_back(v);	//agrego el vertice normalizado
+					glutPostRedisplay();
 				}
 			}
 			else
