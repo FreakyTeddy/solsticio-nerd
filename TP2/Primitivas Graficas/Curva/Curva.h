@@ -7,21 +7,15 @@
 
 #include <iostream>
  
-#define FACTOR_BEZIER_INICIAL 20 
+#define FACTOR_INICIAL 20 
 #define FACTOR_MIN 0 
 #define FACTOR_MAX 30 
  
-typedef struct {
-    float x;
-    float y;
-} Vertice2D;
-
-typedef std::list<Vertice> VertexList;  //TODO en realidad debe ser 3d ;)
-
 class Curva {
 	
 	private:
 		int factorBezier;
+		int factorBspline;
 	
 	public:
 		/* Crea una curva con factores de paso por defecto.
@@ -34,17 +28,23 @@ class Curva {
 		void BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva, 
 		                  std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal);
 
+		/* Suma al factor del paso de Bezier la cantidad pasada por
+		 * parametro.
+		 * */ 		
+		void modificarFactorBezier(int cantidad);
+		
 		/* Guarda en curva los puntos a unir para dibujar
 		 * una curva Bspline cubica uniforme a partir de los puntos de control
 		 *
 		 * requiere al menos 4 puntos de control para dibujar algo
 		 * */
-		void Bspline(VertexList ptosControl, VertexList *curva);
+		void Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva, 
+		             std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal);
 
-		/* Suma al factor del paso de Bezier la cantidad pasada por
+		/* Suma al factor del paso de Bspline la cantidad pasada por
 		 * parametro.
 		 * */ 		
-		void modificarFactorBezier(int cantidad);
+		void modificarFactorBspline(int cantidad);
 };
 
 #endif /*CURVA_H_*/

@@ -1,6 +1,6 @@
 #include "Curva.h"
 
-Curva::Curva(): factorBezier(FACTOR_BEZIER_INICIAL) { };
+Curva::Curva(): factorBezier(FACTOR_INICIAL), factorBspline(FACTOR_INICIAL) { };
 
 Vertice& find(std::list<Vertice> vertices, unsigned int position) {
 	
@@ -80,6 +80,7 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 	while(!last) {	 
 		complete= load(ptosControl, ptos, first);
 		
+		
 		for(int i= 0; !end && complete; i++) { 	 	
 	 		u= dt*i;
 	 		 			
@@ -157,8 +158,10 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 			std::cout << "normal.z: " << normal.z << std::endl;  
 
 		 	//Llegamos al P3
-		 	if(result.x == ptos[3].x && result.y == ptos[3].y && result.z == ptos[3].z)
+		 	if(result.x == ptos[3].x && result.y == ptos[3].y && result.z == ptos[3].z) {
 		 		end= true;
+		 		std::cout << "u: " << u << std::endl;
+		 	}
 		}
 		
 		if((ptos[3].x != it->x || ptos[3].y != it->y || ptos[3].z != it->z) && ((ptosControl.size() - first) >= 4))
@@ -178,9 +181,12 @@ void Curva::modificarFactorBezier(int cantidad) {
 		factorBezier= FACTOR_MAX;
 }
 
-void Curva::Bspline(VertexList ptosControl, VertexList *curva) {
+void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva, 
+		             		std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal) {
 
-	if (ptosControl.size() >= 4) {
+	float dt=(float) 1.0 / factorBspline;
+
+	if(ptosControl.size() >= 4) {
 
 		float base_u[4]; //tiene (u^3, u^2, u, 1)
 
@@ -192,14 +198,14 @@ void Curva::Bspline(VertexList ptosControl, VertexList *curva) {
 
 		Vertice puntos[4];
 
-		VertexList::iterator it = ptosControl.begin();
+		std::list<Vertice>::iterator it = ptosControl.begin();
 
 		//itero por los puntos de control
-		for (unsigned int i=0; i<(ptosControl.size()-3); i++, it++) {
+		for(unsigned int i=0; i<(ptosControl.size()-3); i++, it++) {
 
 			Vertice result[4];
 
-			for (int j= 0; j<4; j++, it++) {
+			for(int j= 0; j<4; j++, it++) {
 
 				//tomo los 4 puntos de control
 				puntos[j].x = (*it).x;
@@ -210,15 +216,14 @@ void Curva::Bspline(VertexList ptosControl, VertexList *curva) {
 			}
 
 			//decremento el it
-			for (int j= 0; j<4; j++, it--){}
+			for(int j= 0; j<4; j++, it--){}
 
 			//multiplico B con los puntos
-			for (int k=0; k<4; k++) {
-				for (int m=0; m<4; m++) {
+			for(int k=0; k<4; k++) {
+				for(int m=0; m<4; m++) {
 
 					result[k].x += B[k][m] * puntos[m].x;
 					result[k].y += B[k][m] * puntos[m].y;
-
 				}
 			}
 
@@ -228,8 +233,17 @@ void Curva::Bspline(VertexList ptosControl, VertexList *curva) {
 				result[j].y /= 6;
 			}
 
-			//multiplico por el parametro TODO paso u hardcodeado!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			for (float u=0; u<=1; u+=0.1) {
+			float i= 0;
+			//float u=0
+			for(float u=0; u<=1; u+=0.1, i++) {
+
+				std::cout << "dt*i: " << i*dt << std::endl;
+
+				std::cout << "u: " << u << std::endl;
+
+				u= i*dt; 			
+
+				std::cout << "u: " << u << std::endl;
 
 				base_u[0] = u*u*u;
 				base_u[1] = u*u;
@@ -245,9 +259,18 @@ void Curva::Bspline(VertexList ptosControl, VertexList *curva) {
 					v.y += base_u[j] * result[j].y;
 				}
 
-				curva->push_back(v);	//agrego el vertice a la curva
-
+				ptosCurva.push_back(v);	//agrego el vertice a la curva
 			}
 		}
 	}
+}
+
+void Curva::modificarFactorBspline(int cantidad) {
+
+	factorBspline+= cantidad;
+
+	if(factorBspline <= FACTOR_MIN)
+		factorBspline= 1;
+	if(factorBspline > FACTOR_MAX)
+		factorBspline= FACTOR_MAX;
 }

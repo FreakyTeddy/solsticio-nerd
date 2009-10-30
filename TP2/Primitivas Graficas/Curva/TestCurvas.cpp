@@ -5,8 +5,8 @@
 #include "GL/glut.h" 
 #include <stdlib.h>
 #include <iostream>
-#include "Primitivas Graficas/Curva/Curva.h"
-#include "Controlador/Controlador.h"
+#include "Curva.h"
+#include "../../Controlador/Controlador.h"
 
 #define ANCHO	800
 #define ALTO	600
@@ -37,49 +37,49 @@ void display(void)
    	glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 	//
-
+	
 	/*-------------------*/ 
 	/*PRUEBA CURVA BEZIER*/ 
 	/*-------------------*/ 
-  std::list<Vertice> ptosControlBezier;
+	std::list<Vertice> ptosControl;
 	std::list<Vertice> ptosCurva;
 	std::list<Vertice> ptosTangente;
 	std::list<Vertice> ptosNormal;
 	
-  Vertice cp00;  
+	Vertice cp00;  
  		cp00.x= 50;
 		cp00.y= 400;  
-		ptosControlBezier.push_back(cp00);
+		ptosControl.push_back(cp00);
  	
- 	 Vertice cp01;  	
+	Vertice cp01;  	
  		cp01.x= 250;
 		cp01.y= 100;
-		ptosControlBezier.push_back(cp01);
+		ptosControl.push_back(cp01);
 
-	 Vertice cp02;  
+	Vertice cp02;  
  		cp02.x= 450;
 		cp02.y= 500;
-		ptosControlBezier.push_back(cp02);
+		ptosControl.push_back(cp02);
 
-	 Vertice cp03;   
+	Vertice cp03;   
  		cp03.x= 550;
 		cp03.y= 200;
-		ptosControlBezier.push_back(cp03);
+		ptosControl.push_back(cp03);
 
-	 Vertice cp04;   
+	Vertice cp04;   
  		cp04.x= 400;
 		cp04.y= 200;
-		ptosControlBezier.push_back(cp04);
+		ptosControl.push_back(cp04);
 
-	 Vertice cp05;   
+	Vertice cp05;   
  		cp05.x= 500;
 		cp05.y= 200;
-		ptosControlBezier.push_back(cp05);
+		ptosControl.push_back(cp05);
 
 	Vertice cp06;   
  		cp06.x= 600;
 		cp06.y= 400;
-		ptosControlBezier.push_back(cp06);
+		ptosControl.push_back(cp06);
 
 	glColor3f(1.0,0,0);    
 	glBegin(GL_POINTS);
@@ -92,7 +92,7 @@ void display(void)
 		glVertex2i(cp06.x, cp06.y);		
 	glEnd();
 
-	curva.BezierCubica(ptosControlBezier, ptosCurva, ptosTangente, ptosNormal);
+	curva.BezierCubica(ptosControl, ptosCurva, ptosTangente, ptosNormal);
 
 	std::list<Vertice>::iterator it;
 	glColor3f(0,1.0,0);    
@@ -119,12 +119,70 @@ void display(void)
 		for(it= ptosNormal.begin(); it != ptosNormal.end(); it++) { 
 			glVertex2f(it->x, it->y);
 		}
+
+	ptosControl.clear();
+	ptosCurva.clear();
+	ptosTangente.clear();
+	ptosNormal.clear();
+
+	/*--------------------*/ 		
+	/*PRUEBA CURVA BSPLINE*/
+	/*--------------------*/ 
+ 	Vertice cp0;
+ 		cp0.x= 100;
+		cp0.y= 400;
+		ptosControl.push_back(cp0);
+
+	Vertice cp1;
+ 		cp1.x= 150;
+		cp1.y= 200;
+		ptosControl.push_back(cp1);
+
+	Vertice cp2;
+ 		cp2.x= 200;
+		cp2.y= 200;
+		ptosControl.push_back(cp2);
+
+	Vertice cp3;
+ 		cp3.x= 250;
+		cp3.y= 400;
+		ptosControl.push_back(cp3);
+
+	Vertice cp4;
+		cp4.x= 350;
+		cp4.y= 200;
+		ptosControl.push_back(cp4);
+
+	Vertice cp5;
+		cp5.x= 400;
+		cp5.y= 200;
+		ptosControl.push_back(cp5);
+		ptosControl.push_back(cp5);
+		ptosControl.push_back(cp5);
+
+	glColor3f(0,0,1.0);
+	glBegin(GL_POINTS);
+		glVertex2i(cp0.x, cp0.y);
+		glVertex2i(cp1.x, cp1.y);
+		glVertex2i(cp2.x, cp2.y);
+		glVertex2i(cp3.x, cp3.y);
+		glVertex2i(cp4.x, cp4.y);
+		glVertex2i(cp5.x, cp5.y);
+	glEnd();
+
+	curva.Bspline(ptosControl, ptosCurva, ptosTangente, ptosNormal);
+
+	glColor3f(0,1.0,0);    
+	glBegin(GL_LINE_STRIP);
+	
+		for(it= ptosCurva.begin(); it != ptosCurva.end(); it++) {
+			glVertex2f(it->x, it->y);
+		}
 		
 	glEnd();
 	
 	/*-------------------*/ 
-	
-	
+
 	///
   	glutSwapBuffers();
 	///
@@ -146,6 +204,17 @@ void keyboard(unsigned char key, int x, int y)
 		controlador.disminuirPasoBezier();
 		glutPostRedisplay();
 		break;
+		case 0x61:
+		std::cout << "A: aumenta el paso bspline" << std::endl;
+		controlador.aumentarPasoBspline();
+		glutPostRedisplay();
+		break;
+	case 0x73:
+		std::cout << "S: disminuye el paso bspline" << std::endl;
+		controlador.disminuirPasoBspline();
+		glutPostRedisplay();
+		break;	
+		
 	case 0x1b:
 		exit(1);
 		break;

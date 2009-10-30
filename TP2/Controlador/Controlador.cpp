@@ -14,3 +14,13 @@ void Controlador::disminuirPasoBezier() {
 
 	curva->modificarFactorBezier(-PASO);
 }
+
+void Controlador::aumentarPasoBspline() {
+	
+	curva->modificarFactorBspline(PASO);
+}
+
+void Controlador::disminuirPasoBspline() {
+
+	curva->modificarFactorBspline(-PASO);
+}

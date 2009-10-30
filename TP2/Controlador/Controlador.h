@@ -22,6 +22,14 @@ class Controlador {
 		/* Disminuye el paso de Bezier.
 		 * */
 		void disminuirPasoBezier();
+		
+		/* Aumenta el paso de Bspline.
+		 * */
+		void aumentarPasoBspline();
+
+		/* Disminuye el paso de Bspline.
+		 * */
+		void disminuirPasoBspline();
 };
 
 #endif /*CONTROLADOR_H_*/
