@@ -55,7 +55,8 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 	
 	std::list<Vertice>::iterator it= ptosControl.end();
 
-  float	u, uSquared, uCubed;
+  //float	u, 
+  float uSquared, uCubed;
   float c0Cubed, c1Cubed, c2Cubed, c3Cubed;
   
   float c0Squared, c1Squared, c2Squared;
@@ -80,9 +81,9 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 	while(!last) {	 
 		complete= load(ptosControl, ptos, first);
 		
-		
-		for(int i= 0; !end && complete; i++) { 	 	
-	 		u= dt*i;
+
+		for(float u= 0; u<=1 && complete; u+=dt) { 	 	
+	 		//u= dt*i;
 	 		 			
 			uSquared= u * u;
 		  uCubed= uSquared * u;
@@ -157,11 +158,11 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 			std::cout << "normal.y: " << normal.y << std::endl;  
 			std::cout << "normal.z: " << normal.z << std::endl;  
 
-		 	//Llegamos al P3
-		 	if(result.x == ptos[3].x && result.y == ptos[3].y && result.z == ptos[3].z) {
-		 		end= true;
-		 		std::cout << "u: " << u << std::endl;
-		 	}
+//		 	//Llegamos al P3
+//		 	if(result.x == ptos[3].x && result.y == ptos[3].y && result.z == ptos[3].z) {
+//		 		end= true;
+//		 		std::cout << "u: " << u << std::endl;
+//		 	}
 		}
 		
 		if((ptos[3].x != it->x || ptos[3].y != it->y || ptos[3].z != it->z) && ((ptosControl.size() - first) >= 4))
@@ -233,17 +234,7 @@ void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurv
 				result[j].y /= 6;
 			}
 
-			float i= 0;
-			//float u=0
-			for(float u=0; u<=1; u+=0.1, i++) {
-
-				std::cout << "dt*i: " << i*dt << std::endl;
-
-				std::cout << "u: " << u << std::endl;
-
-				u= i*dt; 			
-
-				std::cout << "u: " << u << std::endl;
+			for(float u=0; u<=1; u+= dt) {
 
 				base_u[0] = u*u*u;
 				base_u[1] = u*u;

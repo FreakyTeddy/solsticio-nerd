@@ -7,9 +7,9 @@
 
 #include <iostream>
  
-#define FACTOR_INICIAL 20 
+#define FACTOR_INICIAL 50 
 #define FACTOR_MIN 0 
-#define FACTOR_MAX 30 
+#define FACTOR_MAX 100 
  
 class Curva {
 	
