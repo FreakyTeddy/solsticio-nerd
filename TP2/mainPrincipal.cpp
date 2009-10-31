@@ -46,6 +46,8 @@ int TOP_VIEW_H = ((int)((float)W_HEIGHT*0.40f));
 // Variables globales
 Curva curva;
 std::list<Vertice> pControl;	//puntos de control dibujados con el mouse
+std::list<Vertice> pTangente;	//puntos de control dibujados con el mouse
+std::list<Vertice> pNormal;	//puntos de control dibujados con el mouse
 std::list<Vertice> curva_editada;
 std::list<Vertice> curva_cam;	//curva que describe la camara
 Controlador controlador(&curva);
@@ -230,18 +232,20 @@ void display(void)
 					glVertex3f(it->x, it->y, 0.0);
 			glEnd();
 		}
+		
 
-		//TODO!!!!! hacer pero con bezier y ver que hacer con las normales y tg
 		curva_editada.clear();
-		curva.Bspline(pControl, curva_editada, pControl, pControl);
+
+		//TODO: aca esta bezier
+		//falta ver tema normales
+		curva.BezierCubica(pControl, curva_editada, pTangente, pNormal);
 
 		glBegin(GL_LINE_STRIP);
 			glColor3f(1.0,1.0,0);
 			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
 				glVertex3f(it->x, it->y, 0.0);
 		glEnd();
-
-
+		
 		glEnable(GL_LIGHTING);
 
 		glCallList(DL_AXIS2D_TOP); //dibuja el cuadrado del viewport2D

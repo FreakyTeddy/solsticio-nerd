@@ -53,9 +53,6 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 	
   float dt=(float) 1.0 / factorBezier;
 	
-	std::list<Vertice>::iterator it= ptosControl.end();
-
-  //float	u, 
   float uSquared, uCubed;
   float c0Cubed, c1Cubed, c2Cubed, c3Cubed;
   
@@ -71,20 +68,15 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 	Vertice tangent;
 	Vertice normal;
 	 
-	bool end= false; 
-	bool last= false; 
 	bool complete;
 	
 	Vertice ptos[4];
 	unsigned int first= 0;
 	
-	while(!last) {	 
+	while((ptosControl.size() - first) >= 4) {	 
 		complete= load(ptosControl, ptos, first);
 		
-
-		for(float u= 0; u<=1 && complete; u+=dt) { 	 	
-	 		//u= dt*i;
-	 		 			
+		for(float u= 0; u<=1 && complete; u+=dt) { 	 			 			
 			uSquared= u * u;
 		  uCubed= uSquared * u;
 			
@@ -148,27 +140,16 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 			ptosNormal.push_back(result);
 			ptosNormal.push_back(normal);
 			
-		 	std::cout << "result.x: " << result.x << std::endl;
-		 	std::cout << "result.y: " << result.y << std::endl;
-			std::cout << "result.z: " << result.z << std::endl;
-			std::cout << "tangent.x: " << tangent.x << std::endl;
-			std::cout << "tangent.y: " << tangent.y << std::endl;  
-			std::cout << "tangent.z: " << tangent.z << std::endl;  
-			std::cout << "normal.x: " << normal.x << std::endl;
-			std::cout << "normal.y: " << normal.y << std::endl;  
-			std::cout << "normal.z: " << normal.z << std::endl;  
-
-//		 	//Llegamos al P3
-//		 	if(result.x == ptos[3].x && result.y == ptos[3].y && result.z == ptos[3].z) {
-//		 		end= true;
-//		 		std::cout << "u: " << u << std::endl;
-//		 	}
+//			 	std::cout << "result.x: " << result.x << std::endl;
+//			 	std::cout << "result.y: " << result.y << std::endl;
+//				std::cout << "result.z: " << result.z << std::endl;
+//				std::cout << "tangent.x: " << tangent.x << std::endl;
+//				std::cout << "tangent.y: " << tangent.y << std::endl;  
+//				std::cout << "tangent.z: " << tangent.z << std::endl;  
+//				std::cout << "normal.x: " << normal.x << std::endl;
+//				std::cout << "normal.y: " << normal.y << std::endl;  
+//				std::cout << "normal.z: " << normal.z << std::endl;  
 		}
-		
-		if((ptos[3].x != it->x || ptos[3].y != it->y || ptos[3].z != it->z) && ((ptosControl.size() - first) >= 4))
-			end= false;
-		else
-			last= true;
   }  
 }
 
