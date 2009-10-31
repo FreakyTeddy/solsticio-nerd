@@ -121,6 +121,7 @@ void DrawXYGrid()
 	glEnd();
 	glEnable(GL_LIGHTING);
 }
+
 void Set3DEnv()
 {
 	glViewport (0, 0, (GLsizei) W_WIDTH, (GLsizei) W_HEIGHT);
@@ -183,7 +184,19 @@ void display(void)
 		 glCallList(DL_GRID);
 
 	if (view_curves) {
+
+		glDisable(GL_LIGHTING);
+
 		//dibujar las curvas
+		std::list<Vertice>::iterator it;
+		glBegin(GL_LINE_STRIP);
+			glColor3f(0,1.0,1.0);
+			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
+				glVertex3f(it->x * 10, it->y * 10, 0); //TODO calcular este factor de escala
+		glEnd();
+
+		glEnable(GL_LIGHTING);
+
 	}
 	//
 	///////////////////////////////////////////////////
@@ -300,6 +313,8 @@ void mouse(int button, int state, int x, int y) {
 			v.x = (float)(x - x0) / (float) (x1-x0) ;
 			v.y = (float)(y0 - y) / (float) (y0-y1);
 
+			mouseDown = true;
+
 			if ( x > x0 && x < x1) {
 				if ( y < y0 && y > y1) {
 
@@ -308,11 +323,7 @@ void mouse(int button, int state, int x, int y) {
 					pControl.push_back(v);	//agrego el vertice normalizado
 					glutPostRedisplay();
 				}
-				else
-					mouseDown = true;
 			}
-			else
-				mouseDown = true;
 		}
 		else
 			mouseDown = true;
