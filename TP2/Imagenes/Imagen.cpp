@@ -5,7 +5,7 @@ Imagen::Imagen()
 	
 }
 
-void* Imagen::cargarImagen(std::string ruta)
+SDL_Surface* Imagen::cargarImagen(std::string ruta)
 {
 	SDL_Surface* imagen = IMG_Load(ruta.c_str());
 	if (!imagen){
@@ -13,8 +13,6 @@ void* Imagen::cargarImagen(std::string ruta)
 		return NULL;
 	}
 	std::cout << "Se Abrio y Se Cargo La Imagen : " << ruta << std::endl;
-	//convertir de SDL_Surface a el formato que necesita Open GL para
-	//manejar la textura.
 	return imagen;
 		
 }

@@ -10,7 +10,7 @@ class Imagen{
 	
 	public:
 		Imagen();
-		void* cargarImagen(std::string ruta);
+		SDL_Surface* cargarImagen(std::string ruta);
 		~Imagen();
 	
 };
