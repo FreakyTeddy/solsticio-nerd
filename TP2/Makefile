@@ -1,12 +1,14 @@
 SOURCES=Primitivas\ Graficas/Curva/Curva.cpp \
-	Controlador/Controlador.cpp
+	Controlador/Controlador.cpp \
+	Imagenes/Imagen.cpp
 
 
-TESTSOURCES=Primitivas\ Graficas/Curva/pruebaCurva.cpp
+TESTSOURCES=Primitivas\ Graficas/Curva/TestCurvas.cpp \
+	Imagenes/TestImagen.cpp
 
 MAIN=mainPrincipal.cpp
 
-CFLAGS=-g -lGL -lGLU -lglut
+CFLAGS=-g -lGL -lGLU -lglut `pkg-config --cflags --libs sdl` -lSDL_image
 CC=g++
 EXECUTABLE=Tp2
 

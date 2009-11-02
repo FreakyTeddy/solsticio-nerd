@@ -326,6 +326,9 @@ void mouse(int button, int state, int x, int y) {
 			v.x = (float)(x - x0) / (float) (x1-x0) ;
 			v.y = (float)(y0 - y) / (float) (y0-y1);
 
+			if(!mouseDown)
+			     xprev=x;
+
 			mouseDown = true;
 
 			if ( x > x0 && x < x1) {
@@ -339,23 +342,25 @@ void mouse(int button, int state, int x, int y) {
 			}
 		}
 		else
-			mouseDown = true;
+		     mouseDown = true;
+		
 	}
 	else
 		mouseDown = false;
 
+	if(!zoomOn)
+	     yprev=y;
 	(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) ? zoomOn = true : zoomOn = false;
 }
 
 void mouseMotion(int x, int y) {
-
 	if (mouseDown) {
 		if (x > xprev){
-			rotate_cam += 0.3;
+		     rotate_cam += 0.3*(x-xprev);
 			if(rotate_cam > 360.0) rotate_cam = 0.0;
 		}
 		else {
-			rotate_cam -=0.3;
+			rotate_cam -=0.3*(xprev-x);
 			if(rotate_cam < -360.0) rotate_cam = 0.0;
 		}
 		xprev = x;
@@ -363,12 +368,13 @@ void mouseMotion(int x, int y) {
 	}
 	if (zoomOn) {
 		if (y < yprev)
-			zoom += 0.01;
-		else
-			zoom -=0.01;
+			zoom += 0.001*(y-yprev);
+		else if(y > yprev)
+			zoom -=0.001*(yprev-y);
 		yprev = y;
 		glutPostRedisplay();
 	}
+	
 }
 
 
