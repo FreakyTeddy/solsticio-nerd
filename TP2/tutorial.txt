@@ -1,0 +1,16 @@
+* Teclado *
+
+- a: muestra los ejes
+- c: borra la curva editada
+- e: muestra/oculta la ventana de edicion
+- g: muestra/oculta la grilla  
+- t: muestra/oculta todas las curvas y poligonos de control 
+- ESC: sale del programa
+
+
+* Mouse *
+
+- Rotar la camara: boton izq apretado y mover mouse hacia los costados
+- Zoom: boton derecho presionado y mover mouse arriba (zoomIn) o hacia abajo (zoomOut)
+
+

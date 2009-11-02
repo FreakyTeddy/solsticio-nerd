@@ -5,9 +5,9 @@
 #include "Controlador/Controlador.h"
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
-float eye[3] = {15.0, 15.0, 5.0};
-float at[3]  = { 0.0,  0.0, 0.0};
-float up[3]  = { 0.0,  0.0, 1.0};
+float eye[3] = {15.0, 15.0, 5.0};	//camara
+float at[3]  = { 0.0,  0.0, 0.0};	//centro
+float up[3]  = { 0.0,  0.0, 1.0};	//vector normal
 
 // Variables asociadas a única fuente de luz de la escena
 float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -19,13 +19,17 @@ float color_esfera[4] = {0.5f, 0.5f, 0.2f, 1.0f};
 
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
 float rotate_cam = 0;
+float zoom = 1;
 int xprev = 0; //posicion anterior del mouse
+int yprev = 0;
 
 // Variables de control
 bool view_grid = true;
 bool view_axis = true;
 bool edit_panel = true;
 bool view_curves = true;	//indica si se ven las curvas de control
+bool mouseDown = false; //indica si se apreta el boton izquierdo del mouse
+bool zoomOn = false;
 
 
 // Handle para el control de las Display Lists
@@ -53,10 +57,15 @@ std::list<Vertice> curva_editada;
 std::list<Vertice> curva_cam;	//curva que describe la camara
 Controlador controlador(&curva);
 
-bool mouseDown = false; //indica si se apreta el boton izquierdo del mouse
+
 
 void OnIdle (void)
 {}
+
+void animarCam() {
+	//este metodo usa la curva bspline para hacer la animacion de la camara
+	//para la ransicion entre la grilla y la curva
+}
 
 void DrawAxis()
 {
@@ -174,7 +183,7 @@ void display(void)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt (eye[0], eye[1], eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
+	gluLookAt (eye[0]/zoom, eye[1]/zoom, eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
 
 	glPushMatrix();
 	glRotatef(rotate_cam, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
@@ -291,7 +300,7 @@ void keyboard (unsigned char key, int x, int y)
 		  glutPostRedisplay();
 		  break;
 	  case 'c':
-		  pControl.clear(); //borra los puntos de control de la curva VER!!!!!!
+		  pControl.clear();
 		  glutPostRedisplay();
 		  break;
     default:
@@ -334,21 +343,30 @@ void mouse(int button, int state, int x, int y) {
 	}
 	else
 		mouseDown = false;
+
+	(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) ? zoomOn = true : zoomOn = false;
 }
 
 void mouseMotion(int x, int y) {
 
 	if (mouseDown) {
 		if (x > xprev){
-			rotate_cam += 0.2;
+			rotate_cam += 0.3;
 			if(rotate_cam > 360.0) rotate_cam = 0.0;
 		}
 		else {
-			rotate_cam -=0.2;
+			rotate_cam -=0.3;
 			if(rotate_cam < -360.0) rotate_cam = 0.0;
 		}
 		xprev = x;
-
+		glutPostRedisplay();
+	}
+	if (zoomOn) {
+		if (y < yprev)
+			zoom += 0.01;
+		else
+			zoom -=0.01;
+		yprev = y;
 		glutPostRedisplay();
 	}
 }
