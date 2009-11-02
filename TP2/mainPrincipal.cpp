@@ -18,7 +18,8 @@ float light_ambient[4] = {0.05f, 0.05f, 0.05f, 1.0f};
 float color_esfera[4] = {0.5f, 0.5f, 0.2f, 1.0f};
 
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
-float rotate_sphere = 0;
+float rotate_cam = 0;
+int xprev = 0; //posicion anterior del mouse
 
 // Variables de control
 bool view_grid = true;
@@ -55,11 +56,7 @@ Controlador controlador(&curva);
 bool mouseDown = false; //indica si se apreta el boton izquierdo del mouse
 
 void OnIdle (void)
-{
-	rotate_sphere += 0.1;
-	if(rotate_sphere > 360.0) rotate_sphere = 0.0;
-    glutPostRedisplay();
-}
+{}
 
 void DrawAxis()
 {
@@ -179,6 +176,9 @@ void display(void)
 	glLoadIdentity();
 	gluLookAt (eye[0], eye[1], eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
 
+	glPushMatrix();
+	glRotatef(rotate_cam, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
+
 	if (view_axis)
 		 glCallList(DL_AXIS);
 
@@ -187,18 +187,18 @@ void display(void)
 
 	if (view_curves) {
 
+		//dibujar las curvas
+
 		glDisable(GL_LIGHTING);
 
-		//dibujar las curvas
 		std::list<Vertice>::iterator it;
 		glBegin(GL_LINE_STRIP);
 			glColor3f(0,1.0,1.0);
 			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
 				glVertex3f(it->x * 10, it->y * 10, 0); //TODO calcular este factor de escala
 		glEnd();
-
 		glEnable(GL_LIGHTING);
-
+	glPopMatrix();
 	}
 	//
 	///////////////////////////////////////////////////
@@ -232,7 +232,7 @@ void display(void)
 					glVertex3f(it->x, it->y, 0.0);
 			glEnd();
 		}
-		
+
 
 		curva_editada.clear();
 
@@ -245,7 +245,7 @@ void display(void)
 			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
 				glVertex3f(it->x, it->y, 0.0);
 		glEnd();
-		
+
 		glEnable(GL_LIGHTING);
 
 		glCallList(DL_AXIS2D_TOP); //dibuja el cuadrado del viewport2D
@@ -339,14 +339,19 @@ void mouse(int button, int state, int x, int y) {
 void mouseMotion(int x, int y) {
 
 	if (mouseDown) {
-//		yrot = x - xdiff;TODO
-//		xrot = y + ydiff;
-		std::cout<<"rotar :P"<<std::endl;
-		std::cout<<"."<<std::endl;
-//		glutPostRedisplay();
+		if (x > xprev){
+			rotate_cam += 0.2;
+			if(rotate_cam > 360.0) rotate_cam = 0.0;
+		}
+		else {
+			rotate_cam -=0.2;
+			if(rotate_cam < -360.0) rotate_cam = 0.0;
+		}
+		xprev = x;
+
+		glutPostRedisplay();
 	}
 }
-
 
 
 int main(int argc, char** argv)
