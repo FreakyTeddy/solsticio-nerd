@@ -341,8 +341,11 @@ void mouse(int button, int state, int x, int y) {
 				}
 			}
 		}
-		else
+		else{
+		     if(!mouseDown)
+			  xprev=x;
 		     mouseDown = true;
+		}
 		
 	}
 	else
