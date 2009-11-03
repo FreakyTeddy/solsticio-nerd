@@ -38,127 +38,127 @@ void display(void)
         glLoadIdentity();
 	//
 	
-	/*-------------------*/ 
-	/*PRUEBA CURVA BEZIER*/ 
-	/*-------------------*/ 
+//	/*-------------------*/
+//	/*PRUEBA CURVA BEZIER*/
+//	/*-------------------*/
 	std::list<Vertice> ptosControl;
 	std::list<Vertice> ptosCurva;
 	std::list<Vertice> ptosTangente;
 	std::list<Vertice> ptosNormal;
-	
-	Vertice cp00;  
- 		cp00.x= 50;
-		cp00.y= 400;  
-		ptosControl.push_back(cp00);
- 	
-	Vertice cp01;  	
- 		cp01.x= 250;
-		cp01.y= 100;
-		ptosControl.push_back(cp01);
-
-	Vertice cp02;  
- 		cp02.x= 450;
-		cp02.y= 500;
-		ptosControl.push_back(cp02);
-
-	Vertice cp03;   
- 		cp03.x= 550;
-		cp03.y= 200;
-		ptosControl.push_back(cp03);
-
-	Vertice cp04;   
- 		cp04.x= 400;
-		cp04.y= 200;
-		ptosControl.push_back(cp04);
-
-	Vertice cp05;   
- 		cp05.x= 500;
-		cp05.y= 200;
-		ptosControl.push_back(cp05);
-
-	Vertice cp06;   
- 		cp06.x= 600;
-		cp06.y= 400;
-		ptosControl.push_back(cp06);
-
-	glColor3f(1.0,0,0);    
-	glBegin(GL_POINTS);
-		glVertex2i(cp00.x, cp00.y);
-		glVertex2i(cp01.x, cp01.y);
-		glVertex2i(cp02.x, cp02.y);
-		glVertex2i(cp03.x, cp03.y);
-		glVertex2i(cp04.x, cp04.y);
-		glVertex2i(cp05.x, cp05.y);
-		glVertex2i(cp06.x, cp06.y);		
-	glEnd();
-
-	curva.BezierCubica(ptosControl, ptosCurva, ptosTangente, ptosNormal);
-
+//
+//	Vertice cp00;
+// 		cp00.x= 50;
+//		cp00.y= 400;
+//		ptosControl.push_back(cp00);
+//
+//	Vertice cp01;
+// 		cp01.x= 250;
+//		cp01.y= 100;
+//		ptosControl.push_back(cp01);
+//
+//	Vertice cp02;
+// 		cp02.x= 450;
+//		cp02.y= 500;
+//		ptosControl.push_back(cp02);
+//
+//	Vertice cp03;
+// 		cp03.x= 550;
+//		cp03.y= 200;
+//		ptosControl.push_back(cp03);
+//
+//	Vertice cp04;
+// 		cp04.x= 400;
+//		cp04.y= 200;
+//		ptosControl.push_back(cp04);
+//
+//	Vertice cp05;
+// 		cp05.x= 500;
+//		cp05.y= 200;
+//		ptosControl.push_back(cp05);
+//
+//	Vertice cp06;
+// 		cp06.x= 600;
+//		cp06.y= 400;
+//		ptosControl.push_back(cp06);
+//
+//	glColor3f(1.0,0,0);
+//	glBegin(GL_POINTS);
+//		glVertex2i(cp00.x, cp00.y);
+//		glVertex2i(cp01.x, cp01.y);
+//		glVertex2i(cp02.x, cp02.y);
+//		glVertex2i(cp03.x, cp03.y);
+//		glVertex2i(cp04.x, cp04.y);
+//		glVertex2i(cp05.x, cp05.y);
+//		glVertex2i(cp06.x, cp06.y);
+//	glEnd();
+//
+//	curva.BezierCubica(ptosControl, ptosCurva, ptosTangente, ptosNormal);
+//
 	std::list<Vertice>::iterator it;
-	glColor3f(0,1.0,0);    
-	glBegin(GL_LINE_STRIP);
-	
-		for(it= ptosCurva.begin(); it != ptosCurva.end(); it++) { 
-			glVertex2f(it->x, it->y);
-		}
-		
-	glEnd();
-	
-	glColor3f(0,0,1.0);    
-	glBegin(GL_LINE);
-	
-		for(it= ptosTangente.begin(); it != ptosTangente.end(); it++) { 
-			glVertex2f(it->x, it->y);
-		}
-		
-	glEnd();
-
-	glColor3f(1.0,1.0,1.0);    
-	glBegin(GL_LINE);
-	
-		for(it= ptosNormal.begin(); it != ptosNormal.end(); it++) { 
-			glVertex2f(it->x, it->y);
-		}
-
-	ptosControl.clear();
-	ptosCurva.clear();
-	ptosTangente.clear();
-	ptosNormal.clear();
+//	glColor3f(0,1.0,0);
+//	glBegin(GL_LINE_STRIP);
+//
+//		for(it= ptosCurva.begin(); it != ptosCurva.end(); it++) {
+//			glVertex2f(it->x, it->y);
+//		}
+//
+//	glEnd();
+//
+//	glColor3f(0,0,1.0);
+//	glBegin(GL_LINE);
+//
+//		for(it= ptosTangente.begin(); it != ptosTangente.end(); it++) {
+//			glVertex2f(it->x, it->y);
+//		}
+//
+//	glEnd();
+//
+//	glColor3f(1.0,1.0,1.0);
+//	glBegin(GL_LINE);
+//
+//		for(it= ptosNormal.begin(); it != ptosNormal.end(); it++) {
+//			glVertex2f(it->x, it->y);
+//		}
+//
+//	ptosControl.clear();
+//	ptosCurva.clear();
+//	ptosTangente.clear();
+//	ptosNormal.clear();
 
 	/*--------------------*/ 		
 	/*PRUEBA CURVA BSPLINE*/
 	/*--------------------*/ 
  	Vertice cp0;
- 		cp0.x= 100;
-		cp0.y= 400;
-		ptosControl.push_back(cp0);
+          cp0.x= 100;
+          cp0.y= 400;
+          ptosControl.push_back(cp0);
 
 	Vertice cp1;
- 		cp1.x= 150;
-		cp1.y= 200;
-		ptosControl.push_back(cp1);
+          cp1.x= 150;
+          cp1.y= 200;
+          ptosControl.push_back(cp1);
 
 	Vertice cp2;
- 		cp2.x= 200;
-		cp2.y= 200;
-		ptosControl.push_back(cp2);
+          cp2.x= 200;
+          cp2.y= 200;
+          ptosControl.push_back(cp2);
 
 	Vertice cp3;
- 		cp3.x= 250;
-		cp3.y= 400;
-		ptosControl.push_back(cp3);
+          cp3.x= 250;
+          cp3.y= 400;
+          ptosControl.push_back(cp3);
 
 	Vertice cp4;
-		cp4.x= 350;
-		cp4.y= 200;
-		ptosControl.push_back(cp4);
+          cp4.x= 350;
+          cp4.y= 200;
+          ptosControl.push_back(cp4);
 
 	Vertice cp5;
-		cp5.x= 400;
-		cp5.y= 200;
-		ptosControl.push_back(cp5);
-		ptosControl.push_back(cp5);
-		ptosControl.push_back(cp5);
+          cp5.x= 400;
+          cp5.y= 200;
+          ptosControl.push_back(cp5);
+          ptosControl.push_back(cp5);
+          ptosControl.push_back(cp5);
 
 	glColor3f(0,0,1.0);
 	glBegin(GL_POINTS);
@@ -175,12 +175,30 @@ void display(void)
 	glColor3f(0,1.0,0);    
 	glBegin(GL_LINE_STRIP);
 	
-		for(it= ptosCurva.begin(); it != ptosCurva.end(); it++) {
-			glVertex2f(it->x, it->y);
-		}
+          for(it= ptosCurva.begin(); it != ptosCurva.end(); it++) {
+            glVertex2f(it->x, it->y);
+	}
 		
 	glEnd();
 	
+	glColor3f(0,0,1.0);
+        glBegin(GL_LINE);
+
+          for(it= ptosTangente.begin(); it != ptosTangente.end(); it++) {
+            glVertex2f(it->x, it->y);
+	  }
+
+	glEnd();
+
+	glColor3f(1.0,1.0,1.0);
+	glBegin(GL_LINE);
+
+          for(it= ptosNormal.begin(); it != ptosNormal.end(); it++) {
+            glVertex2f(it->x, it->y);
+	   }
+
+         glEnd();
+
 	/*-------------------*/ 
 
 	///

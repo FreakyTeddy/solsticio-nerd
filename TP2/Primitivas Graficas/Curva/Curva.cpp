@@ -3,56 +3,56 @@
 Curva::Curva(): factorBezier(FACTOR_INICIAL), factorBspline(FACTOR_INICIAL) { };
 
 Vertice& find(std::list<Vertice> vertices, unsigned int position) {
-	
-	std::list<Vertice>::iterator it= vertices.begin();
-	
-	for(unsigned int i= 0; it != vertices.end(); i++, it++) { 
-		if(i == position)
-			break;	
-	}
-	
-	return *it;
+
+  std::list<Vertice>::iterator it= vertices.begin();
+
+  for(unsigned int i= 0; it != vertices.end(); i++, it++) {
+    if(i == position)
+      break;
+  }
+
+  return *it;
 } 
 
 bool load(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int &first) {
 
-	Vertice last;	
-	bool complete= false;
-	unsigned int position= 0;
-	unsigned int size= ptosControl.size();
-	
-	ptos[position].x= find(ptosControl, first).x;
- 	ptos[position].y= find(ptosControl, first).y;	 
-	ptos[position].z= find(ptosControl, first).z;	 
-	last= ptos[position];
-	position++;
-	first++;
-		
-	while(!complete && first<size) {
-		
-		ptos[position].x= find(ptosControl, first).x;
- 		ptos[position].y= find(ptosControl, first).y;
- 		ptos[position].z= find(ptosControl, first).z;
- 		
- 		if(last.x != ptos[position].x || last.y != ptos[position].y || last.z != ptos[position].z) {
-			last= ptos[position];
-			position++;
- 		}
+  Vertice last;
+  bool complete= false;
+  unsigned int position= 0;
+  unsigned int size= ptosControl.size();
 
- 		if(position == 4)
- 			complete= true;
-		else
-			first++;
-	}
-	
-	return complete;	
+  ptos[position].x= find(ptosControl, first).x;
+  ptos[position].y= find(ptosControl, first).y;
+  ptos[position].z= find(ptosControl, first).z;
+  last= ptos[position];
+  position++;
+  first++;
+
+  while(!complete && first<size) {
+
+    ptos[position].x= find(ptosControl, first).x;
+    ptos[position].y= find(ptosControl, first).y;
+    ptos[position].z= find(ptosControl, first).z;
+
+    if(last.x != ptos[position].x || last.y != ptos[position].y || last.z != ptos[position].z) {
+      last= ptos[position];
+      position++;
+    }
+
+    if(position == 4)
+      complete= true;
+    else
+      first++;
+  }
+
+  return complete;
 }
 
 void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva,
                          std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal) {
-	
+
   float dt=(float) 1.0 / factorBezier;
-	
+
   float uSquared, uCubed;
   float c0Cubed, c1Cubed, c2Cubed, c3Cubed;
   
@@ -65,183 +65,210 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
   float dducx, dducy, dducz;  
   
   Vertice result;
-	Vertice tangent;
-	Vertice normal;
-	 
-	bool complete;
-	
-	Vertice ptos[4];
-	unsigned int first= 0;
-	
-	while((ptosControl.size() - first) >= 4) {	 
-		complete= load(ptosControl, ptos, first);
-		
-		for(float u= 0; u<=1 && complete; u+=dt) { 	 			 			
-			uSquared= u * u;
-		  uCubed= uSquared * u;
-			
-			//Polinomios de Bernstein cubicos 
-			c0Cubed= -uCubed + 3 * uSquared - 3 * u + 1;
-			c1Cubed= 3 * uCubed - 6 * uSquared + 3 * u;
-			c2Cubed= -3 * uCubed + 3 * uSquared;
-			c3Cubed= uCubed;
+  Vertice tangent;
+  Vertice normal;
 
-			result.x= c0Cubed*ptos[0].x + c1Cubed*ptos[1].x + c2Cubed*ptos[2].x + c3Cubed*ptos[3].x;
-			result.y= c0Cubed*ptos[0].y + c1Cubed*ptos[1].y + c2Cubed*ptos[2].y + c3Cubed*ptos[3].y;
-			result.z= c0Cubed*ptos[0].z + c1Cubed*ptos[1].z + c2Cubed*ptos[2].z + c3Cubed*ptos[3].z;
-			ptosCurva.push_back(result);
+  bool complete;
 
-			//Derivada primera - Tangente			
-			//Polinomios de Bernstein cuadraticos 
-			c0Squared= uSquared - 2 * u + 1;
-			c1Squared= -2 * uSquared + 2 * u;
-			c2Squared= uSquared;
+  Vertice ptos[4];
+  unsigned int first= 0;
 
-			deltab0x= ptos[1].x - ptos[0].x;
-			deltab1x= ptos[2].x - ptos[1].x;
-			deltab2x= ptos[3].x - ptos[2].x;
-			deltab0y= ptos[1].y - ptos[0].y;
-			deltab1y= ptos[2].y - ptos[1].y;
-			deltab2y= ptos[3].y - ptos[2].y;
-			deltab0z= ptos[1].z - ptos[0].z;
-			deltab1z= ptos[2].z - ptos[1].z;
-			deltab2z= ptos[3].z - ptos[2].z;
+  while((ptosControl.size() - first) >= 4) {
+    complete= load(ptosControl, ptos, first);
 
-			ducx= 6 * ((deltab0x * c0Squared) + (deltab1x * c1Squared) + (deltab2x * c2Squared));   
-			ducy= 6 * ((deltab0y * c0Squared) + (deltab1y * c1Squared) + (deltab2y * c2Squared));   
-			ducz= 6 * ((deltab0z * c0Squared) + (deltab1z * c1Squared) + (deltab2z * c2Squared));   
+    for(float u= 0; u<=1 && complete; u+=dt) {
+      uSquared= u * u;
+      uCubed= uSquared * u;
 
-			tangent.x= ducx * (ptos[0].x + ptos[1].x + ptos[2].x + ptos[3].x);
-			tangent.y= ducy * (ptos[0].y + ptos[1].y + ptos[2].y + ptos[3].y);
-			tangent.z= ducz * (ptos[0].z + ptos[1].z + ptos[2].z + ptos[3].z);
-			ptosTangente.push_back(result);
-			ptosTangente.push_back(tangent);
+      //Polinomios de Bernstein cubicos
+      c0Cubed= -uCubed + 3 * uSquared - 3 * u + 1;
+      c1Cubed= 3 * uCubed - 6 * uSquared + 3 * u;
+      c2Cubed= -3 * uCubed + 3 * uSquared;
+      c3Cubed= uCubed;
 
-			//Derivada segunda - Normal
-			//Polinomios de Bernstein lineal 
-			c0= 1 - u;
-			c1= u;
+      result.x= c0Cubed*ptos[0].x + c1Cubed*ptos[1].x + c2Cubed*ptos[2].x + c3Cubed*ptos[3].x;
+      result.y= c0Cubed*ptos[0].y + c1Cubed*ptos[1].y + c2Cubed*ptos[2].y + c3Cubed*ptos[3].y;
+      result.z= c0Cubed*ptos[0].z + c1Cubed*ptos[1].z + c2Cubed*ptos[2].z + c3Cubed*ptos[3].z;
+      ptosCurva.push_back(result);
 
-			delta2b0x= deltab1x - deltab0x;
-			delta2b1x= deltab2x - deltab1x;
-			delta2b0y= deltab1y - deltab0y;
-			delta2b1y= deltab2y - deltab1y;
-			delta2b0z= deltab1z - deltab0z;
-			delta2b1z= deltab2z - deltab1z;
+      //Derivada primera - Tangente
+      //Polinomios de Bernstein cuadraticos
+      c0Squared= uSquared - 2 * u + 1;
+      c1Squared= -2 * uSquared + 2 * u;
+      c2Squared= uSquared;
 
-			dducx= 3 * ((delta2b0x * c0) + (delta2b1x * c1));   
-			dducy= 3 * ((delta2b0y * c0) + (delta2b1y * c1));   
-			dducz= 3 * ((delta2b0z * c0) + (delta2b1z * c1));   
-			
-			normal.x= dducx * (ptos[0].x + ptos[1].x + ptos[2].x);
-			normal.y= dducy * (ptos[0].y + ptos[1].y + ptos[2].y);
-			normal.z= dducz * (ptos[0].z + ptos[1].z + ptos[2].z);
+      deltab0x= ptos[1].x - ptos[0].x;
+      deltab1x= ptos[2].x - ptos[1].x;
+      deltab2x= ptos[3].x - ptos[2].x;
+      deltab0y= ptos[1].y - ptos[0].y;
+      deltab1y= ptos[2].y - ptos[1].y;
+      deltab2y= ptos[3].y - ptos[2].y;
+      deltab0z= ptos[1].z - ptos[0].z;
+      deltab1z= ptos[2].z - ptos[1].z;
+      deltab2z= ptos[3].z - ptos[2].z;
 
-			ptosNormal.push_back(result);
-			ptosNormal.push_back(normal);
-			
-//			 	std::cout << "result.x: " << result.x << std::endl;
-//			 	std::cout << "result.y: " << result.y << std::endl;
-//				std::cout << "result.z: " << result.z << std::endl;
-//				std::cout << "tangent.x: " << tangent.x << std::endl;
-//				std::cout << "tangent.y: " << tangent.y << std::endl;  
-//				std::cout << "tangent.z: " << tangent.z << std::endl;  
-//				std::cout << "normal.x: " << normal.x << std::endl;
-//				std::cout << "normal.y: " << normal.y << std::endl;  
-//				std::cout << "normal.z: " << normal.z << std::endl;  
-		}
+      ducx= 6 * ((deltab0x * c0Squared) + (deltab1x * c1Squared) + (deltab2x * c2Squared));
+      ducy= 6 * ((deltab0y * c0Squared) + (deltab1y * c1Squared) + (deltab2y * c2Squared));
+      ducz= 6 * ((deltab0z * c0Squared) + (deltab1z * c1Squared) + (deltab2z * c2Squared));
+
+      tangent.x= ducx * (ptos[0].x + ptos[1].x + ptos[2].x + ptos[3].x);
+      tangent.y= ducy * (ptos[0].y + ptos[1].y + ptos[2].y + ptos[3].y);
+      tangent.z= ducz * (ptos[0].z + ptos[1].z + ptos[2].z + ptos[3].z);
+      ptosTangente.push_back(result);
+      ptosTangente.push_back(tangent);
+
+      //Derivada segunda - Normal
+      //Polinomios de Bernstein lineal
+      c0= 1 - u;
+      c1= u;
+
+      delta2b0x= deltab1x - deltab0x;
+      delta2b1x= deltab2x - deltab1x;
+      delta2b0y= deltab1y - deltab0y;
+      delta2b1y= deltab2y - deltab1y;
+      delta2b0z= deltab1z - deltab0z;
+      delta2b1z= deltab2z - deltab1z;
+
+      dducx= 3 * ((delta2b0x * c0) + (delta2b1x * c1));
+      dducy= 3 * ((delta2b0y * c0) + (delta2b1y * c1));
+      dducz= 3 * ((delta2b0z * c0) + (delta2b1z * c1));
+
+      normal.x= dducx * (ptos[0].x + ptos[1].x + ptos[2].x);
+      normal.y= dducy * (ptos[0].y + ptos[1].y + ptos[2].y);
+      normal.z= dducz * (ptos[0].z + ptos[1].z + ptos[2].z);
+
+      ptosNormal.push_back(result);
+      ptosNormal.push_back(normal);
+    }
   }  
 }
 
 void Curva::modificarFactorBezier(int cantidad) {
 
-	factorBezier+= cantidad;
+        factorBezier+= cantidad;
 
-	if(factorBezier <= FACTOR_MIN)
-		factorBezier= 1;
-	if(factorBezier > FACTOR_MAX)
-		factorBezier= FACTOR_MAX;
+        if(factorBezier <= FACTOR_MIN)
+                factorBezier= 1;
+        if(factorBezier > FACTOR_MAX)
+                factorBezier= FACTOR_MAX;
+}
+
+bool loadBspline(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int first) {
+
+  unsigned int size= ptosControl.size();
+
+  for(unsigned int i= 0; (i < 4) && ((size-first) > 3); i++) {
+    ptos[i].x= find(ptosControl, first+i).x;
+    ptos[i].y= find(ptosControl, first+i).y;
+    ptos[i].z= find(ptosControl, first+i).z;
+  }
+
+  return ((size-first) > 3);
 }
 
 void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva, 
-		             		std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal) {
+                    std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal) {
 
-	float dt=(float) 1.0 / factorBspline;
+  float dt=(float) 1.0 / factorBspline;
 
-	if(ptosControl.size() >= 4) {
+  float uSquared, uCubed;
+  float Bn2Cubed, Bn1Cubed, B0Cubed, B1Cubed;
 
-		float base_u[4]; //tiene (u^3, u^2, u, 1)
+  float Bn1Squared, B0Squared, B1Squared;
+  float deltab0x, deltab1x, deltab2x, deltab0y, deltab1y, deltab2y, deltab0z, deltab1z, deltab2z;
+  float ducx, ducy, ducz;
 
-		const int B[][4] = { { -1 , 3 , -3 , 1 },
-							{ 3 , -6 , 3 , 0 },
-							{ -3 , 0 , 3 , 0 },
-							{ 1 , 4 , 1 , 0 }
-						  };
+  float B0, B1;
+  float delta2b0x, delta2b1x, delta2b0y, delta2b1y, delta2b0z, delta2b1z;
+  float dducx, dducy, dducz;
 
-		Vertice puntos[4];
+  Vertice curve;
+  Vertice tangent;
+  Vertice normal;
 
-		std::list<Vertice>::iterator it = ptosControl.begin();
+  bool complete;
 
-		//itero por los puntos de control
-		for(unsigned int i=0; i<(ptosControl.size()-3); i++, it++) {
+  Vertice ptos[4];
+  unsigned int first= 0;
 
-			Vertice result[4];
+  while((ptosControl.size() - first) >= 4) {
+    complete= loadBspline(ptosControl, ptos, first);
+    first++;
 
-			for(int j= 0; j<4; j++, it++) {
+    for(float u= 0; u<=1 && complete; u+=dt) {
 
-				//tomo los 4 puntos de control
-				puntos[j].x = (*it).x;
-				puntos[j].y = (*it).y;
-				puntos[j].z = (*it).z;
-			}
+      uSquared= u * u;
+      uCubed= uSquared * u;
 
-			//decremento el it
-			for(int j= 0; j<4; j++, it--){}
+      //Bases cubicas
+      Bn2Cubed= (-uCubed + 3 * uSquared - 3 * u + 1 )/6;
+      Bn1Cubed= ( 3 * uCubed - 6 * uSquared + 4 )/6;
+      B0Cubed= ( -3 * uCubed + 3 * uSquared + 3 * u + 1 )/6;
+      B1Cubed= uCubed/6;
 
-			//multiplico B con los puntos
-			for(int k=0; k<4; k++) {
-				for(int m=0; m<4; m++) {
+      curve.x= Bn2Cubed*ptos[0].x + Bn1Cubed*ptos[1].x + B0Cubed*ptos[2].x + B1Cubed*ptos[3].x;
+      curve.y= Bn2Cubed*ptos[0].y + Bn1Cubed*ptos[1].y + B0Cubed*ptos[2].y + B1Cubed*ptos[3].y;
+      curve.z= Bn2Cubed*ptos[0].z + Bn1Cubed*ptos[1].z + B0Cubed*ptos[2].z + B1Cubed*ptos[3].z;
+      ptosCurva.push_back(curve);
 
-					result[k].x += B[k][m] * puntos[m].x;
-					result[k].y += B[k][m] * puntos[m].y;
-					result[k].z += B[k][m] * puntos[m].z;
-				}
-			}
+      //Derivada primera - Tangente
+      //Bases cuadraticas
+      Bn1Squared= ( uSquared - 2 * u + 1)/2;
+      B0Squared= ( 2 * u - 1 )/2;
+      B1Squared= ( uSquared )/2;
 
-			//divido por seis
-			for (int j= 0; j<4; j++) {
-				result[j].x /= 6;
-				result[j].y /= 6;
-				result[j].z /= 6;
-			}
+      deltab0x= ptos[1].x - ptos[0].x;
+      deltab1x= ptos[2].x - ptos[1].x;
+      deltab2x= ptos[3].x - ptos[2].x;
+      deltab0y= ptos[1].y - ptos[0].y;
+      deltab1y= ptos[2].y - ptos[1].y;
+      deltab2y= ptos[3].y - ptos[2].y;
+      deltab0z= ptos[1].z - ptos[0].z;
+      deltab1z= ptos[2].z - ptos[1].z;
+      deltab2z= ptos[3].z - ptos[2].z;
 
-			for(float u=0; u<=1; u+= dt) {
+      ducx= 6 * ((deltab0x * Bn1Squared) + (deltab1x * B0Squared) + (deltab2x * B1Squared));
+      ducy= 6 * ((deltab0y * Bn1Squared) + (deltab1y * B0Squared) + (deltab2y * B1Squared));
+      ducz= 6 * ((deltab0z * Bn1Squared) + (deltab1z * B0Squared) + (deltab2z * B1Squared));
 
-				base_u[0] = u*u*u;
-				base_u[1] = u*u;
-				base_u[2] = u;
-				base_u[3] = 1;
+      tangent.x= ducx * (ptos[0].x + ptos[1].x + ptos[2].x + ptos[3].x);
+      tangent.y= ducy * (ptos[0].y + ptos[1].y + ptos[2].y + ptos[3].y);
+      tangent.z= ducz * (ptos[0].z + ptos[1].z + ptos[2].z + ptos[3].z);
+      ptosTangente.push_back(curve);
+      ptosTangente.push_back(tangent);
 
-				Vertice v;
+      //Derivada segunda - Normal
+      //Bases lineales
+      B0= 1 - u;
+      B1= u;
 
-				for (int j= 0; j<4; j++) {
-					v.x += base_u[j] * result[j].x;
-					v.y += base_u[j] * result[j].y;
-					v.z += base_u[j] * result[j].z;
-				}
+      delta2b0x= deltab1x - deltab0x;
+      delta2b1x= deltab2x - deltab1x;
+      delta2b0y= deltab1y - deltab0y;
+      delta2b1y= deltab2y - deltab1y;
+      delta2b0z= deltab1z - deltab0z;
+      delta2b1z= deltab2z - deltab1z;
 
-				ptosCurva.push_back(v);	//agrego el vertice a la curva
-			}
-		}
-	}
+      dducx= 3 * ((delta2b0x * B0) + (delta2b1x * B1));
+      dducy= 3 * ((delta2b0y * B0) + (delta2b1y * B1));
+      dducz= 3 * ((delta2b0z * B0) + (delta2b1z * B1));
+
+      normal.x= dducx * (ptos[0].x + ptos[1].x + ptos[2].x);
+      normal.y= dducy * (ptos[0].y + ptos[1].y + ptos[2].y);
+      normal.z= dducz * (ptos[0].z + ptos[1].z + ptos[2].z);
+
+      ptosNormal.push_back(curve);
+      ptosNormal.push_back(normal);
+    }
+  }
 }
 
 void Curva::modificarFactorBspline(int cantidad) {
 
-	factorBspline+= cantidad;
+  factorBspline+= cantidad;
 
-	if(factorBspline <= FACTOR_MIN)
-		factorBspline= 1;
-	if(factorBspline > FACTOR_MAX)
-		factorBspline= FACTOR_MAX;
+  if(factorBspline <= FACTOR_MIN)
+    factorBspline= 1;
+  if(factorBspline > FACTOR_MAX)
+    factorBspline= FACTOR_MAX;
 }
