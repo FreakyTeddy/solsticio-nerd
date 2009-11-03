@@ -100,185 +100,51 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT);
    	glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-	//
-	
-	/*-------------------*/ 
-	/*PRUEBA CURVA BEZIER*/ 
-	/*-------------------*/ 
-	std::list<Vertice> ptosControl;
-	std::list<Vertice> ptosCurva;
-	std::list<Vertice> ptosTangente;
-	std::list<Vertice> ptosNormal;
-	
-	Vertice cp00;  
- 		cp00.x= 50;
-		cp00.y= 400;  
-		ptosControl.push_back(cp00);
- 	
-	Vertice cp01;  	
- 		cp01.x= 250;
-		cp01.y= 100;
-		ptosControl.push_back(cp01);
-
-	Vertice cp02;  
- 		cp02.x= 450;
-		cp02.y= 500;
-		ptosControl.push_back(cp02);
-
-	Vertice cp03;   
- 		cp03.x= 550;
-		cp03.y= 200;
-		ptosControl.push_back(cp03);
-
-	Vertice cp04;   
- 		cp04.x= 400;
-		cp04.y= 200;
-		ptosControl.push_back(cp04);
-
-	Vertice cp05;   
- 		cp05.x= 500;
-		cp05.y= 200;
-		ptosControl.push_back(cp05);
-
-	Vertice cp06;   
- 		cp06.x= 600;
-		cp06.y= 400;
-		ptosControl.push_back(cp06);
-
-	glColor3f(1.0,0,0);    
-	glBegin(GL_POINTS);
-		glVertex2i(cp00.x, cp00.y);
-		glVertex2i(cp01.x, cp01.y);
-		glVertex2i(cp02.x, cp02.y);
-		glVertex2i(cp03.x, cp03.y);
-		glVertex2i(cp04.x, cp04.y);
-		glVertex2i(cp05.x, cp05.y);
-		glVertex2i(cp06.x, cp06.y);		
-	glEnd();
-
-	curva.BezierCubica(ptosControl, ptosCurva, ptosTangente, ptosNormal);
-
-	std::list<Vertice>::iterator it;
-	glColor3f(0,1.0,0);    
-	glBegin(GL_LINE_STRIP);
-	
-		for(it= ptosCurva.begin(); it != ptosCurva.end(); it++) { 
-			glVertex2f(it->x, it->y);
-		}
-		
-	glEnd();
-	
-	glColor3f(0,0,1.0);    
-	glBegin(GL_LINE);
-	
-		for(it= ptosTangente.begin(); it != ptosTangente.end(); it++) { 
-			glVertex2f(it->x, it->y);
-		}
-		
-	glEnd();
-
-	glColor3f(1.0,1.0,1.0);    
-	glBegin(GL_LINE);
-	
-		for(it= ptosNormal.begin(); it != ptosNormal.end(); it++) { 
-			glVertex2f(it->x, it->y);
-		}
-
-	ptosControl.clear();
-	ptosCurva.clear();
-	ptosTangente.clear();
-	ptosNormal.clear();
-
-	/*--------------------*/ 		
-	/*PRUEBA CURVA BSPLINE*/
-	/*--------------------*/ 
- 	Vertice cp0;
- 		cp0.x= 100;
-		cp0.y= 400;
-		ptosControl.push_back(cp0);
-
-	Vertice cp1;
- 		cp1.x= 150;
-		cp1.y= 200;
-		ptosControl.push_back(cp1);
-
-	Vertice cp2;
- 		cp2.x= 200;
-		cp2.y= 200;
-		ptosControl.push_back(cp2);
-
-	Vertice cp3;
- 		cp3.x= 250;
-		cp3.y= 400;
-		ptosControl.push_back(cp3);
-
-	Vertice cp4;
-		cp4.x= 350;
-		cp4.y= 200;
-		ptosControl.push_back(cp4);
-
-	Vertice cp5;
-		cp5.x= 400;
-		cp5.y= 200;
-		ptosControl.push_back(cp5);
-		ptosControl.push_back(cp5);
-		ptosControl.push_back(cp5);
-
-	glColor3f(0,0,1.0);
-	glBegin(GL_POINTS);
-		glVertex2i(cp0.x, cp0.y);
-		glVertex2i(cp1.x, cp1.y);
-		glVertex2i(cp2.x, cp2.y);
-		glVertex2i(cp3.x, cp3.y);
-		glVertex2i(cp4.x, cp4.y);
-		glVertex2i(cp5.x, cp5.y);
-	glEnd();
-
-	curva.Bspline(ptosControl, ptosCurva, ptosTangente, ptosNormal);
-
-	glColor3f(0,1.0,0);    
-	glBegin(GL_LINE_STRIP);
-	
-		for(it= ptosCurva.begin(); it != ptosCurva.end(); it++) {
-			glVertex2f(it->x, it->y);
-		}
-		
-	glEnd();
-	
-	/*-------------------*/ 
-	
-	//Prueba de Texturas
 	
 	Imagen image;
 	SDL_Surface* im;
 	
-	im=image.cargarImagen("Imagenes/ubuntu-logo.png");
+	im=image.cargarImagen("ubuntu-logo.bmp");
 	if(!im) std::cerr << "Error al cargar la imagen" << std::endl;
+	std::cout << "numero de colores: " << im->format->BytesPerPixel << std::endl;
+
+	GLuint texture;
 	
-	unsigned int textures[1];
-	glEnable(GL_TEXTURE_2D);
-	glGenTextures(0,textures);
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB,im->w,im->h,0,GL_RGB,GL_UNSIGNED_BYTE,im->pixels);
+/* Standard OpenGL texture creation code */
+	 glEnable(GL_TEXTURE_2D);
+	glPixelStorei(GL_UNPACK_ALIGNMENT,4);
+	
+	glGenTextures(1,&texture);
+	glBindTexture(GL_TEXTURE_2D,texture);
+	
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	
+	gluBuild2DMipmaps(GL_TEXTURE_2D,4,im->w,
+			  im->h,GL_BGRA_EXT,
+			  GL_UNSIGNED_BYTE,im->pixels);
+	
+	//Free surface after using it
  	glBegin(GL_QUADS);
-		glTexCoord2f(1.0,0.0);
-		glVertex2f(200.0 , 75.0 );
-		glTexCoord2f(0.0,0.0);
-		glVertex2f(200.0 , 300.0 );
-		glTexCoord2f(0.0,1.0);
-		glVertex2f( 600.0, 300.0 );
-		glTexCoord2f(1.0,1.0);
-		glVertex2f( 600.0, 75.0 );
+	//Top-left vertex (corner)
+	glTexCoord2i( 0, 0 );
+	glVertex3f( 100, 100, 0.0f );
 	
+	//Bottom-left vertex (corner)
+	glTexCoord2i( 1, 0 );
+	glVertex3f( 228, 100, 0 );
+	
+	//Bottom-right vertex (corner)
+	glTexCoord2i( 1, 1 );
+	glVertex3f( 228, 228, 0 );
+	
+	//Top-right vertex (corner)
+	glTexCoord2i( 0, 1 );
+	glVertex3f( 100, 228, 0 );
 	
 	glEnd();
-
-	SDL_FreeSurface(im);
-	///
   	glutSwapBuffers();
-	///
+	SDL_FreeSurface(im);
 }
 
 /* x, y coordenadas mouse cuando se presiona key
@@ -316,14 +182,22 @@ void keyboard(unsigned char key, int x, int y)
 
 int main(int argc, char** argv)
 {
-   glutInit(&argc, argv);
-   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-   glutInitWindowSize(ANCHO, ALTO); 
-   glutInitWindowPosition (100, 100);
-   glutCreateWindow(caption);
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(ANCHO, ALTO); 
+    glutInitWindowPosition (100, 100);
+     glutCreateWindow(caption);
+if ( SDL_Init(SDL_INIT_VIDEO) != 0 ) {
+	printf("Unable to initialize SDL: %s\n", SDL_GetError());
+	return 1;
+}
+ 
+// SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 ); // *new*
+ 
+// SDL_Surface* screen = SDL_SetVideoMode( 800, 600, 16, SDL_OPENGL); // *changed* 
    init();
    glutKeyboardFunc(keyboard);
-   glutDisplayFunc(display); 
+    glutDisplayFunc(display); 
    glutReshapeFunc(reshape); 
    glutMainLoop();
    
