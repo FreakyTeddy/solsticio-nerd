@@ -192,9 +192,7 @@ void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurv
 				//tomo los 4 puntos de control
 				puntos[j].x = (*it).x;
 				puntos[j].y = (*it).y;
-
-				result[j].x = 0;	//inicializo
-				result[j].y = 0;
+				puntos[j].z = (*it).z;
 			}
 
 			//decremento el it
@@ -206,6 +204,7 @@ void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurv
 
 					result[k].x += B[k][m] * puntos[m].x;
 					result[k].y += B[k][m] * puntos[m].y;
+					result[k].z += B[k][m] * puntos[m].z;
 				}
 			}
 
@@ -213,6 +212,7 @@ void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurv
 			for (int j= 0; j<4; j++) {
 				result[j].x /= 6;
 				result[j].y /= 6;
+				result[j].z /= 6;
 			}
 
 			for(float u=0; u<=1; u+= dt) {
@@ -223,12 +223,11 @@ void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurv
 				base_u[3] = 1;
 
 				Vertice v;
-				v.x=0;
-				v.y=0;
 
 				for (int j= 0; j<4; j++) {
 					v.x += base_u[j] * result[j].x;
 					v.y += base_u[j] * result[j].y;
+					v.z += base_u[j] * result[j].z;
 				}
 
 				ptosCurva.push_back(v);	//agrego el vertice a la curva

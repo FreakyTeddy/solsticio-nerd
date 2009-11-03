@@ -4,8 +4,7 @@ SOURCES=Primitivas\ Graficas/Curva/Curva.cpp \
 
 
 TESTSOURCES=Primitivas\ Graficas/Curva/TestCurvas.cpp \
-	Imagenes/TestImagen.cpp \
-	Imagenes/test.cpp
+	Imagenes/TestImagen.cpp 
 
 MAIN=mainPrincipal.cpp
 

@@ -8,7 +8,7 @@ class Vertice {
 		float y;
 		float z;
 
-		Vertice() { z= 0.0; };
+		Vertice() { x = 0.0; y = 0.0; z= 0.0; };
 };
 
 #endif /*VERTICE_H_*/

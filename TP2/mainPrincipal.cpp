@@ -64,18 +64,50 @@ void OnIdle (void)
 void animarCam() {
 	//este metodo usa la curva bspline para hacer la animacion de la camara
 	//para la transicion entre la grilla y la curva
+	std::list<Vertice> puntos, tg, norm;
+	Vertice v;
+
 	if (modo_curva) {
 		//si esta en modo curva paso a modo grilla
 		//bajo la camara
-		at[2] -= altura_curva;
-		eye[2] -=altura_curva;//esta transicion se hace con la curva
+//		at[2] -= altura_curva;
+//		eye[2] -=altura_curva;//esta transicion se hace con la curva
 		view_grid = true;
 	}
 	else {
 		//si esta en modo grilla paso a modo curva
 		view_grid = false;
-		at[2] += altura_curva;
-		eye[2] +=altura_curva;//esta transicion se hace con la curva
+
+		curva_cam.clear();
+
+		//punto inicial... lo agrego 3 veces para que interpole
+		v.x = eye[0];
+		v.y = eye[1];
+		v.z = eye[2];
+		puntos.push_back(v);
+		puntos.push_back(v);
+		puntos.push_back(v);
+
+		v.x = eye[0]*1.5;
+		v.y = eye[1]*1.5;
+		v.z = eye[2] + (altura_curva*0.333);
+		puntos.push_back(v);
+
+		v.z = eye[2] + (altura_curva*0.666);
+		puntos.push_back(v);
+
+		v.x = eye[0];
+		v.y = eye[1];
+		v.z = eye[2] + altura_curva;
+		puntos.push_back(v);
+		puntos.push_back(v);
+		puntos.push_back(v);
+
+		curva.Bspline(puntos,curva_cam,tg,norm);
+
+
+//		at[2] += altura_curva;
+//		eye[2] +=altura_curva;//esta transicion se hace con la curva
 	}
 	modo_curva = !modo_curva;
 	glutPostRedisplay();
@@ -191,41 +223,6 @@ void init(void)
 void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	///////////////////////////////////////////////////
-	// Escena 3D
-	Set3DEnv();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt (eye[0]/zoom, eye[1]/zoom, eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
-
-	glPushMatrix();
-	glRotatef(rotate_cam, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
-
-	if (view_axis)
-		 glCallList(DL_AXIS);
-
-	if (view_grid)
-		 glCallList(DL_GRID);
-
-	if (view_curves) {
-
-		//dibujar las curvas
-
-		glDisable(GL_LIGHTING);
-
-		std::list<Vertice>::iterator it;
-		glBegin(GL_LINE_STRIP);
-			glColor3f(0,1.0,1.0);
-			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
-				glVertex3f(it->x * 20, it->y * 20, altura_curva); //TODO calcular este factor de escala
-		glEnd();
-		glEnable(GL_LIGHTING);
-	}
-	glPopMatrix();
-	//
-	///////////////////////////////////////////////////
-
 
 	///////////////////////////////////////////////////
 	// Panel 2D para la vista superior
@@ -256,7 +253,6 @@ void display(void)
 			glEnd();
 		}
 
-
 		curva_editada.clear();
 
 		//TODO: aca esta bezier
@@ -276,6 +272,58 @@ void display(void)
 	}
 	//
 	///////////////////////////////////////////////////
+
+
+	///////////////////////////////////////////////////
+	// Escena 3D
+	Set3DEnv();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt (eye[0]/zoom, eye[1]/zoom, eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
+
+	glPushMatrix();
+	glRotatef(rotate_cam, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
+
+	if (view_axis)
+		 glCallList(DL_AXIS);
+
+	if (view_grid)
+		 glCallList(DL_GRID);
+
+	if (view_curves) {
+
+		//dibujar las curvas
+
+		glDisable(GL_LIGHTING);
+
+		std::list<Vertice>::iterator it;
+		//dibujo la curva editada para las imagenes
+		glBegin(GL_LINE_STRIP);
+			glColor3f(0,1.0,1.0);
+			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
+				glVertex3f(it->x * 20, it->y * 20, altura_curva); //TODO calcular este factor de escala
+		glEnd();
+
+		//dibujo la trayectoria de las imagenes
+
+		//dibujo la trayectoria de la cam
+
+		glBegin(GL_LINE_STRIP);
+			glColor3f(0.5,0,0.7);
+			std::cout<<"dibujar trayectoria de la cam"<<std::endl;
+			for (it = curva_cam.begin(); it != curva_cam.end(); it++)
+				glVertex3f(it->x, it->y, it->z);
+		glEnd();
+
+		glEnable(GL_LIGHTING);
+
+		//dibujar imagenes
+	}
+	glPopMatrix();
+	//
+	///////////////////////////////////////////////////
+
 
 	glutSwapBuffers();
 }
