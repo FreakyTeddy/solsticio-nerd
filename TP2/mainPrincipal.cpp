@@ -3,6 +3,7 @@
 #include <math.h>
 #include "Primitivas Graficas/Curva/Curva.h"
 #include "Controlador/Controlador.h"
+#include "Imagenes/Imagen.h"
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
@@ -48,6 +49,9 @@ int TOP_VIEW_W = ((int)((float)W_WIDTH*0.40f));
 int TOP_VIEW_POSY = ((int)((float)W_HEIGHT*0.60f)) -10;
 int TOP_VIEW_H = ((int)((float)W_HEIGHT*0.40f));
 
+//Cantidad de Imagenes a mostrar en la grilla
+#define N 16
+
 // Variables globales
 Curva curva;
 std::list<Vertice> pControl;	//puntos de control dibujados con el mouse
@@ -56,7 +60,7 @@ std::list<Vertice> pNormal;	//puntos de control dibujados con el mouse
 std::list<Vertice> curva_editada;
 std::list<Vertice> curva_cam;	//curva que describe la camara
 Controlador controlador(&curva);
-
+GLuint textures[15]; //arreglo de texturas de imagenes
 
 
 void OnIdle (void)
@@ -337,6 +341,31 @@ void display(void)
 		glEnable(GL_LIGHTING);
 
 		//dibujar imagenes
+		glDisable(GL_LIGHTING);
+		//for (int i=0; i <N ; i++){
+			//glBindTexture(GL_TEXTURE_2D,textures[i]);
+			glBindTexture(GL_TEXTURE_2D,textures[0]);
+			
+			glBegin(GL_QUADS);
+				//Top-left vertex (corner)
+				glTexCoord2i( 0, 0 );
+				glVertex3f( 100, 100, 0.0f );
+				
+				//Bottom-left vertex (corner)
+				glTexCoord2i( 1, 0 );
+				glVertex3f( 228, 100, 0 );
+				
+				//Bottom-right vertex (corner)
+				glTexCoord2i( 1, 1 );
+				glVertex3f( 228, 228, 0 );
+				
+				//Top-right vertex (corner)
+				glTexCoord2i( 0, 1 );
+				glVertex3f( 100, 228, 0 );
+			glEnd();
+		//}
+		glEnable(GL_LIGHTING);
+						
 	}
 	glPopMatrix();
 	//
@@ -463,6 +492,28 @@ void mouseMotion(int x, int y) {
 	
 }
 
+void ImageLoad(std::string route[]){
+	Imagen im;
+	SDL_Surface* imagen = NULL;
+	
+	glEnable(GL_TEXTURE_2D);
+	glPixelStorei(GL_UNPACK_ALIGNMENT,4);
+	glGenTextures(N,textures);
+	
+	for(int i = 0; i < N; i++){
+		imagen = im.cargarImagen(route[i]);
+		if(!imagen) std::cerr << "Error al cargar la imagen " << std::endl;
+		
+		glBindTexture(GL_TEXTURE_2D,textures[i]);
+	
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	
+		gluBuild2DMipmaps(GL_TEXTURE_2D,4,imagen->w,
+			  imagen->h,GL_BGRA_EXT,
+			  GL_UNSIGNED_BYTE,imagen->pixels);
+	}
+}
 
 int main(int argc, char** argv)
 {
@@ -472,6 +523,11 @@ int main(int argc, char** argv)
    glutInitWindowPosition(0, 0);
    glutCreateWindow("TP2 - Sistemas Graficos");
    glutFullScreen();
+   std::string route[N];
+   for(int i = 0; i < N; i ++){
+   	route[i] = "Imagenes/ubuntu-logo.bmp";
+   }
+   ImageLoad(route);
    init();
    glutDisplayFunc(display);
    glutReshapeFunc(reshape);
