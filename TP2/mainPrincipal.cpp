@@ -5,7 +5,8 @@
 #include "Controlador/Controlador.h"
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
-float eye[3] = {15.0, 15.0, 5.0};	//camara
+#define EYE_Z 5.0
+float eye[3] = {15.0, 15.0, EYE_Z};	//camara
 float at[3]  = { 0.0,  0.0, 0.0};	//centro
 float up[3]  = { 0.0,  0.0, 1.0};	//vector normal
 
@@ -19,7 +20,7 @@ float rotate_cam = 0;
 float zoom = 1;
 int xprev = 0; //posicion anterior del mouse
 int yprev = 0;
-float altura_curva = 5.0;
+float altura_curva = 6.0; //TODO ver la que mejor convenga
 
 // Variables de control
 bool view_grid = true;
@@ -61,32 +62,55 @@ Controlador controlador(&curva);
 void OnIdle (void)
 {}
 
+//mueve la camara al siguiente lugar especificado en curva_cam y redibuja
+void moverCam(int n) {
+	if (!curva_cam.empty()) {
+		Vertice v = curva_cam.front();
+		curva_cam.pop_front();
+		eye[0] = v.x;
+		eye[1] = v.y;
+		eye[2] = v.z;
+		at[2] = v.z - EYE_Z;
+		glutPostRedisplay();
+		glutTimerFunc(50,moverCam,0);	//llamo al timer para que actualice la pos de la cam
+	}
+}
+
 void animarCam() {
 	//este metodo usa la curva bspline para hacer la animacion de la camara
 	//para la transicion entre la grilla y la curva
 	std::list<Vertice> puntos, tg, norm;
 	Vertice v;
 
+	curva_cam.clear();
+
+	//punto inicial... lo agrego 3 veces para que interpole
+	v.x = eye[0];
+	v.y = eye[1];
+	v.z = eye[2];
+	puntos.push_back(v);
+	puntos.push_back(v);
+	puntos.push_back(v);
+
 	if (modo_curva) {
 		//si esta en modo curva paso a modo grilla
 		//bajo la camara
-//		at[2] -= altura_curva;
-//		eye[2] -=altura_curva;//esta transicion se hace con la curva
-		view_grid = true;
+		//view_grid = true;
+		v.x = eye[0]*1.5;
+		v.y = eye[1]*1.5;
+		v.z = eye[2] - (altura_curva*0.333);
+		puntos.push_back(v);
+
+		v.z = eye[2] - (altura_curva*0.666);
+		puntos.push_back(v);
+
+		v.x = eye[0];
+		v.y = eye[1];
+		v.z = eye[2] - altura_curva;
 	}
 	else {
 		//si esta en modo grilla paso a modo curva
-		view_grid = false;
-
-		curva_cam.clear();
-
-		//punto inicial... lo agrego 3 veces para que interpole
-		v.x = eye[0];
-		v.y = eye[1];
-		v.z = eye[2];
-		puntos.push_back(v);
-		puntos.push_back(v);
-		puntos.push_back(v);
+		//view_grid = false;
 
 		v.x = eye[0]*1.5;
 		v.y = eye[1]*1.5;
@@ -99,18 +123,14 @@ void animarCam() {
 		v.x = eye[0];
 		v.y = eye[1];
 		v.z = eye[2] + altura_curva;
-		puntos.push_back(v);
-		puntos.push_back(v);
-		puntos.push_back(v);
-
-		curva.Bspline(puntos,curva_cam,tg,norm);
-
-
-//		at[2] += altura_curva;
-//		eye[2] +=altura_curva;//esta transicion se hace con la curva
 	}
+	puntos.push_back(v);
+	puntos.push_back(v);
+	puntos.push_back(v);
+
+	curva.Bspline(puntos,curva_cam,tg,norm);
 	modo_curva = !modo_curva;
-	glutPostRedisplay();
+	moverCam(0);
 }
 
 void DrawAxis()
@@ -157,7 +177,6 @@ void DrawAxis2DTopView()
 
 	glEnable(GL_LIGHTING);
 }
-
 
 void DrawXYGrid()
 {
@@ -302,19 +321,18 @@ void display(void)
 		glBegin(GL_LINE_STRIP);
 			glColor3f(0,1.0,1.0);
 			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
-				glVertex3f(it->x * 20, it->y * 20, altura_curva); //TODO calcular este factor de escala
+				glVertex3f(it->x * 20, it->y * 20, altura_curva);//VER factor de escala
 		glEnd();
 
 		//dibujo la trayectoria de las imagenes
 
 		//dibujo la trayectoria de la cam
 
-		glBegin(GL_LINE_STRIP);
-			glColor3f(0.5,0,0.7);
-			std::cout<<"dibujar trayectoria de la cam"<<std::endl;
-			for (it = curva_cam.begin(); it != curva_cam.end(); it++)
-				glVertex3f(it->x, it->y, it->z);
-		glEnd();
+//		glBegin(GL_LINE_STRIP); //VER!! no se dibuja bien por culpa de moverCam
+//			glColor3f(0.5,0,0.7);
+//			for (it = curva_cam.begin(); it != curva_cam.end(); it++)
+//				glVertex3f(it->x, it->y, it->z);
+//		glEnd();
 
 		glEnable(GL_LIGHTING);
 
@@ -323,7 +341,6 @@ void display(void)
 	glPopMatrix();
 	//
 	///////////////////////////////////////////////////
-
 
 	glutSwapBuffers();
 }
