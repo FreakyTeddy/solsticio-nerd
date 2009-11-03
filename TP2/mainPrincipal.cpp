@@ -14,22 +14,21 @@ float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 float light_position[3] = {10.0f, 10.0f, 8.0f};
 float light_ambient[4] = {0.05f, 0.05f, 0.05f, 1.0f};
 
-// Color de la esfera en movimiento dentro de la escena
-float color_esfera[4] = {0.5f, 0.5f, 0.2f, 1.0f};
-
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
 float rotate_cam = 0;
 float zoom = 1;
 int xprev = 0; //posicion anterior del mouse
 int yprev = 0;
+float altura_curva = 5.0;
 
 // Variables de control
 bool view_grid = true;
 bool view_axis = true;
 bool edit_panel = true;
 bool view_curves = true;	//indica si se ven las curvas de control
-bool mouseDown = false; //indica si se apreta el boton izquierdo del mouse
+bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
+bool modo_curva = false; 	//indica si esta en modo curva o en modo grilla
 
 
 // Handle para el control de las Display Lists
@@ -64,7 +63,22 @@ void OnIdle (void)
 
 void animarCam() {
 	//este metodo usa la curva bspline para hacer la animacion de la camara
-	//para la ransicion entre la grilla y la curva
+	//para la transicion entre la grilla y la curva
+	if (modo_curva) {
+		//si esta en modo curva paso a modo grilla
+		//bajo la camara
+		at[2] -= altura_curva;
+		eye[2] -=altura_curva;//esta transicion se hace con la curva
+		view_grid = true;
+	}
+	else {
+		//si esta en modo grilla paso a modo curva
+		view_grid = false;
+		at[2] += altura_curva;
+		eye[2] +=altura_curva;//esta transicion se hace con la curva
+	}
+	modo_curva = !modo_curva;
+	glutPostRedisplay();
 }
 
 void DrawAxis()
@@ -96,17 +110,17 @@ void DrawAxis2DTopView()
 	glBegin(GL_LINE_LOOP);
 		// X
 		glColor3f(0.0, 0.5, 1.0);
-		glVertex3f(0.0, 0.0, 0.0);
-		glVertex3f(1.0, 0.0, 0.0);
-		glVertex3f(1.0, 1.0, 0.0);
-		glVertex3f(0.0, 1.0, 0.0);
+		glVertex3f(-0.5, -0.5, 0.0);
+		glVertex3f(0.5, -0.5, 0.0);
+		glVertex3f(0.5, 0.5, 0.0);
+		glVertex3f(-0.5, 0.5, 0.0);
 	glEnd();
 	glBegin(GL_QUADS);
 		glColor3f(0.1, 0.1, 0.1);
-		glVertex3f(0.0, 0.0, 0.0);
-		glVertex3f(1.0, 0.0, 0.0);
-		glVertex3f(1.0, 1.0, 0.0);
-		glVertex3f(0.0, 1.0, 0.0);
+		glVertex3f(-0.5, -0.5, 0.0);
+		glVertex3f(0.5, -0.5, 0.0);
+		glVertex3f(0.5, 0.5, 0.0);
+		glVertex3f(-0.5, 0.5, 0.0);
 	glEnd();
 
 	glEnable(GL_LIGHTING);
@@ -143,7 +157,7 @@ void SetPanelTopEnv()
 	glViewport (TOP_VIEW_POSX, TOP_VIEW_POSY, (GLsizei) TOP_VIEW_W, (GLsizei) TOP_VIEW_H);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
-	gluOrtho2D(0, 1, 0, 1);
+	gluOrtho2D(-0.5, 0.5, -0.5, 0.5);
 }
 
 
@@ -204,11 +218,11 @@ void display(void)
 		glBegin(GL_LINE_STRIP);
 			glColor3f(0,1.0,1.0);
 			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
-				glVertex3f(it->x * 10, it->y * 10, 0); //TODO calcular este factor de escala
+				glVertex3f(it->x * 20, it->y * 20, altura_curva); //TODO calcular este factor de escala
 		glEnd();
 		glEnable(GL_LIGHTING);
-	glPopMatrix();
 	}
+	glPopMatrix();
 	//
 	///////////////////////////////////////////////////
 
@@ -299,8 +313,12 @@ void keyboard (unsigned char key, int x, int y)
 		  view_curves = !view_curves;
 		  glutPostRedisplay();
 		  break;
+	  case 'b':
+		  animarCam();
+		  break;
 	  case 'c':
 		  pControl.clear();
+		  curva_editada.clear();
 		  glutPostRedisplay();
 		  break;
     default:
@@ -311,8 +329,6 @@ void keyboard (unsigned char key, int x, int y)
 void mouse(int button, int state, int x, int y) {
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-
-		std::cout<<"boton izquierdo presionado x:"<<x<<" y: "<<y<<std::endl;
 
 		int x0 = TOP_VIEW_POSX; 			//limite izq
 		int x1 = x0 + TOP_VIEW_W;			//limite der
@@ -325,6 +341,9 @@ void mouse(int button, int state, int x, int y) {
 
 			v.x = (float)(x - x0) / (float) (x1-x0) ;
 			v.y = (float)(y0 - y) / (float) (y0-y1);
+			v.x -=0.5;
+			v.y -=0.5;
+			v.z = altura_curva;
 
 			if(!mouseDown)
 			     xprev=x;
@@ -334,7 +353,6 @@ void mouse(int button, int state, int x, int y) {
 			if ( x > x0 && x < x1) {
 				if ( y < y0 && y > y1) {
 
-					std::cout<<std::endl<<"dibujar punto en x: "<<v.x<<" y: "<<v.y<<std::endl<<std::endl;
 					mouseDown = false; //lo deshabilito para que no rote
 					pControl.push_back(v);	//agrego el vertice normalizado
 					glutPostRedisplay();
@@ -370,10 +388,10 @@ void mouseMotion(int x, int y) {
 		glutPostRedisplay();
 	}
 	if (zoomOn) {
-		if (y < yprev)
-			zoom += 0.001*(y-yprev);
-		else if(y > yprev)
-			zoom -=0.001*(yprev-y);
+		if (y > yprev)
+			zoom += 0.001*(yprev-y);
+		else if(y < yprev)
+			zoom -=0.001*(y-yprev);
 		yprev = y;
 		glutPostRedisplay();
 	}

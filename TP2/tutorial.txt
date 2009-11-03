@@ -1,6 +1,7 @@
 * Teclado *
 
 - a: muestra los ejes
+- b: intercambia entre la vista de grilla y la vista de curva
 - c: borra la curva editada
 - e: muestra/oculta la ventana de edicion
 - g: muestra/oculta la grilla  
