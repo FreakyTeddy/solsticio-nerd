@@ -242,6 +242,39 @@ void init(void)
 }
 
 
+void cargarGrillaImagenes(){
+	int k = 0;
+	int j = 0;
+	for(int i = 0; i < 4; i++){
+		for(j = 0; j < 4; j++){
+			glBindTexture(GL_TEXTURE_2D,textures[k]);
+			glBegin(GL_QUADS);
+				//Top-left vertex (corner)
+				glTexCoord2i( 0, 0 );
+				glVertex3f( 2 *j + j, 2 * i + i, 0 );
+				
+				
+				//Bottom-left vertex (corner)
+				glTexCoord2i( 1, 0 );
+				glVertex3f( 2*j + j + 2, 2 * i + i, 0 );
+				
+				
+				//Bottom-right vertex (corner)
+				glTexCoord2i( 1, 1 );
+				glVertex3f( 2 * j + j + 2, 2 * i + i + 2, 0 );
+				
+				
+				//Top-right vertex (corner)
+				glTexCoord2i( 0, 1 );
+				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
+				
+			glEnd();
+			k++;
+		}
+		if(j!= 4 )k++;
+	}
+} 
+
 
 void display(void)
 {
@@ -346,41 +379,41 @@ void display(void)
 			
 		//for (int i=0; i <N ; i++){
 			//glBindTexture(GL_TEXTURE_2D,textures[i]);
-			glBindTexture(GL_TEXTURE_2D,textures[0]);
-			std::cout << "textura : " << textures[0] << std::endl;
-			glBegin(GL_QUADS);
-				//Top-left vertex (corner)
-				glTexCoord2i( 0, 0 );
-				glVertex3f( 0, 0, 0 );
-				
-				
-				//Bottom-left vertex (corner)
-				glTexCoord2i( 1, 0 );
-				glVertex3f( 2, 0, 0 );
-				
-				
-				//Bottom-right vertex (corner)
-				glTexCoord2i( 1, 1 );
-				glVertex3f( 2, 2, 0 );
-				
-				
-				//Top-right vertex (corner)
-				glTexCoord2i( 0, 1 );
-				glVertex3f( 0, 2, 0 );
-				
-			glEnd();
-		//}
-		
-		glBindTexture(GL_TEXTURE_2D,textures[1]);
-		glBegin(GL_QUADS);
-				glTexCoord2i( 1, 1 );
-				glVertex3f( 4, 2 , 0 );
-				glTexCoord2i( 0, 1 );
-				glVertex3f( 2, 2 , 0 );
-				glTexCoord2i( 0, 0 );
-				glVertex3f( 2, 0 , 0 );
-				glTexCoord2i( 1, 0 );
-				glVertex3f( 4,0 , 0 );
+//			glBindTexture(GL_TEXTURE_2D,textures[0]);
+//			std::cout << "textura : " << textures[0] << std::endl;
+//			glBegin(GL_QUADS);
+//				//Top-left vertex (corner)
+//				glTexCoord2i( 0, 0 );
+//				glVertex3f( 0, 0, 0 );
+//				
+//				
+//				//Bottom-left vertex (corner)
+//				glTexCoord2i( 1, 0 );
+//				glVertex3f( 2, 0, 0 );
+//				
+//				
+//				//Bottom-right vertex (corner)
+//				glTexCoord2i( 1, 1 );
+//				glVertex3f( 2, 2, 0 );
+//				
+//				
+//				//Top-right vertex (corner)
+//				glTexCoord2i( 0, 1 );
+//				glVertex3f( 0, 2, 0 );
+//				
+//			glEnd();
+//		//}
+		cargarGrillaImagenes();
+//		glBindTexture(GL_TEXTURE_2D,textures[1]);
+//		glBegin(GL_QUADS);
+//				glTexCoord2i( 1, 1 );
+//				glVertex3f( 4, 2 , 0 );
+//				glTexCoord2i( 0, 1 );
+//				glVertex3f( 2, 2 , 0 );
+//				glTexCoord2i( 0, 0 );
+//				glVertex3f( 2, 0 , 0 );
+//				glTexCoord2i( 1, 0 );
+//				glVertex3f( 4,0 , 0 );
 		glEnd();		
 		glEnable(GL_LIGHTING);
 						
