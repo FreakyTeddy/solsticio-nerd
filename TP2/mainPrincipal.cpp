@@ -342,28 +342,46 @@ void display(void)
 
 		//dibujar imagenes
 		glDisable(GL_LIGHTING);
+		glColor3f(1.0,1.0,1.0);
+			
 		//for (int i=0; i <N ; i++){
 			//glBindTexture(GL_TEXTURE_2D,textures[i]);
 			glBindTexture(GL_TEXTURE_2D,textures[0]);
-			
+			std::cout << "textura : " << textures[0] << std::endl;
 			glBegin(GL_QUADS);
 				//Top-left vertex (corner)
 				glTexCoord2i( 0, 0 );
-				glVertex3f( 100, 100, 0.0f );
+				glVertex3f( 0, 0, 0 );
+				
 				
 				//Bottom-left vertex (corner)
 				glTexCoord2i( 1, 0 );
-				glVertex3f( 228, 100, 0 );
+				glVertex3f( 2, 0, 0 );
+				
 				
 				//Bottom-right vertex (corner)
 				glTexCoord2i( 1, 1 );
-				glVertex3f( 228, 228, 0 );
+				glVertex3f( 2, 2, 0 );
+				
 				
 				//Top-right vertex (corner)
 				glTexCoord2i( 0, 1 );
-				glVertex3f( 100, 228, 0 );
+				glVertex3f( 0, 2, 0 );
+				
 			glEnd();
 		//}
+		
+		glBindTexture(GL_TEXTURE_2D,textures[1]);
+		glBegin(GL_QUADS);
+				glTexCoord2i( 1, 1 );
+				glVertex3f( 4, 2 , 0 );
+				glTexCoord2i( 0, 1 );
+				glVertex3f( 2, 2 , 0 );
+				glTexCoord2i( 0, 0 );
+				glVertex3f( 2, 0 , 0 );
+				glTexCoord2i( 1, 0 );
+				glVertex3f( 4,0 , 0 );
+		glEnd();		
 		glEnable(GL_LIGHTING);
 						
 	}
@@ -401,7 +419,7 @@ void keyboard (unsigned char key, int x, int y)
 			break;
 	  case 'e':
 		  edit_panel = !edit_panel;
-		  glutPostRedisplay();
+	  	  glutPostRedisplay();
 			break;
 	  case 't':
 		  view_curves = !view_curves;
@@ -523,10 +541,12 @@ int main(int argc, char** argv)
    glutInitWindowPosition(0, 0);
    glutCreateWindow("TP2 - Sistemas Graficos");
    glutFullScreen();
+   //cargo las rutas de las imagenes
    std::string route[N];
    for(int i = 0; i < N; i ++){
    	route[i] = "Imagenes/ubuntu-logo.bmp";
    }
+   //cargo las texturas a partir de las rutas
    ImageLoad(route);
    init();
    glutDisplayFunc(display);
