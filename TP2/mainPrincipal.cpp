@@ -373,7 +373,9 @@ void display(void)
 
 		glEnable(GL_LIGHTING);
 
-		//dibujar imagenes
+					
+	}
+			//dibujar imagenes
 		glDisable(GL_LIGHTING);
 		glColor3f(1.0,1.0,1.0);
 			
@@ -417,8 +419,6 @@ void display(void)
 //				glVertex3f( 4,0 , 0 );
 		glEnd();		
 		glEnable(GL_LIGHTING);
-						
-	}
 	glPopMatrix();
 	//
 	///////////////////////////////////////////////////
