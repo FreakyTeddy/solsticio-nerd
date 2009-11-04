@@ -403,6 +403,7 @@ void display(void)
 //				
 //			glEnd();
 //		//}
+		//cargo la grilla de imagenes
 		cargarGrillaImagenes();
 //		glBindTexture(GL_TEXTURE_2D,textures[1]);
 //		glBegin(GL_QUADS);
@@ -546,6 +547,8 @@ void mouseMotion(int x, int y) {
 void ImageLoad(std::string route[]){
 	Imagen im;
 	SDL_Surface* imagen = NULL;
+	int numColores = 0;
+	int formatoTextura = 0;
 	
 	glEnable(GL_TEXTURE_2D);
 	glPixelStorei(GL_UNPACK_ALIGNMENT,4);
@@ -555,13 +558,36 @@ void ImageLoad(std::string route[]){
 		imagen = im.cargarImagen(route[i]);
 		if(!imagen) std::cerr << "Error al cargar la imagen " << std::endl;
 		
+		//De acuerdo al formato de la imagen, chequeo y seteo 
+		// el formato de textura correspondiente.
+		//en caso de no ser una imagen "true color" muestra el error
+		// por cerr informando que probablemente la imagen no se
+		//observe correctamente
+		numColores = imagen->format->BytesPerPixel;
+        if (numColores == 4){     //Posee transparencias
+       
+                if (imagen->format->Rmask == 0x000000ff)
+                        formatoTextura = GL_RGBA;
+                else
+                        formatoTextura = GL_BGRA;
+        } else if (numColores == 3){     // no posee transparencias
+        
+                if (imagen->format->Rmask == 0x000000ff)
+                        formatoTextura = GL_RGB;
+                else
+                        formatoTextura = GL_BGR;
+        } else {
+                std::cerr << "Advertencia!!!! la imagen que intenta cargar no es true color "<< std::endl;
+                std::cerr << " Es probable que no se visualice correctamente esta imagen. " << std::endl;
+        }
+		
 		glBindTexture(GL_TEXTURE_2D,textures[i]);
 	
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 	
 		gluBuild2DMipmaps(GL_TEXTURE_2D,4,imagen->w,
-			  imagen->h,GL_BGRA_EXT,
+			  imagen->h,formatoTextura,
 			  GL_UNSIGNED_BYTE,imagen->pixels);
 	}
 }
