@@ -245,8 +245,8 @@ void init(void)
 void cargarGrillaImagenes(){
 	int k = 0;
 	int j = 0;
-	for(int i = 0; i < 4; i++){
-		for(j = 0; j < 4; j++){
+	for(int i = 0; i < sqrt(N); i++){
+		for(j = 0; j < sqrt(N); j++){
 			glBindTexture(GL_TEXTURE_2D,textures[k]);
 			glBegin(GL_QUADS);
 				//Top-left vertex (corner)
@@ -417,7 +417,7 @@ void display(void)
 //				glVertex3f( 2, 0 , 0 );
 //				glTexCoord2i( 1, 0 );
 //				glVertex3f( 4,0 , 0 );
-		glEnd();		
+	//	glEnd();		
 		glEnable(GL_LIGHTING);
 	glPopMatrix();
 	//
@@ -592,6 +592,27 @@ void ImageLoad(std::string route[]){
 	}
 }
 
+void loadDefaulImage(std::string* route){
+
+	route[0] = "Imagenes/Castles_in_the_Sky.bmp";
+	route[1] = "Imagenes/Command_by_GravihK.bmp";
+	route[2] = "Imagenes/Fire_materia_in_action_by_DMSLilwolf.bmp";
+	route[3] = "Imagenes/Magic_by_GravihK.bmp";
+	route[4] = "Imagenes/Space Art Wallpapers 00.bmp";
+	route[5] = "Imagenes/Support_by_GravihK.bmp";
+	route[6] = "Imagenes/berrywalls-sample-space-curve-8900-wallpaper.bmp";
+	route[7] = "Imagenes/celestial_sight04.bmp";
+	route[8] = "Imagenes/celestial_sight21.bmp";
+	route[9] = "Imagenes/celestial_sight29.bmp";
+	route[10] = "Imagenes/dream.bmp";
+	route[11] = "Imagenes/eclair.bmp";
+	route[12] = "Imagenes/lua.bmp";
+	route[13] = "Imagenes/premium-wallpaper-10.bmp";
+	route[14] = "Imagenes/sunset.bmp";
+	route[15] = "Imagenes/celestial_sight24.bmp";
+	
+}
+
 int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
@@ -602,9 +623,14 @@ int main(int argc, char** argv)
    glutFullScreen();
    //cargo las rutas de las imagenes
    std::string route[N];
-   for(int i = 0; i < N; i ++){
-   	route[i] = "Imagenes/ubuntu-logo.bmp";
-   }
+   //ESTA es la prueba con la del pingu repetida, descomentar
+   //estas 3 lineas y comentar  loadDefaulImage(&route[0]);
+   //para probar.
+//   for(int i = 0; i < N; i ++){
+//   	route[i] = "Imagenes/ubuntu-logo.bmp";
+//   }
+   //cargo las rutas de las imagenes por defecto
+   loadDefaulImage(&route[0]);
    //cargo las texturas a partir de las rutas
    ImageLoad(route);
    init();
