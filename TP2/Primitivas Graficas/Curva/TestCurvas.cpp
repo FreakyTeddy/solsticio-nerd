@@ -45,7 +45,7 @@ void display(void)
 	std::list<Vertice> ptosCurva;
 	std::list<Vertice> ptosTangente;
 	std::list<Vertice> ptosNormal;
-//
+
 //	Vertice cp00;
 // 		cp00.x= 50;
 //		cp00.y= 400;
@@ -93,7 +93,7 @@ void display(void)
 //	glEnd();
 //
 //	curva.BezierCubica(ptosControl, ptosCurva, ptosTangente, ptosNormal);
-//
+
 	std::list<Vertice>::iterator it;
 //	glColor3f(0,1.0,0);
 //	glBegin(GL_LINE_STRIP);
@@ -120,10 +120,10 @@ void display(void)
 //			glVertex2f(it->x, it->y);
 //		}
 //
-//	ptosControl.clear();
-//	ptosCurva.clear();
-//	ptosTangente.clear();
-//	ptosNormal.clear();
+	ptosControl.clear();
+	ptosCurva.clear();
+	ptosTangente.clear();
+	ptosNormal.clear();
 
 	/*--------------------*/ 		
 	/*PRUEBA CURVA BSPLINE*/
@@ -186,18 +186,18 @@ void display(void)
 
           for(it= ptosTangente.begin(); it != ptosTangente.end(); it++) {
             glVertex2f(it->x, it->y);
-	  }
+          }
 
 	glEnd();
 
-	glColor3f(1.0,1.0,1.0);
-	glBegin(GL_LINE);
-
-          for(it= ptosNormal.begin(); it != ptosNormal.end(); it++) {
-            glVertex2f(it->x, it->y);
-	   }
-
-         glEnd();
+//	glColor3f(1.0,1.0,1.0);
+//	glBegin(GL_LINE);
+//
+//          for(it= ptosNormal.begin(); it != ptosNormal.end(); it++) {
+//            glVertex2f(it->x, it->y);
+//	   }
+//
+//         glEnd();
 
 	/*-------------------*/ 
 

@@ -214,7 +214,7 @@ void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurv
       //Derivada primera - Tangente
       //Bases cuadraticas
       Bn1Squared= ( uSquared - 2 * u + 1)/2;
-      B0Squared= ( 2 * u - 1 )/2;
+      B0Squared= ( -2 * uSquared + 2 * u + 1 )/2;
       B1Squared= ( uSquared )/2;
 
       deltab0x= ptos[1].x - ptos[0].x;
