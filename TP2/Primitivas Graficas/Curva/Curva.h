@@ -3,6 +3,7 @@
 
 #include "GL/glut.h"
 #include <list>
+#include <math.h>
 #include "../Vertice/Vertice.h"
 
 #include <iostream>
@@ -15,6 +16,8 @@ class Curva {
 	
 private:
   int factorBezier;
+  float longitudBezier;
+
   int factorBspline;
 	
 public:

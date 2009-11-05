@@ -53,6 +53,10 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 
   float dt=(float) 1.0 / factorBezier;
 
+  longitudBezier= 0.0;
+  Vertice last;
+  bool begin= true;
+
   float uSquared, uCubed;
   float c0Cubed, c1Cubed, c2Cubed, c3Cubed;
   
@@ -139,8 +143,18 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 
       ptosNormal.push_back(result);
       ptosNormal.push_back(normal);
+
+      if(!begin) {
+        longitudBezier+= sqrt(pow(result.x-last.x, 2) + pow(result.y-last.y, 2));
+      } else
+        begin= !begin;
+
+      //acumulo para calcular la diferencia
+      last= result;
     }
   }  
+
+  std::cout << "longitud Bezier: " << longitudBezier << std::endl;
 }
 
 void Curva::modificarFactorBezier(int cantidad) {
