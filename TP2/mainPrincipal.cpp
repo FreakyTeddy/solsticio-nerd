@@ -62,6 +62,18 @@ std::list<Vertice> curva_cam;	//curva que describe la camara
 Controlador controlador(&curva);
 GLuint textures[15]; //arreglo de texturas de imagenes
 
+//
+#define AMPLIACION 50
+
+float posicionFinalCentroImagen(float longBezier, int numFoto) {
+
+  float espacioXQuad= (float) ((longBezier*AMPLIACION)/N);
+  //harcodeo ancho imagen 2
+  float espacioSobrante= espacioXQuad-2;
+  float espacioInicial= (float) espacioSobrante/2;
+
+  return (espacioXQuad*numFoto)+(espacioInicial+1);
+}
 
 void OnIdle (void)
 {}
@@ -314,6 +326,14 @@ void display(void)
 
 		curva_editada.clear();
 		curva.BezierCubica(pControl, curva_editada, pTangente, pNormal);
+
+		//TODO: mini prueba de los centros
+		float centro;
+		for(int i=0; i<N; i++){
+		  centro= posicionFinalCentroImagen(curva.getLongitudBezier(), i);
+		  std::cout << "Imagen: " << i << " Centro: " << centro << std::endl;
+                }
+
 
 		glBegin(GL_LINE_STRIP);
 			glColor3f(1.0,1.0,0);

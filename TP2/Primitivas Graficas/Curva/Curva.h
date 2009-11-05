@@ -35,6 +35,10 @@ public:
    * */
   void modificarFactorBezier(int cantidad);
 		
+  /* Devuelve la longitud de la ultima curva de Bezier
+   * */
+  float getLongitudBezier() { return longitudBezier; }
+
   /* Guarda en curva los puntos a unir para dibujar una curva Bspline cubica uniforme a
    * partir de los puntos de control requiere al menos 4 puntos de control para dibujar algo
    * */
