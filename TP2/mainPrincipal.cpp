@@ -75,16 +75,18 @@ void moverCam(int n) {
 		eye[1] = v.y;
 		eye[2] = v.z;
 		at[2] = v.z - EYE_Z;
+		//lo mismo para las imagenes
 		glutPostRedisplay();
 		glutTimerFunc(50,moverCam,0);	//llamo al timer para que actualice la pos de la cam
 	}
 }
 
-void animarCam() {
+void animar() {
 	//este metodo usa la curva bspline para hacer la animacion de la camara
 	//para la transicion entre la grilla y la curva
 	std::list<Vertice> puntos, tg, norm;
 	Vertice v;
+	//falta hacer "lo mismo" para las imagenes con sus normales
 
 	curva_cam.clear();
 
@@ -212,7 +214,8 @@ void SetPanelTopEnv()
 	glViewport (TOP_VIEW_POSX, TOP_VIEW_POSY, (GLsizei) TOP_VIEW_W, (GLsizei) TOP_VIEW_H);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
-	gluOrtho2D(-0.5, 0.5, -0.5, 0.5);
+	gluOrtho2D(0.5, -0.5, 0.5, -0.5);
+	//gluOrtho2D(-0.5, 0.5, -0.5, 0.5); original
 }
 
 
@@ -310,9 +313,6 @@ void display(void)
 		}
 
 		curva_editada.clear();
-
-		//TODO: aca esta bezier
-		//falta ver tema normales
 		curva.BezierCubica(pControl, curva_editada, pTangente, pNormal);
 
 		glBegin(GL_LINE_STRIP);
@@ -358,7 +358,7 @@ void display(void)
 		glBegin(GL_LINE_STRIP);
 			glColor3f(0,1.0,1.0);
 			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
-				glVertex3f(it->x * 20, it->y * 20, altura_curva);//VER factor de escala
+				glVertex3f((it->x * 20),(it->y * 20), altura_curva);
 		glEnd();
 
 		//dibujo la trayectoria de las imagenes
@@ -460,7 +460,7 @@ void keyboard (unsigned char key, int x, int y)
 		  glutPostRedisplay();
 		  break;
 	  case 'b':
-		  animarCam();
+		  animar();
 		  break;
 	  case 'c':
 		  pControl.clear();
@@ -487,8 +487,14 @@ void mouse(int button, int state, int x, int y) {
 
 			v.x = (float)(x - x0) / (float) (x1-x0) ;
 			v.y = (float)(y0 - y) / (float) (y0-y1);
-			v.x -=0.5;
-			v.y -=0.5;
+
+			/*
+			 original
+			 v.x -=0.5;
+			 v.y -= 0.5;
+			 */
+			v.x = (v.x - 0.5) * -1;
+			v.y = (v.y - 0.5) * -1;
 			v.z = altura_curva;
 
 			if(!mouseDown)
@@ -626,11 +632,11 @@ int main(int argc, char** argv)
    //ESTA es la prueba con la del pingu repetida, descomentar
    //estas 3 lineas y comentar  loadDefaulImage(&route[0]);
    //para probar.
-//   for(int i = 0; i < N; i ++){
-//   	route[i] = "Imagenes/ubuntu-logo.bmp";
-//   }
+   for(int i = 0; i < N; i ++){
+   	route[i] = "Imagenes/ubuntu-logo.bmp";
+   }
    //cargo las rutas de las imagenes por defecto
-   loadDefaulImage(&route[0]);
+   //loadDefaulImage(&route[0]);
    //cargo las texturas a partir de las rutas
    ImageLoad(route);
    init();
