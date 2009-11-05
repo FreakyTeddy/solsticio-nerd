@@ -65,14 +65,25 @@ GLuint textures[15]; //arreglo de texturas de imagenes
 //
 #define AMPLIACION 50
 
-float posicionFinalCentroImagen(float longBezier, int numFoto) {
+Vertice posicionFinalCentroImagen(float longBezier, int numFoto) {
 
+  Vertice v,last;
   float espacioXQuad= (float) ((longBezier*AMPLIACION)/N);
   //harcodeo ancho imagen 2
   float espacioSobrante= espacioXQuad-2;
   float espacioInicial= (float) espacioSobrante/2;
+  float distancia= (espacioXQuad*numFoto) + espacioInicial + 1;
 
-  return (espacioXQuad*numFoto)+(espacioInicial+1);
+  std::list<Vertice>::iterator it;
+  float acumulado= 0;
+  for(it= curva_editada.begin(); distancia>acumulado || it != curva_editada.end(); it++) {
+
+    if(it != curva_editada.begin())
+      acumulado+= sqrt(pow(it->x-last.x, 2) + pow(it->y-last.y, 2));
+    last= *it;
+  }
+
+  return v;
 }
 
 void OnIdle (void)
@@ -328,10 +339,10 @@ void display(void)
 		curva.BezierCubica(pControl, curva_editada, pTangente, pNormal);
 
 		//TODO: mini prueba de los centros
-		float centro;
+		Vertice centro;
 		for(int i=0; i<N; i++){
 		  centro= posicionFinalCentroImagen(curva.getLongitudBezier(), i);
-		  std::cout << "Imagen: " << i << " Centro: " << centro << std::endl;
+		  std::cout << "Imagen: " << i << " Centro x: " << centro.x << " - y: " << centro.y << std::endl;
                 }
 
 
