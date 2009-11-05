@@ -49,7 +49,8 @@ bool load(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int &first) 
 }
 
 void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva,
-                         std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal) {
+                         std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal,
+                         std::map<int, Vertice> &distancia, int factor) {
 
   float dt=(float) 1.0 / factorBezier;
 
@@ -146,6 +147,7 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 
       if(!begin) {
         longitudBezier+= sqrt(pow(result.x-last.x, 2) + pow(result.y-last.y, 2));
+        distancia.insert( std::pair<int,Vertice>(longitudBezier*factor,last) );
       } else
         begin= !begin;
 
@@ -153,8 +155,6 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
       last= result;
     }
   }  
-
-  std::cout << "longitud Bezier: " << longitudBezier << std::endl;
 }
 
 void Curva::modificarFactorBezier(int cantidad) {

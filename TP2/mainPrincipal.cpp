@@ -58,32 +58,28 @@ std::list<Vertice> pControl;	//puntos de control dibujados con el mouse
 std::list<Vertice> pTangente;	//puntos de control dibujados con el mouse
 std::list<Vertice> pNormal;	//puntos de control dibujados con el mouse
 std::list<Vertice> curva_editada;
+std::map<int,Vertice> distancias;
 std::list<Vertice> curva_cam;	//curva que describe la camara
 Controlador controlador(&curva);
 GLuint textures[15]; //arreglo de texturas de imagenes
 
 //
-#define AMPLIACION 50
+#define FACTOR 50
 
 Vertice posicionFinalCentroImagen(float longBezier, int numFoto) {
 
-  Vertice v,last;
-  float espacioXQuad= (float) ((longBezier*AMPLIACION)/N);
+  Vertice last;
+  float espacioXQuad= (float) ((longBezier*FACTOR)/N);
   //harcodeo ancho imagen 2
   float espacioSobrante= espacioXQuad-2;
   float espacioInicial= (float) espacioSobrante/2;
-  float distancia= (espacioXQuad*numFoto) + espacioInicial + 1;
+  int distancia= (espacioXQuad*numFoto) + espacioInicial + 1;
 
-  std::list<Vertice>::iterator it;
-  float acumulado= 0;
-  for(it= curva_editada.begin(); distancia>acumulado || it != curva_editada.end(); it++) {
+  std::cout << "===========================" << std::endl;
+  std::cout << "distancia: " << distancia << std::endl;
+  std::cout << "distancia encontrada: " << distancias.lower_bound(distancia)->first << std::endl;
 
-    if(it != curva_editada.begin())
-      acumulado+= sqrt(pow(it->x-last.x, 2) + pow(it->y-last.y, 2));
-    last= *it;
-  }
-
-  return v;
+  return(distancias.lower_bound(distancia)->second);
 }
 
 void OnIdle (void)
@@ -336,14 +332,18 @@ void display(void)
 		}
 
 		curva_editada.clear();
-		curva.BezierCubica(pControl, curva_editada, pTangente, pNormal);
+		curva.BezierCubica(pControl, curva_editada, pTangente, pNormal, distancias, FACTOR);
 
 		//TODO: mini prueba de los centros
-		Vertice centro;
-		for(int i=0; i<N; i++){
-		  centro= posicionFinalCentroImagen(curva.getLongitudBezier(), i);
-		  std::cout << "Imagen: " << i << " Centro x: " << centro.x << " - y: " << centro.y << std::endl;
-                }
+		float longitud= curva.getLongitudBezier();
+		if(longitud > 0) {
+		std::cout << "longitud Bezier: " << longitud << std::endl;
+                  Vertice centro;
+                  for(int i=0; i<N; i++){
+                    centro= posicionFinalCentroImagen(longitud, i);
+                    std::cout << "Imagen: " << i << " Centro x: " << centro.x << " - y: " << centro.y << std::endl;
+                  }
+		}
 
 
 		glBegin(GL_LINE_STRIP);

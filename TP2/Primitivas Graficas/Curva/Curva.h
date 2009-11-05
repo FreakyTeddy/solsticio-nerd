@@ -3,6 +3,7 @@
 
 #include "GL/glut.h"
 #include <list>
+#include <map>
 #include <math.h>
 #include "../Vertice/Vertice.h"
 
@@ -29,7 +30,8 @@ public:
    * pasados en la lista (P0, P1, P2, P3).
    * */
   void BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva,
-                    std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal);
+                    std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal,
+                    std::map<int,Vertice> &distancia, int factor);
 
   /* Suma al factor del paso de Bezier la cantidad pasada por parametro.
    * */
