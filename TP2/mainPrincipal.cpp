@@ -31,6 +31,7 @@ bool view_trayectories = false;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
 bool modo_curva = false; 	//indica si esta en modo curva o en modo grilla
+bool animando = false; 		//indica si se esta realizando la animacion
 
 
 // Handle para el control de las Display Lists
@@ -182,15 +183,16 @@ void moverCam(int n) {
 		glutPostRedisplay();
 		glutTimerFunc(50,moverCam,0);	//llamo al timer para que actualice la pos de la cam
 	}
+	else
+		animando = false;
 }
 
 void animar() {
 	//este metodo usa la curva bspline para hacer la animacion de la camara
 	//para la transicion entre la grilla y la curva
+	animando = true;
 	std::list<Vertice> puntos, tg, norm;
 	Vertice v;
-	//falta hacer "lo mismo" para las imagenes con sus normales
-
 	curva_cam.clear();
 
 	//punto inicial... lo agrego 3 veces para que interpole
@@ -238,8 +240,8 @@ void animar() {
 	puntos.push_back(v);
 
 	curva.Bspline(puntos,curva_cam,tg,norm);
-	modo_curva = !modo_curva;
 	moverCam(0);
+	modo_curva = !modo_curva;
 }
 
 void DrawAxis()
@@ -482,17 +484,7 @@ void display(void)
                   glEnd();
                   ptosTrayectoria.clear();
 		}
-		//dibujo la trayectoria de la cam
-
-//		glBegin(GL_LINE_STRIP); //VER!! no se dibuja bien por culpa de moverCam
-//			glColor3f(0.5,0,0.7);
-//			for (it = curva_cam.begin(); it != curva_cam.end(); it++)
-//				glVertex3f(it->x, it->y, it->z);
-//		glEnd();
-
 		glEnable(GL_LIGHTING);
-
-					
 	}
 			//dibujar imagenes
 		glDisable(GL_LIGHTING);
@@ -542,8 +534,10 @@ void keyboard (unsigned char key, int x, int y)
 		  glutPostRedisplay();
 		  break;
 	  case 'b':
-                  view_trayectories = !view_trayectories;
-                  animar();
+		  if ( !animando ) {
+			  view_trayectories = !view_trayectories;
+			  animar();
+		  }
 		  break;
 	  case 'c':
 		  pControl.clear();
