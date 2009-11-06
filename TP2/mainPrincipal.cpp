@@ -35,6 +35,7 @@ bool zoomOn = false;
 bool modo_curva = false; 	//indica si esta en modo curva o en modo grilla
 bool animando = false; 		//indica si se esta realizando la animacion
 bool moviendoImagenes = false;          //indica si se estan moviendo las imagenes
+bool paseUnaVez= false;
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -90,14 +91,56 @@ void OnIdle (void)
 
 void generarMatriz(int k) {
 
-  if(!trayectorias[k].ptosTrayectoria.empty()) {
-    Vertice v= trayectorias[k].ptosTrayectoria.front();
-    glTranslatef(v.x, v.y, v.z);
-    glTranslatef(0.0, 0.0, 0.0);
+  if (!trayectorias[k].ptosTrayectoria.empty()) {
+    Vertice vInicial= trayectorias[k].ptosTrayectoria.front();
     trayectorias[k].ptosTrayectoria.pop_front();
-  }
+    Vertice vFinal= trayectorias[k].ptosTrayectoria.front();
 
+    float dx= vFinal.x-vInicial.x;
+    float dy= vFinal.y-vInicial.y;
+
+    glTranslatef(vInicial.x+dx, vInicial.y+dy, vInicial.z);
+
+    int modificarX= 0;
+    int modificarY= 0;
+    switch(k) {
+      case 12:
+         modificarX= -19;
+         break;
+      case 1:
+      case 13:
+        modificarX= -4;
+        break;
+      case 2:
+      case 14:
+        modificarX= -7;
+        break;
+      case 3:
+      case 15:
+        modificarX= -10;
+        break;
+      case 4:
+      case 8:
+         modificarY= -19;
+         break;
+      case 5:
+      case 9:
+        modificarY= -4;
+        break;
+      case 6:
+      case 10:
+        modificarY= 4;
+        break;
+      case 7:
+      case 11:
+        modificarY= 19;
+        break;
+    }
+    glTranslatef(modificarX, modificarY, 0);
+  }
 }
+
+
 
 void generarTrayectoria(int numFoto, Vertice vInicial) {
 
@@ -183,6 +226,7 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
       trayectorias[numFoto].ptosTangente.clear();
       trayectorias[numFoto].ptosNormal.clear();
     }
+
     curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
   }
 }
@@ -373,7 +417,13 @@ void cargarGrillaImagenes(){
 	for(int i = 0; i < sqrt(N); i++){
 		for(j = 0; j < sqrt(N); j++){
 			glBindTexture(GL_TEXTURE_2D,textures[k]);
-			if(moviendoImagenes && !curva_editada.empty()) {
+
+			vInicial.x= 2 * j + j + 1;
+                        vInicial.y= 2 * i + i + 1;
+                        vInicial.z= 0;
+                        generarTrayectoria(k, vInicial);
+
+			if(moviendoImagenes && (k==0 || k== 1|| k== 2|| k== 3)) {
                           glPushMatrix();
                           generarMatriz(k);
 			}
@@ -398,13 +448,9 @@ void cargarGrillaImagenes(){
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
 			glEnd();
 
-			if(moviendoImagenes && !curva_editada.empty())
+			if(moviendoImagenes && (k==0 || k== 1|| k== 2|| k== 3))
                           glPopMatrix();
 
-                        vInicial.x= 2 * j + j + 1;
-                        vInicial.y= 2 * i + i + 1;
-                        vInicial.z= 0;
-                        generarTrayectoria(k, vInicial);
 			k++;
 		}
 		if(j!= 4)k++;
@@ -497,25 +543,24 @@ void display(void)
 		glEnd();
 
 		//dibujo la trayectoria de las imagenes
-		if(view_trayectories && !curva_editada.empty()) {
+		if(view_trayectories) {
                   glColor3f(1.0,1.0,1.0);
-                   for(unsigned int k=0; k<N; k++) {
-                    glBegin(GL_LINE_STRIP);
+                   for(unsigned int k=0; k<4; k++) {
+                     glBegin(GL_LINE_STRIP);
                     for(it= trayectorias[k].ptosTrayectoria.begin(); it != trayectorias[k].ptosTrayectoria.end(); it++)
-                      glVertex3f(it->x, it->y, it->z);
+                     glVertex3f(it->x, it->y, it->z);
                     glEnd();
                   }
 		}
 		glEnable(GL_LIGHTING);
 	}
+			//dibujar imagenes
+		glDisable(GL_LIGHTING);
+		glColor3f(1.0,1.0,1.0);
+		//cargo la grilla de imagenes
+		cargarGrillaImagenes();
 
-	//dibujar imagenes
-	glDisable(GL_LIGHTING);
-	glColor3f(1.0,1.0,1.0);
-	//cargo la grilla de imagenes
-	cargarGrillaImagenes();
-	glEnable(GL_LIGHTING);
-
+		glEnable(GL_LIGHTING);
 	glPopMatrix();
 	//
 	///////////////////////////////////////////////////
