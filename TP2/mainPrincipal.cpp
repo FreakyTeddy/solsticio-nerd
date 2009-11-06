@@ -91,14 +91,64 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
   ptosControl.clear();
 
   if(modo_curva) {
+
+    int factorX= 1;
+    int factorY= 1;
+    int modificarX= 0;
+    int modificarY= 0;
+
+    if(numFoto >= 0 && numFoto <= 3)
+      factorY= -5;
+    else if(numFoto >= 4 && numFoto <= 7)
+      factorX= -5;
+    else if(numFoto >= 8 && numFoto <= 11)
+      factorX= 5;
+    else if(numFoto >= 12 && numFoto <= 15)
+      factorY= 5;
+
+    switch(numFoto) {
+      case 0:
+      case 12:
+         modificarX= -20;
+         break;
+      case 1:
+      case 13:
+        modificarX= -5;
+        break;
+      case 2:
+      case 14:
+        modificarX= 5;
+        break;
+      case 3:
+      case 15:
+        modificarX= 20;
+        break;
+      case 4:
+      case 8:
+         modificarY= -20;
+         break;
+      case 5:
+      case 9:
+        modificarY= -5;
+        break;
+      case 6:
+      case 10:
+        modificarY= 5;
+        break;
+      case 7:
+      case 11:
+        modificarY= 20;
+        break;
+    }
+
     //interpolo el punto inicial
     ptosControl.push_back(vInicial);
     ptosControl.push_back(vInicial);
     ptosControl.push_back(vInicial);
 
     Vertice v;
-    v.x= eye[0]*1.5;
-    v.y= eye[1]*1.5;
+    v.x= 5 * factorX + modificarX;
+    v.y= 5 * factorY + modificarY;
     v.z= altura_curva*0.333;
     ptosControl.push_back(v);
 
@@ -326,16 +376,16 @@ void cargarGrillaImagenes(){
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
 			glEnd();
 
-			if(k==0) {
-			  vInicial.x= 2 * j + 1;
-			  vInicial.y= 2 * i + 1;
-			  vInicial.z= 0;
-			  generarTrayectoria(k, vInicial);
-			}
+			if(k==0 || k == 1) {
+			  vInicial.x= 2 * j + j + 1;
 
+			vInicial.y= 2 * i + i + 1;
+			vInicial.z= 0;
+			generarTrayectoria(k, vInicial);
+			}
 			k++;
 		}
-		if(j!= 4 )k++;
+		if(j!= 4)k++;
 	}
 } 
 
