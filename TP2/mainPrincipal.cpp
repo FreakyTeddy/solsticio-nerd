@@ -35,7 +35,6 @@ bool zoomOn = false;
 bool modo_curva = false; 	//indica si esta en modo curva o en modo grilla
 bool animando = false; 		//indica si se esta realizando la animacion
 bool moviendoImagenes = false;          //indica si se estan moviendo las imagenes
-bool paseUnaVez= false;
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -73,6 +72,8 @@ float longBezier;
 std::list<Vertice> ptosControl;
 Trayectoria trayectoria;
 std::vector<Trayectoria> trayectorias(N, trayectoria);
+std::list<Vertice> camino;
+std::vector< std::list<Vertice> > caminos(N, camino);
 
 Vertice posicionFinalCentroImagen(int numFoto) {
 
@@ -103,8 +104,6 @@ void generarMatriz(int k, Vertice vCentro) {
     glTranslatef(-vCentro.x, -vCentro.y, 0);
   }
 }
-
-
 
 void generarTrayectoria(int numFoto, Vertice vInicial) {
 
@@ -190,7 +189,9 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
       trayectorias[numFoto].ptosTangente.clear();
       trayectorias[numFoto].ptosNormal.clear();
     }
-
+    caminos[numFoto].clear();
+    //TODO: provisorio
+    curva.Bspline(ptosControl, caminos[numFoto], trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
     curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
   }
 }
@@ -375,8 +376,8 @@ void init(void)
 }
 
 void cargarGrillaImagenes(){
-        Vertice vInicial;
-        int k = 0;
+    Vertice vInicial;
+    int k = 0;
 	int j = 0;
 	for(int i = 0; i < sqrt(N); i++){
 		for(j = 0; j < sqrt(N); j++){
@@ -411,9 +412,10 @@ void cargarGrillaImagenes(){
 			glEnd();
 
 			if(moviendoImagenes)
-                          glPopMatrix();
+				glPopMatrix();
 
-                        generarTrayectoria(k, vInicial);
+
+				generarTrayectoria(k, vInicial);
 			k++;
 		}
 		if(j!= 4)k++;
@@ -510,7 +512,7 @@ void display(void)
                   glColor3f(1.0,1.0,1.0);
                    for(unsigned int k=0; k<N; k++) {
                      glBegin(GL_LINE_STRIP);
-                    for(it= trayectorias[k].ptosTrayectoria.begin(); it != trayectorias[k].ptosTrayectoria.end(); it++)
+                    for(it= caminos[k].begin(); it != caminos[k].end(); it++)
                      glVertex3f(it->x, it->y, it->z);
                     glEnd();
                   }
