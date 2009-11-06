@@ -98,6 +98,8 @@ void generarMatriz(int k) {
     std::cout << "v.x: " << v.x << std::endl;
     std::cout << "v.y: " << v.y << std::endl;
     std::cout << "v.z: " << v.z << std::endl;
+  } else if(k==N) {
+    moviendoImagenes= !moviendoImagenes;
   }
 }
 
@@ -413,7 +415,6 @@ void cargarGrillaImagenes(){
 		}
 		if(j!= 4)k++;
 	}
-	glutPostRedisplay();
 } 
 
 
