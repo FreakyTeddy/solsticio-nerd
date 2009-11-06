@@ -36,7 +36,6 @@ bool modo_curva = false; 	//indica si esta en modo curva o en modo grilla
 bool animando = false; 		//indica si se esta realizando la animacion
 bool moviendoImagenes = false;          //indica si se estan moviendo las imagenes
 
-
 // Handle para el control de las Display Lists
 GLuint dl_handle;
 #define DL_AXIS (dl_handle+0)
@@ -91,19 +90,14 @@ void OnIdle (void)
 
 void generarMatriz(int k) {
 
-  if (!trayectorias[k].ptosTrayectoria.empty()) {
+  if(!trayectorias[k].ptosTrayectoria.empty()) {
     Vertice v= trayectorias[k].ptosTrayectoria.front();
     glTranslatef(v.x, v.y, v.z);
+    glTranslatef(0.0, 0.0, 0.0);
     trayectorias[k].ptosTrayectoria.pop_front();
-    std::cout << "v.x: " << v.x << std::endl;
-    std::cout << "v.y: " << v.y << std::endl;
-    std::cout << "v.z: " << v.z << std::endl;
-  } else if(k==N) {
-    moviendoImagenes= !moviendoImagenes;
   }
+
 }
-
-
 
 void generarTrayectoria(int numFoto, Vertice vInicial) {
 
@@ -116,13 +110,13 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
     int modificarX= 0;
     int modificarY= 0;
 
-    if(numFoto >= 0 && numFoto <= 3)
+    if(numFoto >= 0 || numFoto <= 3)
       factorY= -5;
-    else if(numFoto >= 4 && numFoto <= 7)
+    else if(numFoto >= 4 || numFoto <= 7)
       factorX= -5;
-    else if(numFoto >= 8 && numFoto <= 11)
+    else if(numFoto >= 8 || numFoto <= 11)
       factorX= 5;
-    else if(numFoto >= 12 && numFoto <= 15)
+    else if(numFoto >= 12 || numFoto <= 15)
       factorY= 5;
 
     switch(numFoto) {
@@ -379,7 +373,7 @@ void cargarGrillaImagenes(){
 	for(int i = 0; i < sqrt(N); i++){
 		for(j = 0; j < sqrt(N); j++){
 			glBindTexture(GL_TEXTURE_2D,textures[k]);
-			if(moviendoImagenes) {
+			if(moviendoImagenes && !curva_editada.empty()) {
                           glPushMatrix();
                           generarMatriz(k);
 			}
@@ -404,7 +398,7 @@ void cargarGrillaImagenes(){
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
 			glEnd();
 
-			if(moviendoImagenes)
+			if(moviendoImagenes && !curva_editada.empty())
                           glPopMatrix();
 
                         vInicial.x= 2 * j + j + 1;
@@ -415,6 +409,7 @@ void cargarGrillaImagenes(){
 		}
 		if(j!= 4)k++;
 	}
+	glutPostRedisplay();
 } 
 
 
@@ -502,7 +497,7 @@ void display(void)
 		glEnd();
 
 		//dibujo la trayectoria de las imagenes
-		if(view_trayectories) {
+		if(view_trayectories && !curva_editada.empty()) {
                   glColor3f(1.0,1.0,1.0);
                    for(unsigned int k=0; k<N; k++) {
                     glBegin(GL_LINE_STRIP);
@@ -513,13 +508,14 @@ void display(void)
 		}
 		glEnable(GL_LIGHTING);
 	}
-			//dibujar imagenes
-		glDisable(GL_LIGHTING);
-		glColor3f(1.0,1.0,1.0);
-		//cargo la grilla de imagenes
-		cargarGrillaImagenes();
 
-		glEnable(GL_LIGHTING);
+	//dibujar imagenes
+	glDisable(GL_LIGHTING);
+	glColor3f(1.0,1.0,1.0);
+	//cargo la grilla de imagenes
+	cargarGrillaImagenes();
+	glEnable(GL_LIGHTING);
+
 	glPopMatrix();
 	//
 	///////////////////////////////////////////////////
