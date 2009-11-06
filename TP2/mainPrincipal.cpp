@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "Primitivas Graficas/Curva/Curva.h"
-#include "Controlador/Controlador.h"
 #include "Imagenes/Imagen.h"
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
@@ -28,6 +27,7 @@ bool view_grid = true;
 bool view_axis = true;
 bool edit_panel = true;
 bool view_curves = true;	//indica si se ven las curvas de control
+bool view_trayectories = false;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
 bool modo_curva = false; 	//indica si esta en modo curva o en modo grilla
@@ -52,6 +52,9 @@ int TOP_VIEW_H = ((int)((float)W_HEIGHT*0.40f));
 //Cantidad de Imagenes a mostrar en la grilla
 #define N 16
 
+//Factor de ampliacion de 2D a 3D
+#define FACTOR 50
+
 // Variables globales
 Curva curva;
 std::list<Vertice> pControl;	//puntos de control dibujados con el mouse
@@ -60,13 +63,15 @@ std::list<Vertice> pNormal;	//puntos de control dibujados con el mouse
 std::list<Vertice> curva_editada;
 std::map<int,Vertice> distancias;
 std::list<Vertice> curva_cam;	//curva que describe la camara
-Controlador controlador(&curva);
-GLuint textures[15]; //arreglo de texturas de imagenes
+GLuint textures[N]; //arreglo de texturas de imagenes
 
-//
-#define FACTOR 50
+float longBezier;
+std::list<Vertice> ptosControl;
+std::list<Vertice> ptosTrayectoria;
+std::list<Vertice> ptosTangente;
+std::list<Vertice> ptosNormal;
 
-Vertice posicionFinalCentroImagen(float longBezier, int numFoto) {
+Vertice posicionFinalCentroImagen(int numFoto) {
 
   Vertice last;
   float espacioXQuad= (float) ((longBezier*FACTOR)/N);
@@ -75,15 +80,44 @@ Vertice posicionFinalCentroImagen(float longBezier, int numFoto) {
   float espacioInicial= (float) espacioSobrante/2;
   int distancia= (espacioXQuad*numFoto) + espacioInicial + 1;
 
-  std::cout << "===========================" << std::endl;
-  std::cout << "distancia: " << distancia << std::endl;
-  std::cout << "distancia encontrada: " << distancias.lower_bound(distancia)->first << std::endl;
-
   return(distancias.lower_bound(distancia)->second);
 }
 
 void OnIdle (void)
 {}
+
+void generarTrayectoria(int numFoto, Vertice vInicial) {
+
+  ptosControl.clear();
+
+  if(modo_curva) {
+    //interpolo el punto inicial
+    ptosControl.push_back(vInicial);
+    ptosControl.push_back(vInicial);
+    ptosControl.push_back(vInicial);
+
+    Vertice v;
+    v.x= eye[0]*1.5;
+    v.y= eye[1]*1.5;
+    v.z= altura_curva*0.333;
+    ptosControl.push_back(v);
+
+    v.z= altura_curva*0.666;
+    ptosControl.push_back(v);
+
+    v= posicionFinalCentroImagen(numFoto);
+    v.x= v.x * FACTOR;
+    v.y= v.y * FACTOR;
+    v.z= altura_curva;
+
+    //interpolo el punto final
+    ptosControl.push_back(v);
+    ptosControl.push_back(v);
+    ptosControl.push_back(v);
+
+    curva.Bspline(ptosControl, ptosTrayectoria, ptosTangente, ptosNormal);
+  }
+}
 
 //mueve la camara al siguiente lugar especificado en curva_cam y redibuja
 void moverCam(int n) {
@@ -265,7 +299,8 @@ void init(void)
 
 
 void cargarGrillaImagenes(){
-	int k = 0;
+        Vertice vInicial;
+        int k = 0;
 	int j = 0;
 	for(int i = 0; i < sqrt(N); i++){
 		for(j = 0; j < sqrt(N); j++){
@@ -289,8 +324,15 @@ void cargarGrillaImagenes(){
 				//Top-right vertex (corner)
 				glTexCoord2i( 0, 1 );
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
-				
 			glEnd();
+
+			if(k==0) {
+			  vInicial.x= 2 * j + 1;
+			  vInicial.y= 2 * i + 1;
+			  vInicial.z= 0;
+			  generarTrayectoria(k, vInicial);
+			}
+
 			k++;
 		}
 		if(j!= 4 )k++;
@@ -333,18 +375,7 @@ void display(void)
 
 		curva_editada.clear();
 		curva.BezierCubica(pControl, curva_editada, pTangente, pNormal, distancias, FACTOR);
-
-		//TODO: mini prueba de los centros
-		float longitud= curva.getLongitudBezier();
-		if(longitud > 0) {
-		std::cout << "longitud Bezier: " << longitud << std::endl;
-                  Vertice centro;
-                  for(int i=0; i<N; i++){
-                    centro= posicionFinalCentroImagen(longitud, i);
-                    std::cout << "Imagen: " << i << " Centro x: " << centro.x << " - y: " << centro.y << std::endl;
-                  }
-		}
-
+		longBezier= curva.getLongitudBezier();
 
 		glBegin(GL_LINE_STRIP);
 			glColor3f(1.0,1.0,0);
@@ -389,11 +420,18 @@ void display(void)
 		glBegin(GL_LINE_STRIP);
 			glColor3f(0,1.0,1.0);
 			for (it = curva_editada.begin(); it != curva_editada.end(); it++)
-				glVertex3f((it->x * 20),(it->y * 20), altura_curva);
+				glVertex3f((it->x * FACTOR),(it->y * FACTOR), altura_curva);
 		glEnd();
 
 		//dibujo la trayectoria de las imagenes
-
+		if(view_trayectories) {
+                  glColor3f(1.0,1.0,1.0);
+                  glBegin(GL_LINE_STRIP);
+                  for(it= ptosTrayectoria.begin(); it != ptosTrayectoria.end(); it++)
+                          glVertex3f(it->x, it->y, it->z);
+                  glEnd();
+                  ptosTrayectoria.clear();
+		}
 		//dibujo la trayectoria de la cam
 
 //		glBegin(GL_LINE_STRIP); //VER!! no se dibuja bien por culpa de moverCam
@@ -409,46 +447,9 @@ void display(void)
 			//dibujar imagenes
 		glDisable(GL_LIGHTING);
 		glColor3f(1.0,1.0,1.0);
-			
-		//for (int i=0; i <N ; i++){
-			//glBindTexture(GL_TEXTURE_2D,textures[i]);
-//			glBindTexture(GL_TEXTURE_2D,textures[0]);
-//			std::cout << "textura : " << textures[0] << std::endl;
-//			glBegin(GL_QUADS);
-//				//Top-left vertex (corner)
-//				glTexCoord2i( 0, 0 );
-//				glVertex3f( 0, 0, 0 );
-//				
-//				
-//				//Bottom-left vertex (corner)
-//				glTexCoord2i( 1, 0 );
-//				glVertex3f( 2, 0, 0 );
-//				
-//				
-//				//Bottom-right vertex (corner)
-//				glTexCoord2i( 1, 1 );
-//				glVertex3f( 2, 2, 0 );
-//				
-//				
-//				//Top-right vertex (corner)
-//				glTexCoord2i( 0, 1 );
-//				glVertex3f( 0, 2, 0 );
-//				
-//			glEnd();
-//		//}
 		//cargo la grilla de imagenes
 		cargarGrillaImagenes();
-//		glBindTexture(GL_TEXTURE_2D,textures[1]);
-//		glBegin(GL_QUADS);
-//				glTexCoord2i( 1, 1 );
-//				glVertex3f( 4, 2 , 0 );
-//				glTexCoord2i( 0, 1 );
-//				glVertex3f( 2, 2 , 0 );
-//				glTexCoord2i( 0, 0 );
-//				glVertex3f( 2, 0 , 0 );
-//				glTexCoord2i( 1, 0 );
-//				glVertex3f( 4,0 , 0 );
-	//	glEnd();		
+
 		glEnable(GL_LIGHTING);
 	glPopMatrix();
 	//
@@ -491,7 +492,8 @@ void keyboard (unsigned char key, int x, int y)
 		  glutPostRedisplay();
 		  break;
 	  case 'b':
-		  animar();
+                  view_trayectories = !view_trayectories;
+                  animar();
 		  break;
 	  case 'c':
 		  pControl.clear();
@@ -647,7 +649,6 @@ void loadDefaulImage(std::string* route){
 	route[13] = "Imagenes/premium-wallpaper-10.bmp";
 	route[14] = "Imagenes/sunset.bmp";
 	route[15] = "Imagenes/celestial_sight24.bmp";
-	
 }
 
 int main(int argc, char** argv)
@@ -667,7 +668,7 @@ int main(int argc, char** argv)
    	route[i] = "Imagenes/ubuntu-logo.bmp";
    }
    //cargo las rutas de las imagenes por defecto
-   //loadDefaulImage(&route[0]);
+//   loadDefaulImage(&route[0]);
    //cargo las texturas a partir de las rutas
    ImageLoad(route);
    init();
