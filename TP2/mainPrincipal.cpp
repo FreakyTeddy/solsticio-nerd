@@ -89,7 +89,7 @@ Vertice posicionFinalCentroImagen(int numFoto) {
 void OnIdle (void)
 {}
 
-void generarMatriz(int k) {
+void generarMatriz(int k, Vertice vCentro) {
 
   if (!trayectorias[k].ptosTrayectoria.empty()) {
     Vertice vInicial= trayectorias[k].ptosTrayectoria.front();
@@ -100,43 +100,7 @@ void generarMatriz(int k) {
     float dy= vFinal.y-vInicial.y;
 
     glTranslatef(vInicial.x+dx, vInicial.y+dy, vInicial.z);
-
-    int modificarX= 0;
-    int modificarY= 0;
-    switch(k) {
-      case 12:
-         modificarX= -19;
-         break;
-      case 1:
-      case 13:
-        modificarX= -4;
-        break;
-      case 2:
-      case 14:
-        modificarX= -7;
-        break;
-      case 3:
-      case 15:
-        modificarX= -10;
-        break;
-      case 4:
-      case 8:
-         modificarY= -19;
-         break;
-      case 5:
-      case 9:
-        modificarY= -4;
-        break;
-      case 6:
-      case 10:
-        modificarY= 4;
-        break;
-      case 7:
-      case 11:
-        modificarY= 19;
-        break;
-    }
-    glTranslatef(modificarX, modificarY, 0);
+    glTranslatef(-vCentro.x, -vCentro.y, 0);
   }
 }
 
@@ -417,15 +381,13 @@ void cargarGrillaImagenes(){
 	for(int i = 0; i < sqrt(N); i++){
 		for(j = 0; j < sqrt(N); j++){
 			glBindTexture(GL_TEXTURE_2D,textures[k]);
-
-			vInicial.x= 2 * j + j + 1;
+                        vInicial.x= 2 * j + j + 1;
                         vInicial.y= 2 * i + i + 1;
                         vInicial.z= 0;
-                        generarTrayectoria(k, vInicial);
 
-			if(moviendoImagenes && (k==0 || k== 1|| k== 2|| k== 3)) {
+			if(moviendoImagenes) {
                           glPushMatrix();
-                          generarMatriz(k);
+                          generarMatriz(k, vInicial);
 			}
 			glBegin(GL_QUADS);
 				//Top-left vertex (corner)
@@ -448,9 +410,10 @@ void cargarGrillaImagenes(){
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
 			glEnd();
 
-			if(moviendoImagenes && (k==0 || k== 1|| k== 2|| k== 3))
+			if(moviendoImagenes)
                           glPopMatrix();
 
+                        generarTrayectoria(k, vInicial);
 			k++;
 		}
 		if(j!= 4)k++;
@@ -545,7 +508,7 @@ void display(void)
 		//dibujo la trayectoria de las imagenes
 		if(view_trayectories) {
                   glColor3f(1.0,1.0,1.0);
-                   for(unsigned int k=0; k<4; k++) {
+                   for(unsigned int k=0; k<N; k++) {
                      glBegin(GL_LINE_STRIP);
                     for(it= trayectorias[k].ptosTrayectoria.begin(); it != trayectorias[k].ptosTrayectoria.end(); it++)
                      glVertex3f(it->x, it->y, it->z);
