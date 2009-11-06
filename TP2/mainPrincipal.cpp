@@ -110,13 +110,13 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
     int modificarX= 0;
     int modificarY= 0;
 
-    if(numFoto >= 0 || numFoto <= 3)
+    if(numFoto >= 0 && numFoto <= 3)
       factorY= -5;
-    else if(numFoto >= 4 || numFoto <= 7)
+    else if(numFoto >= 4 && numFoto <= 7)
       factorX= -5;
-    else if(numFoto >= 8 || numFoto <= 11)
+    else if(numFoto >= 8 && numFoto <= 11)
       factorX= 5;
-    else if(numFoto >= 12 || numFoto <= 15)
+    else if(numFoto >= 12 && numFoto <= 15)
       factorY= 5;
 
     switch(numFoto) {
