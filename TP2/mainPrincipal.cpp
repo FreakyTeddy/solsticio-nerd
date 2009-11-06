@@ -34,6 +34,7 @@ bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
 bool modo_curva = false; 	//indica si esta en modo curva o en modo grilla
 bool animando = false; 		//indica si se esta realizando la animacion
+bool moviendoImagenes = false;          //indica si se estan moviendo las imagenes
 
 
 // Handle para el control de las Display Lists
@@ -87,6 +88,20 @@ Vertice posicionFinalCentroImagen(int numFoto) {
 
 void OnIdle (void)
 {}
+
+void generarMatriz(int k) {
+
+  if (!trayectorias[k].ptosTrayectoria.empty()) {
+    Vertice v= trayectorias[k].ptosTrayectoria.front();
+    glTranslatef(v.x, v.y, v.z);
+    trayectorias[k].ptosTrayectoria.pop_front();
+    std::cout << "v.x: " << v.x << std::endl;
+    std::cout << "v.y: " << v.y << std::endl;
+    std::cout << "v.z: " << v.z << std::endl;
+  }
+}
+
+
 
 void generarTrayectoria(int numFoto, Vertice vInicial) {
 
@@ -167,10 +182,11 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
     ptosControl.push_back(v);
     ptosControl.push_back(v);
 
-    trayectorias[numFoto].ptosTrayectoria.clear();
-    trayectorias[numFoto].ptosTangente.clear();
-    trayectorias[numFoto].ptosNormal.clear();
-
+    if(!moviendoImagenes) {
+      trayectorias[numFoto].ptosTrayectoria.clear();
+      trayectorias[numFoto].ptosTangente.clear();
+      trayectorias[numFoto].ptosNormal.clear();
+    }
     curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
   }
 }
@@ -361,6 +377,10 @@ void cargarGrillaImagenes(){
 	for(int i = 0; i < sqrt(N); i++){
 		for(j = 0; j < sqrt(N); j++){
 			glBindTexture(GL_TEXTURE_2D,textures[k]);
+			if(moviendoImagenes) {
+                          glPushMatrix();
+                          generarMatriz(k);
+			}
 			glBegin(GL_QUADS);
 				//Top-left vertex (corner)
 				glTexCoord2i( 0, 0 );
@@ -382,15 +402,18 @@ void cargarGrillaImagenes(){
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
 			glEnd();
 
-			vInicial.x= 2 * j + j + 1;
-			vInicial.y= 2 * i + i + 1;
-			vInicial.z= 0;
-			generarTrayectoria(k, vInicial);
+			if(moviendoImagenes)
+                          glPopMatrix();
 
+                        vInicial.x= 2 * j + j + 1;
+                        vInicial.y= 2 * i + i + 1;
+                        vInicial.z= 0;
+                        generarTrayectoria(k, vInicial);
 			k++;
 		}
 		if(j!= 4)k++;
 	}
+	glutPostRedisplay();
 } 
 
 
@@ -539,6 +562,7 @@ void keyboard (unsigned char key, int x, int y)
 	  case 'b':
 		  if ( !animando ) {
 			  view_trayectories = !view_trayectories;
+			  moviendoImagenes = !moviendoImagenes;
 			  animar();
 		  }
 		  break;
