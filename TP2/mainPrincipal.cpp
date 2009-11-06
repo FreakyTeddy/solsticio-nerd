@@ -1,8 +1,10 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <math.h>
+#include <vector>
 #include "Primitivas Graficas/Curva/Curva.h"
 #include "Imagenes/Imagen.h"
+#include "Trayectoria/Trayectoria.h"
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
@@ -68,9 +70,8 @@ GLuint textures[N]; //arreglo de texturas de imagenes
 
 float longBezier;
 std::list<Vertice> ptosControl;
-std::list<Vertice> ptosTrayectoria;
-std::list<Vertice> ptosTangente;
-std::list<Vertice> ptosNormal;
+Trayectoria trayectoria;
+std::vector<Trayectoria> trayectorias(N, trayectoria);
 
 Vertice posicionFinalCentroImagen(int numFoto) {
 
@@ -166,7 +167,11 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
     ptosControl.push_back(v);
     ptosControl.push_back(v);
 
-    curva.Bspline(ptosControl, ptosTrayectoria, ptosTangente, ptosNormal);
+    trayectorias[numFoto].ptosTrayectoria.clear();
+    trayectorias[numFoto].ptosTangente.clear();
+    trayectorias[numFoto].ptosNormal.clear();
+
+    curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
   }
 }
 
@@ -326,29 +331,28 @@ void SetPanelTopEnv()
 
 void init(void)
 {
-	dl_handle = glGenLists(3);
+  dl_handle = glGenLists(3);
 
-	glClearColor (0.02, 0.02, 0.04, 0.0);
-    glShadeModel (GL_SMOOTH);
-    glEnable(GL_DEPTH_TEST);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHTING);
+  glClearColor (0.02, 0.02, 0.04, 0.0);
+  glShadeModel (GL_SMOOTH);
+  glEnable(GL_DEPTH_TEST);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
+  glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+  glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHTING);
 
-	// Generación de las Display Lists
-	glNewList(DL_AXIS, GL_COMPILE);
-		DrawAxis();
-	glEndList();
-	glNewList(DL_GRID, GL_COMPILE);
-		DrawXYGrid();
-	glEndList();
-	glNewList(DL_AXIS2D_TOP, GL_COMPILE);
-		DrawAxis2DTopView();
-	glEndList();
+  // Generación de las Display Lists
+  glNewList(DL_AXIS, GL_COMPILE);
+  DrawAxis();
+  glEndList();
+  glNewList(DL_GRID, GL_COMPILE);
+  DrawXYGrid();
+  glEndList();
+  glNewList(DL_AXIS2D_TOP, GL_COMPILE);
+  DrawAxis2DTopView();
+  glEndList();
 }
-
 
 void cargarGrillaImagenes(){
         Vertice vInicial;
@@ -378,13 +382,11 @@ void cargarGrillaImagenes(){
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
 			glEnd();
 
-			if(k==0 || k == 1) {
-			  vInicial.x= 2 * j + j + 1;
-
+			vInicial.x= 2 * j + j + 1;
 			vInicial.y= 2 * i + i + 1;
 			vInicial.z= 0;
 			generarTrayectoria(k, vInicial);
-			}
+
 			k++;
 		}
 		if(j!= 4)k++;
@@ -478,11 +480,12 @@ void display(void)
 		//dibujo la trayectoria de las imagenes
 		if(view_trayectories) {
                   glColor3f(1.0,1.0,1.0);
-                  glBegin(GL_LINE_STRIP);
-                  for(it= ptosTrayectoria.begin(); it != ptosTrayectoria.end(); it++)
-                          glVertex3f(it->x, it->y, it->z);
-                  glEnd();
-                  ptosTrayectoria.clear();
+                   for(unsigned int k=0; k<N; k++) {
+                    glBegin(GL_LINE_STRIP);
+                    for(it= trayectorias[k].ptosTrayectoria.begin(); it != trayectorias[k].ptosTrayectoria.end(); it++)
+                      glVertex3f(it->x, it->y, it->z);
+                    glEnd();
+                  }
 		}
 		glEnable(GL_LIGHTING);
 	}
