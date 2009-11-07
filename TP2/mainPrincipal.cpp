@@ -34,7 +34,10 @@ bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
 bool modo_curva = false; 	//indica si esta en modo curva o en modo grilla
 bool animando = false; 		//indica si se esta realizando la animacion
+bool nuevaCurvaEditor = false;
 bool moviendoImagenes = false;          //indica si se estan moviendo las imagenes
+bool camaraArriba = false;
+bool imagenesArriba = false;          //indica si se estan moviendo las imagenes
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -69,11 +72,11 @@ std::list<Vertice> curva_cam;	//curva que describe la camara
 GLuint textures[N]; //arreglo de texturas de imagenes
 
 float longBezier;
-std::list<Vertice> ptosControl;
 Trayectoria trayectoria;
 std::vector<Trayectoria> trayectorias(N, trayectoria);
 std::list<Vertice> camino;
 std::vector< std::list<Vertice> > caminos(N, camino);
+unsigned int sizeBezier= 0;
 
 Vertice posicionFinalCentroImagen(int numFoto) {
 
@@ -92,24 +95,33 @@ void OnIdle (void)
 
 void generarMatriz(int k, Vertice vCentro) {
 
-  if (!trayectorias[k].ptosTrayectoria.empty()) {
-    Vertice vInicial= trayectorias[k].ptosTrayectoria.front();
-    trayectorias[k].ptosTrayectoria.pop_front();
-    Vertice vFinal= trayectorias[k].ptosTrayectoria.front();
+  Vertice vInicial= trayectorias[k].ptosTrayectoria.front();
+  trayectorias[k].ptosTrayectoria.pop_front();
+  Vertice vFinal= trayectorias[k].ptosTrayectoria.front();
 
-    float dx= vFinal.x-vInicial.x;
-    float dy= vFinal.y-vInicial.y;
+  float dx= vFinal.x-vInicial.x;
+  float dy= vFinal.y-vInicial.y;
 
-    glTranslatef(vInicial.x+dx, vInicial.y+dy, vInicial.z);
-    glTranslatef(-vCentro.x, -vCentro.y, 0);
+  glTranslatef(vInicial.x+dx, vInicial.y+dy, vInicial.z);
+  glTranslatef(-vCentro.x, -vCentro.y, 0);
+
+  if(trayectorias[k].ptosTrayectoria.size() == 1) {
+    trayectorias[k].ptosTrayectoria.push_front(vInicial);
+
+    if(moviendoImagenes && k==N-1) {
+      imagenesArriba= true;
+      moviendoImagenes= false;
+    }
   }
 }
 
 void generarTrayectoria(int numFoto, Vertice vInicial) {
 
-  ptosControl.clear();
 
-  if(modo_curva) {
+
+  //if(modo_curva) {
+    std::list<Vertice> ptosControl;
+    ptosControl.clear();
 
     int factorX= 1;
     int factorY= 1;
@@ -175,6 +187,13 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
     ptosControl.push_back(v);
 
     v= posicionFinalCentroImagen(numFoto);
+
+    std::cout << "v.x: " << v.x << std::endl;
+    std::cout << "v.y: " << v.y << std::endl;
+
+    if(numFoto == N-1)
+    std::cout << "GENERANDO RUTA" << std::endl;
+
     v.x= v.x * FACTOR;
     v.y= v.y * FACTOR;
     v.z= altura_curva;
@@ -184,16 +203,14 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
     ptosControl.push_back(v);
     ptosControl.push_back(v);
 
-    if(!moviendoImagenes) {
-      trayectorias[numFoto].ptosTrayectoria.clear();
-      trayectorias[numFoto].ptosTangente.clear();
-      trayectorias[numFoto].ptosNormal.clear();
-    }
+    trayectorias[numFoto].ptosTrayectoria.clear();
+    trayectorias[numFoto].ptosTangente.clear();
+    trayectorias[numFoto].ptosNormal.clear();
     caminos[numFoto].clear();
-    //TODO: provisorio
     curva.Bspline(ptosControl, caminos[numFoto], trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
     curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
-  }
+    //caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
+  //}
 }
 
 //mueve la camara al siguiente lugar especificado en curva_cam y redibuja
@@ -332,26 +349,22 @@ void DrawXYGrid()
 	glEnable(GL_LIGHTING);
 }
 
-void Set3DEnv()
-{
-	glViewport (0, 0, (GLsizei) W_WIDTH, (GLsizei) W_HEIGHT);
-    glMatrixMode (GL_PROJECTION);
-    glLoadIdentity ();
-    gluPerspective(60.0, (GLfloat) W_WIDTH/(GLfloat) W_HEIGHT, 0.10, 100.0);
+void Set3DEnv() {
+  glViewport (0, 0, (GLsizei) W_WIDTH, (GLsizei) W_HEIGHT);
+  glMatrixMode (GL_PROJECTION);
+  glLoadIdentity ();
+  gluPerspective(60.0, (GLfloat) W_WIDTH/(GLfloat) W_HEIGHT, 0.10, 100.0);
 }
 
-void SetPanelTopEnv()
-{
-	glViewport (TOP_VIEW_POSX, TOP_VIEW_POSY, (GLsizei) TOP_VIEW_W, (GLsizei) TOP_VIEW_H);
-    glMatrixMode (GL_PROJECTION);
-    glLoadIdentity ();
-	gluOrtho2D(0.5, -0.5, 0.5, -0.5);
-	//gluOrtho2D(-0.5, 0.5, -0.5, 0.5); original
+void SetPanelTopEnv() {
+  glViewport (TOP_VIEW_POSX, TOP_VIEW_POSY, (GLsizei) TOP_VIEW_W, (GLsizei) TOP_VIEW_H);
+  glMatrixMode (GL_PROJECTION);
+  glLoadIdentity ();
+  gluOrtho2D(0.5, -0.5, 0.5, -0.5);
+  //gluOrtho2D(-0.5, 0.5, -0.5, 0.5); original
 }
 
-
-void init(void)
-{
+void init(void) {
   dl_handle = glGenLists(3);
 
   glClearColor (0.02, 0.02, 0.04, 0.0);
@@ -386,10 +399,10 @@ void cargarGrillaImagenes(){
                         vInicial.y= 2 * i + i + 1;
                         vInicial.z= 0;
 
-			if(moviendoImagenes) {
-                          glPushMatrix();
-                          generarMatriz(k, vInicial);
-			}
+//			if(moviendoImagenes || imagenesArriba) {
+//                          glPushMatrix();
+//                          generarMatriz(k, vInicial);
+//			}
 			glBegin(GL_QUADS);
 				//Top-left vertex (corner)
 				glTexCoord2i( 0, 0 );
@@ -411,15 +424,18 @@ void cargarGrillaImagenes(){
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
 			glEnd();
 
-			if(moviendoImagenes)
-				glPopMatrix();
+//			if(moviendoImagenes || imagenesArriba)
+//			  glPopMatrix();
 
+			if(nuevaCurvaEditor)
+			  generarTrayectoria(k, vInicial);
 
-				generarTrayectoria(k, vInicial);
 			k++;
 		}
 		if(j!= 4)k++;
 	}
+	//Si se descomenta va mucho mas rapido que la camara
+	//Comentado las imagenes se mueven con la camara
 	glutPostRedisplay();
 } 
 
@@ -457,9 +473,16 @@ void display(void)
 			glEnd();
 		}
 
-		curva_editada.clear();
-		curva.BezierCubica(pControl, curva_editada, pTangente, pNormal, distancias, FACTOR);
-		longBezier= curva.getLongitudBezier();
+		//Si se modifica los puntos de control del editor
+		if(sizeBezier != pControl.size()) {
+		  sizeBezier= pControl.size();
+		  std::cout << "modifique bezier: " << sizeBezier << std::endl;
+
+		  curva_editada.clear();
+                  curva.BezierCubica(pControl, curva_editada, pTangente, pNormal, distancias, FACTOR);
+                  longBezier= curva.getLongitudBezier();
+                  nuevaCurvaEditor= true;
+		}
 
 		glBegin(GL_LINE_STRIP);
 			glColor3f(1.0,1.0,0);
@@ -513,7 +536,7 @@ void display(void)
                    for(unsigned int k=0; k<N; k++) {
                      glBegin(GL_LINE_STRIP);
                     for(it= caminos[k].begin(); it != caminos[k].end(); it++)
-                     glVertex3f(it->x, it->y, it->z);
+                      glVertex3f(it->x, it->y, it->z);
                     glEnd();
                   }
 		}
@@ -526,6 +549,10 @@ void display(void)
 		cargarGrillaImagenes();
 
 		glEnable(GL_LIGHTING);
+
+	//Para que los cambios sean cargados solo una vez
+	nuevaCurvaEditor= false;
+
 	glPopMatrix();
 	//
 	///////////////////////////////////////////////////
@@ -544,43 +571,60 @@ void reshape (int w, int h)
 	TOP_VIEW_H = ((int)((float)W_HEIGHT*0.40f));
 }
 
-void keyboard (unsigned char key, int x, int y)
-{
-   switch (key) {
-		case 0x1b:
-         exit(0);
-    	break;
-	  case 'g':
-		  view_grid = !view_grid;
-		  glutPostRedisplay();
-			break;
-	  case 'a':
-		  view_axis = !view_axis;
-		  glutPostRedisplay();
-			break;
-	  case 'e':
-		  edit_panel = !edit_panel;
-	  	  glutPostRedisplay();
-			break;
-	  case 't':
-		  view_curves = !view_curves;
-		  glutPostRedisplay();
-		  break;
-	  case 'b':
-		  if ( !animando ) {
-			  view_trayectories = !view_trayectories;
-			  moviendoImagenes = !moviendoImagenes;
-			  animar();
-		  }
-		  break;
-	  case 'c':
-		  pControl.clear();
-		  curva_editada.clear();
-		  glutPostRedisplay();
-		  break;
+void keyboard (unsigned char key, int x, int y) {
+  switch (key) {
+    case 0x1b:
+      exit(0);
+      break;
+    case 'g':
+      view_grid = !view_grid;
+      glutPostRedisplay();
+      break;
+    case 'a':
+      view_axis = !view_axis;
+      glutPostRedisplay();
+      break;
+    case 'e':
+      edit_panel = !edit_panel;
+      glutPostRedisplay();
+      break;
+    case 't':
+      view_curves = !view_curves;
+      glutPostRedisplay();
+      break;
+    case 'b':
+      if(!animando) {
+        std::cout << "aprete b" << std::endl;
+        //Si hay curva en el editor,
+        //y hay por lo menos 4 ptos de control
+        if(!pControl.empty() && pControl.size() > 3) {
+          view_trayectories= true;
+          moviendoImagenes= !moviendoImagenes;
+          camaraArriba= !camaraArriba;
+          animar();
+	}
+      }
+      break;
+    case 'c':
+      //No se puede borrar mientras se este animando
+      if(!animando) {
+        std::cout << "aprete c" << std::endl;
+        pControl.clear();
+        curva_editada.clear();
+        view_trayectories= false;
+        //Las imagenes vuelven a la grilla
+        if(imagenesArriba)
+          imagenesArriba= false;
+        //La camara vuelve abajo
+        if(camaraArriba) {
+          animar();
+          camaraArriba= false;
+        }
+      }
+      break;
     default:
-    	break;
-   }
+      break;
+  }
 }
 
 void mouse(int button, int state, int x, int y) {
@@ -618,7 +662,7 @@ void mouse(int button, int state, int x, int y) {
 
 					mouseDown = false; //lo deshabilito para que no rote
 					pControl.push_back(v);	//agrego el vertice normalizado
-					glutPostRedisplay();
+					//glutPostRedisplay();
 				}
 			}
 		}
@@ -648,7 +692,7 @@ void mouseMotion(int x, int y) {
 			if(rotate_cam < -360.0) rotate_cam = 0.0;
 		}
 		xprev = x;
-		glutPostRedisplay();
+		//glutPostRedisplay();
 	}
 	if (zoomOn) {
 		if (y > yprev)
@@ -656,7 +700,7 @@ void mouseMotion(int x, int y) {
 		else if(y < yprev)
 			zoom -=0.001*(y-yprev);
 		yprev = y;
-		glutPostRedisplay();
+		//glutPostRedisplay();
 	}
 	
 }
@@ -711,51 +755,48 @@ void ImageLoad(std::string route[]){
 
 void loadDefaulImage(std::string* route){
 
-	route[0] = "Imagenes/Castles_in_the_Sky.bmp";
-	route[1] = "Imagenes/Command_by_GravihK.bmp";
-	route[2] = "Imagenes/Fire_materia_in_action_by_DMSLilwolf.bmp";
-	route[3] = "Imagenes/Magic_by_GravihK.bmp";
-	route[4] = "Imagenes/Space Art Wallpapers 00.bmp";
-	route[5] = "Imagenes/Support_by_GravihK.bmp";
-	route[6] = "Imagenes/berrywalls-sample-space-curve-8900-wallpaper.bmp";
-	route[7] = "Imagenes/celestial_sight04.bmp";
-	route[8] = "Imagenes/celestial_sight21.bmp";
-	route[9] = "Imagenes/celestial_sight29.bmp";
-	route[10] = "Imagenes/dream.bmp";
-	route[11] = "Imagenes/eclair.bmp";
-	route[12] = "Imagenes/lua.bmp";
-	route[13] = "Imagenes/premium-wallpaper-10.bmp";
-	route[14] = "Imagenes/sunset.bmp";
-	route[15] = "Imagenes/celestial_sight24.bmp";
+  route[0]= "Imagenes/Castles_in_the_Sky.bmp";
+  route[1]= "Imagenes/Command_by_GravihK.bmp";
+  route[2]= "Imagenes/Fire_materia_in_action_by_DMSLilwolf.bmp";
+  route[3]= "Imagenes/Magic_by_GravihK.bmp";
+  route[4]= "Imagenes/Space Art Wallpapers 00.bmp";
+  route[5]= "Imagenes/Support_by_GravihK.bmp";
+  route[6]= "Imagenes/berrywalls-sample-space-curve-8900-wallpaper.bmp";
+  route[7]= "Imagenes/celestial_sight04.bmp";
+  route[8]= "Imagenes/celestial_sight21.bmp";
+  route[9]= "Imagenes/celestial_sight29.bmp";
+  route[10]= "Imagenes/dream.bmp";
+  route[11]= "Imagenes/eclair.bmp";
+  route[12]= "Imagenes/lua.bmp";
+  route[13]= "Imagenes/premium-wallpaper-10.bmp";
+  route[14]= "Imagenes/sunset.bmp";
+  //route[15] = "Imagenes/celestial_sight24.bmp";
+  route[15]= "Imagenes/ubuntu-logo.bmp";
 }
 
-int main(int argc, char** argv)
-{
-   glutInit(&argc, argv);
-   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-   glutInitWindowSize(1024, 768);
-   glutInitWindowPosition(0, 0);
-   glutCreateWindow("TP2 - Sistemas Graficos");
-   glutFullScreen();
-   //cargo las rutas de las imagenes
-   std::string route[N];
-   //ESTA es la prueba con la del pingu repetida, descomentar
-   //estas 3 lineas y comentar  loadDefaulImage(&route[0]);
-   //para probar.
-   for(int i = 0; i < N; i ++){
-   	route[i] = "Imagenes/ubuntu-logo.bmp";
-   }
-   //cargo las rutas de las imagenes por defecto
-//   loadDefaulImage(&route[0]);
-   //cargo las texturas a partir de las rutas
-   ImageLoad(route);
-   init();
-   glutDisplayFunc(display);
-   glutReshapeFunc(reshape);
-   glutKeyboardFunc(keyboard);
-   glutMouseFunc(mouse);
-   glutMotionFunc(mouseMotion);
-   glutIdleFunc(OnIdle);
-   glutMainLoop();
-   return 0;
+int main(int argc, char** argv) {
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+  glutInitWindowSize(1024, 768);
+  glutInitWindowPosition(0, 0);
+  glutCreateWindow("TP2 - Sistemas Graficos");
+  glutFullScreen();
+
+  //cargo las rutas de las imagenes
+  std::string route[N];
+  //cargo las rutas de las imagenes por defecto
+  loadDefaulImage(&route[0]);
+  //cargo las texturas a partir de las rutas
+  ImageLoad(route);
+
+  init();
+  glutDisplayFunc(display);
+  glutReshapeFunc(reshape);
+  glutKeyboardFunc(keyboard);
+  glutMouseFunc(mouse);
+  glutMotionFunc(mouseMotion);
+  glutIdleFunc(OnIdle);
+  glutMainLoop();
+
+  return 0;
 }
