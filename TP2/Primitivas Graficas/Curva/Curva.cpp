@@ -146,7 +146,7 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
       ptosNormal.push_back(normal);
 
       if(!begin) {
-        longitudBezier+= sqrt(pow(result.x-last.x, 2) + pow(result.y-last.y, 2));
+        longitudBezier+= sqrtf(powf(result.x-last.x, 2) + powf(result.y-last.y, 2));
         distancia.insert( std::pair<int,Vertice>(longitudBezier*factor,last) );
       } else
         begin= !begin;

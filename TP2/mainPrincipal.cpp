@@ -102,12 +102,16 @@ void generarMatriz(int k, Vertice vCentro) {
   float dx= vFinal.x-vInicial.x;
   float dy= vFinal.y-vInicial.y;
 
+  //Muevo al proximo vertice de la trayectoria
   glTranslatef(vInicial.x+dx, vInicial.y+dy, vInicial.z);
+  //Traslado centro de la imagen
   glTranslatef(-vCentro.x, -vCentro.y, 0);
 
+  //Si estamos en los dos puntos finales de las trayectorias
+  //guardo el anteultimo vertice nuevamente para que las
+  //imagenes permanezcan arriba
   if(trayectorias[k].ptosTrayectoria.size() == 1) {
     trayectorias[k].ptosTrayectoria.push_front(vInicial);
-
     if(moviendoImagenes && k==N-1) {
       imagenesArriba= true;
       moviendoImagenes= false;
@@ -117,117 +121,106 @@ void generarMatriz(int k, Vertice vCentro) {
 
 void generarTrayectoria(int numFoto, Vertice vInicial) {
 
+  std::list<Vertice> ptosControl;
+  ptosControl.clear();
 
+  //Creo las trayectorias desde la grilla a la curva final
+  int factorX= 1;
+  int factorY= 1;
+  int modificarX= 0;
+  int modificarY= 0;
 
-  //if(modo_curva) {
-    std::list<Vertice> ptosControl;
-    ptosControl.clear();
+  if(numFoto >= 0 && numFoto <= 3)
+    factorY= -5;
+  else if(numFoto >= 4 && numFoto <= 7)
+    factorX= -5;
+  else if(numFoto >= 8 && numFoto <= 11)
+    factorX= 5;
+  else if(numFoto >= 12 && numFoto <= 15)
+    factorY= 5;
 
-    int factorX= 1;
-    int factorY= 1;
-    int modificarX= 0;
-    int modificarY= 0;
+  switch(numFoto) {
+    case 0:
+    case 12:
+      modificarX= -20;
+      break;
+    case 1:
+    case 13:
+      modificarX= -5;
+      break;
+    case 2:
+    case 14:
+      modificarX= 5;
+      break;
+    case 3:
+    case 15:
+      modificarX= 20;
+      break;
+    case 4:
+    case 8:
+      modificarY= -20;
+      break;
+    case 5:
+    case 9:
+      modificarY= -5;
+      break;
+    case 6:
+    case 10:
+      modificarY= 5;
+      break;
+    case 7:
+    case 11:
+      modificarY= 20;
+      break;
+  }
 
-    if(numFoto >= 0 && numFoto <= 3)
-      factorY= -5;
-    else if(numFoto >= 4 && numFoto <= 7)
-      factorX= -5;
-    else if(numFoto >= 8 && numFoto <= 11)
-      factorX= 5;
-    else if(numFoto >= 12 && numFoto <= 15)
-      factorY= 5;
+  //interpolo el punto inicial
+  ptosControl.push_back(vInicial);
+  ptosControl.push_back(vInicial);
+  ptosControl.push_back(vInicial);
 
-    switch(numFoto) {
-      case 0:
-      case 12:
-         modificarX= -20;
-         break;
-      case 1:
-      case 13:
-        modificarX= -5;
-        break;
-      case 2:
-      case 14:
-        modificarX= 5;
-        break;
-      case 3:
-      case 15:
-        modificarX= 20;
-        break;
-      case 4:
-      case 8:
-         modificarY= -20;
-         break;
-      case 5:
-      case 9:
-        modificarY= -5;
-        break;
-      case 6:
-      case 10:
-        modificarY= 5;
-        break;
-      case 7:
-      case 11:
-        modificarY= 20;
-        break;
-    }
+  Vertice v;
+  v.x= 5 * factorX + modificarX;
+  v.y= 5 * factorY + modificarY;
+  v.z= altura_curva*0.333;
+  ptosControl.push_back(v);
 
-    //interpolo el punto inicial
-    ptosControl.push_back(vInicial);
-    ptosControl.push_back(vInicial);
-    ptosControl.push_back(vInicial);
+  v.z= altura_curva*0.666;
+  ptosControl.push_back(v);
 
-    Vertice v;
-    v.x= 5 * factorX + modificarX;
-    v.y= 5 * factorY + modificarY;
-    v.z= altura_curva*0.333;
-    ptosControl.push_back(v);
+  v= posicionFinalCentroImagen(numFoto);
+  v.x= v.x * FACTOR;
+  v.y= v.y * FACTOR;
+  v.z= altura_curva;
+  //interpolo el punto final
+  ptosControl.push_back(v);
+  ptosControl.push_back(v);
+  ptosControl.push_back(v);
 
-    v.z= altura_curva*0.666;
-    ptosControl.push_back(v);
-
-    v= posicionFinalCentroImagen(numFoto);
-
-    std::cout << "v.x: " << v.x << std::endl;
-    std::cout << "v.y: " << v.y << std::endl;
-
-    if(numFoto == N-1)
-    std::cout << "GENERANDO RUTA" << std::endl;
-
-    v.x= v.x * FACTOR;
-    v.y= v.y * FACTOR;
-    v.z= altura_curva;
-
-    //interpolo el punto final
-    ptosControl.push_back(v);
-    ptosControl.push_back(v);
-    ptosControl.push_back(v);
-
-    trayectorias[numFoto].ptosTrayectoria.clear();
-    trayectorias[numFoto].ptosTangente.clear();
-    trayectorias[numFoto].ptosNormal.clear();
-    caminos[numFoto].clear();
-    curva.Bspline(ptosControl, caminos[numFoto], trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
-    curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
-    //caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
-  //}
+  trayectorias[numFoto].ptosTrayectoria.clear();
+  trayectorias[numFoto].ptosTangente.clear();
+  trayectorias[numFoto].ptosNormal.clear();
+  caminos[numFoto].clear();
+  curva.Bspline(ptosControl, caminos[numFoto], trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
+  curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
+  //caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
 }
 
 //mueve la camara al siguiente lugar especificado en curva_cam y redibuja
 void moverCam(int n) {
-	if (!curva_cam.empty()) {
-		Vertice v = curva_cam.front();
-		curva_cam.pop_front();
-		eye[0] = v.x;
-		eye[1] = v.y;
-		eye[2] = v.z;
-		at[2] = v.z - EYE_Z;
-		//lo mismo para las imagenes
-		glutPostRedisplay();
-		glutTimerFunc(50,moverCam,0);	//llamo al timer para que actualice la pos de la cam
-	}
-	else
-		animando = false;
+  if (!curva_cam.empty()) {
+    Vertice v = curva_cam.front();
+    curva_cam.pop_front();
+    eye[0] = v.x;
+    eye[1] = v.y;
+    eye[2] = v.z;
+    at[2] = v.z - EYE_Z;
+    //lo mismo para las imagenes
+    glutPostRedisplay();
+    glutTimerFunc(50,moverCam,0);	//llamo al timer para que actualice la pos de la cam
+  }
+  else
+    animando = false;
 }
 
 void animar() {
@@ -287,66 +280,61 @@ void animar() {
 	modo_curva = !modo_curva;
 }
 
-void DrawAxis()
-{
-	glDisable(GL_LIGHTING);
-	glBegin(GL_LINES);
-		// X
-		glColor3f(1.0, 0.0, 0.0);
-		glVertex3f(0.0, 0.0, 0.0);
-		glColor3f(0.0, 0.0, 0.0);
-		glVertex3f(15.0, 0.0, 0.0);
-		// Y
-		glColor3f(0.0, 1.0, 0.0);
-		glVertex3f(0.0, 0.0, 0.0);
-		glColor3f(0.0, 0.0, 0.0);
-		glVertex3f(0.0, 15.0, 0.0);
-		// Z
-		glColor3f(0.0, 0.0, 1.0);
-		glVertex3f(0.0, 0.0, 0.0);
-		glColor3f(0.0, 0.0, 0.0);
-		glVertex3f(0.0, 0.0, 15.0);
-	glEnd();
-	glEnable(GL_LIGHTING);
+void DrawAxis() {
+  glDisable(GL_LIGHTING);
+  glBegin(GL_LINES);
+    // X
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex3f(0.0, 0.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex3f(15.0, 0.0, 0.0);
+    // Y
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex3f(0.0, 0.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex3f(0.0, 15.0, 0.0);
+    // Z
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex3f(0.0, 0.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glVertex3f(0.0, 0.0, 15.0);
+  glEnd();
+  glEnable(GL_LIGHTING);
 }
 
-void DrawAxis2DTopView()
-{
-	glDisable(GL_LIGHTING);
-	glBegin(GL_LINE_LOOP);
-		// X
-		glColor3f(0.0, 0.5, 1.0);
-		glVertex3f(-0.5, -0.5, 0.0);
-		glVertex3f(0.5, -0.5, 0.0);
-		glVertex3f(0.5, 0.5, 0.0);
-		glVertex3f(-0.5, 0.5, 0.0);
-	glEnd();
-	glBegin(GL_QUADS);
-		glColor3f(0.1, 0.1, 0.1);
-		glVertex3f(-0.5, -0.5, 0.0);
-		glVertex3f(0.5, -0.5, 0.0);
-		glVertex3f(0.5, 0.5, 0.0);
-		glVertex3f(-0.5, 0.5, 0.0);
-	glEnd();
-
-	glEnable(GL_LIGHTING);
+void DrawAxis2DTopView() {
+  glDisable(GL_LIGHTING);
+  glBegin(GL_LINE_LOOP);
+  // X
+    glColor3f(0.0, 0.5, 1.0);
+    glVertex3f(-0.5, -0.5, 0.0);
+    glVertex3f(0.5, -0.5, 0.0);
+    glVertex3f(0.5, 0.5, 0.0);
+    glVertex3f(-0.5, 0.5, 0.0);
+  glEnd();
+  glBegin(GL_QUADS);
+    glColor3f(0.1, 0.1, 0.1);
+    glVertex3f(-0.5, -0.5, 0.0);
+    glVertex3f(0.5, -0.5, 0.0);
+    glVertex3f(0.5, 0.5, 0.0);
+    glVertex3f(-0.5, 0.5, 0.0);
+  glEnd();
+  glEnable(GL_LIGHTING);
 }
 
-void DrawXYGrid()
-{
-	int i;
-	glDisable(GL_LIGHTING);
-	glColor3f(0.15, 0.1, 0.1);
-	glBegin(GL_LINES);
-	for(i=-20; i<21; i++)
-	{
-		glVertex3f(i, -20.0, 0.0);
-		glVertex3f(i,  20.0, 0.0);
-		glVertex3f(-20.0, i, 0.0);
-		glVertex3f( 20.0, i, 0.0);
-	}
-	glEnd();
-	glEnable(GL_LIGHTING);
+void DrawXYGrid() {
+  int i;
+  glDisable(GL_LIGHTING);
+  glColor3f(0.15, 0.1, 0.1);
+  glBegin(GL_LINES);
+    for(i=-20; i<21; i++) {
+      glVertex3f(i, -20.0, 0.0);
+      glVertex3f(i,  20.0, 0.0);
+      glVertex3f(-20.0, i, 0.0);
+      glVertex3f( 20.0, i, 0.0);
+    }
+  glEnd();
+  glEnable(GL_LIGHTING);
 }
 
 void Set3DEnv() {
@@ -399,10 +387,11 @@ void cargarGrillaImagenes(){
                         vInicial.y= 2 * i + i + 1;
                         vInicial.z= 0;
 
-//			if(moviendoImagenes || imagenesArriba) {
-//                          glPushMatrix();
-//                          generarMatriz(k, vInicial);
-//			}
+                        //Aplico transformaciones si se esta animando
+			if(moviendoImagenes || imagenesArriba) {
+                          glPushMatrix();
+                          generarMatriz(k, vInicial);
+			}
 			glBegin(GL_QUADS);
 				//Top-left vertex (corner)
 				glTexCoord2i( 0, 0 );
@@ -424,9 +413,11 @@ void cargarGrillaImagenes(){
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
 			glEnd();
 
-//			if(moviendoImagenes || imagenesArriba)
-//			  glPopMatrix();
+			//Aplico transformaciones si se esta animando
+			if(moviendoImagenes || imagenesArriba)
+			  glPopMatrix();
 
+			//Si hay una nueva curva final recalculo las trayectorias
 			if(nuevaCurvaEditor)
 			  generarTrayectoria(k, vInicial);
 
@@ -473,12 +464,15 @@ void display(void)
 			glEnd();
 		}
 
-		//Si se modifica los puntos de control del editor
+		//Solo si se modifica los puntos de control del editor
+		//Vuelvo a calcular bezier
 		if(sizeBezier != pControl.size()) {
 		  sizeBezier= pControl.size();
-		  std::cout << "modifique bezier: " << sizeBezier << std::endl;
-
+		  //limpio los buffers
 		  curva_editada.clear();
+		  pTangente.clear();
+		  pNormal.clear();
+		  distancias.clear();
                   curva.BezierCubica(pControl, curva_editada, pTangente, pNormal, distancias, FACTOR);
                   longBezier= curva.getLongitudBezier();
                   nuevaCurvaEditor= true;
@@ -594,7 +588,6 @@ void keyboard (unsigned char key, int x, int y) {
       break;
     case 'b':
       if(!animando) {
-        std::cout << "aprete b" << std::endl;
         //Si hay curva en el editor,
         //y hay por lo menos 4 ptos de control
         if(!pControl.empty() && pControl.size() > 3) {
@@ -608,7 +601,6 @@ void keyboard (unsigned char key, int x, int y) {
     case 'c':
       //No se puede borrar mientras se este animando
       if(!animando) {
-        std::cout << "aprete c" << std::endl;
         pControl.clear();
         curva_editada.clear();
         view_trayectories= false;
@@ -662,7 +654,7 @@ void mouse(int button, int state, int x, int y) {
 
 					mouseDown = false; //lo deshabilito para que no rote
 					pControl.push_back(v);	//agrego el vertice normalizado
-					//glutPostRedisplay();
+					glutPostRedisplay();
 				}
 			}
 		}
@@ -692,7 +684,7 @@ void mouseMotion(int x, int y) {
 			if(rotate_cam < -360.0) rotate_cam = 0.0;
 		}
 		xprev = x;
-		//glutPostRedisplay();
+		glutPostRedisplay();
 	}
 	if (zoomOn) {
 		if (y > yprev)
@@ -700,7 +692,7 @@ void mouseMotion(int x, int y) {
 		else if(y < yprev)
 			zoom -=0.001*(y-yprev);
 		yprev = y;
-		//glutPostRedisplay();
+		glutPostRedisplay();
 	}
 	
 }
