@@ -22,7 +22,7 @@ float rotate_cam = 0;
 float zoom = 1;
 int xprev = 0; //posicion anterior del mouse
 int yprev = 0;
-float altura_curva = 6.0; //TODO ver la que mejor convenga
+float altura_curva = 6.0;
 
 // Variables de control
 bool view_grid = true;
@@ -64,8 +64,8 @@ int TOP_VIEW_H = ((int)((float)W_HEIGHT*0.40f));
 // Variables globales
 Curva curva;
 std::list<Vertice> pControl;	//puntos de control dibujados con el mouse
-std::list<Vertice> pTangente;	//puntos de control dibujados con el mouse
-std::list<Vertice> pNormal;	//puntos de control dibujados con el mouse
+std::list<Vertice> pTangente;	//tangente a puntos de control dibujados con el mouse
+std::list<Vertice> pNormal;		//normal a puntos de control dibujados con el mouse
 std::list<Vertice> curva_editada;
 std::map<int,Vertice> distancias;
 std::list<Vertice> curva_cam;	//curva que describe la camara
@@ -78,6 +78,7 @@ std::list<Vertice> camino;
 std::vector< std::list<Vertice> > caminos(N, camino);
 unsigned int sizeBezier= 0;
 
+
 Vertice posicionFinalCentroImagen(int numFoto) {
 
   Vertice last;
@@ -89,6 +90,7 @@ Vertice posicionFinalCentroImagen(int numFoto) {
 
   return(distancias.lower_bound(distancia)->second);
 }
+
 
 void OnIdle (void)
 {}
@@ -204,6 +206,7 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
   curva.Bspline(ptosControl, caminos[numFoto], trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
   curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
   //caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
+
 }
 
 //mueve la camara al siguiente lugar especificado en curva_cam y redibuja
@@ -215,7 +218,6 @@ void moverCam(int n) {
     eye[1] = v.y;
     eye[2] = v.z;
     at[2] = v.z - EYE_Z;
-    //lo mismo para las imagenes
     glutPostRedisplay();
     glutTimerFunc(50,moverCam,0);	//llamo al timer para que actualice la pos de la cam
   }
@@ -376,6 +378,8 @@ void init(void) {
   glEndList();
 }
 
+
+
 void cargarGrillaImagenes(){
     Vertice vInicial;
     int k = 0;
@@ -392,26 +396,33 @@ void cargarGrillaImagenes(){
                           glPushMatrix();
                           generarMatriz(k, vInicial);
 			}
+			glPushMatrix();
+
+			glTranslatef( 2 *j + j, 2 * i + i,0);
+			glRotatef(25,0, 0,1.0);
+			glTranslatef( -(2 *j + j), -(2 * i + i),0);
+
 			glBegin(GL_QUADS);
 				//Top-left vertex (corner)
 				glTexCoord2i( 0, 0 );
 				glVertex3f( 2 *j + j, 2 * i + i, 0 );
-				
+
 				
 				//Bottom-left vertex (corner)
 				glTexCoord2i( 1, 0 );
 				glVertex3f( 2*j + j + 2, 2 * i + i, 0 );
-				
-				
+
+
 				//Bottom-right vertex (corner)
 				glTexCoord2i( 1, 1 );
 				glVertex3f( 2 * j + j + 2, 2 * i + i + 2, 0 );
-				
-				
+
+
 				//Top-right vertex (corner)
 				glTexCoord2i( 0, 1 );
 				glVertex3f( 2 * j + j, 2 * i + i + 2, 0 );
 			glEnd();
+			glPopMatrix();
 
 			//Aplico transformaciones si se esta animando
 			if(moviendoImagenes || imagenesArriba)
@@ -427,9 +438,8 @@ void cargarGrillaImagenes(){
 	}
 	//Si se descomenta va mucho mas rapido que la camara
 	//Comentado las imagenes se mueven con la camara
-	glutPostRedisplay();
+	//glutPostRedisplay();
 } 
-
 
 void display(void)
 {
