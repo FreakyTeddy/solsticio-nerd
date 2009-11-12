@@ -64,10 +64,10 @@ int TOP_VIEW_H = ((int)((float)W_HEIGHT*0.40f));
 // Variables globales
 Curva curva;
 std::list<Vertice> pControl;	//puntos de control dibujados con el mouse
-std::list<Vertice> pTangente;	//tangente a puntos de control dibujados con el mouse
-std::list<Vertice> pNormal;		//normal a puntos de control dibujados con el mouse
+//std::list<Vertice> pTangente;	//tangente a puntos de control dibujados con el mouse
+//std::list<Vertice> pNormal;		//normal a puntos de control dibujados con el mouse
 std::list<Vertice> curva_editada;
-std::map<int,Vertice> distancias;
+std::map<int,Ubicacion> distancias;
 std::list<Vertice> curva_cam;	//curva que describe la camara
 GLuint textures[N]; //arreglo de texturas de imagenes
 
@@ -79,7 +79,7 @@ std::vector< std::list<Vertice> > caminos(N, camino);
 unsigned int sizeBezier= 0;
 
 
-Vertice posicionFinalCentroImagen(int numFoto) {
+Ubicacion ubicacionFinalCentroImagen(int numFoto) {
 
   Vertice last;
   float espacioXQuad= (float) ((longBezier*FACTOR)/N);
@@ -190,7 +190,7 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
   v.z= altura_curva*0.666;
   ptosControl.push_back(v);
 
-  v= posicionFinalCentroImagen(numFoto);
+  v= ubicacionFinalCentroImagen(numFoto).punto_curva;
   v.x= v.x * FACTOR;
   v.y= v.y * FACTOR;
   v.z= altura_curva;
@@ -203,7 +203,7 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
   trayectorias[numFoto].ptosTangente.clear();
   trayectorias[numFoto].ptosNormal.clear();
   caminos[numFoto].clear();
-  curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
+  curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria);
   caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
 
 }
@@ -276,7 +276,7 @@ void animar() {
 	puntos.push_back(v);
 	puntos.push_back(v);
 
-	curva.Bspline(puntos,curva_cam,tg,norm);
+	curva.Bspline(puntos,curva_cam);
 	moverCam(0);
 	modo_curva = !modo_curva;
 }
@@ -381,6 +381,7 @@ void init(void) {
 
 void cargarGrillaImagenes(){
     Vertice vInicial;
+    Ubicacion u;
     int k = 0;
 	int j = 0;
 	for(int i = 0; i < sqrt(N); i++){
@@ -395,13 +396,15 @@ void cargarGrillaImagenes(){
                           glPushMatrix();
                           generarMatriz(k, vInicial);
 			}
-			glPushMatrix();
+  			glPushMatrix();
 
-			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
-			glRotatef(25,0, 0,1.0);
-			glTranslatef( -(2 *j + j)-1, -(2 * i + i)-1,0);
+    			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
+    			u = ubicacionFinalCentroImagen(k);
+    			//!!!aca tiene que ir la funcion de rotar o lo que sea :)
+    			glRotatef(-90,u.punto_tangente.x, u.punto_tangente.y,0);
+    			glTranslatef( -(2 *j + j)-1, -(2 * i + i)-1,0);
 
-			glBegin(GL_QUADS);
+   			glBegin(GL_QUADS);
 				//Top-left vertex (corner)
 				glTexCoord2i( 0, 0 );
 				glVertex3f( 2 *j + j, 2 * i + i, 0 );
@@ -479,12 +482,10 @@ void display(void)
 		  sizeBezier= pControl.size();
 		  //limpio los buffers
 		  curva_editada.clear();
-		  pTangente.clear();
-		  pNormal.clear();
 		  distancias.clear();
-                  curva.BezierCubica(pControl, curva_editada, pTangente, pNormal, distancias, FACTOR);
-                  longBezier= curva.getLongitudBezier();
-                  nuevaCurvaEditor= true;
+		  curva.BezierCubica(pControl, curva_editada, distancias, FACTOR);
+		  longBezier= curva.getLongitudBezier();
+		  nuevaCurvaEditor= true;
 		}
 
 		glBegin(GL_LINE_STRIP);
