@@ -403,8 +403,10 @@ void cargarGrillaImagenes(){
 
 			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
 
-			glRotatef(angulo/2,0, 1.0,0); //las deja levantadas
-			glRotatef(-angulo/2,0, 0,1.0);
+//			glRotatef(angulo/2,0, 1.0,0); //las deja levantadas
+//			glRotatef(-angulo/2,0, 0,1.0);
+			glRotatef(angulo/2,1.0, 0,0); //las deja levantadas
+			glRotatef(-angulo,0, 0,1.0);
 			glTranslatef( -(2 *j + j)-1, -(2 * i + i)-1,0);
 
 			glBegin(GL_QUADS);
