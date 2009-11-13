@@ -249,7 +249,6 @@ void animar() {
 	if (modo_curva) {
 		//si esta en modo curva paso a modo grilla
 		//bajo la camara
-		//view_grid = true;
 		v.x = eye[0]*1.5;
 		v.y = eye[1]*1.5;
 		v.z = eye[2] - (altura_curva*0.333);
@@ -264,7 +263,6 @@ void animar() {
 	}
 	else {
 		//si esta en modo grilla paso a modo curva
-		//view_grid = false;
 
 		v.x = eye[0]*1.5;
 		v.y = eye[1]*1.5;
@@ -652,11 +650,6 @@ void mouse(int button, int state, int x, int y) {
 			v.x = (float)(x - x0) / (float) (x1-x0) ;
 			v.y = (float)(y0 - y) / (float) (y0-y1);
 
-			/*
-			 original
-			 v.x -=0.5;
-			 v.y -= 0.5;
-			 */
 			v.x = (v.x - 0.5) * -1;
 			v.y = (v.y - 0.5) * -1;
 			v.z = altura_curva;
