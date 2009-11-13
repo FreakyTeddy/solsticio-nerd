@@ -77,6 +77,7 @@ Trayectoria trayectoria;
 std::vector<Trayectoria> trayectorias(N, trayectoria);
 std::list<Vertice> camino;
 std::vector< std::list<Vertice> > caminos(N, camino);
+Vertice tangentes[16];
 unsigned int sizeBezier= 0;
 
 
@@ -88,8 +89,24 @@ Vertice posicionFinalCentroImagen(int numFoto) {
   float espacioSobrante= espacioXQuad-2;
   float espacioInicial= (float) espacioSobrante/2;
   int distancia= (espacioXQuad*numFoto) + espacioInicial + 1;
+  last = (distancias.lower_bound(distancia)->second);
 
-  return(distancias.lower_bound(distancia)->second);
+  //aca lo que quiero hacer es obtener el vector tangente a la curva en la posicion final
+  std::list<Vertice>::iterator it = trayectorias[numFoto].ptosTangente.begin();
+  bool encontrado = false;
+  while (!encontrado && it !=trayectorias[numFoto].ptosTangente.end() ) {
+	  if (last == (*it)) {
+		  std::cout<<"found"<<std::endl;
+		  encontrado = true;
+		  it++; //tg
+		  tangentes[numFoto] = *it;
+	  }
+	  std::cout<<"it"<<std::endl;
+	  it++;
+	  it++;
+  }
+
+  return last;
 }
 
 
@@ -204,10 +221,8 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
   trayectorias[numFoto].ptosTangente.clear();
   trayectorias[numFoto].ptosNormal.clear();
   caminos[numFoto].clear();
-  curva.Bspline(ptosControl, caminos[numFoto], trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
   curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
-  //caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
-
+  caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
 }
 
 //mueve la camara al siguiente lugar especificado en curva_cam y redibuja
@@ -397,14 +412,12 @@ void cargarGrillaImagenes(){
                         //Aplico transformaciones si se esta animando
 			if(moviendoImagenes || imagenesArriba) {
                           glPushMatrix();
-                          generarMatriz(k, vInicial);
+             	          generarMatriz(k, vInicial);
 			}
 			glPushMatrix();
-
+			std::cout <<k<<": "<< tangentes[k].x << " "<<tangentes[k].y<<" "<<tangentes[k].z<<std::endl;
 			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
 
-//			glRotatef(angulo/2,0, 1.0,0); //las deja levantadas
-//			glRotatef(-angulo/2,0, 0,1.0);
 			glRotatef(angulo/2,1.0, 0,0); //las deja levantadas
 			glRotatef(-angulo,0, 0,1.0);
 			glTranslatef( -(2 *j + j)-1, -(2 * i + i)-1,0);
