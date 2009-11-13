@@ -38,6 +38,7 @@ bool nuevaCurvaEditor = false;
 bool moviendoImagenes = false;          //indica si se estan moviendo las imagenes
 bool camaraArriba = false;
 bool imagenesArriba = false;          //indica si se estan moviendo las imagenes
+int angulo = 0;
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -203,8 +204,9 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
   trayectorias[numFoto].ptosTangente.clear();
   trayectorias[numFoto].ptosNormal.clear();
   caminos[numFoto].clear();
+  curva.Bspline(ptosControl, caminos[numFoto], trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
   curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
-  caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
+  //caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
 
 }
 
@@ -219,15 +221,19 @@ void moverCam(int n) {
     at[2] = v.z - EYE_Z;
     glutPostRedisplay();
     glutTimerFunc(50,moverCam,0);	//llamo al timer para que actualice la pos de la cam
+    if (angulo < 180 && camaraArriba)
+    	angulo++;
   }
-  else
+  else {
     animando = false;
+  }
 }
 
 void animar() {
 	//este metodo usa la curva bspline para hacer la animacion de la camara
 	//para la transicion entre la grilla y la curva
 	animando = true;
+	angulo = 0;
 	std::list<Vertice> puntos, tg, norm;
 	Vertice v;
 	curva_cam.clear();
@@ -398,7 +404,9 @@ void cargarGrillaImagenes(){
 			glPushMatrix();
 
 			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
-			glRotatef(25,0, 0,1.0);
+
+			glRotatef(angulo/2,0, 1.0,0); //las deja levantadas
+			glRotatef(-angulo/2,0, 0,1.0);
 			glTranslatef( -(2 *j + j)-1, -(2 * i + i)-1,0);
 
 			glBegin(GL_QUADS);

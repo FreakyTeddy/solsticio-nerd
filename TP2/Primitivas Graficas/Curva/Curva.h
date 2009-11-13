@@ -5,6 +5,7 @@
 #include <list>
 #include <map>
 #include <math.h>
+
 #include "../Vertice/Vertice.h"
 
 #include <iostream>
@@ -12,26 +13,6 @@
 #define FACTOR_INICIAL 50 
 #define FACTOR_MIN 0 
 #define FACTOR_MAX 100 
-
-
-/*
- * Version anterior de curva en svn update 147 =)
- */
-
-struct Ubicacion {
-	//contiene la posicion de la imagen y su normal
-
-public:
-
-	//puntos en la curva bezier
-	Vertice punto_curva;
-
-	//puntos tangente a la curva bezier
-	Vertice punto_tangente;
-
-	//normal a la curva bezier
-	Vertice punto_normal;
-};
  
 class Curva {
 	
@@ -50,7 +31,8 @@ public:
    * pasados en la lista (P0, P1, P2, P3).
    * */
   void BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva,
-                    std::map<int,Ubicacion> &distancia, int factor);
+                    std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal,
+                    std::map<int,Vertice> &distancia, int factor);
 
   /* Suma al factor del paso de Bezier la cantidad pasada por parametro.
    * */
@@ -63,7 +45,8 @@ public:
   /* Guarda en curva los puntos a unir para dibujar una curva Bspline cubica uniforme a
    * partir de los puntos de control requiere al menos 4 puntos de control para dibujar algo
    * */
-  void Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva);
+  void Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva,
+               std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal);
 
   /* Suma al factor del paso de Bspline la cantidad pasada por parametro.
    * */

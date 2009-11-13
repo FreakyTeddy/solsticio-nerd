@@ -1,5 +1,6 @@
 #include "Curva.h"
 
+
 Curva::Curva(): factorBezier(FACTOR_INICIAL), factorBspline(FACTOR_INICIAL) { };
 
 Vertice& find(std::list<Vertice> vertices, unsigned int position) {
@@ -49,7 +50,8 @@ bool load(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int &first) 
 }
 
 void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva,
-                         std::map<int, Ubicacion> &distancia, int factor) {
+                         std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal,
+                         std::map<int, Vertice> &distancia, int factor) {
 
   float dt=(float) 1.0 / factorBezier;
 
@@ -71,7 +73,6 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
   Vertice result;
   Vertice tangent;
   Vertice normal;
-  Ubicacion ubicacion;
 
   bool complete;
 
@@ -119,7 +120,8 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
       tangent.x= ducx * (ptos[0].x + ptos[1].x + ptos[2].x + ptos[3].x);
       tangent.y= ducy * (ptos[0].y + ptos[1].y + ptos[2].y + ptos[3].y);
       tangent.z= ducz * (ptos[0].z + ptos[1].z + ptos[2].z + ptos[3].z);
-
+      ptosTangente.push_back(result);
+      ptosTangente.push_back(tangent);
 
       //Derivada segunda - Normal
       //Polinomios de Bernstein lineal
@@ -141,19 +143,12 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
       normal.y= dducy * (ptos[0].y + ptos[1].y + ptos[2].y);
       normal.z= dducz * (ptos[0].z + ptos[1].z + ptos[2].z);
 
+      ptosNormal.push_back(result);
+      ptosNormal.push_back(normal);
+
       if(!begin) {
         longitudBezier+= sqrtf(powf(result.x-last.x, 2) + powf(result.y-last.y, 2));
-        //ver!!!
-        normal.x -= last.x;
-        normal.y -= last.y;
-        normal.z -= last.z;
-        tangent.x -=last.x;
-        tangent.y -=last.y;
-        tangent.z -=last.z;
-        ubicacion.punto_curva = last;
-        ubicacion.punto_normal = normal;
-        ubicacion.punto_tangente = tangent; //guardo la tg y la normal asociada al punto de la curva
-        distancia.insert( std::pair<int,Ubicacion>(longitudBezier*factor,ubicacion) );
+        distancia.insert( std::pair<int,Vertice>(longitudBezier*factor,last) );
       } else
         begin= !begin;
 
@@ -186,24 +181,25 @@ bool loadBspline(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int f
   return ((size-first) > 3);
 }
 
-void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva) {
+void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva,
+                    std::list<Vertice> &ptosTangente, std::list<Vertice> &ptosNormal) {
 
   float dt=(float) 1.0 / factorBspline;
 
   float uSquared, uCubed;
   float Bn2Cubed, Bn1Cubed, B0Cubed, B1Cubed;
 
-//  float Bn1Squared, B0Squared, B1Squared;
-//  float deltab0x, deltab1x, deltab2x, deltab0y, deltab1y, deltab2y, deltab0z, deltab1z, deltab2z;
-//  float ducx, ducy, ducz;
-//
-//  float B0, B1;
-//  float delta2b0x, delta2b1x, delta2b0y, delta2b1y, delta2b0z, delta2b1z;
-//  float dducx, dducy, dducz;
+  float Bn1Squared, B0Squared, B1Squared;
+  float deltab0x, deltab1x, deltab2x, deltab0y, deltab1y, deltab2y, deltab0z, deltab1z, deltab2z;
+  float ducx, ducy, ducz;
+
+  float B0, B1;
+  float delta2b0x, delta2b1x, delta2b0y, delta2b1y, delta2b0z, delta2b1z;
+  float dducx, dducy, dducz;
 
   Vertice curve;
-//  Vertice tangent;
-//  Vertice normal;
+  Vertice tangent;
+  Vertice normal;
 
   bool complete;
 
@@ -230,54 +226,54 @@ void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurv
       curve.z= Bn2Cubed*ptos[0].z + Bn1Cubed*ptos[1].z + B0Cubed*ptos[2].z + B1Cubed*ptos[3].z;
       ptosCurva.push_back(curve);
 
-//      //Derivada primera - Tangente
-//      //Bases cuadraticas
-//      Bn1Squared= ( uSquared - 2 * u + 1)/2;
-//      B0Squared= ( -2 * uSquared + 2 * u + 1 )/2;
-//      B1Squared= ( uSquared )/2;
-//
-//      deltab0x= ptos[1].x - ptos[0].x;
-//      deltab1x= ptos[2].x - ptos[1].x;
-//      deltab2x= ptos[3].x - ptos[2].x;
-//      deltab0y= ptos[1].y - ptos[0].y;
-//      deltab1y= ptos[2].y - ptos[1].y;
-//      deltab2y= ptos[3].y - ptos[2].y;
-//      deltab0z= ptos[1].z - ptos[0].z;
-//      deltab1z= ptos[2].z - ptos[1].z;
-//      deltab2z= ptos[3].z - ptos[2].z;
-//
-//      ducx= 6 * ((deltab0x * Bn1Squared) + (deltab1x * B0Squared) + (deltab2x * B1Squared));
-//      ducy= 6 * ((deltab0y * Bn1Squared) + (deltab1y * B0Squared) + (deltab2y * B1Squared));
-//      ducz= 6 * ((deltab0z * Bn1Squared) + (deltab1z * B0Squared) + (deltab2z * B1Squared));
-//
-//      tangent.x= ducx * (ptos[0].x + ptos[1].x + ptos[2].x + ptos[3].x);
-//      tangent.y= ducy * (ptos[0].y + ptos[1].y + ptos[2].y + ptos[3].y);
-//      tangent.z= ducz * (ptos[0].z + ptos[1].z + ptos[2].z + ptos[3].z);
-//      ptosTangente.push_back(curve);
-//      ptosTangente.push_back(tangent);
-//
-//      //Derivada segunda - Normal
-//      //Bases lineales
-//      B0= 1 - u;
-//      B1= u;
-//
-//      delta2b0x= deltab1x - deltab0x;
-//      delta2b1x= deltab2x - deltab1x;
-//      delta2b0y= deltab1y - deltab0y;
-//      delta2b1y= deltab2y - deltab1y;
-//      delta2b0z= deltab1z - deltab0z;
-//      delta2b1z= deltab2z - deltab1z;
-//
-//      dducx= 3 * ((delta2b0x * B0) + (delta2b1x * B1));
-//      dducy= 3 * ((delta2b0y * B0) + (delta2b1y * B1));
-//      dducz= 3 * ((delta2b0z * B0) + (delta2b1z * B1));
-//
-//      normal.x= dducx * (ptos[0].x + ptos[1].x + ptos[2].x);
-//      normal.y= dducy * (ptos[0].y + ptos[1].y + ptos[2].y);
-//      normal.z= dducz * (ptos[0].z + ptos[1].z + ptos[2].z);
-//
-//      ptosNormal.push_back(curve);
-//      ptosNormal.push_back(normal);
+      //Derivada primera - Tangente
+      //Bases cuadraticas
+      Bn1Squared= ( uSquared - 2 * u + 1)/2;
+      B0Squared= ( -2 * uSquared + 2 * u + 1 )/2;
+      B1Squared= ( uSquared )/2;
+
+      deltab0x= ptos[1].x - ptos[0].x;
+      deltab1x= ptos[2].x - ptos[1].x;
+      deltab2x= ptos[3].x - ptos[2].x;
+      deltab0y= ptos[1].y - ptos[0].y;
+      deltab1y= ptos[2].y - ptos[1].y;
+      deltab2y= ptos[3].y - ptos[2].y;
+      deltab0z= ptos[1].z - ptos[0].z;
+      deltab1z= ptos[2].z - ptos[1].z;
+      deltab2z= ptos[3].z - ptos[2].z;
+
+      ducx= 6 * ((deltab0x * Bn1Squared) + (deltab1x * B0Squared) + (deltab2x * B1Squared));
+      ducy= 6 * ((deltab0y * Bn1Squared) + (deltab1y * B0Squared) + (deltab2y * B1Squared));
+      ducz= 6 * ((deltab0z * Bn1Squared) + (deltab1z * B0Squared) + (deltab2z * B1Squared));
+
+      tangent.x= ducx * (ptos[0].x + ptos[1].x + ptos[2].x + ptos[3].x);
+      tangent.y= ducy * (ptos[0].y + ptos[1].y + ptos[2].y + ptos[3].y);
+      tangent.z= ducz * (ptos[0].z + ptos[1].z + ptos[2].z + ptos[3].z);
+      ptosTangente.push_back(curve);
+      ptosTangente.push_back(tangent);
+
+      //Derivada segunda - Normal
+      //Bases lineales
+      B0= 1 - u;
+      B1= u;
+
+      delta2b0x= deltab1x - deltab0x;
+      delta2b1x= deltab2x - deltab1x;
+      delta2b0y= deltab1y - deltab0y;
+      delta2b1y= deltab2y - deltab1y;
+      delta2b0z= deltab1z - deltab0z;
+      delta2b1z= deltab2z - deltab1z;
+
+      dducx= 3 * ((delta2b0x * B0) + (delta2b1x * B1));
+      dducy= 3 * ((delta2b0y * B0) + (delta2b1y * B1));
+      dducz= 3 * ((delta2b0z * B0) + (delta2b1z * B1));
+
+      normal.x= dducx * (ptos[0].x + ptos[1].x + ptos[2].x);
+      normal.y= dducy * (ptos[0].y + ptos[1].y + ptos[2].y);
+      normal.z= dducz * (ptos[0].z + ptos[1].z + ptos[2].z);
+
+      ptosNormal.push_back(curve);
+      ptosNormal.push_back(normal);
     }
   }
 }
