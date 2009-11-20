@@ -452,17 +452,19 @@ void cargarGrillaImagenes(){
 //				}
 //			}
 
-			if (angulos[k]<alfas[k] && animando) {
+			if (angulos[k]<alfas[k]) {
 				angulos[k]++;
 			}
 			if (!modo_curva)
 				angulos[k] = 0;
 
-			std::cout<<"Foto: "<<k<<"   alfa: "<<alfas[k]<<" xn: "<<normales[k].x<<" yn: "<<normales[k].y<<std::endl;
+			std::cout<<"Foto: "<<k<<"  D alfa: "<<alfas[k]-angulos[k]<<" xn: "<<normales[k].x<<" yn: "<<normales[k].y<<std::endl;
 
-			glRotatef(angulos[k],0, 0,1.0);
-			glRotatef(angulo/2,1.0, 0,0);
-			glRotatef(-angulo,0, 0,1.0);
+			//glRotatef(angulos[k],0, 0,1.0);	//acomoda la orientacion segun la curva bezier
+			glRotatef(alfas[k],0, 0,1.0);
+			glRotatef(angulo/2,1.0, 0,0);	//deja las imagenes levantadas
+			glRotatef(-angulo,0, 0,1);
+
 
 			glTranslatef( -(2 *j + j)-1, -(2 * i + i)-1,0);
 
@@ -607,6 +609,15 @@ void display(void)
                       glVertex3f(it->x, it->y, it->z);
                     glEnd();
                   }
+
+                   glColor3f(0.5,0,0.5);
+					  for(it= pNormal.begin(); it != pNormal.end(); it++){
+						  glBegin(GL_LINE_STRIP);
+						glVertex3f(it->x * FACTOR, it->y * FACTOR, altura_curva);
+						it++;
+						glVertex3f(it->x * FACTOR, it->y * FACTOR, altura_curva);
+						glEnd();
+						 }
 		}
 		glEnable(GL_LIGHTING);
 	}
