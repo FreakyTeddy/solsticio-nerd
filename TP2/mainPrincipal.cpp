@@ -422,33 +422,23 @@ void cargarGrillaImagenes(){
 			glPushMatrix();
 
 			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
-//			if (animando) {
-//				Vertice tg = trayectorias[k].ptosTangente.front();
-//				trayectorias[k].ptosTangente.pop_front();
-//				tg.x -= trayectorias[k].ptosTangente.front().x;
-//				tg.y -= trayectorias[k].ptosTangente.front().y;
-//				tg.z -= trayectorias[k].ptosTangente.front().z;
-//				glRotatef(90,tg.x, tg.y,tg.z);
-//			}	NOT REALLY XD
-			//		if(animando) {
-//				Vertice n = trayectorias[k].ptosTangente.front(); //obtengo el punto
-//				trayectorias[k].ptosTangente.pop_front();
-//				n.x -= trayectorias[k].ptosTangente.front().x; //calculo la normal
-//				n.y -= trayectorias[k].ptosTangente.front().y;
-//				n.z -= trayectorias[k].ptosTangente.front().z;
-//				trayectorias[k].ptosTangente.pop_front();
-//getting closer!
-				//calculo angulo a rotar
-				//alfa = tan(n.x / n.y);
-			//	std::cout<<"Foto: "<<k<<"   alfa: "<<alfa<<std::endl;
-
-//			}
-//			glRotatef(angulo/2,0, 0,1.0);//deberia ir xtray e y tray
-//			glRotatef(angulo/2,1.0, 0,0); //las deja levantadas -> temporal
-//			glRotatef(-angulo,0, 0,1.0);
 
 			alfas[k] = -tan(normales[k].x / normales[k].y);
 			alfas[k] = (alfas[k]*180) / 3.1416;
+
+			//correccion segun cuadrante
+//			if (normales[k].y < 0) {
+//				if (normales[k].x < 0)
+//					alfas[k] = 180 - alfas[k];
+//				else
+//					alfas[k] = 180 + alfas[k];
+//			}
+//			else {
+//				if (normales[k].x > 0)
+//					alfas[k] = (-alfas[k]);
+			//}
+
+
 			std::cout<<"Foto: "<<k<<"   alfa: "<<alfas[k]<<" xn: "<<normales[k].x<<" yn: "<<normales[k].y<<std::endl;
 
 			glRotatef(alfas[k],0, 0,1.0);//deberia ir xtray e y tray?? y z??
