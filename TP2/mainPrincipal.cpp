@@ -79,6 +79,7 @@ std::list<Vertice> camino;
 std::vector< std::list<Vertice> > caminos(N, camino);
 Vertice normales[16];
 float alfas[16];
+float angulos[16];
 unsigned int sizeBezier= 0;
 
 
@@ -104,6 +105,9 @@ Vertice posicionFinalCentroImagen(int numFoto) {
 		  normales[numFoto].x -= it->x;
 		  normales[numFoto].y -= it->y;
 		  normales[numFoto].z -= it->z;
+			alfas[numFoto] = normales[numFoto].x / normales[numFoto].y;
+			alfas[numFoto] = (-tan(alfas[numFoto]));
+			alfas[numFoto] = (alfas[numFoto]*180) / 3.1416;
 	  }
 	  else
 		  it++;
@@ -423,27 +427,42 @@ void cargarGrillaImagenes(){
 
 			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
 
-			alfas[k] = -tan(normales[k].x / normales[k].y);
-			alfas[k] = (alfas[k]*180) / 3.1416;
-
 			//correccion segun cuadrante
-//			if (normales[k].y < 0) {
-//				if (normales[k].x < 0)
-//					alfas[k] = 180 - alfas[k];
-//				else
-//					alfas[k] = 180 + alfas[k];
+//			if (normales[k].x < 0){
+//				if (normales[k].y >=0) {
+//					alfas[k] = (tan(normales[k].x / normales[k].y));
+//					alfas[k] = (alfas[k]*180) / 3.1416;
+//				}
+//				else {
+//					alfas[k] = (tan(normales[k].y / normales[k].x));
+//					alfas[k] = (alfas[k]*180) / 3.1416;
+//					alfas[k] =+ 90;
+//				}
 //			}
 //			else {
-//				if (normales[k].x > 0)
-//					alfas[k] = (-alfas[k]);
-			//}
+//				if (normales[k].y <=0) {
+//					alfas[k] = (-tan(normales[k].x / normales[k].y));
+//					alfas[k] = (alfas[k]*180) / 3.1416;
+//					alfas[k] =+ 180;
+//				}
+//				else {
+//					alfas[k] = (tan(normales[k].x / normales[k].y));
+//					alfas[k] = (alfas[k]*180) / 3.1416;
+//					alfas[k] = 90 - alfas[k];
+//				}
+//			}
 
+			if (angulos[k]<alfas[k] && animando) {
+				angulos[k]++;
+			}
+			if (!modo_curva)
+				angulos[k] = 0;
 
 			std::cout<<"Foto: "<<k<<"   alfa: "<<alfas[k]<<" xn: "<<normales[k].x<<" yn: "<<normales[k].y<<std::endl;
 
-			glRotatef(alfas[k],0, 0,1.0);//deberia ir xtray e y tray?? y z??
-			glRotatef(90,1.0, 0,0); //las deja levantadas -> temporal
-			glRotatef(-180,0, 0,1.0);
+			glRotatef(angulos[k],0, 0,1.0);
+			glRotatef(angulo/2,1.0, 0,0);
+			glRotatef(-angulo,0, 0,1.0);
 
 			glTranslatef( -(2 *j + j)-1, -(2 * i + i)-1,0);
 
@@ -645,7 +664,7 @@ void keyboard (unsigned char key, int x, int y) {
       if(!animando) {
         //Si hay curva en el editor,
         //y hay por lo menos 4 ptos de control
-        if(!pControl.empty() && pControl.size() > 3) {
+        if(pControl.size() > 3) {
           view_trayectories= true;
           moviendoImagenes= !moviendoImagenes;
           camaraArriba= !camaraArriba;
@@ -659,6 +678,7 @@ void keyboard (unsigned char key, int x, int y) {
         pControl.clear();
         curva_editada.clear();
         view_trayectories= false;
+        glutPostRedisplay();
         //Las imagenes vuelven a la grilla
         if(imagenesArriba)
           imagenesArriba= false;
