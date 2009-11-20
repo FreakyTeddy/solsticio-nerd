@@ -77,7 +77,8 @@ Trayectoria trayectoria;
 std::vector<Trayectoria> trayectorias(N, trayectoria);
 std::list<Vertice> camino;
 std::vector< std::list<Vertice> > caminos(N, camino);
-Vertice tangentes[16];
+Vertice normales[16];
+float alfas[16];
 unsigned int sizeBezier= 0;
 
 
@@ -91,18 +92,22 @@ Vertice posicionFinalCentroImagen(int numFoto) {
   int distancia= (espacioXQuad*numFoto) + espacioInicial + 1;
   last = (distancias.lower_bound(distancia)->second);
 
-  //aca lo que quiero hacer es obtener el vector tangente a la curva en la posicion final
-  std::list<Vertice>::iterator it = trayectorias[numFoto].ptosTangente.begin();
+  //aca lo que quiero hacer es obtener el vector normal a la curva en la posicion final
+  std::list<Vertice>::iterator it = pNormal.begin();
   bool encontrado = false;
-  while (!encontrado && it !=trayectorias[numFoto].ptosTangente.end() ) {
+  while (!encontrado && it !=pNormal.end() ) {
 	  if (last == (*it)) {
 		  std::cout<<"found"<<std::endl;
 		  encontrado = true;
-		  it++; //tg
-		  tangentes[numFoto] = *it;
+		  normales[numFoto] = *it;
+		  it++; //n
+		  normales[numFoto].x -= it->x;
+		  normales[numFoto].y -= it->y;
+		  normales[numFoto].z -= it->z;
 	  }
+	  else
+		  it++;
 	  std::cout<<"it"<<std::endl;
-	  it++;
 	  it++;
   }
 
@@ -415,11 +420,41 @@ void cargarGrillaImagenes(){
              	          generarMatriz(k, vInicial);
 			}
 			glPushMatrix();
-			std::cout <<k<<": "<< tangentes[k].x << " "<<tangentes[k].y<<" "<<tangentes[k].z<<std::endl;
-			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
 
-			glRotatef(angulo/2,1.0, 0,0); //las deja levantadas
-			glRotatef(-angulo,0, 0,1.0);
+			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
+//			if (animando) {
+//				Vertice tg = trayectorias[k].ptosTangente.front();
+//				trayectorias[k].ptosTangente.pop_front();
+//				tg.x -= trayectorias[k].ptosTangente.front().x;
+//				tg.y -= trayectorias[k].ptosTangente.front().y;
+//				tg.z -= trayectorias[k].ptosTangente.front().z;
+//				glRotatef(90,tg.x, tg.y,tg.z);
+//			}	NOT REALLY XD
+			//		if(animando) {
+//				Vertice n = trayectorias[k].ptosTangente.front(); //obtengo el punto
+//				trayectorias[k].ptosTangente.pop_front();
+//				n.x -= trayectorias[k].ptosTangente.front().x; //calculo la normal
+//				n.y -= trayectorias[k].ptosTangente.front().y;
+//				n.z -= trayectorias[k].ptosTangente.front().z;
+//				trayectorias[k].ptosTangente.pop_front();
+//getting closer!
+				//calculo angulo a rotar
+				//alfa = tan(n.x / n.y);
+			//	std::cout<<"Foto: "<<k<<"   alfa: "<<alfa<<std::endl;
+
+//			}
+//			glRotatef(angulo/2,0, 0,1.0);//deberia ir xtray e y tray
+//			glRotatef(angulo/2,1.0, 0,0); //las deja levantadas -> temporal
+//			glRotatef(-angulo,0, 0,1.0);
+
+			alfas[k] = -tan(normales[k].x / normales[k].y);
+			alfas[k] = (alfas[k]*180) / 3.1416;
+			std::cout<<"Foto: "<<k<<"   alfa: "<<alfas[k]<<" xn: "<<normales[k].x<<" yn: "<<normales[k].y<<std::endl;
+
+			glRotatef(alfas[k],0, 0,1.0);//deberia ir xtray e y tray?? y z??
+			glRotatef(90,1.0, 0,0); //las deja levantadas -> temporal
+			glRotatef(-180,0, 0,1.0);
+
 			glTranslatef( -(2 *j + j)-1, -(2 * i + i)-1,0);
 
 			glBegin(GL_QUADS);
