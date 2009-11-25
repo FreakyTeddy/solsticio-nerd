@@ -98,7 +98,6 @@ Vertice posicionFinalCentroImagen(int numFoto) {
   bool encontrado = false;
   while (!encontrado && it !=pNormal.end() ) {
 	  if (last == (*it)) {
-		  std::cout<<"found"<<std::endl;
 		  encontrado = true;
 		  normales[numFoto] = *it;
 		  it++; //n
@@ -106,12 +105,15 @@ Vertice posicionFinalCentroImagen(int numFoto) {
 		  normales[numFoto].y -= it->y;
 		  normales[numFoto].z -= it->z;
 			alfas[numFoto] = normales[numFoto].x / normales[numFoto].y;
-			alfas[numFoto] = (-tan(alfas[numFoto]));
-			alfas[numFoto] = (alfas[numFoto]*180) / 3.1416;
+			alfas[numFoto] = (-atan(alfas[numFoto]));
+			alfas[numFoto] = (alfas[numFoto]*180.0) / 3.1416;
+			std::cout<<numFoto<<"	ny = "<<normales[numFoto].y<<"	nx = "<<normales[numFoto].x;
+			if (normales[numFoto].y < 0)
+				alfas[numFoto] = 180 + alfas[numFoto]; //correccion por cuadrante
+			std::cout<<"	angulo: "<<alfas[numFoto]<<std::endl;
 	  }
 	  else
 		  it++;
-	  std::cout<<"it"<<std::endl;
 	  it++;
   }
 
@@ -427,38 +429,11 @@ void cargarGrillaImagenes(){
 
 			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
 
-			//correccion segun cuadrante
-//			if (normales[k].x < 0){
-//				if (normales[k].y >=0) {
-//					alfas[k] = (tan(normales[k].x / normales[k].y));
-//					alfas[k] = (alfas[k]*180) / 3.1416;
-//				}
-//				else {
-//					alfas[k] = (tan(normales[k].y / normales[k].x));
-//					alfas[k] = (alfas[k]*180) / 3.1416;
-//					alfas[k] =+ 90;
-//				}
-//			}
-//			else {
-//				if (normales[k].y <=0) {
-//					alfas[k] = (-tan(normales[k].x / normales[k].y));
-//					alfas[k] = (alfas[k]*180) / 3.1416;
-//					alfas[k] =+ 180;
-//				}
-//				else {
-//					alfas[k] = (tan(normales[k].x / normales[k].y));
-//					alfas[k] = (alfas[k]*180) / 3.1416;
-//					alfas[k] = 90 - alfas[k];
-//				}
-//			}
-
 			if (angulos[k]<alfas[k]) {
-				angulos[k]++;
+				angulos[k] += alfas[k]/caminos[k].size();
 			}
 			if (!modo_curva)
 				angulos[k] = 0;
-
-			std::cout<<"Foto: "<<k<<"  D alfa: "<<alfas[k]-angulos[k]<<" xn: "<<normales[k].x<<" yn: "<<normales[k].y<<std::endl;
 
 			//glRotatef(angulos[k],0, 0,1.0);	//acomoda la orientacion segun la curva bezier
 			glRotatef(alfas[k],0, 0,1.0);
@@ -609,9 +584,10 @@ void display(void)
                       glVertex3f(it->x, it->y, it->z);
                     glEnd();
                   }
-
-                   glColor3f(0.5,0,0.5);
-					  for(it= pNormal.begin(); it != pNormal.end(); it++){
+                   int i;
+                   int size = pNormal.size();
+                   	  for(i = 0, it= pNormal.begin(); it != pNormal.end(); it++, i++){
+                   		  glColor3f(0.5,(float)i/size, 1-((float)i/size));
 						  glBegin(GL_LINE_STRIP);
 						glVertex3f(it->x * FACTOR, it->y * FACTOR, altura_curva);
 						it++;
