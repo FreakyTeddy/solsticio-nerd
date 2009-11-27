@@ -433,7 +433,7 @@ void cargarGrillaImagenes(){
                         vInicial.z= 0;
 
                         //Aplico transformaciones si se esta animando
-			if(moviendoImagenes || imagenesArriba) {
+			if((moviendoImagenes || imagenesArriba) && modo_curva) {
                           glPushMatrix();
              	          generarMatriz(k, vInicial);
 			}
@@ -483,7 +483,7 @@ void cargarGrillaImagenes(){
 			glPopMatrix();
 
 			//Aplico transformaciones si se esta animando
-			if(moviendoImagenes || imagenesArriba)
+			if((moviendoImagenes || imagenesArriba) && modo_curva)
 			  glPopMatrix();
 
 			//Si hay una nueva curva final recalculo las trayectorias
@@ -543,7 +543,8 @@ void display(void)
 		  distancias.clear();
                   curva.BezierCubica(pControl, curva_editada, pNormal, distancias, FACTOR);
                   longBezier= curva.getLongitudBezier();
-                  nuevaCurvaEditor= true;
+                  if (!modo_curva)
+                	  nuevaCurvaEditor= true;
 		}
 
 		glBegin(GL_LINE_STRIP);
@@ -662,6 +663,10 @@ void keyboard (unsigned char key, int x, int y) {
           view_trayectories= true;
           moviendoImagenes= !moviendoImagenes;
           camaraArriba= !camaraArriba;
+          nuevaCurvaEditor = true;
+          for (int i=0; i<16; i++)
+          	alfas[i] = 0;
+          angulo = 0; //°°°°°°°
           animar();
 	}
       }
@@ -719,8 +724,10 @@ void mouse(int button, int state, int x, int y) {
 				if ( y < y0 && y > y1) {
 
 					mouseDown = false; //lo deshabilito para que no rote
-					pControl.push_back(v);	//agrego el vertice normalizado
-					glutPostRedisplay();
+					if ( !animando){
+						pControl.push_back(v);	//agrego el vertice normalizado
+						glutPostRedisplay();
+					}
 				}
 			}
 		}
