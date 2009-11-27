@@ -101,9 +101,9 @@ Vertice posicionFinalCentroImagen(int numFoto) {
 		  encontrado = true;
 		  normales[numFoto] = *it;
 		  it++; //n
-		  normales[numFoto].x -= it->x;
-		  normales[numFoto].y -= it->y;
-		  normales[numFoto].z -= it->z;
+		  normales[numFoto].x = it->x;
+		  normales[numFoto].y = it->y;
+		  normales[numFoto].z = it->z;
 			alfas[numFoto] = normales[numFoto].x / normales[numFoto].y;
 			alfas[numFoto] = (-atan(alfas[numFoto]));
 			alfas[numFoto] = (alfas[numFoto]*180.0) / 3.1416;
@@ -584,17 +584,7 @@ void display(void)
                       glVertex3f(it->x, it->y, it->z);
                     glEnd();
                   }
-                   int i;
-                   int size = pNormal.size();
-                   	  for(i = 0, it= pNormal.begin(); it != pNormal.end(); it++, i++){
-                   		  glColor3f(0.5,(float)i/size, 1-((float)i/size));
-						  glBegin(GL_LINE_STRIP);
-						glVertex3f(it->x * FACTOR, it->y * FACTOR, altura_curva);
-						it++;
-						glVertex3f(it->x * FACTOR, it->y * FACTOR, altura_curva);
-						glEnd();
-						 }
-		}
+ 		}
 		glEnable(GL_LIGHTING);
 	}
 			//dibujar imagenes

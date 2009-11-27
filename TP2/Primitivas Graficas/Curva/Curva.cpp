@@ -123,28 +123,28 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
       ptosTangente.push_back(result);
       ptosTangente.push_back(tangent);
 
-      //Derivada segunda - Normal
-      //Polinomios de Bernstein lineal
-      c0= 1 - u;
-      c1= u;
-
-      delta2b0x= deltab1x - deltab0x;
-      delta2b1x= deltab2x - deltab1x;
-      delta2b0y= deltab1y - deltab0y;
-      delta2b1y= deltab2y - deltab1y;
-      delta2b0z= deltab1z - deltab0z;
-      delta2b1z= deltab2z - deltab1z;
-
-      dducx= 3 * ((delta2b0x * c0) + (delta2b1x * c1));
-      dducy= 3 * ((delta2b0y * c0) + (delta2b1y * c1));
-      dducz= 3 * ((delta2b0z * c0) + (delta2b1z * c1));
-
-      normal.x= dducx * (ptos[0].x + ptos[1].x + ptos[2].x);
-      normal.y= dducy * (ptos[0].y + ptos[1].y + ptos[2].y);
-      normal.z= dducz * (ptos[0].z + ptos[1].z + ptos[2].z);
-
-      ptosNormal.push_back(result);
-      ptosNormal.push_back(normal);
+//      //Derivada segunda - Normal
+//      //Polinomios de Bernstein lineal
+//      c0= 1 - u;
+//      c1= u;
+//
+//      delta2b0x= deltab1x - deltab0x;
+//      delta2b1x= deltab2x - deltab1x;
+//      delta2b0y= deltab1y - deltab0y;
+//      delta2b1y= deltab2y - deltab1y;
+//      delta2b0z= deltab1z - deltab0z;
+//      delta2b1z= deltab2z - deltab1z;
+//
+//      dducx= 3 * ((delta2b0x * c0) + (delta2b1x * c1));
+//      dducy= 3 * ((delta2b0y * c0) + (delta2b1y * c1));
+//      dducz= 3 * ((delta2b0z * c0) + (delta2b1z * c1));
+//
+//      normal.x= dducx * (ptos[0].x + ptos[1].x + ptos[2].x);
+//      normal.y= dducy * (ptos[0].y + ptos[1].y + ptos[2].y);
+//      normal.z= dducz * (ptos[0].z + ptos[1].z + ptos[2].z);
+//
+//      ptosNormal.push_back(result);
+//      ptosNormal.push_back(normal);
 
       if(!begin) {
         longitudBezier+= sqrtf(powf(result.x-last.x, 2) + powf(result.y-last.y, 2));
@@ -155,7 +155,66 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
       //acumulo para calcular la diferencia
       last= result;
     }
-  }  
+  } //fin while
+
+  if (ptosCurva.size() > 2) {
+	  ptosNormal.clear();
+	  std::list<Vertice>::iterator prev = ptosCurva.begin();
+	  std::list<Vertice>::iterator it = ptosCurva.begin();
+	  std::list<Vertice>::iterator next = ptosCurva.begin();
+	  Vertice v;
+	  //primer punto
+	  next++;
+	  //resta (next - prev)
+	  v.x = next->x - prev->x;
+	  v.y = next->y - prev->y;
+
+	  // z x resta -->producto vectorial VER casos especiales :P
+	  float aux = 0 - v.y;
+	  v.y = v.x;
+	  v.x = aux;
+
+	  //push it, push normal
+	  ptosNormal.push_back(*it);
+	  ptosNormal.push_back(v);
+
+	  //caso general
+	  do {
+		  next++;
+		  it++;
+
+		  //resta (next - prev)
+		  v.x = next->x - prev->x;
+		  v.y = next->y - prev->y;
+
+		  // z x resta -->producto vectorial
+		  aux = 0 - v.y;
+		  v.y = v.x;
+		  v.x = aux;
+
+		  //push it, push normal
+		  ptosNormal.push_back(*it);
+		  ptosNormal.push_back(v);
+
+		  prev++;
+	  } while (next != ptosCurva.end());
+
+	  //ultimo punto
+	  it++;
+
+	  //resta (next - prev)
+	  v.x = next->x - prev->x;
+	  v.y = next->y - prev->y;
+
+	  // z x resta -->producto vectorial
+	  aux = 0 - v.y;
+	  v.y = v.x;
+	  v.x = aux;
+
+	  //push it, push normal
+	  ptosNormal.push_back(*it);
+	  ptosNormal.push_back(v);
+  }
 }
 
 void Curva::modificarFactorBezier(int cantidad) {
