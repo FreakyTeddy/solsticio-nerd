@@ -38,7 +38,6 @@ bool nuevaCurvaEditor = false;
 bool moviendoImagenes = false;          //indica si se estan moviendo las imagenes
 bool camaraArriba = false;
 bool imagenesArriba = false;          //indica si se estan moviendo las imagenes
-int angulo = 0;
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -79,8 +78,9 @@ std::list<Vertice> camino;
 std::vector< std::list<Vertice> > caminos(N, camino);
 Vertice normales[16];
 float alfas[16];
-float angulos[16];
 unsigned int sizeBezier= 0;
+int angulo = 0;
+std::list<Vertice> spline_normales[16];
 
 
 Vertice posicionFinalCentroImagen(int numFoto) {
@@ -104,13 +104,26 @@ Vertice posicionFinalCentroImagen(int numFoto) {
 		  normales[numFoto].x = it->x;
 		  normales[numFoto].y = it->y;
 		  normales[numFoto].z = it->z;
-			alfas[numFoto] = normales[numFoto].x / normales[numFoto].y;
-			alfas[numFoto] = (-atan(alfas[numFoto]));
-			alfas[numFoto] = (alfas[numFoto]*180.0) / 3.1416;
-			std::cout<<numFoto<<"	ny = "<<normales[numFoto].y<<"	nx = "<<normales[numFoto].x;
-			if (normales[numFoto].y < 0)
-				alfas[numFoto] = 180 + alfas[numFoto]; //correccion por cuadrante
-			std::cout<<"	angulo: "<<alfas[numFoto]<<std::endl;
+
+		  //creo la curva bspline de normales
+		  std::list<Vertice> ctrolNormal;
+		  Vertice v;
+		  v.x = 0;
+		  v.y = 1;
+		  v.z = 0;
+		  ctrolNormal.push_back(v);
+		  ctrolNormal.push_back(v);
+		  ctrolNormal.push_back(v);
+		  v.x = normales[numFoto].x + normales[numFoto].y;
+		  v.y = normales[numFoto].x + normales[numFoto].y;
+		  ctrolNormal.push_back(v);
+		  v.x = normales[numFoto].x;
+		  v.y = normales[numFoto].y;
+		  ctrolNormal.push_back(v);
+		  ctrolNormal.push_back(v);
+		  ctrolNormal.push_back(v);
+		  spline_normales[numFoto].clear();
+		  curva.Bspline(ctrolNormal, spline_normales[numFoto]);
 	  }
 	  else
 		  it++;
@@ -229,10 +242,8 @@ void generarTrayectoria(int numFoto, Vertice vInicial) {
   ptosControl.push_back(v);
 
   trayectorias[numFoto].ptosTrayectoria.clear();
-  trayectorias[numFoto].ptosTangente.clear();
-  trayectorias[numFoto].ptosNormal.clear();
   caminos[numFoto].clear();
-  curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria, trayectorias[numFoto].ptosTangente, trayectorias[numFoto].ptosNormal);
+  curva.Bspline(ptosControl, trayectorias[numFoto].ptosTrayectoria);
   caminos[numFoto]= trayectorias[numFoto].ptosTrayectoria;
 }
 
@@ -248,11 +259,12 @@ void moverCam(int n) {
     glutPostRedisplay();
     glutTimerFunc(50,moverCam,0);	//llamo al timer para que actualice la pos de la cam
     if (angulo < 180 && camaraArriba)
-    	angulo++;
+        angulo++;
   }
   else {
     animando = false;
   }
+
 }
 
 void animar() {
@@ -306,7 +318,7 @@ void animar() {
 	puntos.push_back(v);
 	puntos.push_back(v);
 
-	curva.Bspline(puntos,curva_cam,tg,norm);
+	curva.Bspline(puntos,curva_cam);
 	moverCam(0);
 	modo_curva = !modo_curva;
 }
@@ -429,17 +441,22 @@ void cargarGrillaImagenes(){
 
 			glTranslatef( 2 *j + j+1, 2 * i + i+1,0);
 
-			if (angulos[k]<alfas[k]) {
-				angulos[k] += alfas[k]/caminos[k].size();
+			if (!spline_normales[k].empty() && camaraArriba) {
+				//calculo del angulo de rotacion en z respecto del 0,1,0
+				Vertice n = spline_normales[k].front();
+				spline_normales[k].pop_front();
+				alfas[k] = n.x / n.y;
+				alfas[k] = (-atan(alfas[k]));
+				alfas[k] = (alfas[k]*180.0) / 3.1416;
+				if (n.y < 0)
+					alfas[k] = 180 + alfas[k]; //correccion por cuadrante
 			}
-			if (!modo_curva)
-				angulos[k] = 0;
 
-			//glRotatef(angulos[k],0, 0,1.0);	//acomoda la orientacion segun la curva bezier
+			//rota la imagen respecto del eje z
 			glRotatef(alfas[k],0, 0,1.0);
-			glRotatef(angulo/2,1.0, 0,0);	//deja las imagenes levantadas
+			//orienta la curva normal al eje y
+			glRotatef(angulo/2,1.0, 0,0);
 			glRotatef(-angulo,0, 0,1);
-
 
 			glTranslatef( -(2 *j + j)-1, -(2 * i + i)-1,0);
 
@@ -524,7 +541,7 @@ void display(void)
 		  pTangente.clear();
 		  pNormal.clear();
 		  distancias.clear();
-                  curva.BezierCubica(pControl, curva_editada, pTangente, pNormal, distancias, FACTOR);
+                  curva.BezierCubica(pControl, curva_editada, pNormal, distancias, FACTOR);
                   longBezier= curva.getLongitudBezier();
                   nuevaCurvaEditor= true;
 		}
@@ -655,6 +672,8 @@ void keyboard (unsigned char key, int x, int y) {
         pControl.clear();
         curva_editada.clear();
         view_trayectories= false;
+        for (int i=0; i<16; i++)
+        	alfas[i] = 0;
         glutPostRedisplay();
         //Las imagenes vuelven a la grilla
         if(imagenesArriba)

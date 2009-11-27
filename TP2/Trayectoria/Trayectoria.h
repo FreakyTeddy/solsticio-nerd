@@ -5,10 +5,8 @@ class Trayectoria {
 
 public:
   std::list<Vertice> ptosTrayectoria;
-  std::list<Vertice> ptosTangente;
-  std::list<Vertice> ptosNormal;
 
-  Trayectoria(): ptosTrayectoria(), ptosTangente(), ptosNormal() {};
+  Trayectoria(): ptosTrayectoria(){};
 };
 
 #endif /* TRAYECTORIA_H_ */
