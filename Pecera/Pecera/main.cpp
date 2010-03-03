@@ -25,6 +25,7 @@ bool view_grid = true;
 bool view_axis = true;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
+bool luz = true;
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -34,14 +35,6 @@ GLuint dl_handle;
 
 // Tamaño de la ventana
 GLfloat window_size[2];
-#define W_WIDTH window_size[0]
-#define W_HEIGHT window_size[1]
-
-int TOP_VIEW_POSX = ((int)((float)W_WIDTH*0.60f)) -10;
-int TOP_VIEW_W = ((int)((float)W_WIDTH*0.40f));
-int TOP_VIEW_POSY = ((int)((float)W_HEIGHT*0.60f)) -10;
-int TOP_VIEW_H = ((int)((float)W_HEIGHT*0.40f));
-
 
 void OnIdle (void)
 {}
@@ -84,10 +77,10 @@ void DrawXYGrid() {
 }
 
 void Set3DEnv() {
-  glViewport (0, 0, (GLsizei) W_WIDTH, (GLsizei) W_HEIGHT);
+  glViewport (0, 0, (GLsizei) window_size[0], (GLsizei) window_size[1]);
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
-  gluPerspective(60.0, (GLfloat) W_WIDTH/(GLfloat) W_HEIGHT, 0.10, 100.0);
+  gluPerspective(60.0, (GLfloat) window_size[0]/(GLfloat) window_size[1], 0.10, 100.0);
 }
 
 void init(void) {
@@ -124,17 +117,28 @@ void display(void)
 	glLoadIdentity();
 	gluLookAt (eye[0]/zoom, eye[1]/zoom, eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
 
+
+
 	glPushMatrix();
 	glTranslatef(tras[0],tras[1], tras[2]);
 	glRotatef(rotate_cam, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
-
 
 	if (view_axis)
 		 glCallList(DL_AXIS);
 	if (view_grid)
 		 glCallList(DL_GRID);
 
+	if (!luz)
+		glDisable(GL_LIGHTING);
+
+	glColor3f (1.0, 1.0, 0.5);
+	glutWireSphere(0.9, 20, 16);
+
+	if (!luz)
+		glEnable(GL_LIGHTING);
+
 	glPopMatrix();
+
 	//
 	///////////////////////////////////////////////////
 
@@ -143,13 +147,8 @@ void display(void)
 
 void reshape (int w, int h)
 {
-   	W_WIDTH  = w;
-	W_HEIGHT = h;
-
-	TOP_VIEW_POSX = ((int)((float)W_WIDTH*0.60f)) -10;
-	TOP_VIEW_W = ((int)((float)W_WIDTH*0.40f));
-	TOP_VIEW_POSY = ((int)((float)W_HEIGHT*0.60f)) -10;
-	TOP_VIEW_H = ((int)((float)W_HEIGHT*0.40f));
+   	window_size[0]  = w;
+	window_size[1] = h;
 }
 
 void keyboard (unsigned char key, int x, int y) {
@@ -158,12 +157,16 @@ void keyboard (unsigned char key, int x, int y) {
       exit(0);
       break;
 	case 0x2B:  // '+'
-		tras[2] += 1.0;
+		tras[2] -= 1.0;
 		glutPostRedisplay();
 		break;
 	case 0x2D:  // '-'
-		tras[2] -= 1.0;
+		tras[2] += 1.0;
 		glutPostRedisplay();
+		break;
+	case 'l':
+	case 'L':
+		luz=!luz;
 		break;
 //    case 'g':
 //      view_grid = !view_grid;
