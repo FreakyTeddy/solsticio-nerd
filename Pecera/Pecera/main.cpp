@@ -9,9 +9,12 @@ float up[3]  = { 0.0,  0.0, 1.0};	//vector normal
 int tras[3] = {0 , 0 ,0 };
 
 // Variables asociadas a única fuente de luz de la escena
-float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+float light_color[4] = {1.0f, 0.50f, 0.0f, 1.0f};
 float light_position[3] = {10.0f, 10.0f, 8.0f};
-float light_ambient[4] = {0.05f, 0.05f, 0.05f, 1.0f};
+float light_ambient[4] = {1.0f, 0.90f, 0.0f, 1.0f};
+
+GLfloat mat_specular[] = { 1.0, 0.50, 0.0,0.70 };//material de la esfera
+GLfloat mat_shininess[] = { 50.0 };
 
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
 float rotate_cam = 0;
@@ -26,6 +29,7 @@ bool view_axis = true;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
 bool luz = true;
+bool blend = true;
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -77,23 +81,41 @@ void DrawXYGrid() {
 }
 
 void Set3DEnv() {
-  glViewport (0, 0, (GLsizei) window_size[0], (GLsizei) window_size[1]);
-  glMatrixMode (GL_PROJECTION);
-  glLoadIdentity ();
-  gluPerspective(60.0, (GLfloat) window_size[0]/(GLfloat) window_size[1], 0.10, 100.0);
+	glViewport (0, 0, (GLsizei) window_size[0], (GLsizei) window_size[1]);
+	glMatrixMode (GL_PROJECTION);
+	glLoadIdentity ();
+	gluPerspective(60.0, (GLfloat) window_size[0]/(GLfloat) window_size[1], 0.10, 100.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt (eye[0]/zoom, eye[1]/zoom, eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
+
 }
 
 void init(void) {
   dl_handle = glGenLists(3);
 
-  glClearColor (0.02, 0.02, 0.04, 0.0);
+  //glClearColor (0.02, 0.02, 0.04, 0.0);
+  glClearColor (0, 0.05, 0.10, 0.0);
   glShadeModel (GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
+  glEnable(GL_BLEND);
+
+  glEnable(GL_FOG);
+    {
+       GLfloat fogColor[4] = {0.05, 0.05, 0.1, 1.0};//{0.05, 0.25, 0.55, 1.0};
+
+       glFogi (GL_FOG_MODE, GL_EXP2);
+       glFogfv (GL_FOG_COLOR, fogColor);
+       glFogf (GL_FOG_DENSITY, 0.02);
+       glHint (GL_FOG_HINT, GL_DONT_CARE);
+       glFogf (GL_FOG_START, 1.0);
+       glFogf (GL_FOG_END, 5.0);
+    }
+
 
   // Generación de las Display Lists
   glNewList(DL_AXIS, GL_COMPILE);
@@ -102,46 +124,52 @@ void init(void) {
   glNewList(DL_GRID, GL_COMPILE);
   DrawXYGrid();
   glEndList();
+
 }
 
 
 void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Set3DEnv();
 
 	///////////////////////////////////////////////////
 	// Escena 3D
-	Set3DEnv();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt (eye[0]/zoom, eye[1]/zoom, eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
-
-
 
 	glPushMatrix();
 	glTranslatef(tras[0],tras[1], tras[2]);
 	glRotatef(rotate_cam, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
+
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
+
+	if (!luz)
+		glDisable(GL_LIGHT0);
 
 	if (view_axis)
 		 glCallList(DL_AXIS);
 	if (view_grid)
 		 glCallList(DL_GRID);
 
-	if (!luz)
-		glDisable(GL_LIGHTING);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE);	//transparencia
 
-	glColor3f (1.0, 1.0, 0.5);
-	glutWireSphere(0.9, 20, 16);
+    if (!blend)
+    		glDisable(GL_BLEND);
 
+    glutSolidSphere (1.0, 20, 16);
+    //glutWireSphere(0.9, 20, 16);
+
+    if (!blend)
+		glEnable(GL_BLEND);
 	if (!luz)
-		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+
 
 	glPopMatrix();
 
 	//
 	///////////////////////////////////////////////////
-
 	glutSwapBuffers();
 }
 
@@ -153,7 +181,7 @@ void reshape (int w, int h)
 
 void keyboard (unsigned char key, int x, int y) {
   switch (key) {
-    case 0x1b:
+    case 0x1b: //ESC
       exit(0);
       break;
 	case 0x2B:  // '+'
@@ -167,15 +195,23 @@ void keyboard (unsigned char key, int x, int y) {
 	case 'l':
 	case 'L':
 		luz=!luz;
+		glutPostRedisplay();
 		break;
-//    case 'g':
-//      view_grid = !view_grid;
-//      glutPostRedisplay();
-//      break;
-//    case 'a':
-//      view_axis = !view_axis;
-//      glutPostRedisplay();
-//      break;
+	case 'b':
+	case 'B':
+		blend=!blend;
+		glutPostRedisplay();
+		break;
+    case 'g':
+    case 'G':
+      view_grid = !view_grid;
+      glutPostRedisplay();
+      break;
+    case 'a':
+    case 'A':
+      view_axis = !view_axis;
+      glutPostRedisplay();
+      break;
      default:
       break;
   }
