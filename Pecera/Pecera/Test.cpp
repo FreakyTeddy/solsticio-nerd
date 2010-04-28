@@ -1,5 +1,9 @@
 #include <GL/glut.h>
 #include <stdlib.h>
+#include "Primitivas/Curva/Curva.h"
+
+
+std::list<Vertice> vertices;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
@@ -125,6 +129,36 @@ void init(void) {
   DrawXYGrid();
   glEndList();
 
+  std::list<Vertice> v;
+  Vertice q;
+  q.x = 1;
+  q.y = 1;
+  q.z = 3;
+  v.push_front(q);
+  v.push_front(q);
+  v.push_front(q);
+
+  q.x = 1.5;
+  q.y = 1.5;
+  q.z = 3.8;
+  v.push_front(q);
+
+  q.x = 3.5;
+  q.y = 2.0;
+  q.z = 0.5;
+  v.push_front(q);
+
+  q.x = 4.0;
+  q.y = 3.0;
+  q.z = 1.0;
+  v.push_front(q);
+  v.push_front(q);
+  v.push_front(q);
+
+  Curva curva;
+  curva.Bspline(v, vertices);
+
+
 }
 
 
@@ -157,9 +191,22 @@ void display(void)
     if (!blend)
     		glDisable(GL_BLEND);
 
-    glutSolidSphere (1.0, 20, 16);
-    //glutWireSphere(0.9, 20, 16);
+    ///////////////////////////// dibujar ////////////////////////
 
+    glColor3f(1,0.5,0.5);
+
+    glBegin(GL_LINE_STRIP);
+
+		std::list<Vertice>::iterator it;
+		for (it = vertices.begin(); it != vertices.end(); it++){
+			glVertex3f(it->x,it->y,it->z);
+		}
+
+    glEnd();
+
+
+
+    /////////////////////////// fin dibujar =P /////////////////////
     if (!blend)
 		glEnable(GL_BLEND);
 	if (!luz)
