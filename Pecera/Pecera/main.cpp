@@ -1,20 +1,23 @@
 #include <GL/glut.h>
 #include <stdlib.h>
+#include <cstdlib>
+#include <ctime>
+
+#include "Objetos/Burbuja.h"
+Burbuja* bubble1;
+Burbuja* bubble2;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
 float eye[3] = {0.0, 20.0, EYE_Z};	//camara
 float at[3]  = { 0.0,  0.0, EYE_Z};	//centro
 float up[3]  = { 0.0,  0.0, 1.0};	//vector normal
-int tras[3] = {0 , 0 ,0 };
+int tras[3] = {0 , 0 ,0 }; //traslacion de la camara
 
 // Variables asociadas a única fuente de luz de la escena
-float light_color[4] = {1.0f, 0.50f, 0.0f, 1.0f};
+float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 float light_position[3] = {10.0f, 10.0f, 8.0f};
-float light_ambient[4] = {1.0f, 0.90f, 0.0f, 1.0f};
-
-GLfloat mat_specular[] = { 1.0, 0.50, 0.0,0.70 };//material de la esfera
-GLfloat mat_shininess[] = { 50.0 };
+float light_ambient[4] = {0.9f, 0.95f, 1.0f, 1.0f};
 
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
 float rotate_cam = 0;
@@ -24,12 +27,12 @@ int yprev = 0;
 float altura_curva = 6.0;
 
 // Variables de control
-bool view_grid = true;
-bool view_axis = true;
+bool view_grid = false;
+bool view_axis = false;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
 bool luz = true;
-bool blend = false;
+//bool blend = false; testeo de esfera
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -92,6 +95,7 @@ void Set3DEnv() {
 }
 
 void init(void) {
+
   dl_handle = glGenLists(3);
 
   //glClearColor (0.02, 0.02, 0.04, 0.0);
@@ -102,9 +106,9 @@ void init(void) {
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
-  glEnable(GL_BLEND);
+  //glEnable(GL_BLEND); //transparencia
 
-  glEnable(GL_FOG);
+  glEnable(GL_FOG); //niebla
     {
        GLfloat fogColor[4] = {0.05, 0.05, 0.1, 1.0};//{0.05, 0.25, 0.55, 1.0};
 
@@ -150,18 +154,23 @@ void display(void)
 	if (view_grid)
 		 glCallList(DL_GRID);
 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
-    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE);	//transparencia
-
-    if (!blend)
-    		glDisable(GL_BLEND);
-
-    glutSolidSphere (1.0, 20, 16);
+	/* testeo de esfera*/
+//    if (!blend)
+//    		glDisable(GL_BLEND);
+//    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
+//    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+//    glBlendFunc (GL_SRC_ALPHA, GL_ONE);	//transparencia
+//    glutSolidSphere (1.0, 20, 16);
     //glutWireSphere(0.9, 20, 16);
+//    if (!blend)
+//		glEnable(GL_BLEND);
 
-    if (!blend)
-		glEnable(GL_BLEND);
+	/* testeo burbuja */
+	bubble1->dibujar();
+	glTranslatef(5,0,0);
+	bubble2->dibujar();
+	glTranslatef(-5,0,0);
+
 	if (!luz)
 		glEnable(GL_LIGHT0);
 
@@ -199,7 +208,7 @@ void keyboard (unsigned char key, int x, int y) {
 		break;
 	case 'b':
 	case 'B':
-		blend=!blend;
+		//blend=!blend;
 		glutPostRedisplay();
 		break;
     case 'g':
@@ -341,7 +350,10 @@ int main(int argc, char** argv) {
 //  loadDefaulImage(&route[0]);
 //  //cargo las texturas a partir de las rutas
 //  ImageLoad(route);
-
+  srand((unsigned)time(0));
+  Burbuja b1,b2;
+  bubble1 = &b1;
+  bubble2 = &b2;
   init();
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);

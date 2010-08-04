@@ -1,6 +1,8 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include "Primitivas/Curva/Curva.h"
+#include "Camara/Camara.h"
+#include <iostream>
 
 
 std::list<Vertice> vertices;
@@ -193,16 +195,32 @@ void display(void)
 
     ///////////////////////////// dibujar ////////////////////////
 
-    glColor3f(1,0.5,0.5);
+	std::list<Vertice>::iterator it;
 
-    glBegin(GL_LINE_STRIP);
+	for (int i=0; i<100; i++) {
 
-		std::list<Vertice>::iterator it;
-		for (it = vertices.begin(); it != vertices.end(); it++){
-			glVertex3f(it->x,it->y,it->z);
-		}
+    	glPushMatrix();
+    	glRotatef(i*3.6, 0,0,1);
+		glBegin(GL_LINE_STRIP);
+			for (it = vertices.begin(); it != vertices.end(); it++){
+				glVertex3f(it->x,it->y,it->z);
+			}
+		glEnd();
+		glPopMatrix();
+    }
+   // int x=0
 
-    glEnd();
+//	for (it = vertices.begin(); it != vertices.end(); it++){
+//		glPushMatrix();
+//		glBegin(GL_LINE_STRIP);
+//		for(int i=0; i<100;i++){
+//			glVertex3f(it->x* cos(i*3.6),it->y*sin(3.6*i),it->z);
+//		}
+//		glEnd();
+//		glPopMatrix();
+//	} ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> lineas horizontales del alambre?? :S
+
+
 
 
 
