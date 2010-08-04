@@ -6,6 +6,7 @@
 #include "Objetos/Burbuja.h"
 Burbuja* bubble1;
 Burbuja* bubble2;
+std::list<Burbuja*> burbujas;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
@@ -42,6 +43,30 @@ GLuint dl_handle;
 
 // Tamaño de la ventana
 GLfloat window_size[2];
+
+
+bool animando = false;
+
+void animarBurbujas(int n) {
+
+	if (!burbujas.empty()) {
+		animando = true;
+		std::list<Burbuja*>::iterator it;
+		for (it = burbujas.begin(); it != burbujas.end(); it++)
+			(*it)->animar();
+
+		glutPostRedisplay();
+		glutTimerFunc(50,animarBurbujas,0);	//llamo al timer para generar la animacion
+	}
+	else
+		animando = false;
+}
+
+
+
+
+
+
 
 void OnIdle (void)
 {}
@@ -165,15 +190,28 @@ void display(void)
 //    if (!blend)
 //		glEnable(GL_BLEND);
 
-	/* testeo burbuja */
-	bubble1->dibujar();
-	glTranslatef(5,0,0);
-	bubble2->dibujar();
-	glTranslatef(-5,0,0);
-
 	if (!luz)
 		glEnable(GL_LIGHT0);
 
+	if (animando) {
+		Vertice* v;
+		std::list<Burbuja*>::iterator it;
+		for (it = burbujas.begin(); it != burbujas.end(); it++) {
+			v = (*it)->getPos();
+			if (v != NULL) {
+				glPushMatrix();
+					glTranslatef(v->x,v->y,v->z);
+					(*it)->dibujar();
+				glPopMatrix();
+			}
+			else {
+				Burbuja* b = *it;
+				burbujas.erase(it); //y lo saco de la lista de burbujas
+				it--;
+				delete b; //si termino su trayectoria lo elimino
+			}
+		}
+	}
 
 	glPopMatrix();
 
@@ -208,8 +246,10 @@ void keyboard (unsigned char key, int x, int y) {
 		break;
 	case 'b':
 	case 'B':
-		//blend=!blend;
-		glutPostRedisplay();
+		if (!animando) {
+			animarBurbujas(0);
+			glutPostRedisplay();
+		}
 		break;
     case 'g':
     case 'G':
@@ -351,9 +391,10 @@ int main(int argc, char** argv) {
 //  //cargo las texturas a partir de las rutas
 //  ImageLoad(route);
   srand((unsigned)time(0));
-  Burbuja b1,b2;
-  bubble1 = &b1;
-  bubble2 = &b2;
+  bubble1 = new Burbuja(1,2,3);
+  bubble2 = new Burbuja(3,2,1);
+  burbujas.push_back(bubble1);
+  burbujas.push_back(bubble2);
   init();
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
@@ -363,6 +404,8 @@ int main(int argc, char** argv) {
   glutMotionFunc(mouseMotion);
 //  glutIdleFunc(OnIdle);
   glutMainLoop();
+
+
 
   return 0;
 }

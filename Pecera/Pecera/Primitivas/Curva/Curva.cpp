@@ -184,7 +184,7 @@ bool loadBspline(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int f
   return ((size-first) > 3);
 }
 
-void Curva::Bspline(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva) {
+void Curva::Bspline(std::list<Vertice> &ptosControl, std::list<Vertice> &ptosCurva) {
 
   float dt=(float) 1.0 / factorBspline;
 
