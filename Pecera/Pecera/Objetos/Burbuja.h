@@ -3,9 +3,9 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include "../Primitivas/Curva/Curva.h"
-	static const GLfloat mat_specular[] = { 0 ,0.05, 1.0 ,0.40 };//material de la burbuja
-	static const GLfloat mat_shininess[] = { 70.0 };
-	static Curva curva;
+
+
+
 /*
  * Burbuja que sale de los peces?? :P
  */
@@ -14,6 +14,10 @@ class Burbuja {
 
 private:
 
+	static const GLfloat mat_specular[];//material de la burbuja
+	static const GLfloat mat_shininess[];
+	static const GLfloat mat_diffuse[];
+	static Curva curva;
 	float radio; //radio de la burbuja
 	std::list<Vertice> trayectoria;
 

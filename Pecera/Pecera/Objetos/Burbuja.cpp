@@ -2,9 +2,14 @@
 #include <cstdlib>
 #include <iostream>
 
+const GLfloat Burbuja::mat_specular[] = { 1 ,1, 1.0 ,0.40 };
+const GLfloat Burbuja::mat_diffuse[] = { 0.15 ,0.15, 0.60 ,0.70 };
+const GLfloat Burbuja::mat_shininess[] = { 70.0 };
+Curva Burbuja::curva;
+
 Burbuja::Burbuja(float x, float y, float z) {
 	// TODO
-	//ver valores que correspondan y queden lindos :)
+	//ver valores que correspondan y queden lindos (incluye transparencia) :)
 	radio = (float)((rand()%19)+1)/20.0;
 
 	/* trayectoria que seguira la burbuja */
@@ -35,15 +40,12 @@ Burbuja::Burbuja(float x, float y, float z) {
 	curva.Bspline(puntos,trayectoria);
 }
 
-Burbuja::~Burbuja() {
-	// TODO Auto-generated destructor stub
-}
+Burbuja::~Burbuja() {}
 
 void Burbuja::dibujar() {
-//TODO
-
 	glEnable(GL_BLEND);
 	    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	    glBlendFunc (GL_SRC_ALPHA, GL_ONE);	//transparencia
 	    glutSolidSphere (radio, 20, 16);

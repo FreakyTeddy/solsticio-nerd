@@ -4,8 +4,11 @@
 #include "Camara/Camara.h"
 #include <iostream>
 
+GLfloat vertex_buf[] = {0,0,0, 1,0,0, 0,1,0, 1,1,0};
+GLuint index_buf[] = {0,1,2, 1,2,3};
 
-std::list<Vertice> vertices;
+
+std::list<Vertice> vertices;  //flan
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
@@ -23,10 +26,12 @@ GLfloat mat_specular[] = { 1.0, 0.50, 0.0,0.70 };//material de la esfera
 GLfloat mat_shininess[] = { 50.0 };
 
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
-float rotate_cam = 0;
+float rotate_cam_x = 0;
+float rotate_cam_y = 0;
 float zoom = 1;
 int xprev = 0; //posicion anterior del mouse
 int yprev = 0;
+int zprev = 0;
 float altura_curva = 6.0;
 
 // Variables de control
@@ -131,6 +136,12 @@ void init(void) {
   DrawXYGrid();
   glEndList();
 
+		glEnableClientState (GL_INDEX_ARRAY);
+		glEnableClientState (GL_VERTEX_ARRAY);
+		glColor3f(1,0,1);
+		glVertexPointer(3,GL_FLOAT,0,vertex_buf);
+		glIndexPointer(GL_UNSIGNED_INT,0, index_buf);
+
   std::list<Vertice> v;
   Vertice q;
   q.x = 1;
@@ -174,8 +185,8 @@ void display(void)
 
 	glPushMatrix();
 	glTranslatef(tras[0],tras[1], tras[2]);
-	glRotatef(rotate_cam, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
-
+	glRotatef(rotate_cam_x, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
+	glRotatef(rotate_cam_y, 1.0,0,0);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
 
 	if (!luz)
@@ -186,51 +197,34 @@ void display(void)
 	if (view_grid)
 		 glCallList(DL_GRID);
 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
-    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE);	//transparencia
-
-    if (!blend)
-    		glDisable(GL_BLEND);
+//	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
+//    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
     ///////////////////////////// dibujar ////////////////////////
 
-	std::list<Vertice>::iterator it;
-
-	for (int i=0; i<100; i++) {
-
-    	glPushMatrix();
-    	glRotatef(i*3.6, 0,0,1);
-		glBegin(GL_LINE_STRIP);
-			for (it = vertices.begin(); it != vertices.end(); it++){
-				glVertex3f(it->x,it->y,it->z);
-			}
-		glEnd();
-		glPopMatrix();
-    }
-   // int x=0
-
-//	for (it = vertices.begin(); it != vertices.end(); it++){
-//		glPushMatrix();
+//	std::list<Vertice>::iterator it;
+// EL FLAN
+//	for (int i=0; i<100; i++) {
+//
+//    	glPushMatrix();
+//    	glRotatef(i*3.6, 0,0,1);
 //		glBegin(GL_LINE_STRIP);
-//		for(int i=0; i<100;i++){
-//			glVertex3f(it->x* cos(i*3.6),it->y*sin(3.6*i),it->z);
-//		}
+//			for (it = vertices.begin(); it != vertices.end(); it++){
+//				glVertex3f(it->x,it->y,it->z);
+//			}
 //		glEnd();
 //		glPopMatrix();
-//	} ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> lineas horizontales del alambre?? :S
+//    }
 
+    glDrawElements(GL_TRIANGLES, 6, GL_INT, index_buf);
 
 
 
 
     /////////////////////////// fin dibujar =P /////////////////////
-    if (!blend)
-		glEnable(GL_BLEND);
+
 	if (!luz)
 		glEnable(GL_LIGHT0);
-
-
 	glPopMatrix();
 
 	//
@@ -260,11 +254,6 @@ void keyboard (unsigned char key, int x, int y) {
 	case 'l':
 	case 'L':
 		luz=!luz;
-		glutPostRedisplay();
-		break;
-	case 'b':
-	case 'B':
-		blend=!blend;
 		glutPostRedisplay();
 		break;
     case 'g':
@@ -308,40 +297,44 @@ void specialKeys(int key,int x, int y) {
 void mouse(int button, int state, int x, int y) {
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		if(!mouseDown)
+		if(!mouseDown){
 			xprev=x;
+			yprev=y;
+		}
 		mouseDown = true;
 	}
 	else
 		mouseDown = false;
 
 	if(!zoomOn)
-	     yprev=y;
+	     zprev=y;
 	(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) ? zoomOn = true : zoomOn = false;
 }
 
 void mouseMotion(int x, int y) {
 	if (mouseDown) {
-		if (x > xprev){
-		     rotate_cam += 0.3*(x-xprev);
-			if(rotate_cam > 360.0) rotate_cam = 0.0;
-		}
-		else {
-			rotate_cam -=0.3*(xprev-x);
-			if(rotate_cam < -360.0) rotate_cam = 0.0;
-		}
+//		if (x > xprev){
+//		     rotate_cam += 0.3*(x-xprev);
+//			if(rotate_cam > 360.0) rotate_cam = 0.0;
+//		}
+//		else {
+//			rotate_cam -=0.3*(xprev-x);
+//			if(rotate_cam < -360.0) rotate_cam = 0.0;
+//		}
+		rotate_cam_x += (x-xprev);
+		rotate_cam_y += (y-yprev)*0.1;
 		xprev = x;
-		glutPostRedisplay();
-	}
-	if (zoomOn) {
-		if (y > yprev)
-			zoom += 0.001*(yprev-y);
-		else if(y < yprev)
-			zoom -=0.001*(y-yprev);
 		yprev = y;
 		glutPostRedisplay();
 	}
-
+	if (zoomOn) {
+		if (y > zprev)
+			zoom += 0.001*(zprev-y);
+		else if(y < zprev)
+			zoom -=0.001*(y-zprev);
+		zprev = y;
+		glutPostRedisplay();
+	}
 }
 //
 //void ImageLoad(std::string route[]){

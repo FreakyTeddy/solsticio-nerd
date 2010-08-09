@@ -17,7 +17,7 @@ int tras[3] = {0 , 0 ,0 }; //traslacion de la camara
 
 // Variables asociadas a única fuente de luz de la escena
 float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-float light_position[3] = {10.0f, 10.0f, 8.0f};
+float light_position[3] = {10.0f, 10.0f, 48.0f};
 float light_ambient[4] = {0.9f, 0.95f, 1.0f, 1.0f};
 
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
@@ -28,12 +28,11 @@ int yprev = 0;
 float altura_curva = 6.0;
 
 // Variables de control
-bool view_grid = false;
-bool view_axis = false;
+bool view_grid = true;
+bool view_axis = true;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
 bool luz = true;
-//bool blend = false; testeo de esfera
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -54,7 +53,6 @@ void animarBurbujas(int n) {
 		std::list<Burbuja*>::iterator it;
 		for (it = burbujas.begin(); it != burbujas.end(); it++)
 			(*it)->animar();
-
 		glutPostRedisplay();
 		glutTimerFunc(50,animarBurbujas,0);	//llamo al timer para generar la animacion
 	}
@@ -129,17 +127,17 @@ void init(void) {
   glEnable(GL_DEPTH_TEST);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, light_ambient);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
-  //glEnable(GL_BLEND); //transparencia
 
   glEnable(GL_FOG); //niebla
     {
-       GLfloat fogColor[4] = {0.05, 0.05, 0.1, 1.0};//{0.05, 0.25, 0.55, 1.0};
+       GLfloat fogColor[4] = {0.0, 0.05, 0.1, 0.0};//{0.05, 0.25, 0.55, 1.0};
 
        glFogi (GL_FOG_MODE, GL_EXP2);
        glFogfv (GL_FOG_COLOR, fogColor);
-       glFogf (GL_FOG_DENSITY, 0.03);
+       glFogf (GL_FOG_DENSITY, 0.035);
        glHint (GL_FOG_HINT, GL_DONT_CARE);
        glFogf (GL_FOG_START, 1.0);
        glFogf (GL_FOG_END, 5.0);
@@ -193,6 +191,7 @@ void display(void)
 	if (!luz)
 		glEnable(GL_LIGHT0);
 
+	/* animacion burbujas */
 	if (animando) {
 		Vertice* v;
 		std::list<Burbuja*>::iterator it;
