@@ -3,12 +3,18 @@
 #include "Primitivas/Curva/Curva.h"
 #include "Camara/Camara.h"
 #include <iostream>
+#include <vector>
 
-GLfloat vertex_buf[] = {0,0,0, 1,0,0, 0,1,0, 1,1,0};
-GLuint index_buf[] = {0,1,2, 1,2,3};
+GLfloat vertex_buf[] = {0,0,0, 0,1,0, 0,1,1, 0,0,1};
+GLfloat color_buf[] =   {1,0,0, 0,1,0, 0,0,1, 1,1,1};
+GLubyte index_buf[] = {0,1,2, 2,3,0};
+
+GLfloat mat_diffuse[] = { 1.0, 0.50, 0.0,0.70 };
+GLfloat mat_specular[] = { 1.0, 0.90, 0.0,0.7 };//material de la esfera
+GLfloat mat_shininess[] = { 100.0 };
 
 
-std::list<Vertice> vertices;  //flan
+std::vector<Vertice> vertices;  //flan
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
@@ -18,12 +24,9 @@ float up[3]  = { 0.0,  0.0, 1.0};	//vector normal
 int tras[3] = {0 , 0 ,0 };
 
 // Variables asociadas a única fuente de luz de la escena
-float light_color[4] = {1.0f, 0.50f, 0.0f, 1.0f};
+float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 float light_position[3] = {10.0f, 10.0f, 8.0f};
-float light_ambient[4] = {1.0f, 0.90f, 0.0f, 1.0f};
-
-GLfloat mat_specular[] = { 1.0, 0.50, 0.0,0.70 };//material de la esfera
-GLfloat mat_shininess[] = { 50.0 };
+float light_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
 float rotate_cam_x = 0;
@@ -79,7 +82,7 @@ void DrawAxis() {
 void DrawXYGrid() {
   int i;
   glDisable(GL_LIGHTING);
-  glColor3f(0.15, 0.1, 0.1);
+  glColor3f(0.1, 0.1, 0.15);
   glBegin(GL_LINES);
     for(i=-20; i<21; i++) {
       glVertex3f(i, -20.0, 0.0);
@@ -110,12 +113,13 @@ void init(void) {
   glShadeModel (GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, light_ambient);
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
-  glEnable(GL_BLEND);
+  //glEnable(GL_BLEND);
 
-  glEnable(GL_FOG);
+ // glEnable(GL_FOG);
     {
        GLfloat fogColor[4] = {0.05, 0.05, 0.1, 1.0};//{0.05, 0.25, 0.55, 1.0};
 
@@ -136,37 +140,31 @@ void init(void) {
   DrawXYGrid();
   glEndList();
 
-		glEnableClientState (GL_INDEX_ARRAY);
-		glEnableClientState (GL_VERTEX_ARRAY);
-		glColor3f(1,0,1);
-		glVertexPointer(3,GL_FLOAT,0,vertex_buf);
-		glIndexPointer(GL_UNSIGNED_INT,0, index_buf);
-
-  std::list<Vertice> v;
+  std::vector<Vertice> v;
   Vertice q;
   q.x = 1;
   q.y = 1;
   q.z = 3;
-  v.push_front(q);
-  v.push_front(q);
-  v.push_front(q);
+  v.push_back(q);
+  v.push_back(q);
+  v.push_back(q);
 
   q.x = 1.5;
   q.y = 1.5;
   q.z = 3.8;
-  v.push_front(q);
+  v.push_back(q);
 
   q.x = 3.5;
   q.y = 2.0;
   q.z = 0.5;
-  v.push_front(q);
+  v.push_back(q);
 
   q.x = 4.0;
   q.y = 3.0;
   q.z = 1.0;
-  v.push_front(q);
-  v.push_front(q);
-  v.push_front(q);
+  v.push_back(q);
+  v.push_back(q);
+  v.push_back(q);
 
   Curva curva;
   curva.Bspline(v, vertices);
@@ -185,6 +183,26 @@ void display(void)
 
 	glPushMatrix();
 	glTranslatef(tras[0],tras[1], tras[2]);
+	glDisable(GL_BLEND);
+		glDisable(GL_LIGHTING);
+	for (int i=0; i<4; i+=2){
+	for (int j=0; j<4; j+=2){
+		glPushMatrix();
+		glTranslatef(1-i,0,1-j);
+		glBegin(GL_POLYGON);
+			glColor3f(0.8,0,0);
+			glVertex3f(0,0,1);
+			glVertex3f(-0.5,0,0);
+			glVertex3f(0,0,0.26);
+			glVertex3f(0.5,0,0);
+		glEnd();
+		glBegin(GL_POLYGON);
+		glVertex3f(0,0,0.26);
+		glVertex3f(0.5,0,0.7);
+		glVertex3f(-0.5,0,0.7);
+		glEnd();
+		glPopMatrix();
+	}}
 	glRotatef(rotate_cam_x, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
 	glRotatef(rotate_cam_y, 1.0,0,0);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
@@ -196,29 +214,46 @@ void display(void)
 		 glCallList(DL_AXIS);
 	if (view_grid)
 		 glCallList(DL_GRID);
-
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
-//    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-
     ///////////////////////////// dibujar ////////////////////////
 
-//	std::list<Vertice>::iterator it;
-// EL FLAN
+ //EL FLAN
+//	glDisable(GL_LIGHTING);
+//	glEnableClientState (GL_VERTEX_ARRAY);
+//	glVertexPointer(3,GL_FLOAT,0,&(vertices.front()));
+//	glColor3f(0.5,0.0,0.9);
 //	for (int i=0; i<100; i++) {
 //
 //    	glPushMatrix();
 //    	glRotatef(i*3.6, 0,0,1);
-//		glBegin(GL_LINE_STRIP);
-//			for (it = vertices.begin(); it != vertices.end(); it++){
-//				glVertex3f(it->x,it->y,it->z);
-//			}
-//		glEnd();
+//    	glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 //		glPopMatrix();
 //    }
+//	glDisableClientState (GL_VERTEX_ARRAY);
+//	glEnable(GL_LIGHTING);
+//
+//
+//	//cuadradito colorinche
+//	glDisable(GL_LIGHTING);
+//	glEnableClientState (GL_VERTEX_ARRAY);
+//	glEnableClientState (GL_COLOR_ARRAY);
+//	glVertexPointer(3,GL_FLOAT,0,vertex_buf);
+//	glColorPointer(3,GL_FLOAT, 0, color_buf);
+//    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, index_buf);
+//    glDisableClientState (GL_VERTEX_ARRAY);
+//    glDisableClientState (GL_COLOR_ARRAY);
+//
 
-    glDrawElements(GL_TRIANGLES, 6, GL_INT, index_buf);
+
+	//ESFERA del DRAGON
 
 
+		glEnable(GL_LIGHTING);
+	//	glEnable(GL_BLEND);
+		    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
+		    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+		    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+		    glBlendFunc (GL_SRC_ALPHA, GL_ONE);       //transparencia
+		    glutSolidSphere (4.0, 40, 26);
 
 
     /////////////////////////// fin dibujar =P /////////////////////
@@ -313,14 +348,6 @@ void mouse(int button, int state, int x, int y) {
 
 void mouseMotion(int x, int y) {
 	if (mouseDown) {
-//		if (x > xprev){
-//		     rotate_cam += 0.3*(x-xprev);
-//			if(rotate_cam > 360.0) rotate_cam = 0.0;
-//		}
-//		else {
-//			rotate_cam -=0.3*(xprev-x);
-//			if(rotate_cam < -360.0) rotate_cam = 0.0;
-//		}
 		rotate_cam_x += (x-xprev);
 		rotate_cam_y += (y-yprev)*0.1;
 		xprev = x;
@@ -412,3 +439,4 @@ int main(int argc, char** argv) {
 
   return 0;
 }
+

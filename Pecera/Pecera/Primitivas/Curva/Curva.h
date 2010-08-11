@@ -5,7 +5,7 @@
 #include <list>
 #include <map>
 #include <math.h>
-
+#include <vector>
 #include "../Vertice.h"
 
 #include <iostream>
@@ -45,6 +45,8 @@ public:
    * partir de los puntos de control requiere al menos 4 puntos de control para dibujar algo
    * */
   void Bspline(std::list<Vertice> &ptosControl, std::list<Vertice> &ptosCurva);
+
+  void Bspline(std::vector<Vertice> &ptosControl, std::vector<Vertice> &ptosCurva);
 
   /* Suma al factor del paso de Bspline la cantidad pasada por parametro.
    * */

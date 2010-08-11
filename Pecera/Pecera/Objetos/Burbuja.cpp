@@ -25,13 +25,13 @@ Burbuja::Burbuja(float x, float y, float z) {
 	std::cout<< "Trayectoria burbuja: "<<std::endl;
 	std::cout<<v.x<<" "<<v.y<<" "<<v.z<<std::endl;
 	puntos.push_back(v);
-	v.x += (float)(rand()%20 - 10)/10;
-	v.y += (float)(rand()%20 - 10)/10;
+	v.x += (float)(rand()%20 - 10)/5;
+	v.y += (float)(rand()%20 - 10)/5;
 	v.z += 6;
 	std::cout<<v.x<<" "<<v.y<<" "<<v.z<<std::endl;
 	puntos.push_back(v);
-	v.x += (float)(rand()%20 - 10)/10;
-	v.y += (float)(rand()%20 - 10)/10;
+	v.x += (float)(rand()%20 - 10)/5;
+	v.y += (float)(rand()%20 - 10)/5;
 	v.z += 10;
 	std::cout<<v.x<<" "<<v.y<<" "<<v.z<<std::endl<<std::endl;
 	puntos.push_back(v);

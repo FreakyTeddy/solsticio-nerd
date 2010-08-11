@@ -4,8 +4,6 @@
 #include <ctime>
 
 #include "Objetos/Burbuja.h"
-Burbuja* bubble1;
-Burbuja* bubble2;
 std::list<Burbuja*> burbujas;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
@@ -21,10 +19,12 @@ float light_position[3] = {10.0f, 10.0f, 48.0f};
 float light_ambient[4] = {0.9f, 0.95f, 1.0f, 1.0f};
 
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
-float rotate_cam = 0;
+float rotate_cam_x = 0;
+float rotate_cam_y = 0;
 float zoom = 1;
 int xprev = 0; //posicion anterior del mouse
 int yprev = 0;
+int zprev = 0;
 float altura_curva = 6.0;
 
 // Variables de control
@@ -38,7 +38,7 @@ bool luz = true;
 GLuint dl_handle;
 #define DL_AXIS (dl_handle+0)
 #define DL_GRID (dl_handle+1)
-#define DL_AXIS2D_TOP (dl_handle+2)
+#define DL_CUADRADO (dl_handle+2)
 
 // Tamaño de la ventana
 GLfloat window_size[2];
@@ -133,7 +133,7 @@ void init(void) {
 
   glEnable(GL_FOG); //niebla
     {
-       GLfloat fogColor[4] = {0.0, 0.05, 0.1, 0.0};//{0.05, 0.25, 0.55, 1.0};
+       GLfloat fogColor[4] = {0.0, 0.05, 0.1, 0.0};
 
        glFogi (GL_FOG_MODE, GL_EXP2);
        glFogfv (GL_FOG_COLOR, fogColor);
@@ -148,8 +148,21 @@ void init(void) {
   glNewList(DL_AXIS, GL_COMPILE);
   DrawAxis();
   glEndList();
+
   glNewList(DL_GRID, GL_COMPILE);
   DrawXYGrid();
+  glEndList();
+
+  glNewList(DL_CUADRADO, GL_COMPILE);
+  glDisable(GL_LIGHTING);
+  glBegin(GL_QUADS);
+  glColor3f(0.8,0.5,0.9);
+  glVertex3f(1,0,0);
+  glVertex3f(1,1,0);
+  glVertex3f(0,1,0);
+  glVertex3f(0,0,0);
+  glEnd();
+  glEnable(GL_LIGHTING);
   glEndList();
 
 }
@@ -164,19 +177,26 @@ void display(void)
 	// Escena 3D
 
 	glPushMatrix();
+	//Camara
 	glTranslatef(tras[0],tras[1], tras[2]);
-	glRotatef(rotate_cam, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
+	glRotatef(rotate_cam_y, 1.0,0,0);
+	glRotatef(rotate_cam_x, 0,0,1.0);
+
 
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
-
-	if (!luz)
-		glDisable(GL_LIGHT0);
 
 	if (view_axis)
 		 glCallList(DL_AXIS);
 	if (view_grid)
 		 glCallList(DL_GRID);
 
+	/* cuadrados display lists */
+	for (int i=0; i<100; i++) {
+		glPushMatrix();
+			glTranslatef(i,i,0);
+			glCallList(DL_CUADRADO);
+		glPopMatrix();
+	}
 	/* testeo de esfera*/
 //    if (!blend)
 //    		glDisable(GL_BLEND);
@@ -187,9 +207,6 @@ void display(void)
     //glutWireSphere(0.9, 20, 16);
 //    if (!blend)
 //		glEnable(GL_BLEND);
-
-	if (!luz)
-		glEnable(GL_LIGHT0);
 
 	/* animacion burbujas */
 	if (animando) {
@@ -236,11 +253,6 @@ void keyboard (unsigned char key, int x, int y) {
 		break;
 	case 0x2D:  // '-'
 		tras[2] += 1.0;
-		glutPostRedisplay();
-		break;
-	case 'l':
-	case 'L':
-		luz=!luz;
 		glutPostRedisplay();
 		break;
 	case 'b':
@@ -291,37 +303,34 @@ void specialKeys(int key,int x, int y) {
 void mouse(int button, int state, int x, int y) {
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		if(!mouseDown)
+		if(!mouseDown) {
 			xprev=x;
+			yprev=y;
+		}
 		mouseDown = true;
 	}
 	else
 		mouseDown = false;
 
 	if(!zoomOn)
-	     yprev=y;
+	     zprev=y;
 	(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) ? zoomOn = true : zoomOn = false;
 }
 
 void mouseMotion(int x, int y) {
 	if (mouseDown) {
-		if (x > xprev){
-		     rotate_cam += 0.3*(x-xprev);
-			if(rotate_cam > 360.0) rotate_cam = 0.0;
-		}
-		else {
-			rotate_cam -=0.3*(xprev-x);
-			if(rotate_cam < -360.0) rotate_cam = 0.0;
-		}
+		rotate_cam_x += (x-xprev);
+		rotate_cam_y += (y-yprev)*0.1;
 		xprev = x;
+		yprev = y;
 		glutPostRedisplay();
 	}
 	if (zoomOn) {
-		if (y > yprev)
-			zoom += 0.001*(yprev-y);
-		else if(y < yprev)
-			zoom -=0.001*(y-yprev);
-		yprev = y;
+		if (y > zprev)
+			zoom += 0.001*(zprev-y);
+		else if(y < zprev)
+			zoom -=0.001*(y-zprev);
+		zprev = y;
 		glutPostRedisplay();
 	}
 
@@ -390,10 +399,12 @@ int main(int argc, char** argv) {
 //  //cargo las texturas a partir de las rutas
 //  ImageLoad(route);
   srand((unsigned)time(0));
-  bubble1 = new Burbuja(1,2,3);
-  bubble2 = new Burbuja(3,2,1);
+  Burbuja* bubble1 = new Burbuja(1,2,3);
+  Burbuja* bubble2 = new Burbuja(3,2,1);
+  Burbuja* bubble3 = new Burbuja(0,0,0);
   burbujas.push_back(bubble1);
   burbujas.push_back(bubble2);
+  burbujas.push_back(bubble3);
   init();
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);

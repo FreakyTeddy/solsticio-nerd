@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include "../Primitivas/Curva/Curva.h"
 
-
-
 /*
  * Burbuja que sale de los peces?? :P
  */

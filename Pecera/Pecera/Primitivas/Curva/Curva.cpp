@@ -199,9 +199,66 @@ void Curva::Bspline(std::list<Vertice> &ptosControl, std::list<Vertice> &ptosCur
 
   Vertice ptos[4];
   unsigned int first= 0;
-
+  unsigned int size;
   while((ptosControl.size() - first) >= 4) {
-    complete= loadBspline(ptosControl, ptos, first);
+	  size= ptosControl.size();
+
+	   for(unsigned int i= 0; (i < 4) && ((size-first) > 3); i++) {
+	     ptos[i].x= find(ptosControl, first+i).x;
+	     ptos[i].y= find(ptosControl, first+i).y;
+	     ptos[i].z= find(ptosControl, first+i).z;
+	   }
+
+	complete = ((size-first) > 3);
+    first++;
+
+    for(float u= 0; u<=1 && complete; u+=dt) {
+
+      uSquared= u * u;
+      uCubed= uSquared * u;
+
+      //Bases cubicas
+      Bn2Cubed= (-uCubed + 3 * uSquared - 3 * u + 1 )/6;
+      Bn1Cubed= ( 3 * uCubed - 6 * uSquared + 4 )/6;
+      B0Cubed= ( -3 * uCubed + 3 * uSquared + 3 * u + 1 )/6;
+      B1Cubed= uCubed/6;
+
+      curve.x= Bn2Cubed*ptos[0].x + Bn1Cubed*ptos[1].x + B0Cubed*ptos[2].x + B1Cubed*ptos[3].x;
+      curve.y= Bn2Cubed*ptos[0].y + Bn1Cubed*ptos[1].y + B0Cubed*ptos[2].y + B1Cubed*ptos[3].y;
+      curve.z= Bn2Cubed*ptos[0].z + Bn1Cubed*ptos[1].z + B0Cubed*ptos[2].z + B1Cubed*ptos[3].z;
+      ptosCurva.push_back(curve);
+
+    }
+  }
+}
+
+/* TODO no se que tan lindo es repetir este codigo xD ademas habria que revisar que no haga cosas de mas =P */
+void Curva::Bspline(std::vector<Vertice> &ptosControl, std::vector<Vertice> &ptosCurva) {
+
+  float dt=(float) 1.0 / factorBspline;
+
+  float uSquared, uCubed;
+  float Bn2Cubed, Bn1Cubed, B0Cubed, B1Cubed;
+
+  Vertice curve;
+  Vertice tangent;
+  Vertice normal;
+
+  bool complete;
+
+  Vertice ptos[4];
+  unsigned int first= 0;
+  unsigned int size;
+  while((ptosControl.size() - first) >= 4) {
+	  size= ptosControl.size();
+
+	   for(unsigned int i= 0; (i < 4) && ((size-first) > 3); i++) {
+	     ptos[i].x= ptosControl[first+i].x;
+	     ptos[i].y= ptosControl[first+i].y;
+	     ptos[i].z= ptosControl[first+i].z;
+	   }
+
+	complete = ((size-first) > 3);
     first++;
 
     for(float u= 0; u<=1 && complete; u+=dt) {
