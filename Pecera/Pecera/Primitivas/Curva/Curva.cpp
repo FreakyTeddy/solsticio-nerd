@@ -166,7 +166,7 @@ void Curva::modificarFactorBezier(int cantidad) {
         factorBezier+= cantidad;
 
         if(factorBezier <= FACTOR_MIN)
-                factorBezier= 1;
+                factorBezier= FACTOR_MIN;
         if(factorBezier > FACTOR_MAX)
                 factorBezier= FACTOR_MAX;
 }
@@ -235,6 +235,7 @@ void Curva::Bspline(std::list<Vertice> &ptosControl, std::list<Vertice> &ptosCur
 /* TODO no se que tan lindo es repetir este codigo xD ademas habria que revisar que no haga cosas de mas =P */
 void Curva::Bspline(std::vector<Vertice> &ptosControl, std::vector<Vertice> &ptosCurva) {
 
+  ptosCurva.clear();
   float dt=(float) 1.0 / factorBspline;
 
   float uSquared, uCubed;
@@ -286,7 +287,7 @@ void Curva::modificarFactorBspline(int cantidad) {
   factorBspline+= cantidad;
 
   if(factorBspline <= FACTOR_MIN)
-    factorBspline= 1;
+    factorBspline= FACTOR_MIN;
   if(factorBspline > FACTOR_MAX)
     factorBspline= FACTOR_MAX;
 }

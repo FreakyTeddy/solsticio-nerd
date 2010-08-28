@@ -180,29 +180,30 @@ void display(void)
 
 	///////////////////////////////////////////////////
 	// Escena 3D
+/* estrellitas */
+//	glDisable(GL_BLEND);
+//		glDisable(GL_LIGHTING);
+//	for (int i=0; i<4; i+=2){
+//	for (int j=0; j<4; j+=2){
+//		glPushMatrix();
+//		glTranslatef(1-i,0,1-j);
+//		glBegin(GL_POLYGON);
+//			glColor3f(0.8,0,0);
+//			glVertex3f(0,0,1);
+//			glVertex3f(-0.5,0,0);
+//			glVertex3f(0,0,0.26);
+//			glVertex3f(0.5,0,0);
+//		glEnd();
+//		glBegin(GL_POLYGON);
+//		glVertex3f(0,0,0.26);
+//		glVertex3f(0.5,0,0.7);
+//		glVertex3f(-0.5,0,0.7);
+//		glEnd();
+//		glPopMatrix();
+//	}}
 
 	glPushMatrix();
 	glTranslatef(tras[0],tras[1], tras[2]);
-	glDisable(GL_BLEND);
-		glDisable(GL_LIGHTING);
-	for (int i=0; i<4; i+=2){
-	for (int j=0; j<4; j+=2){
-		glPushMatrix();
-		glTranslatef(1-i,0,1-j);
-		glBegin(GL_POLYGON);
-			glColor3f(0.8,0,0);
-			glVertex3f(0,0,1);
-			glVertex3f(-0.5,0,0);
-			glVertex3f(0,0,0.26);
-			glVertex3f(0.5,0,0);
-		glEnd();
-		glBegin(GL_POLYGON);
-		glVertex3f(0,0,0.26);
-		glVertex3f(0.5,0,0.7);
-		glVertex3f(-0.5,0,0.7);
-		glEnd();
-		glPopMatrix();
-	}}
 	glRotatef(rotate_cam_x, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
 	glRotatef(rotate_cam_y, 1.0,0,0);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
@@ -217,7 +218,6 @@ void display(void)
     ///////////////////////////// dibujar ////////////////////////
 
  //EL FLAN
-//	glDisable(GL_LIGHTING);
 //	glEnableClientState (GL_VERTEX_ARRAY);
 //	glVertexPointer(3,GL_FLOAT,0,&(vertices.front()));
 //	glColor3f(0.5,0.0,0.9);
@@ -225,11 +225,41 @@ void display(void)
 //
 //    	glPushMatrix();
 //    	glRotatef(i*3.6, 0,0,1);
-//    	glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+//    	glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.size());
 //		glPopMatrix();
 //    }
+//	glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 //	glDisableClientState (GL_VERTEX_ARRAY);
-//	glEnable(GL_LIGHTING);
+
+glDisable(GL_LIGHTING);
+	//CINTA
+	glPushMatrix();
+	//glRotatef(i*3.6, 0,0,1);
+	std::vector<Vertice>::iterator it0 = vertices.begin();
+	std::vector<Vertice>::iterator it1 = vertices.begin();
+	std::vector<Vertice>::iterator it;
+	int tam = vertices.size();
+	glBegin(GL_TRIANGLE_STRIP);
+	std::cout<<"pasos bspline: "<<tam<<std::endl;
+	for (it=vertices.begin();it!=vertices.end();it++)
+		std::cout<<it->x<<" "<<it->y<<" "<<it->z<<" "<<std::endl;
+	for(int pos=0 ; pos <  tam-1 ; pos++) {
+		glColor3f((float)pos/tam,0,(float)pos/tam);
+		glVertex3f(it0->x,it0->y,it0->z);
+		glVertex3f(it1->x + 2,it1->y,it1->z);
+		it1++;
+		glVertex3f(it1->x + 2,it1->y,it1->z);
+
+		glColor3f((float)pos/tam,1,(float)pos/tam);
+		glVertex3f(it0->x,it0->y,it0->z);
+		glVertex3f(it1->x + 2,it1->y,it1->z);
+		it0++;
+		glVertex3f(it0->x,it0->y,it0->z);
+	}
+	glEnd();
+	glPopMatrix();
+
+
 //
 //
 //	//cuadradito colorinche
@@ -238,22 +268,27 @@ void display(void)
 //	glEnableClientState (GL_COLOR_ARRAY);
 //	glVertexPointer(3,GL_FLOAT,0,vertex_buf);
 //	glColorPointer(3,GL_FLOAT, 0, color_buf);
-//    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, index_buf);
+//
+//    glDrawElements(GL_TRIANGLE_STRIP, 6, GL_UNSIGNED_BYTE, index_buf);
+//    glTranslatef(2,2,2);
+//        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, index_buf);
+//        glTranslatef(2,2,2);
+//            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, index_buf);
+//            glTranslatef(2,2,2);
+//                    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, index_buf);
 //    glDisableClientState (GL_VERTEX_ARRAY);
 //    glDisableClientState (GL_COLOR_ARRAY);
-//
 
 
 	//ESFERA del DRAGON
 
-
-		glEnable(GL_LIGHTING);
-	//	glEnable(GL_BLEND);
-		    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
-		    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-		    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-		    glBlendFunc (GL_SRC_ALPHA, GL_ONE);       //transparencia
-		    glutSolidSphere (4.0, 40, 26);
+//		glEnable(GL_LIGHTING);
+//		glEnable(GL_BLEND);
+//		    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
+//		    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+//		    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+//		    glBlendFunc (GL_SRC_ALPHA, GL_ONE);       //transparencia
+//		    glutSolidSphere (4.0, 40, 26);
 
 
     /////////////////////////// fin dibujar =P /////////////////////
@@ -299,6 +334,13 @@ void keyboard (unsigned char key, int x, int y) {
     case 'a':
     case 'A':
       view_axis = !view_axis;
+      glutPostRedisplay();
+      break;
+    case 'r':
+    case 'R':
+      tras[0]=0;tras[1]=0;tras[2]=0;
+      rotate_cam_x=0; rotate_cam_y=0;
+      zoom=1;
       glutPostRedisplay();
       break;
      default:
@@ -435,6 +477,16 @@ int main(int argc, char** argv) {
   glutMouseFunc(mouse);
   glutMotionFunc(mouseMotion);
 //  glutIdleFunc(OnIdle);
+
+  std::cout<<"Controles: "<<std::endl;
+  std::cout<<"A - \t ejes"<<std::endl;
+  std::cout<<"G - \t grilla"<<std::endl;
+  std::cout<<"R - \t reset camara"<<std::endl;
+  std::cout<<"flechas \t traslacion xy"<<std::endl;
+  std::cout<<"'+' '-' \t traslacion z"<<std::endl;
+  std::cout<<"boton izq \t rotacion camara"<<std::endl;
+  std::cout<<"boton der \t zoom camara"<<std::endl;
+
   glutMainLoop();
 
   return 0;

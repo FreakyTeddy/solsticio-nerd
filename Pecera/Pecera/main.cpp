@@ -7,25 +7,26 @@
 std::list<Burbuja*> burbujas;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
-#define EYE_Z 5.0
-float eye[3] = {0.0, 20.0, EYE_Z};	//camara
-float at[3]  = { 0.0,  0.0, EYE_Z};	//centro
+float eye[3] = {0.0, 20.0, 5.0};	//camara
+float at[3]  = { 0.0,  0.0, 5.0};	//centro
 float up[3]  = { 0.0,  0.0, 1.0};	//vector normal
 int tras[3] = {0 , 0 ,0 }; //traslacion de la camara
 
-// Variables asociadas a única fuente de luz de la escena
-float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-float light_position[3] = {10.0f, 10.0f, 48.0f};
-float light_ambient[4] = {0.9f, 0.95f, 1.0f, 1.0f};
-
-// Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
+// Variable asociada al movimiento de la camara
 float rotate_cam_x = 0;
 float rotate_cam_y = 0;
 float zoom = 1;
 int xprev = 0; //posicion anterior del mouse
 int yprev = 0;
 int zprev = 0;
-float altura_curva = 6.0;
+
+// Variables asociadas la fuente de luz de la escena
+float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+float light_position[3] = {10.0f, 10.0f, 48.0f};
+float light_ambient[4] = {0.9f, 0.95f, 1.0f, 1.0f};
+
+
+//float altura_curva = 6.0;
 
 // Variables de control
 bool view_grid = true;
@@ -33,6 +34,8 @@ bool view_axis = true;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
 bool luz = true;
+bool animando = false;
+
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -43,8 +46,6 @@ GLuint dl_handle;
 // Tamaño de la ventana
 GLfloat window_size[2];
 
-
-bool animando = false;
 
 void animarBurbujas(int n) {
 
@@ -59,11 +60,6 @@ void animarBurbujas(int n) {
 	else
 		animando = false;
 }
-
-
-
-
-
 
 
 void OnIdle (void)
@@ -121,7 +117,6 @@ void init(void) {
 
   dl_handle = glGenLists(3);
 
-  //glClearColor (0.02, 0.02, 0.04, 0.0);
   glClearColor (0, 0.05, 0.10, 0.0);
   glShadeModel (GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
@@ -270,6 +265,13 @@ void keyboard (unsigned char key, int x, int y) {
     case 'a':
     case 'A':
       view_axis = !view_axis;
+      glutPostRedisplay();
+      break;
+    case 'r':
+    case 'R':
+      tras[0]=0;tras[1]=0;tras[2]=0;
+      rotate_cam_x=0; rotate_cam_y=0;
+      zoom=1;
       glutPostRedisplay();
       break;
      default:
