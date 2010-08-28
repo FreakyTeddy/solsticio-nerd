@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "Primitivas/Curva/Curva.h"
 #include "Camara/Camara.h"
+#include "Primitivas/Superficie/SuperficieBarrido.h"
 #include <iostream>
 #include <vector>
 
@@ -15,6 +16,7 @@ GLfloat mat_shininess[] = { 100.0 };
 
 
 std::vector<Vertice> vertices;  //flan
+SuperficieBarrido *sb;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
@@ -168,6 +170,22 @@ void init(void) {
 
   Curva curva;
   curva.Bspline(v, vertices);
+  q.x = 1.0;
+  q.y = 1.0;
+  q.z = 1.0;
+  std::vector<Vertice> trasl;
+  trasl.push_back(q);
+  trasl.push_back(q);
+  trasl.push_back(q);
+  q.x = 2.5;
+  q.y = 2.5;
+  q.z = 4.0;
+  trasl.push_back(q);
+  trasl.push_back(q);
+  trasl.push_back(q);
+  curva.Bspline(trasl, v);
+
+  sb = new SuperficieBarrido(vertices, v);
 
 
 }
@@ -233,33 +251,36 @@ void display(void)
 
 glDisable(GL_LIGHTING);
 	//CINTA
-	glPushMatrix();
-	//glRotatef(i*3.6, 0,0,1);
-	std::vector<Vertice>::iterator it0 = vertices.begin();
-	std::vector<Vertice>::iterator it1 = vertices.begin();
-	std::vector<Vertice>::iterator it;
-	int tam = vertices.size();
-	glBegin(GL_TRIANGLE_STRIP);
-	std::cout<<"pasos bspline: "<<tam<<std::endl;
-	for (it=vertices.begin();it!=vertices.end();it++)
-		std::cout<<it->x<<" "<<it->y<<" "<<it->z<<" "<<std::endl;
-	for(int pos=0 ; pos <  tam-1 ; pos++) {
-		glColor3f((float)pos/tam,0,(float)pos/tam);
-		glVertex3f(it0->x,it0->y,it0->z);
-		glVertex3f(it1->x + 2,it1->y,it1->z);
-		it1++;
-		glVertex3f(it1->x + 2,it1->y,it1->z);
+//
+//	//glRotatef(i*3.6, 0,0,1);
+//	std::vector<Vertice>::iterator it0 = vertices.begin();
+//	std::vector<Vertice>::iterator it1 = vertices.begin();
+//	std::vector<Vertice>::iterator it;
+//	int tam = vertices.size();
+//	glBegin(GL_TRIANGLE_STRIP);
+//	std::cout<<"pasos bspline: "<<tam<<std::endl;
+//	for (it=vertices.begin();it!=vertices.end();it++)
+//		std::cout<<it->x<<" "<<it->y<<" "<<it->z<<" "<<std::endl;
+//	for(int pos=0 ; pos <  tam-1 ; pos++) {
+//		glColor3f((float)pos/tam,0,(float)pos/tam);
+//		glVertex3f(it0->x,it0->y,it0->z);
+//		glVertex3f(it1->x + 2,it1->y,it1->z);
+//		it1++;
+//		glVertex3f(it1->x + 2,it1->y,it1->z);
+//
+//		glColor3f((float)pos/tam,1,(float)pos/tam);
+//		glVertex3f(it0->x,it0->y,it0->z);
+//		glVertex3f(it1->x + 2,it1->y,it1->z);
+//		it0++;
+//		glVertex3f(it0->x,it0->y,it0->z);
+//	}
+//	glEnd();
 
-		glColor3f((float)pos/tam,1,(float)pos/tam);
-		glVertex3f(it0->x,it0->y,it0->z);
-		glVertex3f(it1->x + 2,it1->y,it1->z);
-		it0++;
-		glVertex3f(it0->x,it0->y,it0->z);
-	}
-	glEnd();
-	glPopMatrix();
 
-
+//CINTA CON CLASE B-]
+std::cout<<"dibujar"<<std::endl;
+		sb->dibujar();
+		std::cout<<"fin"<<std::endl<<std::endl;
 //
 //
 //	//cuadradito colorinche
