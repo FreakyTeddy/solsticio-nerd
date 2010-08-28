@@ -170,16 +170,17 @@ void init(void) {
 
   Curva curva;
   curva.Bspline(v, vertices);
-  q.x = 1.0;
-  q.y = 1.0;
-  q.z = 1.0;
+  std::cout<<"sup"<<std::endl;
+  q.x = 0;
+  q.y = 0;
+  q.z = 0;
   std::vector<Vertice> trasl;
   trasl.push_back(q);
   trasl.push_back(q);
   trasl.push_back(q);
   q.x = 2.5;
-  q.y = 2.5;
-  q.z = 4.0;
+  q.y = -1.5;
+  q.z = 0;
   trasl.push_back(q);
   trasl.push_back(q);
   trasl.push_back(q);
@@ -278,9 +279,8 @@ glDisable(GL_LIGHTING);
 
 
 //CINTA CON CLASE B-]
-std::cout<<"dibujar"<<std::endl;
+//glDisable(GL_LIGHTING);
 		sb->dibujar();
-		std::cout<<"fin"<<std::endl<<std::endl;
 //
 //
 //	//cuadradito colorinche
