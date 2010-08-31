@@ -267,13 +267,18 @@ void keyboard (unsigned char key, int x, int y) {
       view_axis = !view_axis;
       glutPostRedisplay();
       break;
+    case 'c':
+    case 'C':
+       tras[0]=0;tras[1]=0;tras[2]=0;
+       rotate_cam_x=0; rotate_cam_y=0;
+       zoom=1;
+       glutPostRedisplay();
+       break;
     case 'r':
-    case 'R':
-      tras[0]=0;tras[1]=0;tras[2]=0;
-      rotate_cam_x=0; rotate_cam_y=0;
-      zoom=1;
-      glutPostRedisplay();
-      break;
+ 	case 'R':
+ 		Superficie::nextMode();
+ 		glutPostRedisplay();
+        break;
      default:
       break;
   }
@@ -415,9 +420,19 @@ int main(int argc, char** argv) {
   glutMouseFunc(mouse);
   glutMotionFunc(mouseMotion);
 //  glutIdleFunc(OnIdle);
+
+   std::cout<<"Controles: "<<std::endl;
+   std::cout<<"A - \t ejes"<<std::endl;
+   std::cout<<"G - \t grilla"<<std::endl;
+   std::cout<<"C - \t reset camara"<<std::endl;
+   std::cout<<"R - \t render de escena"<<std::endl;
+   std::cout<<"flechas \t traslacion xy"<<std::endl;
+   std::cout<<"'+' '-' \t traslacion z"<<std::endl;
+   std::cout<<"boton izq \t rotacion camara"<<std::endl;
+   std::cout<<"boton der \t zoom camara"<<std::endl;
+
+
   glutMainLoop();
-
-
 
   return 0;
 }

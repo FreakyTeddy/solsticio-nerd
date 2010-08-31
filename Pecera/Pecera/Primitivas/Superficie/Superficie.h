@@ -13,12 +13,23 @@ protected:
 	unsigned int tam; //tamanio de la curva "forma"
 	//TODO faltaria malla de color/textura
 
+private:
+	static unsigned int render_mode;
+
+	/* generar las normales de iluminacion */
+	void getNormales(std::vector<Vertice> &ptosCurva, std::vector<Vertice> &ptosNormal);
+
 public:
 
 	Superficie();
 	virtual ~Superficie();
 
+	/* cambia al siguiente modo de renderizado TRIANG -> QUAD -> LINE */
+	static void nextMode();
+
+
 	void dibujar();
+
 };
 
 #endif /* SUPERFICIE_H_ */

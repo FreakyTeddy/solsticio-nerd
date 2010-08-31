@@ -6,6 +6,8 @@
 #include <iostream>
 #include <vector>
 
+
+
 GLfloat vertex_buf[] = {0,0,0, 0,1,0, 0,1,1, 0,0,1};
 GLfloat color_buf[] =   {1,0,0, 0,1,0, 0,0,1, 1,1,1};
 GLubyte index_buf[] = {0,1,2, 2,3,0};
@@ -146,7 +148,7 @@ void init(void) {
   Vertice q;
   q.x = 1;
   q.y = 1;
-  q.z = 3;
+  q.z = 0;
   v.push_back(q);
   v.push_back(q);
   v.push_back(q);
@@ -187,6 +189,55 @@ void init(void) {
   curva.Bspline(trasl, v);
 
   sb = new SuperficieBarrido(vertices, v);
+
+//  std::vector<Vertice> alga;
+//  q.x= 2;  q.y=2;   q.z=0;
+//  alga.push_back(q);
+//  q.x=3;
+//  alga.push_back(q);
+//
+//  trasl.clear();
+//  q.x=0; q.y=0; q.z=0;
+//  trasl.push_back(q);
+//  trasl.push_back(q);
+//  trasl.push_back(q);
+//
+//  q.x=-1; q.y=0; q.z=1;
+//  trasl.push_back(q);
+//
+//  q.x=1; q.y=0; q.z=3;
+//  trasl.push_back(q);
+//
+//  q.x=-1; q.y=0; q.z=5;
+//  trasl.push_back(q);
+//  trasl.push_back(q);
+//  trasl.push_back(q);
+//
+//  curva.Bspline(trasl, v);
+//
+//  trasl.clear();
+//   q.x=1; q.y=1; q.z=1;
+//   trasl.push_back(q);
+//   trasl.push_back(q);
+//   trasl.push_back(q);
+//
+//   q.x=0.5; q.y=0.5; q.z=1;
+//   trasl.push_back(q);
+//
+//   q.x=1; q.y=1.5; q.z=1;
+//   trasl.push_back(q);
+//
+//   q.x=0.01; q.y=0.01; q.z=1;
+//   trasl.push_back(q);
+//   trasl.push_back(q);
+//   trasl.push_back(q);
+//
+//
+//  std::vector<Vertice> def;
+//
+//  curva.Bspline(trasl, def);
+//   sb2 = new SuperficieBarrido(alga, v, def);
+
 
 
 }
@@ -330,7 +381,7 @@ void reshape (int w, int h)
 }
 
 void keyboard (unsigned char key, int x, int y) {
-  switch (key) {
+	switch (key) {
     case 0x1b: //ESC
       exit(0);
       break;
@@ -357,14 +408,19 @@ void keyboard (unsigned char key, int x, int y) {
       view_axis = !view_axis;
       glutPostRedisplay();
       break;
-    case 'r':
-    case 'R':
+    case 'c':
+    case 'C':
       tras[0]=0;tras[1]=0;tras[2]=0;
       rotate_cam_x=0; rotate_cam_y=0;
       zoom=1;
       glutPostRedisplay();
       break;
-     default:
+    case 'r':
+	case 'R':
+		Superficie::nextMode();
+		 glutPostRedisplay();
+        break;
+    default:
       break;
   }
 }
@@ -502,13 +558,17 @@ int main(int argc, char** argv) {
   std::cout<<"Controles: "<<std::endl;
   std::cout<<"A - \t ejes"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
-  std::cout<<"R - \t reset camara"<<std::endl;
+  std::cout<<"C - \t reset camara"<<std::endl;
+  std::cout<<"R - \t render de escena"<<std::endl;
   std::cout<<"flechas \t traslacion xy"<<std::endl;
   std::cout<<"'+' '-' \t traslacion z"<<std::endl;
   std::cout<<"boton izq \t rotacion camara"<<std::endl;
   std::cout<<"boton der \t zoom camara"<<std::endl;
 
   glutMainLoop();
+
+  std::cout<<"deletes   "<<std::endl;
+  delete sb;
 
   return 0;
 }

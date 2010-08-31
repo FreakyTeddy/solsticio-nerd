@@ -49,25 +49,18 @@ bool load(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int &first) 
   return complete;
 }
 
-void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva,
-						std::list<Vertice> &ptosNormal,	std::map<int, Vertice> &distancia, int factor) {
+void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva) {
 
   float dt=(float) 1.0 / factorBezier;
-
-  longitudBezier= 0.0;
-  Vertice last;
-  bool begin= true;
-
   float uSquared, uCubed;
   float c0Cubed, c1Cubed, c2Cubed, c3Cubed;
   
   Vertice result;
-  Vertice tangent;
   Vertice normal;
+  Vertice last;
+  Vertice ptos[4];
 
   bool complete;
-
-  Vertice ptos[4];
   unsigned int first= 0;
 
   while((ptosControl.size() - first) >= 4) {
@@ -88,77 +81,13 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
       result.z= c0Cubed*ptos[0].z + c1Cubed*ptos[1].z + c2Cubed*ptos[2].z + c3Cubed*ptos[3].z;
       ptosCurva.push_back(result);
 
-      if(!begin) {
-        longitudBezier+= sqrtf(powf(result.x-last.x, 2) + powf(result.y-last.y, 2));
-        distancia.insert( std::pair<int,Vertice>(longitudBezier*factor,last) );
-      } else
-        begin= !begin;
-
       //acumulo para calcular la diferencia
       last= result;
     }
   } //fin while
 
 
-  /* normales */
-  if (ptosCurva.size() > 2) {
-	  ptosNormal.clear();
-	  std::list<Vertice>::iterator prev = ptosCurva.begin();
-	  std::list<Vertice>::iterator it = ptosCurva.begin();
-	  std::list<Vertice>::iterator next = ptosCurva.begin();
-	  Vertice v;
-	  //primer punto
-	  next++;
-	  //resta (next - prev)
-	  v.x = next->x - prev->x;
-	  v.y = next->y - prev->y;
 
-	  // z x resta -->producto vectorial
-	  float aux = 0 - v.y;
-	  v.y = v.x;
-	  v.x = aux;
-
-	  //push it, push normal
-	  ptosNormal.push_back(*it);
-	  ptosNormal.push_back(v);
-
-	  //caso general
-	  do {
-		  next++;
-		  it++;
-
-		  //resta (next - prev)
-		  v.x = next->x - prev->x;
-		  v.y = next->y - prev->y;
-
-		  // z x resta -->producto vectorial
-		  aux = 0 - v.y;
-		  v.y = v.x;
-		  v.x = aux;
-
-		  //push it, push normal
-		  ptosNormal.push_back(*it);
-		  ptosNormal.push_back(v);
-
-		  prev++;
-	  } while (next != ptosCurva.end());
-
-	  //ultimo punto
-	  it++;
-
-	  //resta (next - prev)
-	  v.x = next->x - prev->x;
-	  v.y = next->y - prev->y;
-
-	  // z x resta -->producto vectorial
-	  aux = 0 - v.y;
-	  v.y = v.x;
-	  v.x = aux;
-
-	  //push it, push normal
-	  ptosNormal.push_back(*it);
-	  ptosNormal.push_back(v);
-  }
 }
 
 void Curva::modificarFactorBezier(int cantidad) {

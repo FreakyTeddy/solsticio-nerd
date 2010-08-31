@@ -1,5 +1,6 @@
 #include "SuperficieBarrido.h"
 #include <iostream>
+
 SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Vertice> &trasl) {
 
 	tam = forma.size(); //guardo la long de la curva patron
@@ -16,7 +17,7 @@ SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Ve
 			superficie.push_back(v);
 		}
 	}
-//calculo de normales
+//calculo de normales y texturas
 
 
 }
