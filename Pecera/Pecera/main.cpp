@@ -4,6 +4,9 @@
 #include <ctime>
 
 #include "Objetos/Burbuja.h"
+#include "Primitivas/Superficie/Superficie.h"
+
+
 std::list<Burbuja*> burbujas;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
@@ -51,11 +54,11 @@ void animarBurbujas(int n) {
 
 	if (!burbujas.empty()) {
 		animando = true;
+		glutTimerFunc(100,animarBurbujas,0);	//llamo al timer para generar la animacion
 		std::list<Burbuja*>::iterator it;
 		for (it = burbujas.begin(); it != burbujas.end(); it++)
 			(*it)->animar();
 		glutPostRedisplay();
-		glutTimerFunc(50,animarBurbujas,0);	//llamo al timer para generar la animacion
 	}
 	else
 		animando = false;
@@ -186,12 +189,12 @@ void display(void)
 		 glCallList(DL_GRID);
 
 	/* cuadrados display lists */
-	for (int i=0; i<100; i++) {
-		glPushMatrix();
-			glTranslatef(i,i,0);
-			glCallList(DL_CUADRADO);
-		glPopMatrix();
-	}
+//	for (int i=0; i<100; i++) {
+//		glPushMatrix();
+//			glTranslatef(i,i,0);
+//			glCallList(DL_CUADRADO);
+//		glPopMatrix();
+//	}
 	/* testeo de esfera*/
 //    if (!blend)
 //    		glDisable(GL_BLEND);
@@ -408,10 +411,8 @@ int main(int argc, char** argv) {
   srand((unsigned)time(0));
   Burbuja* bubble1 = new Burbuja(1,2,3);
   Burbuja* bubble2 = new Burbuja(3,2,1);
-  Burbuja* bubble3 = new Burbuja(0,0,0);
   burbujas.push_back(bubble1);
   burbujas.push_back(bubble2);
-  burbujas.push_back(bubble3);
   init();
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);

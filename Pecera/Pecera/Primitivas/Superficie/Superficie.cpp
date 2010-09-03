@@ -1,10 +1,3 @@
-/*
- * Superficie.cpp
- *
- *  Created on: 28/08/2010
- *      Author: luuu
- */
-
 #include "Superficie.h"
 
 unsigned int Superficie::render_mode = GL_TRIANGLE_STRIP;
@@ -14,7 +7,7 @@ Superficie::Superficie() {}
 Superficie::~Superficie() {}
 
 void Superficie::dibujar() {
-//VER optimizacion con arrayvertex :)
+
 	std::vector<Vertice>::iterator it0;
 	std::vector<Vertice>::iterator it1;
 
@@ -23,6 +16,7 @@ void Superficie::dibujar() {
 	it1 += tam;
 
 	if (render_mode == GL_LINE_LOOP) {
+		glDisable(GL_LIGHTING);
 		while (it1 != superficie.end()) {
 			for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
 				glBegin(GL_LINE_LOOP);
@@ -31,6 +25,7 @@ void Superficie::dibujar() {
 				glVertex3f(it1->x,it1->y,it1->z);
 				it1++;
 				glVertex3f(it1->x,it1->y,it1->z);
+
 				glColor3f((float)pos/tam,1,(float)pos/tam);
 				glVertex3f(it0->x,it0->y,it0->z);
 				glVertex3f(it1->x,it1->y,it1->z);
@@ -41,21 +36,15 @@ void Superficie::dibujar() {
 			}
 			it1++; it0++;
 		}
+		glEnable(GL_LIGHTING);
 	} else {
-		while (it1 != superficie.end()) {
-			glBegin(render_mode);
-			glVertex3f(it0->x,it0->y,it0->z);
-			glVertex3f(it1->x,it1->y,it1->z);
-			for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
-				glColor3f(0,(float)pos/tam,(float)pos/tam);
-				it0++;
-				glVertex3f(it0->x,it0->y,it0->z);
-				it1++;
-				glVertex3f(it1->x,it1->y,it1->z);
-			}
-			glEnd();
-			it1++; it0++;
-		}
+		glColor3f(1,1,1);
+		glEnableClientState (GL_VERTEX_ARRAY);
+		glVertexPointer(3,GL_FLOAT,0,&(superficie[0]));
+		unsigned int cols = (superficie.size()/tam) -1;
+		for(unsigned int i=0 ; i <  cols ; i++)
+			glDrawElements(render_mode, tam*2, GL_UNSIGNED_INT, &(indices[i*tam*2]));
+		glDisableClientState (GL_VERTEX_ARRAY);
 	}
 }
 
@@ -69,8 +58,26 @@ void Superficie::nextMode() {
 	}
 }
 
-void Superficie::getNormales(std::vector<Vertice> &ptosCurva, std::vector<Vertice> &ptosNormal) {
-	 /* normales */
+void Superficie::setIndices() {
+
+	GLuint it0=0, it1=0;
+	GLuint longitud = superficie.size();
+	indices.clear();
+
+	for (it1 = tam; it1 < longitud; it0++, it1++) {
+		indices.push_back(it0);
+		indices.push_back(it1);
+		for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
+			it0++;
+			indices.push_back(it0);
+			it1++;
+			indices.push_back(it1);
+		}
+	}
+}
+
+void Superficie::setNormales(std::vector<Vertice> &ptosCurva, std::vector<Vertice> &ptosNormal) {
+	 /* normales TODO */
 	  if (ptosCurva.size() > 2) {
 		  ptosNormal.clear();
 		  std::vector<Vertice>::iterator prev = ptosCurva.begin();

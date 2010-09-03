@@ -11,12 +11,14 @@ SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Ve
 	//aplico traslacion
 	for(unsigned int i=0; i < trasl.size(); i++ ) {
 		for(unsigned int pos=0 ; pos <  tam ; pos++) {
-			v.x = forma[pos].x + trasl[i].x;
-			v.y = forma[pos].y + trasl[i].y;
-			v.z = forma[pos].z + trasl[i].z;
+			v = forma[pos] + trasl[i];
 			superficie.push_back(v);
 		}
 	}
+
+	//seteo los indices de dibujado
+	setIndices();
+
 //calculo de normales y texturas
 
 
@@ -25,5 +27,3 @@ SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Ve
 SuperficieBarrido::~SuperficieBarrido() {
 	// TODO Auto-generated destructor stub
 }
-
-

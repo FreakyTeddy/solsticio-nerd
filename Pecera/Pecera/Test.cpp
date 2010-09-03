@@ -3,6 +3,7 @@
 #include "Primitivas/Curva/Curva.h"
 #include "Camara/Camara.h"
 #include "Primitivas/Superficie/SuperficieBarrido.h"
+#include "Primitivas/Superficie/SuperficieRevolucion.h"
 #include <iostream>
 #include <vector>
 
@@ -18,7 +19,7 @@ GLfloat mat_shininess[] = { 100.0 };
 
 
 std::vector<Vertice> vertices;  //flan
-SuperficieBarrido *sb;
+Superficie *sb;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
@@ -188,7 +189,7 @@ void init(void) {
   trasl.push_back(q);
   curva.Bspline(trasl, v);
 
-  sb = new SuperficieBarrido(vertices, v);
+  sb = new SuperficieRevolucion(vertices, 360);
 
 //  std::vector<Vertice> alga;
 //  q.x= 2;  q.y=2;   q.z=0;
@@ -301,7 +302,7 @@ void display(void)
 //	glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
 //	glDisableClientState (GL_VERTEX_ARRAY);
 
-glDisable(GL_LIGHTING);
+//glDisable(GL_LIGHTING);
 	//CINTA
 //
 //	//glRotatef(i*3.6, 0,0,1);
@@ -566,10 +567,6 @@ int main(int argc, char** argv) {
   std::cout<<"boton der \t zoom camara"<<std::endl;
 
   glutMainLoop();
-
-  std::cout<<"deletes   "<<std::endl;
-  delete sb;
-
   return 0;
 }
 
