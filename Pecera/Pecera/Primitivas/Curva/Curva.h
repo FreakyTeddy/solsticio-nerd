@@ -15,7 +15,6 @@
 #define FACTOR_MAX 50
  //usar valores tipo 5 o 10 esta bien :)
 
-
 class Curva {
 	
 private:
@@ -40,6 +39,8 @@ public:
    * partir de los puntos de control requiere al menos 4 puntos de control para dibujar algo
    * */
   void Bspline(std::list<Vertice> &ptosControl, std::list<Vertice> &ptosCurva);
+
+  void Bspline(std::vector<float> &ptosControl, std::vector<float> &ptosCurva);
 
   void Bspline(std::vector<Vertice> &ptosControl, std::vector<Vertice> &ptosCurva);
 

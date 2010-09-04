@@ -40,6 +40,11 @@ class Vertice {
 			return q;
 		};
 
+		Vertice operator*(const float d) const {
+			Vertice q(x*d, y*d, z*d);
+			return q;
+		};
+
 		void operator-=(const Vertice& v) {
 			  x -= v.x; y -= v.y; z -= v.z;
 		};
@@ -56,6 +61,10 @@ class Vertice {
 			  x *= a; y *= a; z *= a;
 		};
 
+		bool esIgual(const float a, const float b, const float c) const {
+			return  ((x == a) && (y == b) && (z == c));
+		};
+
 		float modulo() const {
 			return sqrt(z*z + y*y + x*x);
 		}
@@ -65,9 +74,15 @@ class Vertice {
 		}
 
 		Vertice proyeccionYZ() const {
-			Vertice v(0,y,z);
-			return v;
+			Vertice q(0,y,z);
+			return q;
 		}
+
+		Vertice prodVectorial(const Vertice &v) const {
+			Vertice q(y*v.z - z*v.y , z*v.x - x*v.z, x*v.y - y*v.x);
+			return q;
+		}
+
 
 };
 

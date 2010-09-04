@@ -41,6 +41,7 @@ void Superficie::dibujar() {
 		glColor3f(1,1,1);
 		glEnableClientState (GL_VERTEX_ARRAY);
 		glVertexPointer(3,GL_FLOAT,0,&(superficie[0]));
+		//glNormalPointer();
 		unsigned int cols = (superficie.size()/tam) -1;
 		for(unsigned int i=0 ; i <  cols ; i++)
 			glDrawElements(render_mode, tam*2, GL_UNSIGNED_INT, &(indices[i*tam*2]));
@@ -76,8 +77,8 @@ void Superficie::setIndices() {
 	}
 }
 
-void Superficie::setNormales(std::vector<Vertice> &ptosCurva, std::vector<Vertice> &ptosNormal) {
-	 /* normales TODO */
+void Superficie::setNormales() {
+/*
 	  if (ptosCurva.size() > 2) {
 		  ptosNormal.clear();
 		  std::vector<Vertice>::iterator prev = ptosCurva.begin();
@@ -136,9 +137,24 @@ void Superficie::setNormales(std::vector<Vertice> &ptosCurva, std::vector<Vertic
 		  ptosNormal.push_back(*it);
 		  ptosNormal.push_back(v);
 	  }
+*/
+	
+
+
+
+
 }
 
+void Superficie::setTextura() {//TODO
+}
 
+void Superficie::init() {
+	
+	setIndices();
+	//setNormales();
+	//setTextura();	
+	
+}
 
 
 

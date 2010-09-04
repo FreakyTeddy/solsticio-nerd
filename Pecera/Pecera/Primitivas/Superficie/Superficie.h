@@ -8,6 +8,9 @@
 
 class Superficie {
 
+private:
+	static unsigned int render_mode;
+
 protected:
 	std::vector<Vertice> superficie; //malla de vertices de la superficie
 	std::vector<Vertice> normales;
@@ -15,13 +18,18 @@ protected:
 	unsigned int tam; 		 //tamanio de la curva "forma"
 	//TODO faltaria malla de color/textura
 
+
+
+	/* setea los indices para dibujado con draw elements */
 	void setIndices();
 
-private:
-	static unsigned int render_mode;
-
 	/* generar las normales de iluminacion */
-	void setNormales(std::vector<Vertice> &ptosCurva, std::vector<Vertice> &ptosNormal);
+	void setNormales();
+	
+	void setTextura();
+
+	/* inicializa la superficie creando normales, indices y texturas */
+	void init();
 
 public:
 

@@ -11,7 +11,7 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 
 	int pasos = 30;
 	Vertice eje (0,0,0);
-	Vertice eje2(0,0,10);
+	Vertice eje2(0,0,1);
 	Vertice v, v1, q;
 
 	//traslado el eje
@@ -24,14 +24,16 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 	double sen_x = v.y/norm;
 	double cos_x = v.z/norm;
 
+	if (eje2.esIgual(1,0,0)) { //caso especial si el eje de rotacion es x
+		sen_x = 0;
+		cos_x = 1;
+	}
+
 	v1 = eje2;
-	std::cout<<" v1: "<<v1.x<<" "<<v1.y<<" "<<v1.z<<std::endl;
 	rotar(v1.y, v1.z, sen_x, cos_x);
 
 	double sen_y = v1.x / v1.modulo();
 	double cos_y = v1.z / v1.modulo();
-
-
 
 	//aplico rotacion
 
