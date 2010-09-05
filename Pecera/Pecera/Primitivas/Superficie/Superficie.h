@@ -16,6 +16,7 @@ protected:
 	std::vector<Vertice> normales;
 	std::vector<GLuint> indices;
 	unsigned int tam; 		 //tamanio de la curva "forma"
+	bool cerrada;
 	//TODO faltaria malla de color/textura
 
 

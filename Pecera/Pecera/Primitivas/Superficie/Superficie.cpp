@@ -1,6 +1,9 @@
 #include "Superficie.h"
-
 unsigned int Superficie::render_mode = GL_TRIANGLE_STRIP;
+
+GLfloat mat_diffuse[] = { 1.0, 0.50, 0.0,0.70 };
+GLfloat mat_specular[] = { 1.0, 0.90, 0.0,0.7 };//material de la esfera
+GLfloat mat_shininess[] = { 100.0 };
 
 Superficie::Superficie() {}
 
@@ -38,15 +41,33 @@ void Superficie::dibujar() {
 		}
 		glEnable(GL_LIGHTING);
 	} else {
-		glColor3f(1,1,1);
+		glEnable(GL_LIGHTING);
+		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
+		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 		glEnableClientState (GL_VERTEX_ARRAY);
-		glVertexPointer(3,GL_FLOAT,0,&(superficie[0]));
-		//glNormalPointer();
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, &(superficie[0]));
+		glNormalPointer(GL_FLOAT,0, &(normales[0]));
 		unsigned int cols = (superficie.size()/tam) -1;
 		for(unsigned int i=0 ; i <  cols ; i++)
 			glDrawElements(render_mode, tam*2, GL_UNSIGNED_INT, &(indices[i*tam*2]));
+		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState (GL_VERTEX_ARRAY);
+
 	}
+	it1 = normales.begin();
+	//dibujo las normales
+	glDisable(GL_LIGHTING);
+	glBegin(GL_LINES);
+	glColor3f(1,1,1); Vertice v;
+	for(it0 =superficie.begin(); it0 != superficie.end() ; it0++, it1++) {
+			v = (*it0) + (*it1);
+			glVertex3f(it0->x,it0->y,it0->z);
+			glVertex3f(v.x,v.y,v.z);
+	}
+	glEnd();
+	glEnable(GL_LIGHTING);
 }
 
 void Superficie::nextMode() {
@@ -78,70 +99,105 @@ void Superficie::setIndices() {
 }
 
 void Superficie::setNormales() {
-/*
-	  if (ptosCurva.size() > 2) {
-		  ptosNormal.clear();
-		  std::vector<Vertice>::iterator prev = ptosCurva.begin();
-		  std::vector<Vertice>::iterator it = ptosCurva.begin();
-		  std::vector<Vertice>::iterator next = ptosCurva.begin();
-		  Vertice v;
-		  //primer punto
-		  next++;
-		  //resta (next - prev)
-		  v.x = next->x - prev->x;
-		  v.y = next->y - prev->y;
 
-		  // z x resta -->producto vectorial
-		  float aux = 0 - v.y;
-		  v.y = v.x;
-		  v.x = aux;
+	normales.clear();
+	unsigned int curr=0;
+	Vertice normal, v, q;
 
-		  //push it, push normal
-		  ptosNormal.push_back(*it);
-		  ptosNormal.push_back(v);
+	/**************** primer curva **********************/
 
-		  //caso general
-		  do {
-			  next++;
-			  it++;
+	/* Primer vertice */
+	v = superficie[curr+tam] - superficie[curr];
+	q = superficie[curr+1] - superficie[curr];
+	normales.push_back(v.normal(q));
 
-			  //resta (next - prev)
-			  v.x = next->x - prev->x;
-			  v.y = next->y - prev->y;
+	/* Vertices intermedios */
 
-			  // z x resta -->producto vectorial
-			  aux = 0 - v.y;
-			  v.y = v.x;
-			  v.x = aux;
+	for (curr = 1; curr < tam-1; curr++) {
+		v = superficie[curr-1] - superficie[curr];
+		q = superficie[curr+tam] - superficie[curr];
+		normal = v.normal(q);
+		v = superficie[curr+1] - superficie[curr];
+		normal += q.normal(v);
+		normales.push_back(normal.normalizar());
+	}
 
-			  //push it, push normal
-			  ptosNormal.push_back(*it);
-			  ptosNormal.push_back(v);
+	/* ultimo vertice */
+	v = superficie[curr-1] - superficie[curr];
+	q = superficie[curr+tam] - superficie[curr];
+	normal = v.normal(q);
+	normales.push_back(normal.normalizar());
 
-			  prev++;
-		  } while (next != ptosCurva.end());
+	/**************** curvas intermedias **********************/
 
-		  //ultimo punto
-		  it++;
+	if (superficie.size()/tam >2) {
+		//para todas las curvas intermedias:
 
-		  //resta (next - prev)
-		  v.x = next->x - prev->x;
-		  v.y = next->y - prev->y;
+		for (unsigned int curva = 1; curva < (superficie.size()/tam)-1; curva++) {
+			curr++;
+			/* Primer vertice */
+			v = superficie[curr+tam] - superficie[curr];
+			q = superficie[curr+1] - superficie[curr];
+			normal = v.normal(q);
+			v = superficie[curr-tam] - superficie[curr];
+			normales.push_back(normal.normalizar());
 
-		  // z x resta -->producto vectorial
-		  aux = 0 - v.y;
-		  v.y = v.x;
-		  v.x = aux;
+			/* Vertices intermedios */
+			for (curr += 1; curr < ((curva+1)*tam)-1; curr++ ) {
+				v = superficie[curr-1] - superficie[curr]; //arriba
+				q = superficie[curr+tam] - superficie[curr];//izq
+				normal = v.normal(q);
+				v = superficie[curr+1] - superficie[curr];//abajo
+				normal += q.normal(v);
+				q = superficie[curr-tam] - superficie[curr];//der
+				normal += v.normal(q);
+				v = superficie[curr-1] - superficie[curr]; //arriba
+				normal += q.normal(v);
+				normales.push_back(normal.normalizar());
+			}
+			/* ultimo vertice */
+			v = superficie[curr-1] - superficie[curr];
+			q = superficie[curr-tam] - superficie[curr];
+			normal = q.normal(v);
+			q = superficie[curr+tam] - superficie[curr];
+			normal += v.normal(q);
+			normales.push_back(normal.normalizar());
+		}
+	}
 
-		  //push it, push normal
-		  ptosNormal.push_back(*it);
-		  ptosNormal.push_back(v);
-	  }
-*/
-	
+	/******************** ultima curva ***********************/
+	if (superficie.size()/tam >1) {
+		curr++;
+		/* Primer vertice */
+		v = superficie[curr-tam] - superficie[curr];
+		q = superficie[curr+1] - superficie[curr];
+		normal = q.normal(v);
+		normales.push_back(normal.normalizar());
 
+		/* Vertices intermedios */
 
+		for (curr = superficie.size()-tam+1; curr < superficie.size()-1; curr++) {
+			v = superficie[curr-1] - superficie[curr];
+			q = superficie[curr-tam] - superficie[curr];
+			normal = q.normal(v);
+			v = superficie[curr+1] - superficie[curr];
+			normal += v.normal(q);
+			normales.push_back(normal.normalizar());
+		}
 
+		/* ultimo vertice */
+		v = superficie[curr-1] - superficie[curr];
+		q = superficie[curr-tam] - superficie[curr];
+		normales.push_back(q.normal(v));
+	}
+
+	if (cerrada) {
+		for (unsigned int i=0; i<tam; i++){
+			v = (normales[i]+normales[normales.size()-tam+i]).normalizar();
+			normales[i] = v;
+			normales[normales.size()-tam+i] = v;
+		}
+	}
 
 }
 
@@ -151,7 +207,7 @@ void Superficie::setTextura() {//TODO
 void Superficie::init() {
 	
 	setIndices();
-	//setNormales();
+	setNormales();
 	//setTextura();	
 	
 }

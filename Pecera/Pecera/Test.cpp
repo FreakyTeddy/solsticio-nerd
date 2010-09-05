@@ -13,9 +13,9 @@ GLfloat vertex_buf[] = {0,0,0, 0,1,0, 0,1,1, 0,0,1};
 GLfloat color_buf[] =   {1,0,0, 0,1,0, 0,0,1, 1,1,1};
 GLubyte index_buf[] = {0,1,2, 2,3,0};
 
-GLfloat mat_diffuse[] = { 1.0, 0.50, 0.0,0.70 };
-GLfloat mat_specular[] = { 1.0, 0.90, 0.0,0.7 };//material de la esfera
-GLfloat mat_shininess[] = { 100.0 };
+//GLfloat mat_diffuse[] = { 1.0, 0.50, 0.0,0.70 };
+//GLfloat mat_specular[] = { 1.0, 0.90, 0.0,0.7 };//material de la esfera
+//GLfloat mat_shininess[] = { 100.0 };
 
 
 std::vector<Vertice> vertices;  //flan
@@ -173,7 +173,6 @@ void init(void) {
 
   Curva curva;
   curva.Bspline(v, vertices);
-  std::cout<<"sup"<<std::endl;
   q.x = 0;
   q.y = 0;
   q.z = 0;
@@ -189,7 +188,10 @@ void init(void) {
   trasl.push_back(q);
   curva.Bspline(trasl, v);
 
-  sb = new SuperficieRevolucion(vertices, 360);
+  q.set(0,0,0);
+  Vertice x(0,0,1);
+  sb = new SuperficieRevolucion(vertices, 180.0, q, x);
+  //sb = new SuperficieBarrido(vertices, v);
 
 //  std::vector<Vertice> alga;
 //  q.x= 2;  q.y=2;   q.z=0;
@@ -272,12 +274,12 @@ void display(void)
 //		glEnd();
 //		glPopMatrix();
 //	}}
-
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
 	glPushMatrix();
 	glTranslatef(tras[0],tras[1], tras[2]);
 	glRotatef(rotate_cam_x, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
 	glRotatef(rotate_cam_y, 1.0,0,0);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
+
 
 	if (!luz)
 		glDisable(GL_LIGHT0);

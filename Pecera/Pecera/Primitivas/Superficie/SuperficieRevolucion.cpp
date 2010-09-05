@@ -1,21 +1,19 @@
 #include "SuperficieRevolucion.h"
-#include <iostream>
 #include <math.h>
 #define PI 3.141592654
 
-SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float angulo) {
+SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float angulo, Vertice eje1, Vertice eje2) {
 
 	tam = forma.size(); //guardo la long de la curva patron
+	cerrada = !((int)angulo%360);
 
 	//guardo la malla de vertices de la superficie formada
 
-	int pasos = 30;
-	Vertice eje (0,0,0);
-	Vertice eje2(0,0,1);
+	int pasos = 20;
 	Vertice v, v1, q;
 
 	//traslado el eje
-	eje2 -= eje;
+	eje2 -= eje1;
 	eje2.normalizar();
 
 	//proyecto sobre yz y calculo el angulo
@@ -39,20 +37,16 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 
 	for (int i=0; i<=pasos; i++) {
 		for(unsigned int pos=0 ; pos <  tam ; pos++) {
-			/* con ejes coordenados */
-//			v.x = forma[pos].x;	v.y = forma[pos].y;	v.z = forma[pos].z;
-//			rotar(v.x,v.y, angulo*i/pasos);
-//			superficie.push_back(v);
 
 			q = forma[pos];
 			//traslado al origen
-			q -= eje;
+			q -= eje1;
 			//roto sobre eje x
 			rotar(q.y, q.z, sen_x, cos_x);
 			//roto sobre eje y
 			rotar(q.z, q.x, sen_y, cos_y);
 			//roto el angulo alfa en el eje z
-			rotar(q.x, q.y, angulo*i/pasos);
+			rotar(q.x, q.y, -angulo*i/pasos);
 
 			//hago el camino inverso
 
@@ -61,16 +55,12 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 			//roto sobre eje x
 			rotar(q.y, q.z, -sen_x, cos_x);
 			//traslado
-			q += eje;
+			q += eje1;
 
 			superficie.push_back(q);
 		}
 	}
-
-//calculo de normales
-
-	setIndices();
-	//setNormales();
+	init();
 
 }
 

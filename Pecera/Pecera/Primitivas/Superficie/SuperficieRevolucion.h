@@ -13,8 +13,9 @@ private:
 
 public:
 
-	/* Recibe la forma de la curva, el angulo a rotar */
-	SuperficieRevolucion(std::vector<Vertice> &forma, float angulo);
+	/* Recibe la forma de la curva, el angulo a rotar
+	 * y el eje de rotacion dado por los vertices eje1 y eje2 */
+	SuperficieRevolucion(std::vector<Vertice> &forma, float angulo,Vertice eje1, Vertice eje2);
 	~SuperficieRevolucion();
 };
 

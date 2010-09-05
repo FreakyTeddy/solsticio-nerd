@@ -1,6 +1,5 @@
 #include "Burbuja.h"
 #include <cstdlib>
-#include <iostream>
 
 const GLfloat Burbuja::mat_specular[] = { 1 ,1, 1.0 ,0.40 };
 const GLfloat Burbuja::mat_diffuse[] = { 0.15 ,0.15, 0.60 ,0.70 };
@@ -22,18 +21,14 @@ Burbuja::Burbuja(float x, float y, float z) {
 	v.x += (float)(rand()%20 - 10)/5;
 	v.y += (float)(rand()%20 - 10)/5;
 	v.z += 4;
-	std::cout<< "Trayectoria burbuja: "<<std::endl;
-	std::cout<<v.x<<" "<<v.y<<" "<<v.z<<std::endl;
 	puntos.push_back(v);
 	v.x += (float)(rand()%20 - 10)/5;
 	v.y += (float)(rand()%20 - 10)/5;
 	v.z += 6;
-	std::cout<<v.x<<" "<<v.y<<" "<<v.z<<std::endl;
 	puntos.push_back(v);
 	v.x += (float)(rand()%20 - 10)/5;
 	v.y += (float)(rand()%20 - 10)/5;
 	v.z += 10;
-	std::cout<<v.x<<" "<<v.y<<" "<<v.z<<std::endl<<std::endl;
 	puntos.push_back(v);
 	puntos.push_back(v);
 	puntos.push_back(v);

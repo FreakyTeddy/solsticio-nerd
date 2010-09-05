@@ -4,7 +4,7 @@
 SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Vertice> &trasl) {
 
 	tam = forma.size(); //guardo la long de la curva patron
-
+	cerrada = false;
 	//guardo la malla de vertices de la superficie formada y aplico traslacion
 	Vertice v;
 

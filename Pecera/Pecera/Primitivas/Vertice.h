@@ -2,7 +2,7 @@
 #define VERTICE_H_
 
 #include <math.h>
-
+#include <iostream>
 class Vertice {
 	
 	public:
@@ -61,28 +61,43 @@ class Vertice {
 			  x *= a; y *= a; z *= a;
 		};
 
+		void set(const float a, const float b, const float c) {
+			x = a; y = b; z = c;
+		};
+
 		bool esIgual(const float a, const float b, const float c) const {
 			return  ((x == a) && (y == b) && (z == c));
 		};
 
 		float modulo() const {
 			return sqrt(z*z + y*y + x*x);
-		}
+		};
 
-		void normalizar() {
+		Vertice& normalizar() {
 			(*this) /= this->modulo();
-		}
+			return *this;
+		};
 
 		Vertice proyeccionYZ() const {
 			Vertice q(0,y,z);
 			return q;
-		}
+		};
 
+		/* realiza el producto vectorial: this x v */
 		Vertice prodVectorial(const Vertice &v) const {
 			Vertice q(y*v.z - z*v.y , z*v.x - x*v.z, x*v.y - y*v.x);
 			return q;
-		}
+		};
 
+		/* devuelve un vector normal al actual y al parametro */
+		Vertice normal(const Vertice &v) const {
+			//std::cout << v.x <<" "<<v.y<<" "<<v.z<<std::endl;
+			return this->prodVectorial(v).normalizar();
+		};
+
+		void print() {
+			std::cout<< x<<" "<<y<<" "<<z<<std::endl;
+		};
 
 };
 
