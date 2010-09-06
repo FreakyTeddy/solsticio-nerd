@@ -159,47 +159,37 @@ void Curva::Bspline(std::list<Vertice> &ptosControl, std::list<Vertice> &ptosCur
 
 void Curva::Bspline(std::vector<Vertice> &ptosControl, std::vector<Vertice> &ptosCurva) {
 
-	ptosCurva.clear();
-	float dt=(float) 1.0 / factorBspline;
+	 ptosCurva.clear();
+	 double dt=(float) 1.0 / factorBspline;
 
-	float uSquared, uCubed;
-	float Bn2Cubed, Bn1Cubed, B0Cubed, B1Cubed;
+	 double uSquared, uCubed;
+	 double Bn2Cubed, Bn1Cubed, B0Cubed, B1Cubed;
 
-	Vertice curve;
-	Vertice tangent;
-	Vertice normal;
+	 Vertice curve;
+	 Vertice ptos[4];
+	 unsigned int size = ptosControl.size();
 
-	bool complete;
+//mientras haya 4 puntos para procesar
+	 for ( unsigned int first = 0; size - first >=4; first++) {
+		 for (int i=0; i<4; i++)
+			 ptos[i] = ptosControl[first+i];  //cargo el vector con el que trabajo
 
-  	Vertice ptos[4];
-  	unsigned int first= 0;
-  	unsigned int size;
-  	while((ptosControl.size() - first) >= 4) {
-		size= ptosControl.size();
+		 for(double u= 0; u<1; u+=dt) {
 
-		for(unsigned int i= 0; (i < 4) && ((size-first) > 3); i++) {
-				 ptos[i] = ptosControl[first+i];
-		}
+		   uSquared= u * u;
+		   uCubed= uSquared * u;
 
-		complete = ((size-first) > 3);
-		first++;
+		   //Bases cubicas
+		   Bn2Cubed= (-uCubed + 3 * uSquared - 3 * u + 1 )/6;
+		   Bn1Cubed= ( 3 * uCubed - 6 * uSquared + 4 )/6;
+		   B0Cubed= ( -3 * uCubed + 3 * uSquared + 3 * u + 1 )/6;
+		   B1Cubed= uCubed/6;
 
-		for(float u= 0; u<=1 && complete; u+=dt) {
+		   curve = ptos[0] * Bn2Cubed + ptos[1] * Bn1Cubed + ptos[2] * B0Cubed + ptos[3] * B1Cubed;
+		   ptosCurva.push_back(curve);
 
-		  uSquared= u * u;
-		  uCubed= uSquared * u;
-
-		  //Bases cubicas
-		  Bn2Cubed= (-uCubed + 3 * uSquared - 3 * u + 1 )/6;
-		  Bn1Cubed= ( 3 * uCubed - 6 * uSquared + 4 )/6;
-		  B0Cubed= ( -3 * uCubed + 3 * uSquared + 3 * u + 1 )/6;
-		  B1Cubed= uCubed/6;
-
-	      curve = ptos[0] * Bn2Cubed + ptos[1] * Bn1Cubed + ptos[2] * B0Cubed + ptos[3] * B1Cubed;
-		  ptosCurva.push_back(curve);
-
-		}
-	}
+		 }
+	 }
 }
 
 void Curva::Bspline(std::vector<float> &ptosControl, std::vector<float> &ptosCurva) {

@@ -190,7 +190,7 @@ void init(void) {
 
   q.set(0,0,0);
   Vertice x(0,0,1);
-  sb = new SuperficieRevolucion(vertices, 180.0, q, x);
+  sb = new SuperficieRevolucion(vertices, 360.0, q, x);
   //sb = new SuperficieBarrido(vertices, v);
 
 //  std::vector<Vertice> alga;
@@ -274,12 +274,12 @@ void display(void)
 //		glEnd();
 //		glPopMatrix();
 //	}}
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
+	//glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glPushMatrix();
 	glTranslatef(tras[0],tras[1], tras[2]);
 	glRotatef(rotate_cam_x, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
 	glRotatef(rotate_cam_y, 1.0,0,0);
-
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
 
 	if (!luz)
 		glDisable(GL_LIGHT0);
