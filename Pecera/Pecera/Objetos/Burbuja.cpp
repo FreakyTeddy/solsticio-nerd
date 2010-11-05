@@ -10,9 +10,10 @@ Burbuja::Burbuja(float x, float y, float z) {
 	// TODO
 	//ver valores que correspondan y queden lindos (incluye transparencia) :)
 	radio = (float)((rand()%19)+1)/20.0;
+	tramo = 0;
 
 	/* trayectoria que seguira la burbuja */
-	std::list<Vertice> puntos;
+	std::vector<Vertice> puntos;
 	Vertice v;
 	v.x = x; v.y = y; v.z = z;
 	puntos.push_back(v);
@@ -35,7 +36,9 @@ Burbuja::Burbuja(float x, float y, float z) {
 	curva.Bspline(puntos,trayectoria);
 }
 
-Burbuja::~Burbuja() {}
+Burbuja::~Burbuja() {
+	trayectoria.clear();
+}
 
 void Burbuja::dibujar() {
 	glEnable(GL_BLEND);
@@ -49,14 +52,13 @@ void Burbuja::dibujar() {
 
 Vertice* Burbuja::getPos() {
 	Vertice* v = NULL;
-	if (!trayectoria.empty()) { //todavia le queda trayectoria
-		v = &(trayectoria.front());
+	if (tramo < trayectoria.size()) { //todavia le queda trayectoria
+		v = &(trayectoria[tramo]);
 	}
 	return v;
 }
 
 void Burbuja::animar() {
-	if (!trayectoria.empty())  //todavia le queda trayectoria
-		trayectoria.pop_front();
+	tramo++;
 }
 

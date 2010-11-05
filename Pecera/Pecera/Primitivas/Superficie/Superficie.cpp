@@ -1,11 +1,11 @@
 #include "Superficie.h"
 unsigned int Superficie::render_mode = GL_TRIANGLE_STRIP;
 
-GLfloat mat_diffuse[] = { 1.0, 0.50, 0.0,0.70 };
-GLfloat mat_specular[] = { 1.0, 0.90, 0.0,0.7 };//material de la esfera
-GLfloat mat_shininess[] = { 100.0 };
-
-Superficie::Superficie() {}
+Superficie::Superficie() {
+	mat_diffuse[0]=1.0; mat_diffuse[1]=0.50; mat_diffuse[2]=0.0; mat_diffuse[3]=0.70;
+	mat_specular[0]=1.0; mat_specular[1]=0.90; mat_specular[2]=0.0; mat_specular[3]=0.7;
+	mat_shininess[0]=100.0;
+}
 
 Superficie::~Superficie() {}
 
@@ -210,6 +210,17 @@ void Superficie::init() {
 	setNormales();
 	//setTextura();	
 	
+}
+
+void Superficie::setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {
+	mat_diffuse[0]=r; mat_diffuse[1]=g; mat_diffuse[2]=b; mat_diffuse[3]=alpha;
+
+}
+void Superficie::setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {
+	mat_specular[0]=r; mat_specular[1]=g; mat_specular[2]=b; mat_specular[3]=alpha;
+}
+void Superficie::setShininess(GLfloat shine) {
+	mat_shininess[0] = shine;
 }
 
 

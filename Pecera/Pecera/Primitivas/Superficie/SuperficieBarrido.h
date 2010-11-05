@@ -19,7 +19,7 @@ public:
 	 * conviene que trasl empiece en (0,0,0) 
 	 */
 
-	SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<float> defo);
+	SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo);
 	
 	~SuperficieBarrido();
 

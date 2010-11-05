@@ -17,7 +17,8 @@ private:
 	static const GLfloat mat_diffuse[];
 	static Curva curva;
 	float radio; //radio de la burbuja
-	std::list<Vertice> trayectoria;
+	unsigned int tramo;
+	std::vector<Vertice> trayectoria;
 
 	/* tiene una curva que describe el movimiento */
 

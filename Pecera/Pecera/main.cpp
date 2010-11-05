@@ -4,9 +4,11 @@
 #include <ctime>
 
 #include "Objetos/Burbuja.h"
+#include "Objetos/Alga.h"
 #include "Primitivas/Superficie/Superficie.h"
 
 
+Alga alguita;
 std::list<Burbuja*> burbujas;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
@@ -180,7 +182,6 @@ void display(void)
 	glRotatef(rotate_cam_y, 1.0,0,0);
 	glRotatef(rotate_cam_x, 0,0,1.0);
 
-
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
 
 	if (view_axis)
@@ -227,6 +228,8 @@ void display(void)
 		}
 	}
 
+	/* ALGAAAAAAAAAAA */
+	alguita.dibujar();
 	glPopMatrix();
 
 	//

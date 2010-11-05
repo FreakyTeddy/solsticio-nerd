@@ -66,7 +66,7 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
   while((ptosControl.size() - first) >= 4) {
     complete= load(ptosControl, ptos, first);
 
-    for(float u= 0; u<=1 && complete; u+=dt) {
+    for(float u= 0; u<1 && complete; u+=dt) {
       uSquared= u * u;
       uCubed= uSquared * u;
 
@@ -111,50 +111,6 @@ bool loadBspline(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int f
   }
 
   return ((size-first) > 3);
-}
-
-void Curva::Bspline(std::list<Vertice> &ptosControl, std::list<Vertice> &ptosCurva) {
-
-  float dt=(float) 1.0 / factorBspline;
-
-  float uSquared, uCubed;
-  float Bn2Cubed, Bn1Cubed, B0Cubed, B1Cubed;
-
-  Vertice curve;
-  Vertice tangent;
-  Vertice normal;
-
-  bool complete;
-
-  Vertice ptos[4];
-  unsigned int first= 0;
-  unsigned int size;
-  while((ptosControl.size() - first) >= 4) {
-	  size= ptosControl.size();
-
-	   for(unsigned int i= 0; (i < 4) && ((size-first) > 3); i++) {
-	     ptos[i] = find(ptosControl, first+i);
-	   }
-
-	complete = ((size-first) > 3);
-    first++;
-
-    for(float u= 0; u<=1 && complete; u+=dt) {
-
-      uSquared= u * u;
-      uCubed= uSquared * u;
-
-      //Bases cubicas
-      Bn2Cubed= (-uCubed + 3 * uSquared - 3 * u + 1 )/6;
-      Bn1Cubed= ( 3 * uCubed - 6 * uSquared + 4 )/6;
-      B0Cubed= ( -3 * uCubed + 3 * uSquared + 3 * u + 1 )/6;
-      B1Cubed= uCubed/6;
-
-      curve = ptos[0] * Bn2Cubed + ptos[1] * Bn1Cubed + ptos[2] * B0Cubed + ptos[3] * B1Cubed;
-      ptosCurva.push_back(curve);
-
-    }
-  }
 }
 
 void Curva::Bspline(std::vector<Vertice> &ptosControl, std::vector<Vertice> &ptosCurva) {
@@ -202,22 +158,14 @@ void Curva::Bspline(std::vector<float> &ptosControl, std::vector<float> &ptosCur
 
 	float curve;
 
-	bool complete;
-
   	float ptos[4];
-  	unsigned int first= 0;
-  	unsigned int size;
-  	while((ptosControl.size() - first) >= 4) {
-		size= ptosControl.size();
+  	unsigned int size = ptosControl.size();;
+  	for ( unsigned int first = 0; size - first >=4; first++) {
 
-		for(unsigned int i= 0; (i < 4) && ((size-first) > 3); i++) {
+		for(unsigned int i= 0; i < 4; i++)
 				 ptos[i] = ptosControl[first+i];
-		}
 
-		complete = ((size-first) > 3);
-		first++;
-
-		for(float u= 0; u<=1 && complete; u+=dt) {
+		for(float u= 0; u<1; u+=dt) {
 
 		  uSquared= u * u;
 		  uCubed= uSquared * u;

@@ -44,6 +44,10 @@ class Vertice {
 			Vertice q(x*d, y*d, z*d);
 			return q;
 		};
+		Vertice operator*(const Vertice &v) const {
+			Vertice q(v.x*x, v.y*y ,v.z*z);
+			return q;
+		};
 
 		void operator-=(const Vertice& v) {
 			  x -= v.x; y -= v.y; z -= v.z;

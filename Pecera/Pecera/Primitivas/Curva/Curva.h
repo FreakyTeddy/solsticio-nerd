@@ -10,7 +10,7 @@
 
 #include <iostream>
  
-#define FACTOR_INICIAL 4
+#define FACTOR_INICIAL 5
 #define FACTOR_MIN 1
 #define FACTOR_MAX 50
  //usar valores tipo 5 o 10 esta bien :)
@@ -38,7 +38,6 @@ public:
   /* Guarda en curva los puntos a unir para dibujar una curva Bspline cubica uniforme a
    * partir de los puntos de control requiere al menos 4 puntos de control para dibujar algo
    * */
-  void Bspline(std::list<Vertice> &ptosControl, std::list<Vertice> &ptosCurva);
 
   void Bspline(std::vector<float> &ptosControl, std::vector<float> &ptosCurva);
 

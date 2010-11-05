@@ -146,103 +146,101 @@ void init(void) {
   glEndList();
 
   std::vector<Vertice> v;
-  Vertice q;
-  q.x = 1;
-  q.y = 1;
-  q.z = 0;
-  v.push_back(q);
-  v.push_back(q);
-  v.push_back(q);
-
-  q.x = 1.5;
-  q.y = 1.5;
-  q.z = 3.8;
-  v.push_back(q);
-
-  q.x = 3.5;
-  q.y = 2.0;
-  q.z = 0.5;
-  v.push_back(q);
-
-  q.x = 4.0;
-  q.y = 3.0;
-  q.z = 1.0;
-  v.push_back(q);
-  v.push_back(q);
-  v.push_back(q);
-
-  Curva curva;
-  curva.Bspline(v, vertices);
-  q.x = 0;
-  q.y = 0;
-  q.z = 0;
   std::vector<Vertice> trasl;
-  trasl.push_back(q);
-  trasl.push_back(q);
-  trasl.push_back(q);
-  q.x = 2.5;
-  q.y = -1.5;
-  q.z = 0;
-  trasl.push_back(q);
-  trasl.push_back(q);
-  trasl.push_back(q);
-  curva.Bspline(trasl, v);
-
-  q.set(0,0,0);
-  Vertice x(0,0,1);
-  sb = new SuperficieRevolucion(vertices, 360.0, q, x);
-  //sb = new SuperficieBarrido(vertices, v);
-
-//  std::vector<Vertice> alga;
-//  q.x= 2;  q.y=2;   q.z=0;
-//  alga.push_back(q);
-//  q.x=3;
-//  alga.push_back(q);
+  Vertice q;
+  Curva curva;
 //
-//  trasl.clear();
-//  q.x=0; q.y=0; q.z=0;
-//  trasl.push_back(q);
-//  trasl.push_back(q);
-//  trasl.push_back(q);
+//  q.x = 1;
+//  q.y = 1;
+//  q.z = 0;
+//  v.push_back(q);
+//  v.push_back(q);
+//  v.push_back(q);
 //
-//  q.x=-1; q.y=0; q.z=1;
-//  trasl.push_back(q);
+//  q.x = 1.5;
+//  q.y = 1.5;
+//  q.z = 3.8;
+//  v.push_back(q);
 //
-//  q.x=1; q.y=0; q.z=3;
-//  trasl.push_back(q);
+//  q.x = 3.5;
+//  q.y = 2.0;
+//  q.z = 0.5;
+//  v.push_back(q);
 //
-//  q.x=-1; q.y=0; q.z=5;
-//  trasl.push_back(q);
-//  trasl.push_back(q);
-//  trasl.push_back(q);
+//  q.x = 4.0;
+//  q.y = 3.0;
+//  q.z = 1.0;
+//  v.push_back(q);
+//  v.push_back(q);
+//  v.push_back(q);
 //
+//  curva.Bspline(v, vertices);
+//  q.x = 0;
+//  q.y = 0;
+//  q.z = 0;
+//
+//  trasl.push_back(q);
+//  trasl.push_back(q);
+//  trasl.push_back(q);
+//  q.x = 2.5;
+//  q.y = -1.5;
+//  q.z = 0;
+//  trasl.push_back(q);
+//  trasl.push_back(q);
+//  trasl.push_back(q);
 //  curva.Bspline(trasl, v);
 //
-//  trasl.clear();
-//   q.x=1; q.y=1; q.z=1;
-//   trasl.push_back(q);
-//   trasl.push_back(q);
-//   trasl.push_back(q);
-//
-//   q.x=0.5; q.y=0.5; q.z=1;
-//   trasl.push_back(q);
-//
-//   q.x=1; q.y=1.5; q.z=1;
-//   trasl.push_back(q);
-//
-//   q.x=0.01; q.y=0.01; q.z=1;
-//   trasl.push_back(q);
-//   trasl.push_back(q);
-//   trasl.push_back(q);
-//
-//
-//  std::vector<Vertice> def;
-//
-//  curva.Bspline(trasl, def);
-//   sb2 = new SuperficieBarrido(alga, v, def);
+//  q.set(0,0,0);
+//  Vertice x(1,0,0);
+//  sb = new SuperficieRevolucion(vertices, 360.0, q, x);
+//  //sb = new SuperficieBarrido(vertices, v);
+  	std::vector<Vertice> alga;
+  	std::vector<Vertice> alga_s;
+	q.set(1,1,0);
+	alga.push_back(q);
+	alga.push_back(q);
+	alga.push_back(q);
+	q.set(-1,1,0);
+	alga.push_back(q);
+	alga.push_back(q);
+	alga.push_back(q);
+	curva.Bspline(alga, alga_s);
 
+	trasl.clear();
+	q.set(0,0,0);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
 
+	q.set(0,0,1);
+	trasl.push_back(q);
 
+	q.set(0,0,3);
+	trasl.push_back(q);
+
+	q.set(0,0,6);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	curva.Bspline(trasl, v);
+
+	std::vector<Vertice> def;
+	std::vector<Vertice> def2;
+	q.set(1, 1, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	q.set(0.5,0.5,1);
+	def.push_back(q);
+	q.set(2,2,1);
+	def.push_back(q);
+	q.set(0.1, 0.1, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	curva.Bspline(def, def2);
+
+	sb = new SuperficieBarrido(alga_s, v , def2);
 }
 
 
@@ -276,10 +274,11 @@ void display(void)
 //	}}
 	//glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glPushMatrix();
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
 	glTranslatef(tras[0],tras[1], tras[2]);
 	glRotatef(rotate_cam_x, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
 	glRotatef(rotate_cam_y, 1.0,0,0);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
+
 
 	if (!luz)
 		glDisable(GL_LIGHT0);

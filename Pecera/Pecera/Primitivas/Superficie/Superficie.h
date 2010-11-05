@@ -10,6 +10,10 @@ class Superficie {
 
 private:
 	static unsigned int render_mode;
+	/* material de la superficie */
+	GLfloat mat_diffuse[4];
+	GLfloat mat_specular[4];
+	GLfloat mat_shininess[1];
 
 protected:
 	std::vector<Vertice> superficie; //malla de vertices de la superficie
@@ -41,6 +45,12 @@ public:
 	static void nextMode();
 
 	void dibujar();
+
+	/* cambian el material de la superficie.. los valores son entre 0 y 1
+	 * alpha = 1 -> no hay transparencia	 */
+	void setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
+	void setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
+	void setShininess(GLfloat shine);
 
 };
 
