@@ -20,6 +20,7 @@ GLubyte index_buf[] = {0,1,2, 2,3,0};
 
 std::vector<Vertice> vertices;  //flan
 Superficie *sb;
+Camara cam;
 
 // Variables que controlan la ubicación de la cámara en la Escena 3D
 #define EYE_Z 5.0
@@ -105,7 +106,8 @@ void Set3DEnv() {
 	gluPerspective(60.0, (GLfloat) window_size[0]/(GLfloat) window_size[1], 0.10, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt (eye[0]/zoom, eye[1]/zoom, eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
+	//gluLookAt (eye[0]/zoom, eye[1]/zoom, eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
+	cam.lookAt();
 
 }
 
@@ -272,10 +274,11 @@ void display(void)
 //		glEnd();
 //		glPopMatrix();
 //	}}
-	//glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glPushMatrix();
+	cam.lookAt();
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
-	glTranslatef(tras[0],tras[1], tras[2]);
+	glPushMatrix();
+
+	//glTranslatef(tras[0],tras[1], tras[2]);
 	glRotatef(rotate_cam_x, 0,0,1.0);	//en lugar de rotar la cam roto el modelo
 	glRotatef(rotate_cam_y, 1.0,0,0);
 
@@ -390,10 +393,12 @@ void keyboard (unsigned char key, int x, int y) {
       break;
 	case 0x2B:  // '+'
 		tras[2] -= 1.0;
+		cam.trasladar(0,0,-1.0);
 		glutPostRedisplay();
 		break;
 	case 0x2D:  // '-'
 		tras[2] += 1.0;
+		cam.trasladar(0,0,1.0);
 		glutPostRedisplay();
 		break;
 	case 'l':
@@ -416,6 +421,7 @@ void keyboard (unsigned char key, int x, int y) {
       tras[0]=0;tras[1]=0;tras[2]=0;
       rotate_cam_x=0; rotate_cam_y=0;
       zoom=1;
+      cam.reset();
       glutPostRedisplay();
       break;
     case 'r':
@@ -433,18 +439,22 @@ void specialKeys(int key,int x, int y) {
 	switch(key) {
 	case GLUT_KEY_LEFT:
 		tras[0] -= 1.0;
+		cam.trasladar(-1.0,0,0);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_RIGHT:
 		tras[0] += 1.0;
+		cam.trasladar(1.0,0,0);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_UP:
 		tras[1] += 1.0;
+		cam.trasladar(0,1.0,0);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_DOWN:
 		tras[1] -= 1.0;
+		cam.trasladar(0,-1.0,0);
 		glutPostRedisplay();
 		break;
 	}
@@ -478,9 +488,11 @@ void mouseMotion(int x, int y) {
 	}
 	if (zoomOn) {
 		if (y > zprev)
-			zoom += 0.001*(zprev-y);
+			//zoom += 0.001*(zprev-y);
+			cam.zoom_in(0.001*(zprev-y));
 		else if(y < zprev)
-			zoom -=0.001*(y-zprev);
+			//zoom -=0.001*(y-zprev);
+			cam.zoom_in(-0.001*(y-zprev));
 		zprev = y;
 		glutPostRedisplay();
 	}

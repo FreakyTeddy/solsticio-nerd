@@ -10,7 +10,7 @@
 
 #include <iostream>
  
-#define FACTOR_INICIAL 5
+#define FACTOR_INICIAL 4
 #define FACTOR_MIN 1
 #define FACTOR_MAX 50
  //usar valores tipo 5 o 10 esta bien :)

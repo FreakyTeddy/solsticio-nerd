@@ -46,7 +46,7 @@ void Burbuja::dibujar() {
 	    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	    glBlendFunc (GL_SRC_ALPHA, GL_ONE);	//transparencia
-	    glutSolidSphere (radio, 20, 16);
+	    glutSolidSphere (radio, 20, 10);
 	glDisable(GL_BLEND);
 }
 

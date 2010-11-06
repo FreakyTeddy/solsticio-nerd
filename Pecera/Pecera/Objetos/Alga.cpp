@@ -3,17 +3,19 @@
 #include "../Primitivas/Curva/Curva.h"
 
 Alga::Alga() {
+
+	/* ejemplo de alga */
 	std::vector<Vertice> v;
 	std::vector<Vertice> trasl;
 	Vertice q;
 	Curva curva;
 	std::vector<Vertice> alga_c;
 	std::vector<Vertice> alga_s;
-	q.set(1,1,0);
+	q.set(0.5,0,0);
 	alga_c.push_back(q);
 	alga_c.push_back(q);
 	alga_c.push_back(q);
-	q.set(-1,1,0);
+	q.set(-0.5,0,0);
 	alga_c.push_back(q);
 	alga_c.push_back(q);
 	alga_c.push_back(q);
@@ -25,13 +27,19 @@ Alga::Alga() {
 	trasl.push_back(q);
 	trasl.push_back(q);
 
-	q.set(0,0,1);
+	q.set(0,-1,1.5);
 	trasl.push_back(q);
 
-	q.set(0,0,3);
+	q.set(0,0,4);
 	trasl.push_back(q);
 
-	q.set(0,0,6);
+	q.set(0.5,0.5,6);
+	trasl.push_back(q);
+
+	q.set(0.5,0.8,6.5);
+	trasl.push_back(q);
+
+	q.set(0.8,0.8,7);
 	trasl.push_back(q);
 	trasl.push_back(q);
 	trasl.push_back(q);
@@ -39,15 +47,19 @@ Alga::Alga() {
 
 	std::vector<Vertice> def;
 	std::vector<Vertice> def2;
-	q.set(1, 1, 1);
+	q.set(0.1, 0.1, 1);
 	def.push_back(q);
 	def.push_back(q);
+	def.push_back(q);
+	q.set(1,1,1);
 	def.push_back(q);
 	q.set(0.5,0.5,1);
 	def.push_back(q);
-	q.set(2,2,1);
+	q.set(0.8,0.8,1);
 	def.push_back(q);
-	q.set(0.1, 0.1, 1);
+	q.set(0.4,0.4,1);
+	def.push_back(q);
+	q.set(0.01, 0.01, 1);
 	def.push_back(q);
 	def.push_back(q);
 	def.push_back(q);
