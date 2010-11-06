@@ -107,6 +107,8 @@ void DrawXYGrid() {
   glEnable(GL_LIGHTING);
 }
 
+/* Seteo del ambiente 3D
+ * Debe llamarse cada vez que se cambia el tamaño de ventana */
 void Set3DEnv() {
 	glViewport (0, 0, (GLsizei) window_size[0], (GLsizei) window_size[1]);
 	glMatrixMode (GL_PROJECTION);
@@ -143,6 +145,8 @@ void init(void) {
        glFogf (GL_FOG_END, 5.0);
     }
 
+  /* seteo del ambiente */
+  Set3DEnv();
 
   // Generación de las Display Lists
   glNewList(DL_AXIS, GL_COMPILE);
@@ -171,7 +175,6 @@ void init(void) {
 void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	Set3DEnv();
 
 	///////////////////////////////////////////////////
 	// Escena 3D
@@ -241,6 +244,7 @@ void reshape (int w, int h)
 {
    	window_size[0]  = w;
 	window_size[1] = h;
+	Set3DEnv();
 }
 
 void keyboard (unsigned char key, int x, int y) {

@@ -40,7 +40,6 @@ float zoom = 1;
 int xprev = 0; //posicion anterior del mouse
 int yprev = 0;
 int zprev = 0;
-float altura_curva = 6.0;
 
 // Variables de control
 bool view_grid = true;
@@ -136,6 +135,7 @@ void init(void) {
        glFogf (GL_FOG_END, 5.0);
     }
 
+    Set3DEnv();
 
   // Generación de las Display Lists
   glNewList(DL_AXIS, GL_COMPILE);
@@ -226,7 +226,7 @@ void init(void) {
 
 	std::vector<Vertice> def;
 	std::vector<Vertice> def2;
-	q.set(1, 1, 1);
+	q.set(0.1, 0.1, 1);
 	def.push_back(q);
 	def.push_back(q);
 	def.push_back(q);
@@ -247,7 +247,7 @@ void init(void) {
 void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	Set3DEnv();
+	//Set3DEnv();
 
 	///////////////////////////////////////////////////
 	// Escena 3D
@@ -380,6 +380,7 @@ void reshape (int w, int h)
 {
    	window_size[0]  = w;
 	window_size[1] = h;
+	Set3DEnv();
 }
 
 void keyboard (unsigned char key, int x, int y) {
@@ -539,7 +540,7 @@ int main(int argc, char** argv) {
   glutInitWindowSize(1024, 768);
   glutInitWindowPosition(0, 0);
   glutCreateWindow("TP Final - Sistemas Graficos");
-  glutFullScreen();
+  //glutFullScreen();
 
 //  //cargo las rutas de las imagenes
 //  std::string route[N];
