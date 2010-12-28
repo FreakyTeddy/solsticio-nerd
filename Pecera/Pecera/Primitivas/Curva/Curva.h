@@ -12,7 +12,7 @@
  
 #define FACTOR_INICIAL 4
 #define FACTOR_MIN 1
-#define FACTOR_MAX 50
+#define FACTOR_MAX 25
  //usar valores tipo 5 o 10 esta bien :)
 
 class Curva {
@@ -43,9 +43,9 @@ public:
 
   void Bspline(std::vector<Vertice> &ptosControl, std::vector<Vertice> &ptosCurva);
 
-  /* Suma al factor del paso de Bspline la cantidad pasada por parametro.
+  /* Modifica al factor del paso de Bspline a la cantidad pasada por parametro.
    * */
-  void modificarFactorBspline(int cantidad);
+  void setFactor(int cantidad);
 
 };
 

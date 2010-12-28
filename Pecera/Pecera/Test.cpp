@@ -393,12 +393,12 @@ void keyboard (unsigned char key, int x, int y) {
       break;
 	case 0x2B:  // '+'
 		tras[2] -= 1.0;
-		cam.trasladar(0,0,-1.0);
+		cam.trasladar(0,0,1.0);
 		glutPostRedisplay();
 		break;
 	case 0x2D:  // '-'
 		tras[2] += 1.0;
-		cam.trasladar(0,0,1.0);
+		cam.trasladar(0,0,-1.0);
 		glutPostRedisplay();
 		break;
 	case 'l':
@@ -439,22 +439,22 @@ void specialKeys(int key,int x, int y) {
 	switch(key) {
 	case GLUT_KEY_LEFT:
 		tras[0] -= 1.0;
-		cam.trasladar(-1.0,0,0);
+		cam.trasladar(1.0,0,0);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_RIGHT:
 		tras[0] += 1.0;
-		cam.trasladar(1.0,0,0);
+		cam.trasladar(-1.0,0,0);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_UP:
 		tras[1] += 1.0;
-		cam.trasladar(0,1.0,0);
+		cam.trasladar(0,-1.0,0);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_DOWN:
 		tras[1] -= 1.0;
-		cam.trasladar(0,-1.0,0);
+		cam.trasladar(0,1.0,0);
 		glutPostRedisplay();
 		break;
 	}

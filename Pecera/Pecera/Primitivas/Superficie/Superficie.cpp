@@ -56,18 +56,18 @@ void Superficie::dibujar() {
 		glDisableClientState (GL_VERTEX_ARRAY);
 
 	}
-//	it1 = normales.begin();
-//	//dibujo las normales
-//	glDisable(GL_LIGHTING);
-//	glBegin(GL_LINES);
-//	glColor3f(1,1,1); Vertice v;
-//	for(it0 =superficie.begin(); it0 != superficie.end() ; it0++, it1++) {
-//			v = (*it0) + (*it1);
-//			glVertex3f(it0->x,it0->y,it0->z);
-//			glVertex3f(v.x,v.y,v.z);
-//	}
-//	glEnd();
-//	glEnable(GL_LIGHTING);
+	it1 = normales.begin();
+	//dibujo las normales
+	glDisable(GL_LIGHTING);
+	glBegin(GL_LINES);
+	glColor3f(1,1,1); Vertice v;
+	for(it0 =superficie.begin(); it0 != superficie.end() ; it0++, it1++) {
+			v = (*it0) + (*it1);
+			glVertex3f(it0->x,it0->y,it0->z);
+			glVertex3f(v.x,v.y,v.z);
+	}
+	glEnd();
+	glEnable(GL_LIGHTING);
 }
 
 void Superficie::nextMode() {

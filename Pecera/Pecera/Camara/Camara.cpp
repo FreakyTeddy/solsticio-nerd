@@ -1,6 +1,5 @@
 #include "Camara.h"
-
-
+#include <math.h>
 
 Camara::Camara() {
 	reset();
@@ -11,12 +10,15 @@ Camara::~Camara() {}
 
 void Camara::lookAt() {
 	glLoadIdentity();
-	gluLookAt (eye[0]/zoom, eye[1]/zoom, eye[2], at[0], at[1], at[2], up[0], up[1], up[2]);
+	gluLookAt (eye.x/zoom, eye.y/zoom, eye.z, at.x, at.y, at.z, up.x, up.y, up.z);
 }
 
-void Camara::trasladar(float x, float y, float z) {
-	eye[0]+=x; eye[1]+=y; eye[2]+=z;
-//	at[0]+=x; at[1]+=y; at[2]+=z;
+void Camara::reset() {
+	eye.set(5.0,15.0,4.0);	//camara
+	at.set(0.0,0.0,5.0);	//centro
+	up.set(0.0,0.0,1.0);	//vector normal
+
+	zoom = 1;
 }
 
 void Camara::zoom_in(float p) {
@@ -26,14 +28,36 @@ void Camara::zoom_in(float p) {
 	}
 }
 
-void Camara::reset() {
-	eye[0]=0.0; eye[1]=20.0; eye[2]=5.0;	//camara
-	at[0]=0.0; at[1]=0.0; at[2]=5.0;	//centro
-	up[0]=0.0; up[1]=0.0; up[2]=1.0;	//vector normal
-	tras[0]=0; tras[1]=0; tras[2]=0; //traslacion de la camara
-
-	rotate_cam_x = 0;
-	rotate_cam_y = 0;
-	zoom = 1;
+void Camara::trasladar_f(float cant) {
+	Vertice temp = (at-eye).normalizar()*cant;
+	eye +=temp;
+	at +=temp;
+	temp.print();
 }
 
+void Camara::trasladar_s(float cant) {
+	Vertice temp = (eye-at).prodVectorial(up).normalizar()*cant;
+	eye +=temp;
+	at +=temp;
+}
+
+void Camara::trasladar_u(float cant) {
+	//no me convence
+	eye += (up*cant);
+	at += (up*cant);
+}
+
+
+void Camara::rotar_h(float cant) {
+	//TODO! mucho error... se va la imagen :P
+	Vertice temp = (eye-at).prodVectorial(up).normalizar()*cant;
+	temp.z=0;
+	eye +=temp;
+
+}
+
+void Camara::rotar_v(float cant) {
+	//TODO! mucho error... se va la imagen :P
+	Vertice temp = eye.prodVectorial(at).prodVectorial(eye).normalizar()*cant;
+	eye += temp;
+}

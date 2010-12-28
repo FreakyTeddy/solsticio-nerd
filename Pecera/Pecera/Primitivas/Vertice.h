@@ -49,6 +49,12 @@ class Vertice {
 			return q;
 		};
 
+		/* NO verifica d != 0 */
+		Vertice operator/(const float d) const {
+			Vertice q(x/d, y/d, z/d);
+			return q;
+		};
+
 		void operator-=(const Vertice& v) {
 			  x -= v.x; y -= v.y; z -= v.z;
 		};
@@ -95,7 +101,6 @@ class Vertice {
 
 		/* devuelve un vector normal al actual y al parametro */
 		Vertice normal(const Vertice &v) const {
-			//std::cout << v.x <<" "<<v.y<<" "<<v.z<<std::endl;
 			return this->prodVectorial(v).normalizar();
 		};
 

@@ -182,8 +182,8 @@ void display(void)
 	glPushMatrix();
 	//Camara
 	glTranslatef(tras[0],tras[1], tras[2]);
-	glRotatef(rotate_cam_y, 1.0,0,0);
-	glRotatef(rotate_cam_x, 0,0,1.0);
+	glRotatef(rotate_cam_y, 0.0,1.0,0.0);
+	glRotatef(rotate_cam_x, 0.0,0.0,1.0);
 
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
 

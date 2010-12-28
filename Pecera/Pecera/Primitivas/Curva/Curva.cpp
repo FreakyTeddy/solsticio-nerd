@@ -183,11 +183,11 @@ void Curva::Bspline(std::vector<float> &ptosControl, std::vector<float> &ptosCur
 	}
 }
 
-void Curva::modificarFactorBspline(int cantidad) {
+void Curva::setFactor(int cantidad) {
 
-  factorBspline+= cantidad;
+  factorBspline = cantidad;
 
-  if(factorBspline <= FACTOR_MIN)
+  if(factorBspline < FACTOR_MIN)
     factorBspline= FACTOR_MIN;
   if(factorBspline > FACTOR_MAX)
     factorBspline= FACTOR_MAX;

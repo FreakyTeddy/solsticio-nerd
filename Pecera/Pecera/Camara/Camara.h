@@ -3,6 +3,8 @@
 
 #include <GL/glut.h>
 #include <stdlib.h>
+#include "../Primitivas/Vertice.h"
+
 
 /*
  * Clase que controla la camara
@@ -11,14 +13,10 @@
 
 class Camara {
 private:
-	float eye[3];	//posicion
-	float at[3];	//centro
-	float up[3];	//vector normal
-	int tras[3];	//traslacion de la camara
-
-	float rotate_cam_x;
-	float rotate_cam_y;
-	float zoom;
+	Vertice eye;//posicion
+	Vertice at;	//centro
+	Vertice up;	//vector normal
+	float zoom;	//zoom realizado
 
 
 
@@ -29,16 +27,20 @@ public:
 	/* se llama ante cada cambio en la camara */
 	void lookAt();
 
-	/* mueve la camara tantas unidades en esa direccion */
-	void trasladar(float x, float y, float z);
+	/* vuelve a la configuracion inicial */
+	void reset();
 
 	/* porcentaje para hacer zoom */
 	void zoom_in (float p);
 
-	/* vuelve a la configuracion inicial */
-	void reset();
+	/* mueve la camara tantas unidades en esa direccion */
+	void trasladar_f(float cant);	//forward
+	void trasladar_s(float cant);	//sideways
+	void trasladar_u(float cant);	//upward
 
-	void rotar();
+	/* rotar la camara en la direccion vertical y horizontal*/
+	void rotar_h(float cant);
+	void rotar_v(float cant);
 };
 
 #endif
