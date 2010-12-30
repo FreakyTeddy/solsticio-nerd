@@ -12,7 +12,37 @@
 
 Camara cam;	//camara
 
+/* Dibujos de prueba */
 
+Superficie *sup;
+
+
+void florero() {
+	Curva c;
+	c.setFactor(3);
+	std::vector<Vertice> verts, vertb;
+	Vertice t;
+	t.set(0,0,0);
+	verts.push_back(t);
+	verts.push_back(t);
+	verts.push_back(t);
+	t.set(0,3,0);
+	verts.push_back(t);
+	t.set(0,5,1);
+	verts.push_back(t);
+	t.set(0,3,2);
+	verts.push_back(t);
+	t.set(0,1,4);
+	verts.push_back(t);
+	t.set(0,2,5);
+	verts.push_back(t);
+	verts.push_back(t);
+	verts.push_back(t);
+	c.Bspline(verts,vertb);
+	t.set(0,0,0);
+	Vertice q(0,0,1);
+	sup = new SuperficieRevolucion(vertb, -360,t,q);
+}
 
 /************************************/
 
@@ -146,7 +176,8 @@ void display(void)
 		 glCallList(DL_GRID);
     ///////////////////////////// dibujar ////////////////////////
 
-
+	if (sup)
+		sup->dibujar();
 
 
     /////////////////////////// fin dibujar =P /////////////////////
@@ -285,6 +316,11 @@ int main(int argc, char** argv) {
   glutMouseFunc(mouse);
   glutMotionFunc(mouseMotion);
 
+
+  /** TESTS **/
+  sup = 0;
+  florero();
+
   std::cout<<"Controles: "<<std::endl;
   std::cout<<"A - \t ejes"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
@@ -296,6 +332,8 @@ int main(int argc, char** argv) {
   std::cout<<"boton der \t zoom camara"<<std::endl;
 
   glutMainLoop();
+  if (sup)
+	  delete sup;
   return 0;
 }
 

@@ -23,18 +23,24 @@ protected:
 	bool cerrada;
 	//TODO faltaria malla de color/textura
 
-
+	void setTextura();
 
 	/* setea los indices para dibujado con draw elements */
 	void setIndices();
 
 	/* generar las normales de iluminacion */
 	void setNormales();
-	
-	void setTextura();
 
 	/* inicializa la superficie creando normales, indices y texturas */
 	void init();
+
+private:
+
+	void dibujarTrianStrip();
+	void dibujarMalla();
+	void dibujarTextura();
+	void dibujarNormales();
+
 
 public:
 
@@ -51,6 +57,7 @@ public:
 	void setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 	void setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 	void setShininess(GLfloat shine);
+
 
 };
 

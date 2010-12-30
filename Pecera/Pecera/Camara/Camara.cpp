@@ -32,7 +32,6 @@ void Camara::trasladar_f(float cant) {
 	Vertice temp = (at-eye).normalizar()*cant;
 	eye +=temp;
 	at +=temp;
-	temp.print();
 }
 
 void Camara::trasladar_s(float cant) {

@@ -1,66 +1,106 @@
 #include "Superficie.h"
+
+#define TEXTURA 0
+
 unsigned int Superficie::render_mode = GL_TRIANGLE_STRIP;
 
 Superficie::Superficie() {
 	mat_diffuse[0]=1.0; mat_diffuse[1]=0.50; mat_diffuse[2]=0.0; mat_diffuse[3]=0.70;
 	mat_specular[0]=1.0; mat_specular[1]=0.90; mat_specular[2]=0.0; mat_specular[3]=0.7;
 	mat_shininess[0]=100.0;
+
 }
 
 Superficie::~Superficie() {}
 
 void Superficie::dibujar() {
 
-	std::vector<Vertice>::iterator it0;
-	std::vector<Vertice>::iterator it1;
+	if (render_mode == GL_LINE_LOOP) {
+		dibujarMalla();
+	}
+	if (render_mode == GL_TRIANGLE_STRIP)	{
+		dibujarTrianStrip();
+	}
+	if (render_mode == TEXTURA) {
+		dibujarTextura();
+	}
+
+	//dibujo las normales
+	//dibujarNormales();
+
+}
+
+void Superficie::dibujarMalla() {
+	std::vector<Vertice>::iterator it0, it1;
 
 	it0 = superficie.begin();
 	it1 = superficie.begin();
 	it1 += tam;
 
-	if (render_mode == GL_LINE_LOOP) {
-		glDisable(GL_LIGHTING);
-		while (it1 != superficie.end()) {
-			for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
-				glBegin(GL_LINE_LOOP);
-				glColor3f(0,(float)pos/tam,(float)pos/tam);
-				glVertex3f(it0->x,it0->y,it0->z);
-				glVertex3f(it1->x,it1->y,it1->z);
-				it1++;
-				glVertex3f(it1->x,it1->y,it1->z);
+	glDisable(GL_LIGHTING);
 
-				glColor3f((float)pos/tam,1,(float)pos/tam);
-				glVertex3f(it0->x,it0->y,it0->z);
-				glVertex3f(it1->x,it1->y,it1->z);
-				it0++;
-				glVertex3f(it0->x,it0->y,it0->z);
+	while (it1 != superficie.end()) {
 
-				glEnd();
-			}
-			it1++; it0++;
+		for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
+
+			glBegin(GL_LINE_LOOP);
+
+			glColor3f(0,(float)pos/tam,(float)pos/tam);
+			glVertex3f(it0->x,it0->y,it0->z);
+			glVertex3f(it1->x,it1->y,it1->z);
+			it1++;
+			glVertex3f(it1->x,it1->y,it1->z);
+
+			glColor3f((float)pos/tam,1,(float)pos/tam);
+			glVertex3f(it0->x,it0->y,it0->z);
+			glVertex3f(it1->x,it1->y,it1->z);
+			it0++;
+			glVertex3f(it0->x,it0->y,it0->z);
+
+			glEnd();
 		}
-		glEnable(GL_LIGHTING);
-	} else {
-		glEnable(GL_LIGHTING);
-		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //material
-		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-		glEnableClientState (GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, &(superficie[0]));
-		glNormalPointer(GL_FLOAT,0, &(normales[0]));
-		unsigned int cols = (superficie.size()/tam) -1;
-		for(unsigned int i=0 ; i <  cols ; i++)
-			glDrawElements(render_mode, tam*2, GL_UNSIGNED_INT, &(indices[i*tam*2]));
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState (GL_VERTEX_ARRAY);
-
+		it1++; it0++;
 	}
-	it1 = normales.begin();
-	//dibujo las normales
+	glEnable(GL_LIGHTING);
+}
+
+void Superficie::dibujarTrianStrip() {
+	//dibuja usando triangle strip y Vertex y Normal Pointers
+	std::vector<Vertice>::iterator it0, it1;
+
+	it0 = superficie.begin();
+	it1 = superficie.begin();
+	it1 += tam;
+
+	glEnable(GL_LIGHTING);
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+
+	glEnableClientState (GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, &(superficie[0]));
+	glNormalPointer(GL_FLOAT,0, &(normales[0]));
+
+	unsigned int cols = (superficie.size()/tam) -1;
+
+	for(unsigned int i=0 ; i <  cols ; i++)
+		glDrawElements(GL_TRIANGLE_STRIP, tam*2, GL_UNSIGNED_INT, &(indices[i*tam*2]));
+
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState (GL_VERTEX_ARRAY);
+}
+
+void Superficie::dibujarNormales() {
+
+	std::vector<Vertice>::iterator it0;
+	std::vector<Vertice>::iterator it1 = normales.begin();
 	glDisable(GL_LIGHTING);
 	glBegin(GL_LINES);
-	glColor3f(1,1,1); Vertice v;
+	glColor3f(1,1,1);
+	Vertice v;
 	for(it0 =superficie.begin(); it0 != superficie.end() ; it0++, it1++) {
 			v = (*it0) + (*it1);
 			glVertex3f(it0->x,it0->y,it0->z);
@@ -68,12 +108,40 @@ void Superficie::dibujar() {
 	}
 	glEnd();
 	glEnable(GL_LIGHTING);
+
 }
+
+void Superficie::dibujarTextura() {
+	GLuint it0=0, it1=0;
+	GLuint longitud = superficie.size();
+	indices.clear();
+
+	for (it1 = tam; it1 < longitud; it0++, it1++) {
+		glBegin(GL_TRIANGLE_STRIP);
+
+		glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
+		glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
+
+		glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
+		glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
+
+		for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
+			it0++;
+			glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
+			glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
+			it1++;
+			glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
+			glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
+		}
+		glEnd();
+	}
+}
+
 
 void Superficie::nextMode() {
 	if (render_mode == GL_TRIANGLE_STRIP) {
-		render_mode = GL_QUAD_STRIP;
-	}else if (render_mode == GL_QUAD_STRIP) {
+		render_mode = TEXTURA;
+	}else if (render_mode == TEXTURA) {
 		render_mode = GL_LINE_LOOP;
 	}else if (render_mode == GL_LINE_LOOP) {
 		render_mode = GL_TRIANGLE_STRIP;
@@ -202,6 +270,7 @@ void Superficie::setNormales() {
 }
 
 void Superficie::setTextura() {//TODO
+
 }
 
 void Superficie::init() {
