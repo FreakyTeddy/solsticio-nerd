@@ -2,14 +2,13 @@
 #include <math.h>
 #define PI 3.141592654
 
-SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float angulo, Vertice eje1, Vertice eje2) {
+SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float angulo, Vertice eje1, Vertice eje2, int pasos) {
 
 	tam = forma.size(); //guardo la long de la curva patron
 	cerrada = !((int)angulo%360);
 
 	//guardo la malla de vertices de la superficie formada
 
-	int pasos = 20;
 	Vertice v, v1, q;
 
 	//traslado el eje

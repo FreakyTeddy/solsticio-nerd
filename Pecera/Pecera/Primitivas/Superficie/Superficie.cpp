@@ -5,9 +5,9 @@
 unsigned int Superficie::render_mode = GL_TRIANGLE_STRIP;
 
 Superficie::Superficie() {
-	mat_diffuse[0]=1.0; mat_diffuse[1]=0.50; mat_diffuse[2]=0.0; mat_diffuse[3]=0.70;
-	mat_specular[0]=1.0; mat_specular[1]=0.90; mat_specular[2]=0.0; mat_specular[3]=0.7;
-	mat_shininess[0]=100.0;
+	mat_diffuse[0]=0.50; mat_diffuse[1]=0.10; mat_diffuse[2]=0.70; mat_diffuse[3]=0.70;
+	mat_specular[0]=0.30; mat_specular[1]=0.0; mat_specular[2]=0.90; mat_specular[3]=0.7;
+	mat_shininess[0]=50.0;
 
 }
 
@@ -21,7 +21,7 @@ void Superficie::dibujar() {
 	if (render_mode == GL_TRIANGLE_STRIP)	{
 		dibujarTrianStrip();
 	}
-	if (render_mode == TEXTURA) {
+	if (render_mode == TEXTURA && tex.tieneTextura()) {
 		dibujarTextura();
 	}
 
@@ -116,25 +116,36 @@ void Superficie::dibujarTextura() {
 	GLuint longitud = superficie.size();
 	indices.clear();
 
+	glBindTexture(GL_TEXTURE_2D,tex.getID());
+	glEnable(GL_TEXTURE_2D);
+
 	for (it1 = tam; it1 < longitud; it0++, it1++) {
 		glBegin(GL_TRIANGLE_STRIP);
 
+
+		glTexCoord2f(0,0);
 		glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
 		glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
 
+		glTexCoord2f(0,1);
 		glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
 		glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
 
-		for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
+		bool coord = 1;
+
+		for(unsigned int pos=0 ; pos <  tam-1 ; pos++, coord= !coord) {
 			it0++;
+			glTexCoord2f(coord,0);
 			glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
 			glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
 			it1++;
+			glTexCoord2f(coord,1);
 			glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
 			glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
 		}
 		glEnd();
 	}
+	glDisable(GL_TEXTURE_2D);
 }
 
 
@@ -269,15 +280,15 @@ void Superficie::setNormales() {
 
 }
 
-void Superficie::setTextura() {//TODO
-
+void Superficie::setTextura() {
+	tex.cargarImagen("res/arena.bmp");
 }
 
 void Superficie::init() {
 	
 	setIndices();
 	setNormales();
-	//setTextura();	
+	setTextura();
 	
 }
 

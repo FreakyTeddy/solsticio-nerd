@@ -6,7 +6,6 @@
 class SuperficieRevolucion: public Superficie {
 
 private:
-	unsigned int pasos;
 
 	void rotar(float &p1, float &p2, float angulo);
 	void rotar(float &p1, float &p2, float seno, float coseno);
@@ -14,9 +13,12 @@ private:
 public:
 
 	/* Recibe la forma de la curva, el angulo a rotar
-	 * y el eje de rotacion dado por los vertices eje1 y eje2 */
-	SuperficieRevolucion(std::vector<Vertice> &forma, float angulo,Vertice eje1, Vertice eje2);
+	 * y el eje de rotacion dado por la recta que une los vertices eje1 y eje2
+	 * pasos indica el paso de discretizacion (20 por defecto) */
+	SuperficieRevolucion(std::vector<Vertice> &forma, float angulo,Vertice eje1, Vertice eje2, int pasos = 20);
+
 	~SuperficieRevolucion();
+
 };
 
 #endif /* SUPERFICIEREVOLUCION_H_ */

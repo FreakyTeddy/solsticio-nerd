@@ -2,6 +2,7 @@
 #define SUPERFICIE_H_
 
 #include "../Vertice.h"
+#include "../Textura.h"
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <vector>
@@ -16,12 +17,14 @@ private:
 	GLfloat mat_shininess[1];
 
 protected:
-	std::vector<Vertice> superficie; //malla de vertices de la superficie
+	std::vector<Vertice> superficie; // malla de vertices de la superficie
 	std::vector<Vertice> normales;
 	std::vector<GLuint> indices;
-	unsigned int tam; 		 //tamanio de la curva "forma"
-	bool cerrada;
-	//TODO faltaria malla de color/textura
+
+	Textura	tex;		// contiene la textura de la superficie
+
+	unsigned int tam;	// cantidad de vertices de la curva "forma"
+	bool cerrada;		//indica si la curva es cerrada
 
 	void setTextura();
 
@@ -57,7 +60,6 @@ public:
 	void setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 	void setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 	void setShininess(GLfloat shine);
-
 
 };
 
