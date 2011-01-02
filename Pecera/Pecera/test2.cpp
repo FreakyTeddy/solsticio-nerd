@@ -15,7 +15,8 @@ Camara cam;	//camara
 /* Dibujos de prueba */
 
 Superficie *sup;
-
+ContenedorTexturas *contenedorTex = ContenedorTexturas::getInstancia();
+GLuint textura;
 
 void florero() {
 	Curva c;
@@ -42,6 +43,26 @@ void florero() {
 	t.set(0,0,0);
 	Vertice q(0,0,1);
 	sup = new SuperficieRevolucion(vertb, -360,t,q);
+}
+
+void suelo() {
+	//glDisable(GL_LIGHTING);
+	glBindTexture(GL_TEXTURE_2D,textura);
+	glEnable(GL_TEXTURE_2D);
+
+		for(int j=-50; j<50; j++) {
+			glBegin(GL_QUAD_STRIP);
+			for (int i=-50; i<51; i++){
+				glTexCoord2d(i,j);
+				glVertex3f(i, j, 0.0);
+				glTexCoord2d(i,j+1);
+				glVertex3f(i, j+1, 0.0);
+			}
+			glEnd();
+		}
+	glDisable(GL_TEXTURE_2D);
+	//glEnable(GL_LIGHTING);
+
 }
 
 /************************************/
@@ -187,7 +208,8 @@ void display(void)
 
 	if (sup)
 		sup->dibujar();
-
+	suelo();
+	contenedorTex->mostrarImagenesCargadas();
 
     /////////////////////////// fin dibujar =P /////////////////////
 
@@ -323,7 +345,8 @@ int main(int argc, char** argv) {
 
   /** TESTS **/
   sup = 0;
-  florero();
+ // florero();
+  textura = contenedorTex->cargarImagen("Primitivas/Texturas/res/arena.bmp");
 
   /* Informacion */
   std::cout<<"Controles: "<<std::endl;

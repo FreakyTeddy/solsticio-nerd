@@ -5,9 +5,6 @@
 unsigned int Superficie::render_mode = GL_TRIANGLE_STRIP;
 
 Superficie::Superficie() {
-//	setDiffuse(0.2, 0.7, 0.7, 1);
-//	setSpecular(0.0, 0.5, 0.6, 1);
-//	setShininess(50.0);
 	setDiffuse(0.5,0.5, 0.5, 1);
 	setSpecular(1, 1, 1, 1);
 	setShininess(70.0);
@@ -131,23 +128,22 @@ void Superficie::dibujarTextura() {
 
 		glBegin(GL_TRIANGLE_STRIP);
 
-		glTexCoord2f(0,0);
+		glTexCoord2f(texCoord[it0].x,texCoord[it0].y);
 		glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
 		glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
 
-		glTexCoord2f(0,1);
+		glTexCoord2f(texCoord[it1].x,texCoord[it1].y);
 		glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
 		glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
 
-		bool coord = 1;
-
-		for(unsigned int pos=0 ; pos <  tam-1 ; pos++, coord= !coord) {
+		for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
 			it0++;
-			glTexCoord2f(coord,0);
+			glTexCoord2f(texCoord[it0].x,texCoord[it0].y);
 			glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
 			glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
+
 			it1++;
-			glTexCoord2f(coord,1);
+			glTexCoord2f(texCoord[it1].x,texCoord[it1].y);
 			glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
 			glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
 		}
@@ -291,6 +287,7 @@ void Superficie::setNormales() {
 void Superficie::setTextura() {
 	//TODO temporary
 	tex.cargarImagen("Primitivas/Texturas/res/arena.bmp");
+	tex.generarCoordenadas(superficie, texCoord);
 }
 
 void Superficie::init() {

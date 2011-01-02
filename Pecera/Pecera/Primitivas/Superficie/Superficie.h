@@ -27,6 +27,7 @@ protected:
 	unsigned int tam;	// cantidad de vertices de la curva "forma"
 	bool cerrada;		//indica si la curva es cerrada
 
+	/* genera la textura de la superficie */
 	void setTextura();
 
 	/* setea los indices para dibujado con draw elements */

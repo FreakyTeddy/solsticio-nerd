@@ -56,7 +56,7 @@ void Camara::rotar_h(float cant) {
 }
 
 void Camara::rotar_v(float cant) {
-	//TODO! mucho error... se va la imagen :P
+	//TODO! mucho error... se va la imagen :P usar rotacion de superficie de barrido :)
 	Vertice temp = eye.prodVectorial(at).prodVectorial(eye).normalizar()*cant;
 	eye += temp;
 }
