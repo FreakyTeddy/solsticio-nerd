@@ -3,6 +3,13 @@
 
 #include <math.h>
 #include <iostream>
+
+/*
+ * Describe un punto 3D
+ *
+ * */
+
+
 class Vertice {
 	
 	public:
@@ -18,7 +25,7 @@ class Vertice {
 			x = a; y = b; z= c;
 		};
 
-		Vertice (const Vertice &v) {
+		Vertice(const Vertice &v) {
 			*this = v;
 		}
 
@@ -104,10 +111,56 @@ class Vertice {
 			return this->prodVectorial(v).normalizar();
 		};
 
-		void print() {
+		void print() const {
 			std::cout<< x<<" "<<y<<" "<<z<<std::endl;
 		};
 
+		float distancia(const Vertice &v) const {
+			return ((*this)-v).modulo();
+		}
+
 };
+
+
+/*
+ * Describe un punto 2D
+ *
+ * */
+
+class Vertice2D {
+
+public:
+	float x;
+	float y;
+
+	Vertice2D() {
+		x = 0.0; y = 0.0;
+	};
+
+	Vertice2D(float a, float b, float c) {
+		x = a; y = b;
+	};
+
+	Vertice2D(const Vertice2D &v) {
+		*this = v;
+	}
+
+	void set(const float a, const float b) {
+		x = a; y = b;
+	};
+
+	void proyeccionYZ(const Vertice &v) {
+		set(v.y,v.z);
+	};
+
+	void proyeccionXY(const Vertice &v) {
+		set(v.x,v.y);
+	};
+
+	void proyeccionZX(const Vertice &v) {
+		set(v.z,v.x);
+	};
+};
+
 
 #endif /*VERTICE_H_*/

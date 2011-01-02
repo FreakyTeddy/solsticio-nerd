@@ -2,7 +2,7 @@
 #define SUPERFICIE_H_
 
 #include "../Vertice.h"
-#include "../Textura.h"
+#include "../Texturas/Textura.h"
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <vector>
@@ -17,9 +17,10 @@ private:
 	GLfloat mat_shininess[1];
 
 protected:
-	std::vector<Vertice> superficie; // malla de vertices de la superficie
-	std::vector<Vertice> normales;
-	std::vector<GLuint> indices;
+	std::vector<Vertice> superficie;	// malla de vertices 3D de la superficie
+	std::vector<Vertice> normales;		// normales de iluminacion en cada vertice 3D
+	std::vector<Vertice2D> texCoord;	// coordenadas de textura de cada vertice 3D
+	std::vector<GLuint> indices;		// recorrido de la malla
 
 	Textura	tex;		// contiene la textura de la superficie
 
@@ -50,15 +51,18 @@ public:
 	Superficie();
 	virtual ~Superficie();
 
-	/* cambia al siguiente modo de renderizado TRIANG -> QUAD -> LINE */
+	/* cambia al siguiente modo de renderizado COLOR -> TEXTURA -> MALLA */
 	static void nextMode();
 
+	/* dibuja la superficie segun el modo de renderizado */
 	void dibujar();
 
 	/* cambian el material de la superficie.. los valores son entre 0 y 1
 	 * alpha = 1 -> no hay transparencia	 */
 	void setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 	void setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
+
+	/* menor shine hace el brillo mas "grande" */
 	void setShininess(GLfloat shine);
 
 };

@@ -2,7 +2,7 @@
 #include <math.h>
 #define PI 3.141592654
 
-SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float angulo, Vertice eje1, Vertice eje2, int pasos) {
+SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float angulo, Vertice eje1, Vertice eje2, uint pasos) {
 
 	tam = forma.size(); //guardo la long de la curva patron
 	cerrada = !((int)angulo%360);
@@ -34,7 +34,7 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 
 	//aplico rotacion
 
-	for (int i=0; i<=pasos; i++) {
+	for (uint i=0; i<=pasos; i++) {
 		for(unsigned int pos=0 ; pos <  tam ; pos++) {
 
 			q = forma[pos];
@@ -63,9 +63,7 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 
 }
 
-SuperficieRevolucion::~SuperficieRevolucion() {
-	// TODO Auto-generated destructor stub
-}
+SuperficieRevolucion::~SuperficieRevolucion() {}
 
 void SuperficieRevolucion::rotar(float &p1, float &p2, float angulo) {
 

@@ -19,7 +19,7 @@ Superficie *sup;
 
 void florero() {
 	Curva c;
-	c.setFactor(3);
+	c.setFactor(4);
 	std::vector<Vertice> verts, vertb;
 	Vertice t;
 	t.set(0,0,0);
@@ -157,6 +157,15 @@ void init(void) {
 
 }
 
+void salir() {
+
+	/* TEST */
+	if (sup)
+		delete sup;
+
+	exit(0);
+}
+
 
 void display(void)
 {
@@ -201,7 +210,7 @@ void reshape (int w, int h)
 void keyboard (unsigned char key, int x, int y) {
 	switch (key) {
     case 0x1b: //ESC
-      exit(0);
+      salir();
       break;
 	case 0x2B:  // '+'
 		cam.trasladar_u(1);
@@ -209,11 +218,6 @@ void keyboard (unsigned char key, int x, int y) {
 		break;
 	case 0x2D:  // '-'
 		cam.trasladar_u(-1);
-		glutPostRedisplay();
-		break;
-	case 'l':
-	case 'L':
-		luz=!luz;
 		glutPostRedisplay();
 		break;
     case 'g':
@@ -321,6 +325,7 @@ int main(int argc, char** argv) {
   sup = 0;
   florero();
 
+  /* Informacion */
   std::cout<<"Controles: "<<std::endl;
   std::cout<<"A - \t ejes"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
@@ -329,11 +334,9 @@ int main(int argc, char** argv) {
   std::cout<<"flechas \t traslacion xy"<<std::endl;
   std::cout<<"'+' '-' \t traslacion z"<<std::endl;
   std::cout<<"boton izq \t rotacion camara"<<std::endl;
-  std::cout<<"boton der \t zoom camara"<<std::endl;
+  std::cout<<"boton der \t zoom camara"<<std::endl<<std::endl;
 
   glutMainLoop();
-  if (sup)
-	  delete sup;
   return 0;
 }
 
