@@ -1,5 +1,5 @@
  - Rotacion de Camara: usar la de superficie de revolucion.
- - Texturas: transparencia, mosaico, expandida.
+ - Texturas: transparencia, mosaico.
  - Algas: movimiento, formas "random".
  - Peces
  - Suelo: forma.
@@ -11,3 +11,5 @@
  
  
  SUPERFICIES IRREGULARES.
+ 
+ - para solucionar el tema de la iluminacion hay que asignarle al "gl_back" las normales opuestas  

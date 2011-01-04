@@ -27,10 +27,8 @@ SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Ve
 	for(unsigned int i=0; i < trasl.size(); i++ ) {
 		for(unsigned int pos=0 ; pos <  tam ; pos++) {
 			v = forma[pos] * defo[i] + trasl[i];
-			v.print();
 			superficie.push_back(v);
 		}
-		std::cout<<std::endl;
 	}
 	
 	init();

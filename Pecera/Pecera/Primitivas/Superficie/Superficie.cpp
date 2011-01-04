@@ -283,18 +283,16 @@ void Superficie::setNormales() {
 
 }
 
-void Superficie::setTextura() {
-//TODO temporary
-	tex.cargarImagen("Primitivas/Texturas/res/papel.bmp");
-	tex.generarCoordenadas(superficie, texCoord, tam);
+void Superficie::aplicarTextura(std::string ruta) {
+	if ( !tex.tieneTextura())
+		tex.generarCoordenadas(superficie, texCoord, tam);
+	tex.cargarImagen(ruta);
 }
 
 void Superficie::init() {
 	
 	setIndices();
 	setNormales();
-	setTextura();
-	
 }
 
 void Superficie::setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {

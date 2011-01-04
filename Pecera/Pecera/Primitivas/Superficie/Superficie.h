@@ -27,9 +27,6 @@ protected:
 	unsigned int tam;	// cantidad de vertices de la curva "forma"
 	bool cerrada;		//indica si la curva es cerrada
 
-	/* genera la textura de la superficie */
-	void setTextura();
-
 	/* setea los indices para dibujado con draw elements */
 	void setIndices();
 
@@ -57,6 +54,9 @@ public:
 
 	/* dibuja la superficie segun el modo de renderizado */
 	void dibujar();
+
+	/* aplica la textura especificada a la superficie */
+	void aplicarTextura (std::string ruta);
 
 	/* cambian el material de la superficie.. los valores son entre 0 y 1
 	 * alpha = 1 -> no hay transparencia	 */

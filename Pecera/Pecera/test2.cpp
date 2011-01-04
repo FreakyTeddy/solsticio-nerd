@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 
+
 /* Variables Globales
  * */
 
@@ -43,6 +44,76 @@ void florero() {
 	t.set(0,0,0);
 	Vertice q(0,0,1);
 	sup = new SuperficieRevolucion(vertb, -360,t,q,36);
+	sup->aplicarTextura("Primitivas/Texturas/res/papel.bmp");
+}
+
+void alga() {
+	/* ejemplo de alga */
+	std::vector<Vertice> v;
+	std::vector<Vertice> trasl;
+	Vertice q;
+	Curva curva;
+	std::vector<Vertice> alga_c;
+	std::vector<Vertice> alga_s;
+	q.set(0.5,0,0);
+	alga_c.push_back(q);
+	alga_c.push_back(q);
+	alga_c.push_back(q);
+	q.set(-0.5,0,0);
+	alga_c.push_back(q);
+	alga_c.push_back(q);
+	alga_c.push_back(q);
+	curva.Bspline(alga_c, alga_s);
+
+	trasl.clear();
+	q.set(0,0,0);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+
+	q.set(0,-1,1.5);
+	trasl.push_back(q);
+
+	q.set(0,0,4);
+	trasl.push_back(q);
+
+	q.set(0.5,0.5,6);
+	trasl.push_back(q);
+
+	q.set(0.5,0.8,6.5);
+	trasl.push_back(q);
+
+	q.set(0.8,0.8,7);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	curva.Bspline(trasl, v);
+
+	std::vector<Vertice> def;
+	std::vector<Vertice> def2;
+	q.set(0.1, 0.1, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	q.set(1,1,1);
+	def.push_back(q);
+	q.set(0.5,0.5,1);
+	def.push_back(q);
+	q.set(0.8,0.8,1);
+	def.push_back(q);
+	q.set(0.4,0.4,1);
+	def.push_back(q);
+	q.set(0.01, 0.01, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	curva.Bspline(def, def2);
+
+	sup = new SuperficieBarrido(alga_s, v , def2);
+	sup->setDiffuse(0,1,0.5,1);
+	sup->setSpecular(0,0.5,0.5,1);
+	sup->setShininess(50);
+	sup->aplicarTextura("Primitivas/Texturas/res/madera.bmp");
 }
 
 void suelo() {
@@ -185,6 +256,9 @@ void salir() {
 
 	/* destruir todos los objetos */
 	contenedorTex->vaciarContenedor();
+
+	std::cout<<"llego el fin"<<std::endl;
+	std::cout.flush();
 	exit(0);
 }
 
@@ -206,7 +280,7 @@ void display(void)
 	if (view_grid)
 		 glCallList(DL_GRID);
     ///////////////////////////// dibujar ////////////////////////
-
+	glRotatef(180, 0,0,1);
 	if (sup)
 		sup->dibujar();
 	//suelo();
@@ -346,7 +420,8 @@ int main(int argc, char** argv) {
 
   /** TESTS **/
   sup = 0;
-  florero();
+//  florero();
+  alga();
   textura = contenedorTex->cargarImagen("Primitivas/Texturas/res/arena.bmp");
   /* Informacion */
   std::cout<<"Controles: "<<std::endl;
