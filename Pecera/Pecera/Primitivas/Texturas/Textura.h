@@ -43,8 +43,9 @@ public:
 	/* Devuelve el identificador de textura */
 	GLuint getID();
 
-	/** asigna coordenadas de textura a cada vertice de la superficie  * */
-	void generarCoordenadas(const std::vector<Vertice> &sup, std::vector<Vertice2D> &texCoord);
+	/** asigna coordenadas de textura a cada vertice de la superficie
+	 * recibe el la cant de vertices de la curva patron * */
+	void generarCoordenadas(const std::vector<Vertice> &sup, std::vector<Vertice2D> &texCoord, uint tam);
 
 };
 

@@ -5,7 +5,7 @@
 unsigned int Superficie::render_mode = GL_TRIANGLE_STRIP;
 
 Superficie::Superficie() {
-	setDiffuse(0.5,0.5, 0.5, 1);
+	setDiffuse(0.85,0.85, 0.85, 1);
 	setSpecular(1, 1, 1, 1);
 	setShininess(70.0);
 }
@@ -119,7 +119,6 @@ void Superficie::dibujarTextura() {
 
 	GLuint it0=0, it1=0;
 	GLuint longitud = superficie.size();
-	indices.clear();
 
 	glBindTexture(GL_TEXTURE_2D,tex.getID());
 	glEnable(GL_TEXTURE_2D);
@@ -285,9 +284,9 @@ void Superficie::setNormales() {
 }
 
 void Superficie::setTextura() {
-	//TODO temporary
-	tex.cargarImagen("Primitivas/Texturas/res/arena.bmp");
-	tex.generarCoordenadas(superficie, texCoord);
+//TODO temporary
+	tex.cargarImagen("Primitivas/Texturas/res/papel.bmp");
+	tex.generarCoordenadas(superficie, texCoord, tam);
 }
 
 void Superficie::init() {

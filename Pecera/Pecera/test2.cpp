@@ -20,7 +20,7 @@ GLuint textura;
 
 void florero() {
 	Curva c;
-	c.setFactor(4);
+	c.setFactor(5);
 	std::vector<Vertice> verts, vertb;
 	Vertice t;
 	t.set(0,0,0);
@@ -42,27 +42,24 @@ void florero() {
 	c.Bspline(verts,vertb);
 	t.set(0,0,0);
 	Vertice q(0,0,1);
-	sup = new SuperficieRevolucion(vertb, -360,t,q);
+	sup = new SuperficieRevolucion(vertb, -360,t,q,36);
 }
 
 void suelo() {
-	//glDisable(GL_LIGHTING);
 	glBindTexture(GL_TEXTURE_2D,textura);
 	glEnable(GL_TEXTURE_2D);
 
-		for(int j=-50; j<50; j++) {
+		for(int j=-50; j<50; j+=5) {
 			glBegin(GL_QUAD_STRIP);
-			for (int i=-50; i<51; i++){
+			for (int i=-50; i<51; i+=5){
 				glTexCoord2d(i,j);
 				glVertex3f(i, j, 0.0);
-				glTexCoord2d(i,j+1);
-				glVertex3f(i, j+1, 0.0);
+				glTexCoord2d(i,j+5);
+				glVertex3f(i, j+5, 0.0);
 			}
 			glEnd();
 		}
 	glDisable(GL_TEXTURE_2D);
-	//glEnable(GL_LIGHTING);
-
 }
 
 /************************************/
@@ -78,7 +75,7 @@ int yprev = 0;
 int zprev = 0;
 
 // Variables de control
-bool view_grid = true;
+bool view_grid = false;
 bool view_axis = true;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
@@ -184,6 +181,10 @@ void salir() {
 	if (sup)
 		delete sup;
 
+	contenedorTex->mostrarImagenesCargadas();
+
+	/* destruir todos los objetos */
+	contenedorTex->vaciarContenedor();
 	exit(0);
 }
 
@@ -208,8 +209,8 @@ void display(void)
 
 	if (sup)
 		sup->dibujar();
-	suelo();
-	contenedorTex->mostrarImagenesCargadas();
+	//suelo();
+
 
     /////////////////////////// fin dibujar =P /////////////////////
 
@@ -345,17 +346,16 @@ int main(int argc, char** argv) {
 
   /** TESTS **/
   sup = 0;
- // florero();
+  florero();
   textura = contenedorTex->cargarImagen("Primitivas/Texturas/res/arena.bmp");
-
   /* Informacion */
   std::cout<<"Controles: "<<std::endl;
   std::cout<<"A - \t ejes"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
   std::cout<<"C - \t reset camara"<<std::endl;
   std::cout<<"R - \t render de escena"<<std::endl;
-  std::cout<<"flechas \t traslacion xy"<<std::endl;
-  std::cout<<"'+' '-' \t traslacion z"<<std::endl;
+  std::cout<<"flechas \t traslacion horizontal"<<std::endl;
+  std::cout<<"'+' '-' \t traslacion vertical"<<std::endl;
   std::cout<<"boton izq \t rotacion camara"<<std::endl;
   std::cout<<"boton der \t zoom camara"<<std::endl<<std::endl;
 

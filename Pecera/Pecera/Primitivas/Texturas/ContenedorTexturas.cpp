@@ -1,9 +1,6 @@
 #include "ContenedorTexturas.h"
 
 
-#include <SDL/SDL_image.h>
-#include <SDL/SDL.h>
-
 ContenedorTexturas* ContenedorTexturas::instancia = 0;
 
 /**************
@@ -27,7 +24,9 @@ ContenedorTexturas::ContenedorTexturas() {
 	idTex.clear();
 }
 
-ContenedorTexturas::~ContenedorTexturas() {}
+ContenedorTexturas::~ContenedorTexturas() {
+	liberarImagenesCargadas();
+}
 
 ContenedorTexturas* ContenedorTexturas::getInstancia() {
 	if (!instancia)
@@ -95,7 +94,7 @@ GLuint ContenedorTexturas::cargarImagenDesdeArchivo(std::string &ruta) {
 
 	glBindTexture(GL_TEXTURE_2D,tex);	//indica con que textura estoy trabajando
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); //repeat o clamp
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
@@ -117,5 +116,19 @@ void ContenedorTexturas::mostrarImagenesCargadas() {
 		std::cout<<nombreTex[pos]<<"\t"<<idTex[pos]<<std::endl;
 	}
 }
+
+void ContenedorTexturas::liberarImagenesCargadas() {
+	while ( ! bitmaps.empty() ) {
+		 SDL_FreeSurface(bitmaps.back());
+		 bitmaps.pop_back();
+	}
+}
+
+void ContenedorTexturas::vaciarContenedor() {
+	nombreTex.clear();
+	idTex.clear();
+	liberarImagenesCargadas();
+}
+
 
 
