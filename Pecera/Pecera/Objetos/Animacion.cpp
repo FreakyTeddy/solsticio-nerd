@@ -15,6 +15,6 @@ Animacion::~Animacion() {
 }
 
 void Animacion::animar() {
-	frame[f_act].dibujar();
+	frame[f_act].dibujar(0);
 	(f_act != f_cant-1) ? f_act++ : f_act = 0;
 }

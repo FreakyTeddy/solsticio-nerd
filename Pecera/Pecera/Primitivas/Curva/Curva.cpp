@@ -184,7 +184,7 @@ void Curva::Bspline(std::vector<float> &ptosControl, std::vector<float> &ptosCur
 }
 
 void Curva::setFactor(int cantidad) {
-
+/* 4 es el parametro por default */
   factorBspline = cantidad;
 
   if(factorBspline < FACTOR_MIN)

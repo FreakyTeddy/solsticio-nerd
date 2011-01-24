@@ -36,7 +36,7 @@ void Textura::generarCoordenadas(const std::vector<Vertice> &sup, std::vector<Ve
 	side.resize(tam,0);
 	acum_s.resize(tam,0);
 
-	uint i,j,nro_curva = 0;
+	uint i=0,j=0,nro_curva = 0;
 	for (i=0; i < (sup.size()-tam); i++) {	//i indica donde estoy en la superficie
 		nro_curva= i/tam;
 		for(j=0; j<tam-1; j++,i++){			//j indica donde estoy en nro_curva
@@ -89,6 +89,7 @@ void Textura::generarCoordenadas(const std::vector<Vertice> &sup, std::vector<Ve
 		i--;
 	}
 }
+
 
 bool Textura::tieneTextura() {
 	return (tex!=0);

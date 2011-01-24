@@ -28,7 +28,7 @@ private:
 	~ContenedorTexturas();
 
 	/* carga una imagen desde el archivo bmp especificado. Devuelve su identificador de textura */
-	GLuint cargarImagenDesdeArchivo(std::string &ruta);
+	GLuint cargarImagenDesdeArchivo(std::string ruta);
 
 	void liberarImagenesCargadas();
 

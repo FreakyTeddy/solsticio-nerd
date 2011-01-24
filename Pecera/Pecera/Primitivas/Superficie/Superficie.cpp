@@ -1,27 +1,24 @@
 #include "Superficie.h"
 
-#define TEXTURA 0
-
-unsigned int Superficie::render_mode = GL_TRIANGLE_STRIP;
-
 Superficie::Superficie() {
 	setDiffuse(0.85,0.85, 0.85, 1);
 	setSpecular(1, 1, 1, 1);
+	setAmbient(0.0, 0.1, 0.2, 1);
 	setShininess(70.0);
 }
 
 Superficie::~Superficie() {}
 
-void Superficie::dibujar() {
+void Superficie::dibujar(unsigned int render_mode) {
 
-	if (render_mode == GL_LINE_LOOP)
-		dibujarMalla();
+//	if (render_mode == GL_LINE_LOOP)
+//		dibujarMalla();
 
-	if ((render_mode == GL_TRIANGLE_STRIP) || (render_mode == TEXTURA && !tex.tieneTextura()))
-		dibujarTrianStrip();
+//	if ((render_mode != TEXTURA) || (render_mode == TEXTURA && !tex.tieneTextura()))
+		dibujarTrianStrip(render_mode);
 
-	if (render_mode == TEXTURA && tex.tieneTextura())
-		dibujarTextura();
+//	if (render_mode == TEXTURA && tex.tieneTextura())
+//		dibujarTextura();
 
 
 	//dibujo las normales
@@ -63,7 +60,7 @@ void Superficie::dibujarMalla() {
 	glEnable(GL_LIGHTING);
 }
 
-void Superficie::dibujarTrianStrip() {
+void Superficie::dibujarTrianStrip(unsigned int render_mode) {
 	//dibuja usando triangle strip y Vertex y Normal Pointers
 	std::vector<Vertice>::iterator it0, it1;
 
@@ -71,25 +68,53 @@ void Superficie::dibujarTrianStrip() {
 	it1 = superficie.begin();
 	it1 += tam;
 
+	//iluminacion
 	glEnable(GL_LIGHTING);
 
+	//material
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_BACK, GL_AMBIENT, mat_ambient);
 
+
+	//caras
+	glFrontFace( GL_CCW );
+	glCullFace( GL_BACK );
+	//glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+	glDisable( GL_CULL_FACE );
+
+	//activar estado
 	glEnableClientState (GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 
-	glVertexPointer(3, GL_FLOAT, 0, &(superficie[0]));
+	//Render Mode
+	if (render_mode == GL_TEXTURE) {
+		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+		if (tex.tieneTextura()) {
+			glEnableClientState(GL_TEXTURE_2D_ARRAY);
+			glTexCoordPointer(2,GL_FLOAT,0, &(texCoord[0]));
+		}
+	}
+	else {
+		glPolygonMode( GL_FRONT_AND_BACK, render_mode);
+	}
+
 	glNormalPointer(GL_FLOAT,0, &(normales[0]));
+	glVertexPointer(3, GL_FLOAT, 0, &(superficie[0]));
 
+	//dibujar
 	unsigned int cols = (superficie.size()/tam) -1;
-
 	for(unsigned int i=0 ; i <  cols ; i++)
 		glDrawElements(GL_TRIANGLE_STRIP, tam*2, GL_UNSIGNED_INT, &(indices[i*tam*2]));
 
+	//desactivar estados
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState (GL_VERTEX_ARRAY);
+	if ((render_mode == GL_TEXTURE) && tex.tieneTextura())
+		glDisableClientState(GL_TEXTURE_2D_ARRAY);
+
+	glDisable(GL_LIGHTING);
 }
 
 void Superficie::dibujarNormales() {
@@ -149,17 +174,6 @@ void Superficie::dibujarTextura() {
 		glEnd();
 	}
 	glDisable(GL_TEXTURE_2D);
-}
-
-
-void Superficie::nextMode() {
-	if (render_mode == GL_TRIANGLE_STRIP) {
-		render_mode = TEXTURA;
-	}else if (render_mode == TEXTURA) {
-		render_mode = GL_LINE_LOOP;
-	}else if (render_mode == GL_LINE_LOOP) {
-		render_mode = GL_TRIANGLE_STRIP;
-	}
 }
 
 void Superficie::setIndices() {
@@ -297,7 +311,9 @@ void Superficie::init() {
 
 void Superficie::setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {
 	mat_diffuse[0]=r; mat_diffuse[1]=g; mat_diffuse[2]=b; mat_diffuse[3]=alpha;
-
+}
+void Superficie::setAmbient(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {
+	mat_ambient[0]=r; mat_ambient[1]=g; mat_ambient[2]=b; mat_ambient[3]=alpha;
 }
 void Superficie::setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {
 	mat_specular[0]=r; mat_specular[1]=g; mat_specular[2]=b; mat_specular[3]=alpha;

@@ -10,9 +10,10 @@
 class Superficie {
 
 private:
-	static unsigned int render_mode;
+
 	/* material de la superficie */
 	GLfloat mat_diffuse[4];
+	GLfloat mat_ambient[4];
 	GLfloat mat_specular[4];
 	GLfloat mat_shininess[1];
 
@@ -38,7 +39,7 @@ protected:
 
 private:
 
-	void dibujarTrianStrip();
+	void dibujarTrianStrip(unsigned int render_mode);
 	void dibujarMalla();
 	void dibujarTextura();
 	void dibujarNormales();
@@ -49,11 +50,8 @@ public:
 	Superficie();
 	virtual ~Superficie();
 
-	/* cambia al siguiente modo de renderizado COLOR -> TEXTURA -> MALLA */
-	static void nextMode();
-
 	/* dibuja la superficie segun el modo de renderizado */
-	void dibujar();
+	void dibujar(unsigned int render_mode);
 
 	/* aplica la textura especificada a la superficie */
 	void aplicarTextura (std::string ruta);
@@ -62,6 +60,7 @@ public:
 	 * alpha = 1 -> no hay transparencia	 */
 	void setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 	void setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
+	void setAmbient(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 
 	/* menor shine hace el brillo mas "grande" */
 	void setShininess(GLfloat shine);

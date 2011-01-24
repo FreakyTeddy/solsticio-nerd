@@ -4,6 +4,7 @@
 #include "Camara/Camara.h"
 #include "Primitivas/Superficie/SuperficieBarrido.h"
 #include "Primitivas/Superficie/SuperficieRevolucion.h"
+#include "Escena/ControladorEscena.h"
 #include <iostream>
 #include <vector>
 
@@ -12,114 +13,25 @@
  * */
 
 Camara cam;	//camara
+ControladorEscena escena;
 
 /* Dibujos de prueba */
 
-Superficie *sup;
 ContenedorTexturas *contenedorTex = ContenedorTexturas::getInstancia();
 GLuint textura;
 
-void florero() {
-	Curva c;
-	c.setFactor(5);
-	std::vector<Vertice> verts, vertb;
-	Vertice t;
-	t.set(0,0,0);
-	verts.push_back(t);
-	verts.push_back(t);
-	verts.push_back(t);
-	t.set(0,3,0);
-	verts.push_back(t);
-	t.set(0,5,1);
-	verts.push_back(t);
-	t.set(0,3,2);
-	verts.push_back(t);
-	t.set(0,1,4);
-	verts.push_back(t);
-	t.set(0,2,5);
-	verts.push_back(t);
-	verts.push_back(t);
-	verts.push_back(t);
-	c.Bspline(verts,vertb);
-	t.set(0,0,0);
-	Vertice q(0,0,1);
-	sup = new SuperficieRevolucion(vertb, -360,t,q,36);
-	sup->aplicarTextura("Primitivas/Texturas/res/papel.bmp");
-}
-
-void alga() {
-	/* ejemplo de alga */
-	std::vector<Vertice> v;
-	std::vector<Vertice> trasl;
-	Vertice q;
-	Curva curva;
-	std::vector<Vertice> alga_c;
-	std::vector<Vertice> alga_s;
-	q.set(0.5,0,0);
-	alga_c.push_back(q);
-	alga_c.push_back(q);
-	alga_c.push_back(q);
-	q.set(-0.5,0,0);
-	alga_c.push_back(q);
-	alga_c.push_back(q);
-	alga_c.push_back(q);
-	curva.Bspline(alga_c, alga_s);
-
-	trasl.clear();
-	q.set(0,0,0);
-	trasl.push_back(q);
-	trasl.push_back(q);
-	trasl.push_back(q);
-
-	q.set(0,-1,1.5);
-	trasl.push_back(q);
-
-	q.set(0,0,4);
-	trasl.push_back(q);
-
-	q.set(0.5,0.5,6);
-	trasl.push_back(q);
-
-	q.set(0.5,0.8,6.5);
-	trasl.push_back(q);
-
-	q.set(0.8,0.8,7);
-	trasl.push_back(q);
-	trasl.push_back(q);
-	trasl.push_back(q);
-	curva.Bspline(trasl, v);
-
-	std::vector<Vertice> def;
-	std::vector<Vertice> def2;
-	q.set(0.1, 0.1, 1);
-	def.push_back(q);
-	def.push_back(q);
-	def.push_back(q);
-	q.set(1,1,1);
-	def.push_back(q);
-	q.set(0.5,0.5,1);
-	def.push_back(q);
-	q.set(0.8,0.8,1);
-	def.push_back(q);
-	q.set(0.4,0.4,1);
-	def.push_back(q);
-	q.set(0.01, 0.01, 1);
-	def.push_back(q);
-	def.push_back(q);
-	def.push_back(q);
-	curva.Bspline(def, def2);
-
-	sup = new SuperficieBarrido(alga_s, v , def2);
-	sup->setDiffuse(0,1,0.5,1);
-	sup->setSpecular(0,0.5,0.5,1);
-	sup->setShininess(50);
-	sup->aplicarTextura("Primitivas/Texturas/res/madera.bmp");
-}
-
 void suelo() {
-	glBindTexture(GL_TEXTURE_2D,textura);
-	glEnable(GL_TEXTURE_2D);
+	 glShadeModel (GL_FLAT);
 
+	//falta material del suelo
+	glFrontFace( GL_CCW );
+	glCullFace( GL_FRONT );
+	glEnable(GL_CULL_FACE);
+
+	if (escena.getRenderMode() == GL_TEXTURE) {
+		glBindTexture(GL_TEXTURE_2D,textura);
+		glEnable(GL_TEXTURE_2D);
+		glPolygonMode( GL_BACK, GL_FILL);
 		for(int j=-50; j<50; j+=5) {
 			glBegin(GL_QUAD_STRIP);
 			for (int i=-50; i<51; i+=5){
@@ -130,7 +42,22 @@ void suelo() {
 			}
 			glEnd();
 		}
-	glDisable(GL_TEXTURE_2D);
+		glDisable(GL_TEXTURE_2D);
+	}
+	else {
+		glPolygonMode( GL_BACK, escena.getRenderMode());
+		for(int j=-50; j<50; j+=5) {
+			glBegin(GL_QUAD_STRIP);
+			for (int i=-50; i<51; i+=5){
+				glVertex3f(i, j, 0.0);
+				glVertex3f(i, j+5, 0.0);
+			}
+			glEnd();
+		}
+	}
+
+	glDisable( GL_CULL_FACE );
+	glShadeModel (GL_SMOOTH);
 }
 
 /************************************/
@@ -151,7 +78,6 @@ bool view_axis = true;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
 bool luz = true;
-bool blend = false;
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -220,7 +146,6 @@ void init(void) {
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
-  glEnable(GL_BLEND);
 
   glEnable(GL_FOG);
     {
@@ -244,20 +169,21 @@ void init(void) {
   DrawXYGrid();
   glEndList();
 
+  glDisable(GL_COLOR_MATERIAL);
+  contenedorTex->cargarImagen("Primitivas/Texturas/res/madera.bmp");
+
 }
 
 void salir() {
 
-	/* TEST */
-	if (sup)
-		delete sup;
 
 	contenedorTex->mostrarImagenesCargadas();
+	std::cout.flush();
 
 	/* destruir todos los objetos */
 	contenedorTex->vaciarContenedor();
 
-	std::cout<<"llego el fin"<<std::endl;
+	std::cout<<"Gracias por usar Peces Pepe"<<std::endl;
 	std::cout.flush();
 	exit(0);
 }
@@ -267,33 +193,27 @@ void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	cam.lookAt();
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 	glPushMatrix();
-	cam.lookAt();
 
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position); //tambien roto la luz
 
-	if (!luz)
-		glDisable(GL_LIGHT0);
 	if (view_axis)
 		 glCallList(DL_AXIS);
 	if (view_grid)
 		 glCallList(DL_GRID);
-    ///////////////////////////// dibujar ////////////////////////
-	glRotatef(180, 0,0,1);
-	if (sup)
-		sup->dibujar();
-	//suelo();
 
+
+    ///////////////////////////// dibujar ////////////////////////
+
+	suelo();
+	escena.generarEscena();
 
     /////////////////////////// fin dibujar =P /////////////////////
 
-	if (!luz)
-		glEnable(GL_LIGHT0);
-
 	glPopMatrix();
-	//
-	///////////////////////////////////////////////////
+
 	glutSwapBuffers();
 }
 
@@ -307,7 +227,7 @@ void reshape (int w, int h)
 void keyboard (unsigned char key, int x, int y) {
 	switch (key) {
     case 0x1b: //ESC
-      salir();
+       	exit(0);
       break;
 	case 0x2B:  // '+'
 		cam.trasladar_u(1);
@@ -334,7 +254,7 @@ void keyboard (unsigned char key, int x, int y) {
       break;
     case 'r':
 	case 'R':
-		Superficie::nextMode();
+		 escena.nextMode();
 		 glutPostRedisplay();
         break;
     default:
@@ -401,6 +321,7 @@ void mouseMotion(int x, int y) {
 }
 
 int main(int argc, char** argv) {
+
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(1024, 768);
@@ -416,12 +337,9 @@ int main(int argc, char** argv) {
   glutSpecialFunc(specialKeys);
   glutMouseFunc(mouse);
   glutMotionFunc(mouseMotion);
-
+  atexit(salir);
 
   /** TESTS **/
-  sup = 0;
-//  florero();
-  alga();
   textura = contenedorTex->cargarImagen("Primitivas/Texturas/res/arena.bmp");
   /* Informacion */
   std::cout<<"Controles: "<<std::endl;

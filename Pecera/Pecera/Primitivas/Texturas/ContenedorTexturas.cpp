@@ -54,11 +54,11 @@ GLuint ContenedorTexturas::cargarImagen(std::string ruta) {
 		return tex;
 }
 
-GLuint ContenedorTexturas::cargarImagenDesdeArchivo(std::string &ruta) {
+GLuint ContenedorTexturas::cargarImagenDesdeArchivo(std::string ruta) {
 
 	SDL_Surface *imagen = IMG_Load(ruta.c_str());
 	if(!imagen) {
-		std::cerr << "Error al cargar la imagen " << std::endl;
+		std::cerr << "Error al cargar la imagen "<<ruta << std::endl;
 		return 0;
 	}
 
