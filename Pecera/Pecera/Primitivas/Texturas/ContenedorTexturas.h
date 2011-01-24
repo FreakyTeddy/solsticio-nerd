@@ -1,6 +1,7 @@
 #ifndef CONTENEDORTEXTURAS_H_
 #define CONTENEDORTEXTURAS_H_
 
+#define PATH_TEX "./Escena/res/"
 
 #include <iostream>
 #include <vector>
@@ -28,7 +29,7 @@ private:
 	~ContenedorTexturas();
 
 	/* carga una imagen desde el archivo bmp especificado. Devuelve su identificador de textura */
-	GLuint cargarImagenDesdeArchivo(std::string ruta);
+	GLuint cargarImagenDesdeArchivo(std::string &nombre);
 
 	void liberarImagenesCargadas();
 

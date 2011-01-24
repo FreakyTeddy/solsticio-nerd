@@ -56,7 +56,7 @@ Superficie* ContenedorObjetos::crearFlorero() {
 	t.set(0,0,0);
 	Vertice q(0,0,1);
 	Superficie* florero = new SuperficieRevolucion(vertb, -360,t,q);
-	florero->aplicarTextura("../Primitivas/Texturas/res/arena.bmp");
+	florero->aplicarTextura("papel.bmp");
 
 	return florero;
 }
@@ -126,7 +126,7 @@ Superficie* ContenedorObjetos::crearAlga1() {
 	sup->setDiffuse(0,1,0.5,1);
 	sup->setSpecular(0,1,1,1);
 	sup->setShininess(50);
-	sup->aplicarTextura("../Primitivas/Texturas/res/arena.bmp");
+	sup->aplicarTextura("madera.bmp");
 
 	return sup;
 }
@@ -198,7 +198,7 @@ Superficie* ContenedorObjetos::crearAlga2() {
 		sup->setDiffuse(0,1,0.5,1);
 		sup->setSpecular(0,0.5,0.5,1);
 		sup->setShininess(50);
-		sup->aplicarTextura("../Primitivas/Texturas/res/arena.bmp");
+		sup->aplicarTextura("madera.bmp");
 		return sup;
 }
 

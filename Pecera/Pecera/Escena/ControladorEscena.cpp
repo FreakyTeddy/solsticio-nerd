@@ -4,23 +4,20 @@
 #include <stdlib.h>
 
 ControladorEscena::ControladorEscena() {
-	render_mode = GL_TEXTURE;
+	render_mode = GL_FILL;
 
 }
 
-ControladorEscena::~ControladorEscena() {
-	// TODO Auto-generated destructor stub
-}
+ControladorEscena::~ControladorEscena() {}
 
 void ControladorEscena::generarEscena() {
 
+	objetos.dibujarObjeto(ALGA1, render_mode);
+	objetos.dibujarObjeto(ALGA2, render_mode);
 	glPushMatrix();
 		glTranslatef(-5,-4,0);
 		objetos.dibujarObjeto(FLORERO, render_mode);
 	glPopMatrix();
-		objetos.dibujarObjeto(ALGA1, render_mode);
-		objetos.dibujarObjeto(ALGA2, render_mode);
-
 }
 
 void ControladorEscena::nextMode() {
@@ -31,6 +28,7 @@ void ControladorEscena::nextMode() {
 	}else if (render_mode == GL_LINE) {
 		render_mode = GL_FILL;
 	}
+
 }
 
 unsigned int ControladorEscena::getRenderMode() {

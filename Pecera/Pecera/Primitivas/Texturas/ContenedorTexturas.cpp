@@ -39,7 +39,7 @@ GLuint ContenedorTexturas::cargarImagen(std::string ruta) {
 
 		// busco si la imagen ya esta cargada
 		for (size_t pos=0; pos < nombreTex.size(); pos++) {
-			if (nombreTex[pos] == ruta)
+			if (ruta == nombreTex[pos])
 				return idTex[pos];
 		}
 		// La imagen no esta en la lista, la cargo desde archivo
@@ -54,11 +54,13 @@ GLuint ContenedorTexturas::cargarImagen(std::string ruta) {
 		return tex;
 }
 
-GLuint ContenedorTexturas::cargarImagenDesdeArchivo(std::string ruta) {
+GLuint ContenedorTexturas::cargarImagenDesdeArchivo(std::string &nombre) {
 
-	SDL_Surface *imagen = IMG_Load(ruta.c_str());
-	if(!imagen) {
-		std::cerr << "Error al cargar la imagen "<<ruta << std::endl;
+	std::string path(PATH_TEX);
+	path += nombre;
+	SDL_Surface *imagen = IMG_Load(path.c_str());
+	if((!imagen) || (!imagen->pixels) ) {
+		std::cerr << "Error al cargar la imagen "<<path << std::endl;
 		return 0;
 	}
 
@@ -88,8 +90,9 @@ GLuint ContenedorTexturas::cargarImagenDesdeArchivo(std::string ruta) {
 			else
 					formatoTextura = GL_BGR;
 	} else {
-			std::cerr << "Advertencia!!!! la imagen que intenta cargar no es true color "<< std::endl;
-			std::cerr << " Es probable que no se visualice correctamente esta imagen. " << std::endl;
+		SDL_FreeSurface(imagen);
+		std::cerr << "Advertencia!!!! la imagen que intenta cargar no es true color "<< std::endl;
+		return 0;
 	}
 
 	glBindTexture(GL_TEXTURE_2D,tex);	//indica con que textura estoy trabajando
@@ -102,8 +105,9 @@ GLuint ContenedorTexturas::cargarImagenDesdeArchivo(std::string ruta) {
 	//mezcla la informacion de textura con la de color
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
+
 	//crea en mipmap
-	gluBuild2DMipmaps(GL_TEXTURE_2D,4,imagen->w,
+	gluBuild2DMipmaps(GL_TEXTURE_2D,numColores,imagen->w,
 		  imagen->h,formatoTextura,
 		  GL_UNSIGNED_BYTE,imagen->pixels);
 

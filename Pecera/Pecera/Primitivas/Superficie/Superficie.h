@@ -34,6 +34,8 @@ protected:
 	/* generar las normales de iluminacion */
 	void setNormales();
 
+	void setMaterial();
+
 	/* inicializa la superficie creando normales, indices y texturas */
 	void init();
 

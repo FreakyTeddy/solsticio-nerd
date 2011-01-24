@@ -11,9 +11,8 @@
 
 /* Variables Globales
  * */
-
 Camara cam;	//camara
-ControladorEscena escena;
+ControladorEscena* escena;
 
 /* Dibujos de prueba */
 
@@ -28,7 +27,7 @@ void suelo() {
 	glCullFace( GL_FRONT );
 	glEnable(GL_CULL_FACE);
 
-	if (escena.getRenderMode() == GL_TEXTURE) {
+	if (escena->getRenderMode() == GL_TEXTURE) {
 		glBindTexture(GL_TEXTURE_2D,textura);
 		glEnable(GL_TEXTURE_2D);
 		glPolygonMode( GL_BACK, GL_FILL);
@@ -42,10 +41,11 @@ void suelo() {
 			}
 			glEnd();
 		}
+		std::cout<<"con text "<<textura<<std::endl;
 		glDisable(GL_TEXTURE_2D);
 	}
 	else {
-		glPolygonMode( GL_BACK, escena.getRenderMode());
+		glPolygonMode( GL_BACK, escena->getRenderMode());
 		for(int j=-50; j<50; j+=5) {
 			glBegin(GL_QUAD_STRIP);
 			for (int i=-50; i<51; i+=5){
@@ -54,6 +54,7 @@ void suelo() {
 			}
 			glEnd();
 		}
+		std::cout<<"siiin text"<<std::endl;
 	}
 
 	glDisable( GL_CULL_FACE );
@@ -170,8 +171,6 @@ void init(void) {
   glEndList();
 
   glDisable(GL_COLOR_MATERIAL);
-  contenedorTex->cargarImagen("Primitivas/Texturas/res/madera.bmp");
-
 }
 
 void salir() {
@@ -181,6 +180,7 @@ void salir() {
 	std::cout.flush();
 
 	/* destruir todos los objetos */
+	delete escena;
 	contenedorTex->vaciarContenedor();
 
 	std::cout<<"Gracias por usar Peces Pepe"<<std::endl;
@@ -206,9 +206,9 @@ void display(void)
 
 
     ///////////////////////////// dibujar ////////////////////////
-
+	escena->generarEscena();
 	suelo();
-	escena.generarEscena();
+
 
     /////////////////////////// fin dibujar =P /////////////////////
 
@@ -254,7 +254,7 @@ void keyboard (unsigned char key, int x, int y) {
       break;
     case 'r':
 	case 'R':
-		 escena.nextMode();
+		 escena->nextMode();
 		 glutPostRedisplay();
         break;
     default:
@@ -329,7 +329,6 @@ int main(int argc, char** argv) {
   glutCreateWindow("TP Final - Sistemas Graficos");
   //glutFullScreen();
 
-
   init();
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
@@ -339,8 +338,6 @@ int main(int argc, char** argv) {
   glutMotionFunc(mouseMotion);
   atexit(salir);
 
-  /** TESTS **/
-  textura = contenedorTex->cargarImagen("Primitivas/Texturas/res/arena.bmp");
   /* Informacion */
   std::cout<<"Controles: "<<std::endl;
   std::cout<<"A - \t ejes"<<std::endl;
@@ -351,6 +348,11 @@ int main(int argc, char** argv) {
   std::cout<<"'+' '-' \t traslacion vertical"<<std::endl;
   std::cout<<"boton izq \t rotacion camara"<<std::endl;
   std::cout<<"boton der \t zoom camara"<<std::endl<<std::endl;
+  std::cout.flush();
+
+  /** TESTS **/
+  textura = contenedorTex->cargarImagen("arena.bmp");
+  escena = new ControladorEscena();
 
   glutMainLoop();
   return 0;

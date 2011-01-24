@@ -13,12 +13,13 @@ void Superficie::dibujar(unsigned int render_mode) {
 
 //	if (render_mode == GL_LINE_LOOP)
 //		dibujarMalla();
+//	std::cout<<"dibujar"<<std::endl;
 
-//	if ((render_mode != TEXTURA) || (render_mode == TEXTURA && !tex.tieneTextura()))
+	if ((render_mode != GL_TEXTURE) || (render_mode == GL_TEXTURE && !tex.tieneTextura()))
 		dibujarTrianStrip(render_mode);
 
-//	if (render_mode == TEXTURA && tex.tieneTextura())
-//		dibujarTextura();
+	if (render_mode == GL_TEXTURE && tex.tieneTextura())
+		dibujarTextura();
 
 
 	//dibujo las normales
@@ -68,21 +69,15 @@ void Superficie::dibujarTrianStrip(unsigned int render_mode) {
 	it1 = superficie.begin();
 	it1 += tam;
 
-	//iluminacion
-	glEnable(GL_LIGHTING);
+	//caras
+//	glFrontFace( GL_CCW );
+//	glCullFace( GL_BACK );
+//	glDisable( GL_CULL_FACE );
 
 	//material
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	glMaterialfv(GL_BACK, GL_AMBIENT, mat_ambient);
+	setMaterial();
 
 
-	//caras
-	glFrontFace( GL_CCW );
-	glCullFace( GL_BACK );
-	//glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
-	glDisable( GL_CULL_FACE );
 
 	//activar estado
 	glEnableClientState (GL_VERTEX_ARRAY);
@@ -91,7 +86,8 @@ void Superficie::dibujarTrianStrip(unsigned int render_mode) {
 	//Render Mode
 	if (render_mode == GL_TEXTURE) {
 		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
-		if (tex.tieneTextura()) {
+		if (tex.tieneTextura()) {  	//TODO no anda
+			glBindTexture(GL_TEXTURE_2D,tex.getID());
 			glEnableClientState(GL_TEXTURE_2D_ARRAY);
 			glTexCoordPointer(2,GL_FLOAT,0, &(texCoord[0]));
 		}
@@ -114,7 +110,6 @@ void Superficie::dibujarTrianStrip(unsigned int render_mode) {
 	if ((render_mode == GL_TEXTURE) && tex.tieneTextura())
 		glDisableClientState(GL_TEXTURE_2D_ARRAY);
 
-	glDisable(GL_LIGHTING);
 }
 
 void Superficie::dibujarNormales() {
@@ -145,6 +140,8 @@ void Superficie::dibujarTextura() {
 	GLuint it0=0, it1=0;
 	GLuint longitud = superficie.size();
 
+	setMaterial();
+
 	glBindTexture(GL_TEXTURE_2D,tex.getID());
 	glEnable(GL_TEXTURE_2D);
 
@@ -174,6 +171,7 @@ void Superficie::dibujarTextura() {
 		glEnd();
 	}
 	glDisable(GL_TEXTURE_2D);
+
 }
 
 void Superficie::setIndices() {
@@ -322,5 +320,12 @@ void Superficie::setShininess(GLfloat shine) {
 	mat_shininess[0] = shine;
 }
 
+void Superficie::setMaterial() {
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
+	//glMaterialfv(GL_BACK, GL_AMBIENT, mat_ambient); ->> TODO no se por que no anda el BACK!!!
+}
 
 
