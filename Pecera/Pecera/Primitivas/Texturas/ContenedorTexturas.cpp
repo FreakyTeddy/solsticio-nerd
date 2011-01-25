@@ -25,7 +25,7 @@ ContenedorTexturas::ContenedorTexturas() {
 }
 
 ContenedorTexturas::~ContenedorTexturas() {
-	liberarImagenesCargadas();
+	vaciarContenedor();
 }
 
 ContenedorTexturas* ContenedorTexturas::getInstancia() {
@@ -119,6 +119,7 @@ void ContenedorTexturas::mostrarImagenesCargadas() {
 	for(size_t pos=0; pos < nombreTex.size(); pos++){
 		std::cout<<nombreTex[pos]<<"\t"<<idTex[pos]<<std::endl;
 	}
+	std::cout.flush();
 }
 
 void ContenedorTexturas::liberarImagenesCargadas() {
@@ -126,11 +127,11 @@ void ContenedorTexturas::liberarImagenesCargadas() {
 		 SDL_FreeSurface(bitmaps.back());
 		 bitmaps.pop_back();
 	}
+		glDeleteTextures(idTex.size(),&(idTex[0]));
 }
 
 void ContenedorTexturas::vaciarContenedor() {
-	nombreTex.clear();
-	idTex.clear();
+	mostrarImagenesCargadas();
 	liberarImagenesCargadas();
 }
 

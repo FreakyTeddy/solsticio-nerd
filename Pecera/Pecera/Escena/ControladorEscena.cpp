@@ -8,10 +8,13 @@ ControladorEscena::ControladorEscena() {
 
 }
 
-ControladorEscena::~ControladorEscena() {}
+ControladorEscena::~ControladorEscena() {
+	ContenedorTexturas::getInstancia()->vaciarContenedor();
+}
 
 void ControladorEscena::generarEscena() {
 	glPushMatrix();
+
 		glRotatef(180,0,0,1);
 		objetos.dibujarObjeto(ALGA1, render_mode);
 		objetos.dibujarObjeto(ALGA2, render_mode);
@@ -20,6 +23,8 @@ void ControladorEscena::generarEscena() {
 		objetos.dibujarObjeto(FLORERO, render_mode);
 //		objetos.dibujarObjeto(ROCA1,render_mode);
 	glPopMatrix();
+	objetos.dibujarEscenario(render_mode);
+
 }
 
 void ControladorEscena::nextMode() {

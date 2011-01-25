@@ -14,11 +14,6 @@
 Camara cam;	//camara
 ControladorEscena* escena;
 
-/* Dibujos de prueba */
-
-ContenedorTexturas *contenedorTex = ContenedorTexturas::getInstancia();
-GLuint textura;
-
 void suelo() {
 	 glShadeModel (GL_FLAT);
 
@@ -27,32 +22,17 @@ void suelo() {
 	glCullFace( GL_FRONT );
 	glEnable(GL_CULL_FACE);
 
-	if (escena->getRenderMode() == GL_TEXTURE) {
-		glBindTexture(GL_TEXTURE_2D,textura);
-		glEnable(GL_TEXTURE_2D);
+	if (escena->getRenderMode() == GL_LINE)
+		glPolygonMode( GL_BACK, GL_LINE);
+	else
 		glPolygonMode( GL_BACK, GL_FILL);
-		for(int j=-50; j<50; j+=5) {
-			glBegin(GL_QUAD_STRIP);
-			for (int i=-50; i<51; i+=5){
-				glTexCoord2d(i,j);
-				glVertex3f(i, j, 0.0);
-				glTexCoord2d(i,j+5);
-				glVertex3f(i, j+5, 0.0);
-			}
-			glEnd();
+	for(int j=-50; j<50; j+=5) {
+		glBegin(GL_QUAD_STRIP);
+		for (int i=-50; i<51; i+=5){
+			glVertex3f(i, j, 0.0);
+			glVertex3f(i, j+5, 0.0);
 		}
-		glDisable(GL_TEXTURE_2D);
-	}
-	else {
-		glPolygonMode( GL_BACK, escena->getRenderMode());
-		for(int j=-50; j<50; j+=5) {
-			glBegin(GL_QUAD_STRIP);
-			for (int i=-50; i<51; i+=5){
-				glVertex3f(i, j, 0.0);
-				glVertex3f(i, j+5, 0.0);
-			}
-			glEnd();
-		}
+		glEnd();
 	}
 
 	glDisable( GL_CULL_FACE );
@@ -173,14 +153,8 @@ void init(void) {
 
 void salir() {
 
-
-	contenedorTex->mostrarImagenesCargadas();
-	std::cout.flush();
-
 	/* destruir todos los objetos */
 	delete escena;
-	contenedorTex->vaciarContenedor();
-
 	std::cout<<"Gracias por usar Peces Pepe"<<std::endl;
 	std::cout.flush();
 	exit(0);
@@ -205,7 +179,7 @@ void display(void)
 
     ///////////////////////////// dibujar ////////////////////////
 	escena->generarEscena();
-	suelo();
+//	suelo();
 
 
     /////////////////////////// fin dibujar =P /////////////////////
@@ -349,7 +323,9 @@ int main(int argc, char** argv) {
   std::cout.flush();
 
   /** TESTS **/
-  textura = contenedorTex->cargarImagen("arena.bmp");
+//
+//  contenedorTex = ContenedorTexturas::getInstancia();
+//  textura = contenedorTex->cargarImagen("arena.bmp");
   escena = new ControladorEscena();
 
   glutMainLoop();

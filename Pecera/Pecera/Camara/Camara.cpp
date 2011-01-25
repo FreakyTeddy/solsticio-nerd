@@ -14,8 +14,8 @@ void Camara::lookAt() {
 }
 
 void Camara::reset() {
-	eye.set(15,0,5.0);	//camara
-	at.set(0.0,6.0,5.0);	//centro
+	eye.set(2,15,3.0);	//camara
+	at.set(0.0,0,5.0);	//centro
 	up.set(0.0,0.0,1.0);	//vector normal
 
 	zoom = 1;
