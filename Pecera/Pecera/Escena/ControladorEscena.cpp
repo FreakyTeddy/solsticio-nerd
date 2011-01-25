@@ -4,19 +4,21 @@
 #include <stdlib.h>
 
 ControladorEscena::ControladorEscena() {
-	render_mode = GL_FILL;
+	render_mode = RM_INICIAL;
 
 }
 
 ControladorEscena::~ControladorEscena() {}
 
 void ControladorEscena::generarEscena() {
-
-	objetos.dibujarObjeto(ALGA1, render_mode);
-	objetos.dibujarObjeto(ALGA2, render_mode);
 	glPushMatrix();
-		glTranslatef(-5,-4,0);
+		glRotatef(180,0,0,1);
+		objetos.dibujarObjeto(ALGA1, render_mode);
+		objetos.dibujarObjeto(ALGA2, render_mode);
+
+		glTranslatef(5,4,0);
 		objetos.dibujarObjeto(FLORERO, render_mode);
+//		objetos.dibujarObjeto(ROCA1,render_mode);
 	glPopMatrix();
 }
 
@@ -28,7 +30,6 @@ void ControladorEscena::nextMode() {
 	}else if (render_mode == GL_LINE) {
 		render_mode = GL_FILL;
 	}
-
 }
 
 unsigned int ControladorEscena::getRenderMode() {

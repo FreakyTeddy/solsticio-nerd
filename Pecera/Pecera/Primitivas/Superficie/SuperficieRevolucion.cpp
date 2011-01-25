@@ -1,6 +1,6 @@
 #include "SuperficieRevolucion.h"
 #include <math.h>
-#define PI 3.141592654
+
 
 SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float angulo, Vertice eje1, Vertice eje2, uint pasos) {
 
@@ -27,7 +27,7 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 	}
 
 	v1 = eje2;
-	rotar(v1.y, v1.z, sen_x, cos_x);
+	Util::rotar(v1.y, v1.z, sen_x, cos_x);
 
 	double sen_y = v1.x / v1.modulo();
 	double cos_y = v1.z / v1.modulo();
@@ -41,18 +41,18 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 			//traslado al origen
 			q -= eje1;
 			//roto sobre eje x
-			rotar(q.y, q.z, sen_x, cos_x);
+			Util::rotar(q.y, q.z, sen_x, cos_x);
 			//roto sobre eje y
-			rotar(q.z, q.x, sen_y, cos_y);
+			Util::rotar(q.z, q.x, sen_y, cos_y);
 			//roto el angulo alfa en el eje z
-			rotar(q.x, q.y, -angulo*i/pasos);
+			Util::rotar(q.x, q.y, -angulo*i/pasos);
 
 			//hago el camino inverso
 
 			//roto sobre eje y
-			rotar(q.z, q.x, -sen_y, cos_y);
+			Util::rotar(q.z, q.x, -sen_y, cos_y);
 			//roto sobre eje x
-			rotar(q.y, q.z, -sen_x, cos_x);
+			Util::rotar(q.y, q.z, -sen_x, cos_x);
 			//traslado
 			q += eje1;
 
@@ -65,21 +65,4 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 
 SuperficieRevolucion::~SuperficieRevolucion() {}
 
-void SuperficieRevolucion::rotar(float &p1, float &p2, float angulo) {
-
-	double alfa = 0;
-	alfa = angulo*PI/180;
-	float aux = p1;
-	p1 = aux * cos(alfa) - p2 * sin(alfa);
-	p2 = aux * sin(alfa) + p2 * cos(alfa);
-
-}
-
-void SuperficieRevolucion::rotar(float &p1, float &p2, float seno, float coseno) {
-
-	float aux = p1;
-	p1 = aux * coseno - p2 * seno;
-	p2 = aux * seno + p2 * coseno;
-
-}
 

@@ -41,7 +41,6 @@ void suelo() {
 			}
 			glEnd();
 		}
-		std::cout<<"con text "<<textura<<std::endl;
 		glDisable(GL_TEXTURE_2D);
 	}
 	else {
@@ -54,7 +53,6 @@ void suelo() {
 			}
 			glEnd();
 		}
-		std::cout<<"siiin text"<<std::endl;
 	}
 
 	glDisable( GL_CULL_FACE );
@@ -304,7 +302,7 @@ void mouse(int button, int state, int x, int y) {
 
 void mouseMotion(int x, int y) {
 	if (mouseDown) {
-		cam.rotar_h((x-xprev)*0.5);
+		cam.rotar_h((x-xprev)*(-0.5));
 		cam.rotar_v((y-yprev)*0.1);
 		xprev = x;
 		yprev = y;

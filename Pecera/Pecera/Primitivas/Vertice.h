@@ -4,6 +4,8 @@
 #include <math.h>
 #include <iostream>
 
+#include "../Util.h"
+
 /*
  * Describe un punto 3D
  *
@@ -119,6 +121,49 @@ class Vertice {
 			return ((*this)-v).modulo();
 		}
 
+		/* rota el vertice sobre un eje definido por dos puntos */
+		void rotar(const Vertice &inicio, const Vertice &fin, const float angulo) {
+
+			//proyecto sobre yz y calculo el angulo del eje con los planos x e y para rotar sobre el eje z
+			Vertice v1 = fin - inicio;
+			Vertice v = v1.normalizar();
+
+			double norm = v.modulo();
+			double sen_x = v.y/norm;
+			double cos_x = v.z/norm;
+			if (v1.esIgual(1,0,0)) { //caso especial si el eje de rotacion es x
+				sen_x = 0;
+				cos_x = 1;
+			}
+
+			Util::rotar(v1.y, v1.z, sen_x, cos_x);
+
+			double sen_y = v1.x / v1.modulo();
+			double cos_y = v1.z / v1.modulo();
+
+			//traslado al origen
+			(*this) -= inicio;
+
+			//roto sobre eje x
+			Util::rotar(this->y, this->z, sen_x, cos_x);
+			//roto sobre eje y
+			Util::rotar(this->z, this->x, sen_y, cos_y);
+
+			//roto el angulo alfa en el eje z
+			Util::rotar(this->x, this->y, angulo);
+
+			//hago el camino inverso
+
+			//roto sobre eje y
+			Util::rotar(this->z, this->x, -sen_y, cos_y);
+			//roto sobre eje x
+			Util::rotar(this->y, this->z, -sen_x, cos_x);
+
+			//traslado
+			(*this) += inicio;
+
+
+		}
 };
 
 

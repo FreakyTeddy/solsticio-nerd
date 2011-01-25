@@ -28,10 +28,10 @@ protected:
 	unsigned int tam;	// cantidad de vertices de la curva "forma"
 	bool cerrada;		//indica si la curva es cerrada
 
-	/* setea los indices para dibujado con draw elements */
+	/* setea los indices para dibujado con triangle strip*/
 	void setIndices();
 
-	/* generar las normales de iluminacion */
+	/* generar las normales de iluminacion para una superficie regular*/
 	void setNormales();
 
 	void setMaterial();
@@ -47,9 +47,12 @@ private:
 	void dibujarNormales();
 
 
-public:
-
+protected:
 	Superficie();
+
+public:
+	Superficie(std::vector<Vertice> &vertices);
+
 	virtual ~Superficie();
 
 	/* dibuja la superficie segun el modo de renderizado */

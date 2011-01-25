@@ -7,6 +7,16 @@ Superficie::Superficie() {
 	setShininess(70.0);
 }
 
+Superficie::Superficie(std::vector<Vertice> &vertices) {
+	setDiffuse(1,0, 0, 1);
+	setSpecular(1, 1, 1, 1);
+	setAmbient(1, 0.1, 0.2, 1);
+	setShininess(70.0);
+	tam =1;
+	superficie = vertices; //TODO se copiaaaaaaaaaaa
+	init();
+}
+
 Superficie::~Superficie() {}
 
 void Superficie::dibujar(unsigned int render_mode) {
@@ -70,14 +80,12 @@ void Superficie::dibujarTrianStrip(unsigned int render_mode) {
 	it1 += tam;
 
 	//caras
-//	glFrontFace( GL_CCW );
-//	glCullFace( GL_BACK );
-//	glDisable( GL_CULL_FACE );
+	glFrontFace( GL_CCW );
+	glCullFace( GL_BACK );
+	glDisable( GL_CULL_FACE );
 
 	//material
 	setMaterial();
-
-
 
 	//activar estado
 	glEnableClientState (GL_VERTEX_ARRAY);

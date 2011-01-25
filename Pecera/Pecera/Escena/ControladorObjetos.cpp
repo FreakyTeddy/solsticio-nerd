@@ -25,9 +25,7 @@ void ContenedorObjetos::crearSuperficies() {
 	superficies[FLORERO] = crearFlorero();
 	superficies[ALGA1] = crearAlga1();
 	superficies[ALGA2] = crearAlga2();
-
-	std::cout << "superficies creadas"<<std::endl;
-
+	superficies[ROCA1] = crearRoca1();
 }
 
 
@@ -53,6 +51,7 @@ Superficie* ContenedorObjetos::crearFlorero() {
 	verts.push_back(t);
 	verts.push_back(t);
 	curva.Bspline(verts,vertb);
+//	t.set(1,0,0); con arena
 	t.set(0,0,0);
 	Vertice q(0,0,1);
 	Superficie* florero = new SuperficieRevolucion(vertb, -360,t,q);
@@ -133,73 +132,90 @@ Superficie* ContenedorObjetos::crearAlga1() {
 
 Superficie* ContenedorObjetos::crearAlga2() {
 	std::vector<Vertice> v;
-		std::vector<Vertice> trasl;
-		Vertice q;
+	std::vector<Vertice> trasl;
+	Vertice q;
 
-		//puntos de control
-		std::vector<Vertice> alga_s;
+	//puntos de control
+	std::vector<Vertice> alga_s;
 
-		q.set(0.5,0,0);
-		alga_s.push_back(q);
-		q.set(-0.5,0,0);
-		alga_s.push_back(q);
+	q.set(0.5,0,0);
+	alga_s.push_back(q);
+	q.set(-0.5,0,0);
+	alga_s.push_back(q);
 
-		//traslacion de los puntos
-		Curva curva;
-		curva.setFactor(3);
+	//traslacion de los puntos
+	Curva curva;
+	curva.setFactor(3);
 
-		trasl.clear();
-		q.set(0,0,0);
-		trasl.push_back(q);
-		trasl.push_back(q);
-		trasl.push_back(q);
+	trasl.clear();
+	q.set(0,0,0);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
 
-		q.set(0.2,0.5,1);
-		trasl.push_back(q);
+	q.set(0.2,0.5,1);
+	trasl.push_back(q);
 
-		q.set(0.75,0.75,3);
-		trasl.push_back(q);
+	q.set(0.75,0.75,3);
+	trasl.push_back(q);
 
-		q.set(1.5,1.5,4);
-		trasl.push_back(q);
+	q.set(1.5,1.5,4);
+	trasl.push_back(q);
 
-		q.set(2,2,3);
-		trasl.push_back(q);
+	q.set(2,2,3);
+	trasl.push_back(q);
 
-		q.set(1.5,1.5,2.5);
-		trasl.push_back(q);
-		trasl.push_back(q);
-		trasl.push_back(q);
-		curva.Bspline(trasl, v);
+	q.set(1.5,1.5,2.5);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	curva.Bspline(trasl, v);
 
-		//deformacion de los puntos
-		std::vector<Vertice> def;
-		std::vector<Vertice> def2;
-		q.set(0.1, 0.1, 1);
-		def.push_back(q);
-		def.push_back(q);
-		def.push_back(q);
-		q.set(1,1,1);
-		def.push_back(q);
-		q.set(1.5,1.5,1);
-		def.push_back(q);
-		q.set(0.8,0.8,1);
-		def.push_back(q);
-		q.set(1.4,1.4,1);
-		def.push_back(q);
-		q.set(0.01, 0.01, 1);
-		def.push_back(q);
-		def.push_back(q);
-		def.push_back(q);
-		curva.Bspline(def, def2);
+	//deformacion de los puntos
+	std::vector<Vertice> def;
+	std::vector<Vertice> def2;
+	q.set(0.1, 0.1, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	q.set(1,1,1);
+	def.push_back(q);
+	q.set(1.5,1.5,1);
+	def.push_back(q);
+	q.set(0.8,0.8,1);
+	def.push_back(q);
+	q.set(1.4,1.4,1);
+	def.push_back(q);
+	q.set(0.01, 0.01, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	curva.Bspline(def, def2);
 
-		//creacion de superficie de barrido
-		Superficie *sup = new SuperficieBarrido(alga_s, v , def2);
-		sup->setDiffuse(0,1,0.5,1);
-		sup->setSpecular(0,0.5,0.5,1);
-		sup->setShininess(50);
-		sup->aplicarTextura("madera.bmp");
-		return sup;
+	//creacion de superficie de barrido
+	Superficie *sup = new SuperficieBarrido(alga_s, v , def2);
+	sup->setDiffuse(0,1,0.5,1);
+	sup->setSpecular(0,0.5,0.5,1);
+	sup->setShininess(50);
+	sup->aplicarTextura("madera.bmp");
+	return sup;
 }
 
+Superficie* ContenedorObjetos::crearRoca1(){
+	std::vector<Vertice> v;
+	Vertice q;
+	v.push_back(q);
+	q.set(0,0,0);
+	v.push_back(q);
+	q.set(0,1,0);
+	v.push_back(q);
+	q.set(0,1,1);
+	v.push_back(q);
+	q.set(0,0,1);
+	v.push_back(q);
+	Superficie* s= new Superficie(v);
+	s->aplicarTextura("stones.bmp");
+	return s;
+
+}
 

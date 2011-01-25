@@ -3,7 +3,9 @@
 
 #include <GL/glut.h>
 #include <stdlib.h>
+
 #include "../Primitivas/Vertice.h"
+
 
 
 /*
@@ -18,7 +20,8 @@ private:
 	Vertice up;	//vector normal
 	float zoom;	//zoom realizado
 
-
+	bool fueraDeEscena(Vertice &t);
+	bool anguloValido(Vertice t);
 
 public:
 	Camara();

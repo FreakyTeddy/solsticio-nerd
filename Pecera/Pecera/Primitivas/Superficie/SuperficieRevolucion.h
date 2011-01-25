@@ -5,11 +5,6 @@
 
 class SuperficieRevolucion: public Superficie {
 
-private:
-
-	void rotar(float &p1, float &p2, float angulo);
-	void rotar(float &p1, float &p2, float seno, float coseno);
-
 public:
 
 	/* Recibe la forma de la curva, el angulo a rotar
