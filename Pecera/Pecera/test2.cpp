@@ -1,7 +1,6 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include "Primitivas/Curva/Curva.h"
-#include "Camara/Camara.h"
 #include "Primitivas/Superficie/SuperficieBarrido.h"
 #include "Primitivas/Superficie/SuperficieRevolucion.h"
 #include "Escena/ControladorEscena.h"
@@ -11,7 +10,6 @@
 
 /* Variables Globales
  * */
-Camara cam;	//camara
 ControladorEscena* escena;
 
 void suelo() {
@@ -110,8 +108,6 @@ void Set3DEnv() {
 	glLoadIdentity ();
 	gluPerspective(60.0, (GLfloat) window_size[0]/(GLfloat) window_size[1], 0.10, 100.0);
 	glMatrixMode(GL_MODELVIEW);
-	cam.lookAt();
-
 }
 
 void init(void) {
@@ -164,23 +160,18 @@ void salir() {
 void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	cam.lookAt();
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 	glPushMatrix();
 
+	///////////////////////////// dibujar ////////////////////////
 
 	if (view_axis)
 		 glCallList(DL_AXIS);
 	if (view_grid)
 		 glCallList(DL_GRID);
 
-
-    ///////////////////////////// dibujar ////////////////////////
 	escena->generarEscena();
-//	suelo();
-
 
     /////////////////////////// fin dibujar =P /////////////////////
 
@@ -202,11 +193,11 @@ void keyboard (unsigned char key, int x, int y) {
        	exit(0);
       break;
 	case 0x2B:  // '+'
-		cam.trasladar_u(1);
+		escena->getCamara()->trasladar_u(1);
 		glutPostRedisplay();
 		break;
 	case 0x2D:  // '-'
-		cam.trasladar_u(-1);
+		escena->getCamara()->trasladar_u(-1);
 		glutPostRedisplay();
 		break;
     case 'g':
@@ -221,7 +212,7 @@ void keyboard (unsigned char key, int x, int y) {
       break;
     case 'c':
     case 'C':
-      cam.reset();
+      escena->getCamara()->reset();
       glutPostRedisplay();
       break;
     case 'r':
@@ -238,19 +229,19 @@ void specialKeys(int key,int x, int y) {
 
 	switch(key) {
 	case GLUT_KEY_LEFT:
-		cam.trasladar_s(1);
+		escena->getCamara()->trasladar_s(1);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_RIGHT:
-		cam.trasladar_s(-1);
+		escena->getCamara()->trasladar_s(-1);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_UP:
-		cam.trasladar_f(1);
+		escena->getCamara()->trasladar_f(1);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_DOWN:
-		cam.trasladar_f(-1);
+		escena->getCamara()->trasladar_f(-1);
 		glutPostRedisplay();
 		break;
 	}
@@ -276,17 +267,17 @@ void mouse(int button, int state, int x, int y) {
 
 void mouseMotion(int x, int y) {
 	if (mouseDown) {
-		cam.rotar_h((x-xprev)*(-0.5));
-		cam.rotar_v((y-yprev)*0.1);
+		escena->getCamara()->rotar_h((xprev-x)*0.3);
+		escena->getCamara()->rotar_v((y-yprev)*0.2);
 		xprev = x;
 		yprev = y;
 		glutPostRedisplay();
 	}
 	if (zoomOn) {
 		if (y > zprev)
-			cam.zoom_in(0.001*(zprev-y));
+			escena->getCamara()->zoom_in(0.001*(zprev-y));
 		else if(y < zprev)
-			cam.zoom_in(-0.001*(y-zprev));
+			escena->getCamara()->zoom_in(-0.001*(y-zprev));
 		zprev = y;
 		glutPostRedisplay();
 	}
@@ -323,9 +314,6 @@ int main(int argc, char** argv) {
   std::cout.flush();
 
   /** TESTS **/
-//
-//  contenedorTex = ContenedorTexturas::getInstancia();
-//  textura = contenedorTex->cargarImagen("arena.bmp");
   escena = new ControladorEscena();
 
   glutMainLoop();

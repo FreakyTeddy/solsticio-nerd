@@ -121,12 +121,16 @@ class Vertice {
 			return ((*this)-v).modulo();
 		}
 
+		void opuesto() {
+			x = (-x); y = (-y); z = (-z);
+		}
+
 		/* rota el vertice sobre un eje definido por dos puntos */
 		void rotar(const Vertice &inicio, const Vertice &fin, const float angulo) {
 
 			//proyecto sobre yz y calculo el angulo del eje con los planos x e y para rotar sobre el eje z
 			Vertice v1 = fin - inicio;
-			Vertice v = v1.normalizar();
+			Vertice v = v1.normalizar().proyeccionYZ();
 
 			double norm = v.modulo();
 			double sen_x = v.y/norm;

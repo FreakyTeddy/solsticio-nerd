@@ -10,7 +10,7 @@ Camara::~Camara() {}
 
 void Camara::lookAt() {
 	glLoadIdentity();
-	gluLookAt (eye.x, eye.y, eye.z, at.x, at.y, at.z, up.x, up.y, up.z);
+	gluLookAt (eye.x/zoom, eye.y/zoom, eye.z, at.x, at.y, at.z, up.x, up.y, up.z);
 }
 
 void Camara::reset() {
@@ -23,8 +23,7 @@ void Camara::reset() {
 
 void Camara::zoom_in(float p) {
 	if (zoom > p ) {
-		eye.x /= zoom;
-		eye.y /= zoom;
+		zoom -=p;
 	}//chekear dentro de escena
 }
 
@@ -61,8 +60,8 @@ void Camara::rotar_h(float cant) {
 }
 
 void Camara::rotar_v(float cant) {
-//	Vertice t = (eye-at).prodVectorial(up);
-//	at.rotar(eye,t+eye,cant);  ->> deberia ser asi! no se por que falla
+	Vertice t = (at-eye).prodVectorial(up);
+	at.rotar(eye,t+eye,cant);
 }
 
 bool Camara::fueraDeEscena(Vertice &t) {

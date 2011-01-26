@@ -13,6 +13,8 @@ ControladorEscena::~ControladorEscena() {
 }
 
 void ControladorEscena::generarEscena() {
+	cam.lookAt();
+
 	glPushMatrix();
 
 		glRotatef(180,0,0,1);
@@ -41,4 +43,6 @@ unsigned int ControladorEscena::getRenderMode() {
 	return render_mode;
 }
 
-
+Camara* ControladorEscena::getCamara() {
+	return &cam;
+}

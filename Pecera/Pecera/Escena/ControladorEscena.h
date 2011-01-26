@@ -2,6 +2,7 @@
 #define CONTROLADORESCENA_H_
 
 #include "ControladorObjetos.h"
+#include "../Camara/Camara.h"
 
 /**
  *  Arma la escena: ubica la camara, los objetos, realiza animaciones.
@@ -15,7 +16,10 @@ class ControladorEscena {
 
 private:
 	ContenedorObjetos objetos;
+	Camara cam;
 	unsigned int render_mode;
+
+
 
 public:
 	ControladorEscena();
@@ -28,6 +32,8 @@ public:
 	void nextMode();
 
 	unsigned int getRenderMode();
+
+	Camara* getCamara();
 };
 
 #endif /* CONTROLADORESCENA_H_ */
