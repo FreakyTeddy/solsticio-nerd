@@ -1,29 +1,25 @@
 #include "Superficie.h"
 
 Superficie::Superficie() {
-	setDiffuse(0.85,0.85, 0.85, 1);
-	setSpecular(1, 1, 1, 1);
-	setAmbient(0.0, 0.1, 0.2, 1);
-	setShininess(70.0);
+	material.setDiffuse(0.85,0.85, 0.85, 1);
+	material.setSpecular(1, 1, 1, 1);
+	material.setAmbient(0.0, 0.1, 0.2, 1);
+	material.setShininess(70.0);
 }
 
 Superficie::Superficie(std::vector<Vertice> &vertices) {
-	setDiffuse(1,0, 0, 1);
-	setSpecular(1, 1, 1, 1);
-	setAmbient(1, 0.1, 0.2, 1);
-	setShininess(70.0);
+	material.setDiffuse(1,0, 0, 1);
+	material.setSpecular(1, 1, 1, 1);
+	material.setAmbient(1, 0.1, 0.2, 1);
+	material.setShininess(70.0);
 	tam =1;
-	superficie = vertices; //TODO se copiaaaaaaaaaaa
+	superficie = vertices; //TODO se copiaaaaaaaaaaa -->> todavia no funciona esta cosa
 	init();
 }
 
 Superficie::~Superficie() {}
 
 void Superficie::dibujar(unsigned int render_mode) {
-
-//	if (render_mode == GL_LINE_LOOP)
-//		dibujarMalla();
-//	std::cout<<"dibujar"<<std::endl;
 
 	if ((render_mode != GL_TEXTURE) || (render_mode == GL_TEXTURE && !tex.tieneTextura()))
 		dibujarTrianStrip(render_mode);
@@ -85,7 +81,7 @@ void Superficie::dibujarTrianStrip(unsigned int render_mode) {
 	glDisable( GL_CULL_FACE );
 
 	//material
-	setMaterial();
+	material.usarMaterial();
 
 	//activar estado
 	glEnableClientState (GL_VERTEX_ARRAY);
@@ -148,7 +144,7 @@ void Superficie::dibujarTextura() {
 	GLuint it0=0, it1=0;
 	GLuint longitud = superficie.size();
 
-	setMaterial();
+	material.usarMaterial();
 
 	glBindTexture(GL_TEXTURE_2D,tex.getID());
 	glEnable(GL_TEXTURE_2D);
@@ -315,25 +311,6 @@ void Superficie::init() {
 	setNormales();
 }
 
-void Superficie::setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {
-	mat_diffuse[0]=r; mat_diffuse[1]=g; mat_diffuse[2]=b; mat_diffuse[3]=alpha;
+Material* Superficie::getMaterial() {
+	return &material;
 }
-void Superficie::setAmbient(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {
-	mat_ambient[0]=r; mat_ambient[1]=g; mat_ambient[2]=b; mat_ambient[3]=alpha;
-}
-void Superficie::setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {
-	mat_specular[0]=r; mat_specular[1]=g; mat_specular[2]=b; mat_specular[3]=alpha;
-}
-void Superficie::setShininess(GLfloat shine) {
-	mat_shininess[0] = shine;
-}
-
-void Superficie::setMaterial() {
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
-	//glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
-	//glMaterialfv(GL_BACK, GL_AMBIENT, mat_ambient); ->> TODO no se por que no anda el BACK!!!
-}
-
-

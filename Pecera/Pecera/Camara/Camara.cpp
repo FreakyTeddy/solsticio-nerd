@@ -59,7 +59,8 @@ void Camara::rotar_v(float cant) {
 	Vertice t = at.prodVectorial(up);
 	Vertice origen;
 	at.rotar(origen,t,cant).normalizar();
-	//at.print();
+	//at.print();//creo que el problema es, que al rotar, el mismo prodvect da ejes opuestos
+	//VER! bajo que condicion hay que calcular el opuesto
 
 }
 

@@ -3,20 +3,14 @@
 
 #include "../Vertice.h"
 #include "../Texturas/Textura.h"
+#include "../Materiales/Material.h"
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <vector>
 
 class Superficie {
-
 private:
-
-	/* material de la superficie */
-	GLfloat mat_diffuse[4];
-	GLfloat mat_ambient[4];
-	GLfloat mat_specular[4];
-	GLfloat mat_shininess[1];
-
+	Material material;
 protected:
 	std::vector<Vertice> superficie;	// malla de vertices 3D de la superficie
 	std::vector<Vertice> normales;		// normales de iluminacion en cada vertice 3D
@@ -33,8 +27,6 @@ protected:
 
 	/* generar las normales de iluminacion para una superficie regular*/
 	void setNormales();
-
-	void setMaterial();
 
 	/* inicializa la superficie creando normales, indices y texturas */
 	void init();
@@ -61,14 +53,7 @@ public:
 	/* aplica la textura especificada a la superficie */
 	void aplicarTextura (std::string ruta);
 
-	/* cambian el material de la superficie.. los valores son entre 0 y 1
-	 * alpha = 1 -> no hay transparencia	 */
-	void setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
-	void setSpecular(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
-	void setAmbient(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
-
-	/* menor shine hace el brillo mas "grande" */
-	void setShininess(GLfloat shine);
+	Material* getMaterial();
 
 };
 

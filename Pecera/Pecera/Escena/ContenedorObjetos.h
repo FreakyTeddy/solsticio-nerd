@@ -22,6 +22,7 @@ enum _dibujos { FLORERO=0, ALGA1, ALGA2, ALGA3, PEZ1, PEZ2, PEZ3, ROCA1, ROCA2};
 class ContenedorObjetos {
 private:
 	Curva curva;
+	Material mat_escenario;
 
 	Superficie* superficies[MAX_DIBUJOS];
 	enum _dibujos _d;
