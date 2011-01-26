@@ -60,7 +60,6 @@ bool luz = true;
 GLuint dl_handle;
 #define DL_AXIS (dl_handle+0)
 #define DL_GRID (dl_handle+1)
-#define DL_AXIS2D_TOP (dl_handle+2)
 
 // Tamaño de la ventana
 GLfloat window_size[2];
@@ -166,13 +165,13 @@ void display(void)
 
 	///////////////////////////// dibujar ////////////////////////
 
+
+	escena->generarEscena();
+
 	if (view_axis)
 		 glCallList(DL_AXIS);
 	if (view_grid)
 		 glCallList(DL_GRID);
-
-	escena->generarEscena();
-
     /////////////////////////// fin dibujar =P /////////////////////
 
 	glPopMatrix();
@@ -229,11 +228,11 @@ void specialKeys(int key,int x, int y) {
 
 	switch(key) {
 	case GLUT_KEY_LEFT:
-		escena->getCamara()->trasladar_s(1);
+		escena->getCamara()->trasladar_s(-1);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_RIGHT:
-		escena->getCamara()->trasladar_s(-1);
+		escena->getCamara()->trasladar_s(1);
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_UP:

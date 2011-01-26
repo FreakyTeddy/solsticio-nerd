@@ -1,7 +1,7 @@
 #ifndef CONTROLADORESCENA_H_
 #define CONTROLADORESCENA_H_
 
-#include "ControladorObjetos.h"
+#include "ContenedorObjetos.h"
 #include "../Camara/Camara.h"
 
 /**

@@ -1,4 +1,4 @@
-#include "ControladorObjetos.h"
+#include "ContenedorObjetos.h"
 
 ContenedorObjetos::ContenedorObjetos() {
 

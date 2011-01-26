@@ -10,13 +10,13 @@ Camara::~Camara() {}
 
 void Camara::lookAt() {
 	glLoadIdentity();
-	gluLookAt (eye.x/zoom, eye.y/zoom, eye.z, at.x, at.y, at.z, up.x, up.y, up.z);
+	gluLookAt (eye.x/zoom, eye.y/zoom, eye.z, eye.x + at.x, eye.y + at.y, eye.z + at.z, up.x, up.y, up.z);
 }
 
 void Camara::reset() {
-	eye.set(2,15,3.0);	//camara
-	at.set(0.0,0,5.0);	//centro
-	up.set(0.0,0.0,1.0);	//vector normal
+	eye.set(2,15,3.0);	//posicion camara
+	at.set(0,-1.0,0);	//direccion mira
+	up.set(0.0,0.0,1.0);//vector normal
 
 	zoom = 1;
 }
@@ -28,40 +28,39 @@ void Camara::zoom_in(float p) {
 }
 
 void Camara::trasladar_f(float cant) {
-	Vertice temp = (at-eye).normalizar()*cant;
+	Vertice temp = at*cant;
 	eye +=temp;
-	at +=temp;
 	if (fueraDeEscena(eye)) {
 		eye -=temp;
-		at -=temp;
 	}
 }
 
 void Camara::trasladar_s(float cant) {
-	Vertice temp = (eye-at).prodVectorial(up).normalizar()*cant;
+	Vertice temp = at.prodVectorial(up).normalizar()*cant;
 	eye +=temp;
-	at +=temp;
-	if (fueraDeEscena(eye)) {
+
+	if (fueraDeEscena(eye))
 		eye -=temp;
-		at -=temp;
-	}
 }
 
 void Camara::trasladar_u(float cant) {
-	//no me convence
 	eye += (up*cant);
-	at += (up*cant);
+	if (fueraDeEscena(eye))
+		eye -=(up*cant);
 }
 
 
 void Camara::rotar_h(float cant) {
-	Vertice fin = eye + up;
-	at.rotar(eye,fin,cant);
+	Vertice origen;
+	at.rotar(origen,up,cant).normalizar();
 }
 
 void Camara::rotar_v(float cant) {
-	Vertice t = (at-eye).prodVectorial(up);
-	at.rotar(eye,t+eye,cant);
+	Vertice t = at.prodVectorial(up);
+	Vertice origen;
+	at.rotar(origen,t,cant).normalizar();
+	//at.print();
+
 }
 
 bool Camara::fueraDeEscena(Vertice &t) {

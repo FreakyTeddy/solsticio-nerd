@@ -21,7 +21,7 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 	double sen_x = v.y/norm;
 	double cos_x = v.z/norm;
 
-	if (eje2.esIgual(1,0,0)) { //caso especial si el eje de rotacion es x
+	if (eje2.esIgual(1,0,0) || eje2.esIgual(-1,0,0)) { //caso especial si el eje de rotacion es x
 		sen_x = 0;
 		cos_x = 1;
 	}

@@ -126,20 +126,24 @@ class Vertice {
 		}
 
 		/* rota el vertice sobre un eje definido por dos puntos */
-		void rotar(const Vertice &inicio, const Vertice &fin, const float angulo) {
+		Vertice& rotar(const Vertice &inicio, const Vertice &fin, const float angulo) {
 
 			//proyecto sobre yz y calculo el angulo del eje con los planos x e y para rotar sobre el eje z
-			Vertice v1 = fin - inicio;
-			Vertice v = v1.normalizar().proyeccionYZ();
 
+			//traslado el vector eje al origen
+			Vertice v1 = (fin - inicio).normalizar();
+
+			Vertice v = v1.proyeccionYZ();
+
+			//angulo a rotar respecto de x
 			double norm = v.modulo();
 			double sen_x = v.y/norm;
 			double cos_x = v.z/norm;
-			if (v1.esIgual(1,0,0)) { //caso especial si el eje de rotacion es x
+			if (v1.esIgual(1,0,0) || v1.esIgual(-1,0,0)) { //caso especial si el eje de rotacion es x
 				sen_x = 0;
 				cos_x = 1;
 			}
-
+			//roto respecto del eje x
 			Util::rotar(v1.y, v1.z, sen_x, cos_x);
 
 			double sen_y = v1.x / v1.modulo();
@@ -166,7 +170,7 @@ class Vertice {
 			//traslado
 			(*this) += inicio;
 
-
+			return (*this);
 		}
 };
 
