@@ -272,18 +272,20 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 			glVertex3f(cubo[idx[i+2]*3],cubo[idx[i+2]*3+1],cubo[idx[i+2]*3+2]);
 			glTexCoord2f(0.0,1.0);
 			glVertex3f(cubo[idx[i+3]*3],cubo[idx[i+3]*3+1],cubo[idx[i+3]*3+2]);
-
+			glEnd();
 			glDisable(GL_TEXTURE_2D);
 		}
-		else{
+		else
+		{
 			glBegin(GL_QUADS);
 			glVertex3f(cubo[idx[i  ]*3],cubo[idx[i  ]*3+1],cubo[idx[i  ]*3+2]);
 			glVertex3f(cubo[idx[i+1]*3],cubo[idx[i+1]*3+1],cubo[idx[i+1]*3+2]);
 			glVertex3f(cubo[idx[i+2]*3],cubo[idx[i+2]*3+1],cubo[idx[i+2]*3+2]);
 			glVertex3f(cubo[idx[i+3]*3],cubo[idx[i+3]*3+1],cubo[idx[i+3]*3+2]);
+			glEnd();
 		}
 
-		glEnd();
+
 	}
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
