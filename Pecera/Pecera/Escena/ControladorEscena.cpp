@@ -38,6 +38,10 @@ void ControladorEscena::generarEscena() {
 
 		//test
 		dibujarCardumen(cardumen1);
+		if(ver_tray){
+			glColor3f(1,1,0);
+			cardumen1->recorrido->dibujarTrayecto();
+		}
 
 	glPopMatrix();
 	objetos.dibujarEscenario(render_mode);
@@ -121,11 +125,11 @@ void ControladorEscena::crearCardumen(){
 	control.push_back(t);
 	control.push_back(t);
 	control.push_back(t);
-	t.set(10,2,0);
+	t.set(30,12,0);
 	control.push_back(t);
-	t.set(5,-2,4);
+	t.set(5,-12,24);
 	control.push_back(t);
-	t.set(-2,-12,6);
+	t.set(-32,-52,36);
 	control.push_back(t);
 	t.set(0,0,0);
 	control.push_back(t);
@@ -133,7 +137,9 @@ void ControladorEscena::crearCardumen(){
 	control.push_back(t);
 
 
-	cardumen1 = new Cardumen(FLORERO,1,control,true,5,false);
+	cardumen1 = new Cardumen(FLORERO,1,control,true,6,false);
+
+	std::cout<<"Escalaaaaaaaaaaaaaaaa: "<<cardumen1->volumen[0]<<std::endl;
 
 }
 

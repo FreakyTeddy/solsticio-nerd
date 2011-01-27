@@ -56,7 +56,7 @@ private:
 		volumen = new float [cantidad];
 		ubicacion = new Vertice [cantidad];
 		for(uint i=0;i<cantidad;i++){
-			volumen[i] = (rand()%4)+0.5;
+			volumen[i] = (rand()%3)+0.5;
 			//generar posiciones aleatorias
 		}
 	}

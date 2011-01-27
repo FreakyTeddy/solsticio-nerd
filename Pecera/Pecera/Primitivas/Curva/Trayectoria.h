@@ -16,7 +16,7 @@ class Trayectoria {
 	std::vector<Vertice> trayecto;
 	size_t actual;
 	size_t tam;
-
+	float velocidad;
 
 public:
 
