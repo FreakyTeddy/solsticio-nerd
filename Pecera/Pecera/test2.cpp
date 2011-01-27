@@ -7,35 +7,9 @@
 #include <iostream>
 #include <vector>
 
-
 /* Variables Globales
  * */
 ControladorEscena* escena;
-
-void suelo() {
-	 glShadeModel (GL_FLAT);
-
-	//falta material del suelo
-	glFrontFace( GL_CCW );
-	glCullFace( GL_FRONT );
-	glEnable(GL_CULL_FACE);
-
-	if (escena->getRenderMode() == GL_LINE)
-		glPolygonMode( GL_BACK, GL_LINE);
-	else
-		glPolygonMode( GL_BACK, GL_FILL);
-	for(int j=-50; j<50; j+=5) {
-		glBegin(GL_QUAD_STRIP);
-		for (int i=-50; i<51; i+=5){
-			glVertex3f(i, j, 0.0);
-			glVertex3f(i, j+5, 0.0);
-		}
-		glEnd();
-	}
-
-	glDisable( GL_CULL_FACE );
-	glShadeModel (GL_SMOOTH);
-}
 
 /************************************/
 
@@ -226,9 +200,18 @@ void keyboard (unsigned char key, int x, int y) {
       escena->getCamara()->reset();
       glutPostRedisplay();
       break;
+    case 'p':
+	case 'P':
+		 escena->nextAnimationMode();
+        break;
     case 'r':
 	case 'R':
-		 escena->nextMode();
+		 escena->nextRenderMode();
+		 glutPostRedisplay();
+        break;
+    case 't':
+	case 'T':
+		 escena->nextTrackDisplayMode();
 		 glutPostRedisplay();
         break;
     default:
@@ -301,6 +284,7 @@ int main(int argc, char** argv) {
   glutInitWindowSize(1024, 768);
   glutInitWindowPosition(0, 0);
   glutCreateWindow("TP Final - Sistemas Graficos");
+//  glutSetIconTitle("iconsmall.png");
   //glutFullScreen();
 
   init();
@@ -319,7 +303,9 @@ int main(int argc, char** argv) {
   std::cout<<"F - \t niebla"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
   std::cout<<"C - \t reset camara"<<std::endl;
+  std::cout<<"P - \t iniciar/detener animacion"<<std::endl;
   std::cout<<"R - \t render de escena"<<std::endl;
+  std::cout<<"T - \t trayectorias"<<std::endl;
   std::cout<<"flechas \t traslacion horizontal"<<std::endl;
   std::cout<<"'+' '-' \t traslacion vertical"<<std::endl;
   std::cout<<"boton izq \t rotacion camara"<<std::endl;

@@ -5,7 +5,7 @@
 
 /* objeto que sigue una trayectoria */
 
-typedef struct ObjetoViajero {
+struct ObjetoViajero {
 	uint IDobjeto;	//id del objeto que se quiere dibujar
 	Trayectoria* recorrido;	//puntos que recorre el objeto
 
@@ -21,23 +21,30 @@ typedef struct ObjetoViajero {
 
 
 
-typedef struct Cardumen {
+struct Cardumen {
 	uint IDobjeto;	//id del objeto que se quiere dibujar
 	uint cantidad; 	//cantidad de objetos a dibujar
-	uint* volumen;	//tamaño de cada objeto
+	float* volumen;	//escala de cada objeto (de 1 a 4)
 	Vertice* ubicacion;	//ubicacion de cada objeto en el grupo
 	Trayectoria* recorrido;	//puntos que recorre el objeto
 
-	Cardumen(uint cant, uint id,std::vector<Vertice> &puntosControl,bool cerrada,uint intervalo, bool bezier){
+	Cardumen(uint id, uint cant, std::vector<Vertice> &puntosControl,bool cerrada,uint intervalo, bool bezier){
 		recorrido = new Trayectoria(puntosControl,cerrada,intervalo,bezier);
 		IDobjeto = id;
 		cantidad = cant;
 		init();
 	}
 
+	/* WARNING! hay que asignarle una trayectoria antes de viajar!  el destructor hace delete!!!*/
+	Cardumen(uint id=0, uint cant=1) {
+		IDobjeto = id;
+		cantidad = cant;
+		init();
+	}
+
 	~Cardumen(){
-		delete volumen;
-		delete ubicacion;
+		delete[] volumen;
+		delete[] ubicacion;
 		delete recorrido;
 	}
 
@@ -46,11 +53,11 @@ typedef struct Cardumen {
 	}
 private:
 	void init(){
-		volumen = new uint [cant];
-		ubicacion = new Vertice [cant];
-		for(uint i=0;i<cant;i++){
+		volumen = new float [cantidad];
+		ubicacion = new Vertice [cantidad];
+		for(uint i=0;i<cantidad;i++){
 			volumen[i] = (rand()%4)+0.5;
-			//asignar posicion
+			//generar posiciones aleatorias
 		}
 	}
 };

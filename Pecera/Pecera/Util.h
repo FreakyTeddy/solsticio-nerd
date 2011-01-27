@@ -12,6 +12,9 @@
 /*****************  CONFIGURACION  *********************/
 
 #define RM_INICIAL GL_LINE /* render mode inicial */
+#define ANIMACION_INICIAL false	/* estado inicial de la animacion */
+#define VER_TRAYECTORIAS false
+
 
 #define CX_INF -128	/* limites del cubo de escena */
 #define CX_SUP 128
