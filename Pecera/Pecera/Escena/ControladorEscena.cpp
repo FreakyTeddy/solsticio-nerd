@@ -13,7 +13,6 @@ ControladorEscena::~ControladorEscena() {
 }
 
 void ControladorEscena::generarEscena() {
-	cam.lookAt();
 
 	glPushMatrix();
 

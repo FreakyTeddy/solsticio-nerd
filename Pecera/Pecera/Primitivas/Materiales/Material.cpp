@@ -4,8 +4,8 @@
 Material::Material() {
 	setDiffuse(0.85,0.85, 0.85, 1);
 	setSpecular(0.8, 0.81, 1, 1);
-	setAmbient(1.0, 0.1, 0.2, 1);
-	setShininess(70.0);
+	setAmbient(0.0, 0.1, 0.2, 1);
+	setShininess(128.0);
 }
 
 Material::~Material() {}
@@ -16,7 +16,7 @@ void Material::usarMaterial() {
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
-	glMaterialfv(GL_BACK, GL_AMBIENT, mat_ambient); //->> TODO no se por que no anda el BACK!!!
+//->> TODO no se por que no anda el BACK como yo quiero!!!
 }
 
 void Material::setDiffuse(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha) {

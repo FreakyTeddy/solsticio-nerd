@@ -10,11 +10,11 @@ Camara::~Camara() {}
 
 void Camara::lookAt() {
 	glLoadIdentity();
-	gluLookAt (eye.x/zoom, eye.y/zoom, eye.z, eye.x + at.x, eye.y + at.y, eye.z + at.z, up.x, up.y, up.z);
+	gluLookAt (eye.x/zoom, eye.y/zoom, eye.z, (eye.x+ at.x)/zoom, (eye.y + at.y)/zoom, eye.z + at.z, up.x, up.y, up.z);
 }
 
 void Camara::reset() {
-	eye.set(2,15,3.0);	//posicion camara
+	eye.set(2,15,10.0);	//posicion camara
 	at.set(0,-1.0,0);	//direccion mira
 	up.set(0.0,0.0,1.0);//vector normal
 
@@ -24,6 +24,9 @@ void Camara::reset() {
 void Camara::zoom_in(float p) {
 	if (zoom > p ) {
 		zoom -=p;
+		Vertice temp(eye.x/zoom,eye.y/zoom,eye.z);
+		if (!fueraDeEscena(temp))
+			eye = temp;
 	}//chekear dentro de escena
 }
 

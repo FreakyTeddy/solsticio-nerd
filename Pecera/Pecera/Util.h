@@ -13,19 +13,19 @@
 
 #define RM_INICIAL GL_LINE /* render mode inicial */
 
-#define CX_INF -64	/* limites del cubo de escena */
-#define CX_SUP 64
-#define CY_INF -64
-#define CY_SUP 64
+#define CX_INF -128	/* limites del cubo de escena */
+#define CX_SUP 128
+#define CY_INF -128
+#define CY_SUP 128
 #define CZ_INF 0
-#define CZ_SUP 64
+#define CZ_SUP 128
 
-#define X_INF -62	/* limites de la camara */
-#define X_SUP 62
-#define Y_INF -62
-#define Y_SUP 62
+#define X_INF -126	/* limites de la camara */
+#define X_SUP 126
+#define Y_INF -126
+#define Y_SUP 126
 #define Z_INF 2
-#define Z_SUP 62
+#define Z_SUP 126
 
 
 //void rotar(Vertice &eje, float angulo, std::list<Vertice> &puntos) {

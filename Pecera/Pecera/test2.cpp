@@ -54,7 +54,7 @@ bool view_grid = false;
 bool view_axis = true;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool zoomOn = false;
-bool luz = true;
+bool niebla = true;
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -105,7 +105,7 @@ void Set3DEnv() {
 	glViewport (0, 0, (GLsizei) window_size[0], (GLsizei) window_size[1]);
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
-	gluPerspective(60.0, (GLfloat) window_size[0]/(GLfloat) window_size[1], 0.10, 100.0);
+	gluPerspective(60.0, (GLfloat) window_size[0]/(GLfloat) window_size[1], 0.30, 363.0);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -118,7 +118,6 @@ void init(void) {
   glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
   glLightfv(GL_LIGHT0, GL_SPECULAR, light_ambient);
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
 
@@ -128,10 +127,10 @@ void init(void) {
 
        glFogi (GL_FOG_MODE, GL_EXP2);
        glFogfv (GL_FOG_COLOR, fogColor);
-       glFogf (GL_FOG_DENSITY, 0.03);
+       glFogf (GL_FOG_DENSITY, 0.01);
        glHint (GL_FOG_HINT, GL_DONT_CARE);
-       glFogf (GL_FOG_START, 1.0);
-       glFogf (GL_FOG_END, 5.0);
+       glFogf (GL_FOG_START, 20.0);
+       glFogf (GL_FOG_END, 50.0);
     }
 
     Set3DEnv();
@@ -160,21 +159,28 @@ void salir() {
 void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
 
 	glPushMatrix();
+	escena->getCamara()->lookAt();
 
-	///////////////////////////// dibujar ////////////////////////
-
-
-	escena->generarEscena();
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 	if (view_axis)
 		 glCallList(DL_AXIS);
 	if (view_grid)
 		 glCallList(DL_GRID);
-    /////////////////////////// fin dibujar =P /////////////////////
+	if (niebla)
+		glEnable(GL_FOG);
 
+	///////////////////////////// dibujar ////////////////////////
+
+	escena->generarEscena();
+
+
+    /////////////////////////// fin dibujar =P /////////////////////
+	if (niebla)
+		glDisable(GL_FOG);
 	glPopMatrix();
 
 	glutSwapBuffers();
@@ -208,6 +214,11 @@ void keyboard (unsigned char key, int x, int y) {
     case 'a':
     case 'A':
       view_axis = !view_axis;
+      glutPostRedisplay();
+      break;
+    case 'f':
+    case 'F':
+      niebla = !niebla;
       glutPostRedisplay();
       break;
     case 'c':
