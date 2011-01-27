@@ -311,10 +311,12 @@ int main(int argc, char** argv) {
   glutMouseFunc(mouse);
   glutMotionFunc(mouseMotion);
   atexit(salir);
+  srand(time(0));
 
   /* Informacion */
   std::cout<<"Controles: "<<std::endl;
   std::cout<<"A - \t ejes"<<std::endl;
+  std::cout<<"F - \t niebla"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
   std::cout<<"C - \t reset camara"<<std::endl;
   std::cout<<"R - \t render de escena"<<std::endl;

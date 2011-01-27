@@ -3,9 +3,9 @@
 
 Curva::Curva(): factorBezier(FACTOR_INICIAL), factorBspline(FACTOR_INICIAL) { };
 
-Vertice& find(std::list<Vertice> vertices, unsigned int position) {
+Vertice& find(std::vector<Vertice> vertices, unsigned int position) {
 
-  std::list<Vertice>::iterator it= vertices.begin();
+  std::vector<Vertice>::iterator it= vertices.begin();
 
   for(unsigned int i= 0; it != vertices.end(); i++, it++) {
     if(i == position)
@@ -15,7 +15,7 @@ Vertice& find(std::list<Vertice> vertices, unsigned int position) {
   return *it;
 } 
 
-bool load(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int &first) {
+bool load(std::vector<Vertice> ptosControl, Vertice ptos[4], unsigned int &first) {
 
   Vertice last;
   bool complete= false;
@@ -49,7 +49,7 @@ bool load(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int &first) 
   return complete;
 }
 
-void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva) {
+void Curva::BezierCubica(std::vector<Vertice> &ptosControl, std::vector<Vertice> &ptosCurva) {
 
   float dt=(float) 1.0 / factorBezier;
   float uSquared, uCubed;
@@ -90,9 +90,9 @@ void Curva::BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &pto
 
 }
 
-void Curva::modificarFactorBezier(int cantidad) {
+void Curva::setFactorBezier(int cantidad) {
 
-        factorBezier+= cantidad;
+        factorBezier= cantidad;
 
         if(factorBezier <= FACTOR_MIN)
                 factorBezier= FACTOR_MIN;
@@ -100,7 +100,7 @@ void Curva::modificarFactorBezier(int cantidad) {
                 factorBezier= FACTOR_MAX;
 }
 
-bool loadBspline(std::list<Vertice> ptosControl, Vertice ptos[4], unsigned int first) {
+bool loadBspline(std::vector<Vertice> ptosControl, Vertice ptos[4], unsigned int first) {
 
   unsigned int size= ptosControl.size();
 

@@ -6,6 +6,7 @@
 #include "../Primitivas/Curva/Curva.h"
 #include "../Primitivas/Texturas/Textura.h"
 
+
 /*
  * El Controlador de Objetos:
  *
@@ -17,10 +18,15 @@
  * */
 
 #define MAX_DIBUJOS 9
+
+
+
 enum _dibujos { FLORERO=0, ALGA1, ALGA2, ALGA3, PEZ1, PEZ2, PEZ3, ROCA1, ROCA2};
 
 class ContenedorObjetos {
 private:
+	static ContenedorObjetos *instancia;
+
 	Curva curva;
 	Material mat_escenario;
 
@@ -42,17 +48,17 @@ private:
 
 	void crearEscenario();
 
+	ContenedorObjetos();
 
 public:
-	ContenedorObjetos();
 	~ContenedorObjetos();
 
+	static ContenedorObjetos* getInstancia();
 
 	// dibuja el objeto indicado por id
 	void dibujarObjeto(unsigned int id, unsigned int render_mode);
 
 	void dibujarEscenario(unsigned int render_mode);
-
 
 };
 

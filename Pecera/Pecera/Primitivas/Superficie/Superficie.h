@@ -43,7 +43,7 @@ protected:
 	Superficie();
 
 public:
-	Superficie(std::vector<Vertice> &vertices);
+	Superficie(std::vector<Vertice> &vertices, uint tam);
 
 	virtual ~Superficie();
 

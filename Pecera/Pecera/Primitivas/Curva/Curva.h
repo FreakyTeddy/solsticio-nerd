@@ -2,13 +2,15 @@
 #define CURVA_H_
 
 #include "GL/glut.h"
-#include <list>
 #include <map>
 #include <math.h>
 #include <vector>
+#include <iostream>
+
+
 #include "../Vertice.h"
 
-#include <iostream>
+
  
 #define FACTOR_INICIAL 4
 #define FACTOR_MIN 1
@@ -29,11 +31,11 @@ public:
   /* Dibuja los vertices de la curva, apartir de los puntos de control
    * pasados en la lista (P0, P1, P2, P3).
    * */
-  void BezierCubica(std::list<Vertice> ptosControl, std::list<Vertice> &ptosCurva);
+  void BezierCubica(std::vector<Vertice>& ptosControl, std::vector<Vertice> &ptosCurva);
 
   /* Suma al factor del paso de Bezier la cantidad pasada por parametro.
    * */
-  void modificarFactorBezier(int cantidad);
+  void setFactorBezier(int cantidad);
 		
   /* Guarda en curva los puntos a unir para dibujar una curva Bspline cubica uniforme a
    * partir de los puntos de control requiere al menos 4 puntos de control para dibujar algo

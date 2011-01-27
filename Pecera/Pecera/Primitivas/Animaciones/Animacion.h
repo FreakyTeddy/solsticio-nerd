@@ -1,7 +1,7 @@
 #ifndef ANIMACION_H_
 #define ANIMACION_H_
 
-#include "../Primitivas/Superficie/Superficie.h"
+#include "../Superficie/Superficie.h"
 
 /**
  * Modela Superficies animadas

@@ -3,7 +3,7 @@
 
 #include "ContenedorObjetos.h"
 #include "../Camara/Camara.h"
-
+#include "../Objetos/Objetos.h"
 /**
  *  Arma la escena: ubica la camara, los objetos, realiza animaciones.
  *
@@ -15,7 +15,7 @@
 class ControladorEscena {
 
 private:
-	ContenedorObjetos objetos;
+	ContenedorObjetos &objetos;
 	Camara cam;
 	unsigned int render_mode;
 

@@ -7,13 +7,13 @@ Superficie::Superficie() {
 	material.setShininess(70.0);
 }
 
-Superficie::Superficie(std::vector<Vertice> &vertices) {
+Superficie::Superficie(std::vector<Vertice> &vertices, uint tam) {
 	material.setDiffuse(1,0, 0, 1);
 	material.setSpecular(1, 1, 1, 1);
 	material.setAmbient(1, 0.1, 0.2, 1);
 	material.setShininess(70.0);
-	tam =1;
-	superficie = vertices; //TODO se copiaaaaaaaaaaa -->> todavia no funciona esta cosa
+	this->tam =tam;
+	superficie = vertices; //TODO se copiaaaaaaaaaaa
 	init();
 }
 

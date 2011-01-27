@@ -1,5 +1,7 @@
 #include "ContenedorObjetos.h"
 
+ContenedorObjetos* ContenedorObjetos::instancia=0;
+
 ContenedorObjetos::ContenedorObjetos() {
 
 	//creo todas las superficies dibujables
@@ -203,21 +205,21 @@ Superficie* ContenedorObjetos::crearAlga2() {
 }
 
 Superficie* ContenedorObjetos::crearRoca1(){
-	std::vector<Vertice> v;
-	Vertice q;
-	v.push_back(q);
-	q.set(0,0,0);
-	v.push_back(q);
-	q.set(0,1,0);
-	v.push_back(q);
-	q.set(0,1,1);
-	v.push_back(q);
-	q.set(0,0,1);
-	v.push_back(q);
-	Superficie* s= new Superficie(v);
-	s->aplicarTextura("stones.bmp");
-	return s;
-
+//	std::vector<Vertice> v;
+//	Vertice q;
+//	v.push_back(q);
+//	q.set(0,0,0);
+//	v.push_back(q);
+//	q.set(0,1,0);
+//	v.push_back(q);
+//	q.set(0,1,1);
+//	v.push_back(q);
+//	q.set(0,0,1);
+//	v.push_back(q);
+//	Superficie* s= new Superficie(v);
+//	s->aplicarTextura("stones.bmp");
+//	return s;
+return 0;
 }
 
 void ContenedorObjetos::crearEscenario() {
@@ -296,3 +298,8 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 
 }
 
+ContenedorObjetos* ContenedorObjetos::getInstancia(){
+	if (!instancia)
+		instancia = new ContenedorObjetos();
+	return instancia;
+}

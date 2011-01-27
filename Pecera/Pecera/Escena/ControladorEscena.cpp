@@ -3,7 +3,7 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 
-ControladorEscena::ControladorEscena() {
+ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia())) {
 	render_mode = RM_INICIAL;
 
 }

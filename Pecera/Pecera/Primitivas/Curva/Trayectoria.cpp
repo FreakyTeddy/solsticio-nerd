@@ -1,0 +1,43 @@
+#include "Trayectoria.h"
+
+Trayectoria::Trayectoria(std::vector<Vertice> &puntosControl,bool cerrada=true, uint intervalo=4, bool bezier=false) {
+	Curva curva;
+	if (bezier){
+		curva.setFactorBezier(intervalo);
+		curva.BezierCubica(puntosControl,trayecto);
+	}
+	else {
+		curva.setFactor(intervalo);
+		curva.Bspline(puntosControl,trayecto);
+	}
+
+	if (cerrada && !(trayecto.back()==trayecto.front())){
+		//TODO cerrar elegantemente
+	}
+
+	actual = 0;
+	tam = trayecto.size();
+}
+
+Trayectoria::~Trayectoria() {}
+
+Vertice Trayectoria::getPosicion(){
+	return trayecto[actual];
+}
+
+void Trayectoria::dibujarTrayecto(){
+
+	glBegin(GL_LINE_LOOP);
+	for (size_t pos=0 ; pos<tam ; pos++) {
+		glVertex3f(trayecto[pos].x,trayecto[pos].y,trayecto[pos].z);
+	}
+	glEnd();
+}
+
+void Trayectoria::sgtePosicion(){
+	actual++;
+	if (actual == tam)
+		actual = 0;
+}
+
+
