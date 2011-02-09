@@ -3,15 +3,19 @@
 ContenedorObjetos* ContenedorObjetos::instancia=0;
 
 ContenedorObjetos::ContenedorObjetos() {
-
 	//creo todas las superficies dibujables
 	crearSuperficies();
-
+	crearAnimaciones();
+	crearCardumenes();
 }
 
 ContenedorObjetos::~ContenedorObjetos() {
 	for (int i=0; i < MAX_DIBUJOS; i++)
 		delete superficies[i];
+	for (int i=0; i < MAX_ANIMACIONES; i++)
+		delete animaciones[i];
+	for (int i=0; i < MAX_CARDUMEN; i++)
+		delete cardumen[i];
 }
 
 void ContenedorObjetos::dibujarObjeto(unsigned int id, unsigned int render_mode) {
@@ -29,6 +33,14 @@ void ContenedorObjetos::crearSuperficies() {
 	superficies[ALGA2] = crearAlga2();
 	superficies[ROCA1] = crearRoca1();
 	crearEscenario();
+}
+
+void ContenedorObjetos::crearAnimaciones() {
+	animaciones[0] = crearAlga3();
+}
+
+void ContenedorObjetos::crearCardumenes() {
+	cardumen[0] = crearCardumen1();
 }
 
 
@@ -204,6 +216,105 @@ Superficie* ContenedorObjetos::crearAlga2() {
 	return sup;
 }
 
+Animacion* ContenedorObjetos::crearAlga3() {
+	std::vector<Vertice> v1, v2;
+	std::vector<Vertice> trasl;
+	Vertice q;
+
+	//puntos de control
+	std::vector<Vertice> alga_s;
+
+	q.set(0.5,0,0);
+	alga_s.push_back(q);
+	q.set(-0.5,0,0);
+	alga_s.push_back(q);
+
+	//traslacion inicial de los puntos
+	Curva curva;
+	curva.setFactor(3);
+
+	trasl.clear();
+	q.set(0,0,0);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+
+	q.set(0.2,0.5,1);
+	trasl.push_back(q);
+
+	q.set(0.75,0.75,3);
+	trasl.push_back(q);
+
+	q.set(1.5,1.5,4);
+	trasl.push_back(q);
+
+	q.set(2,2,3);
+	trasl.push_back(q);
+
+	q.set(1.5,1.5,2.5);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	curva.Bspline(trasl, v1);
+
+	//traslacion final de los puntos
+	trasl.clear();
+	q.set(0,0,0);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+
+	q.set(-0.2,0.5,1);
+	trasl.push_back(q);
+
+	q.set(-0.75,0.75,3);
+	trasl.push_back(q);
+
+	q.set(-1.5,1.5,4);
+	trasl.push_back(q);
+
+	q.set(-2,2,3);
+	trasl.push_back(q);
+
+	q.set(-1.5,1.5,2.5);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	curva.Bspline(trasl, v2);
+
+	//deformacion de los puntos
+	std::vector<Vertice> def;
+	std::vector<Vertice> def2;
+	q.set(0.1, 0.1, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	q.set(1,1,1);
+	def.push_back(q);
+	q.set(1.5,1.5,1);
+	def.push_back(q);
+	q.set(0.8,0.8,1);
+	def.push_back(q);
+	q.set(1.4,1.4,1);
+	def.push_back(q);
+	q.set(0.01, 0.01, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	curva.Bspline(def, def2);
+
+	//creacion de superficie de barrido
+	Animacion *ani = new Animacion(alga_s,v1,v2,def2,4);
+	Material m;
+	m.setDiffuse(0,1,0.5,1);
+	m.setSpecular(0,0.5,0.5,1);
+	m.setShininess(50);
+	ani->setTextura("madera.bmp");
+	ani->setMaterial(m);
+	return ani;
+}
+
+
 Superficie* ContenedorObjetos::crearRoca1(){
 //	std::vector<Vertice> v;
 //	Vertice q;
@@ -222,6 +333,30 @@ Superficie* ContenedorObjetos::crearRoca1(){
 return 0;
 }
 
+Cardumen* ContenedorObjetos::crearCardumen1(){
+
+	//puntos control trayecto
+	std::vector<Vertice> control;
+	Vertice t;
+	control.push_back(t);
+	control.push_back(t);
+	control.push_back(t);
+	t.set(30,12,0);
+	control.push_back(t);
+	t.set(5,-12,24);
+	control.push_back(t);
+	t.set(-32,-52,36);
+	control.push_back(t);
+	t.set(0,0,0);
+	control.push_back(t);
+	control.push_back(t);
+	control.push_back(t);
+
+
+	Cardumen* cardumen1 = new Cardumen(FLORERO,1,control,true,6,false);
+	return cardumen1;
+}
+
 void ContenedorObjetos::crearEscenario() {
 	textura[0].cargarImagen("pared_neg_y.jpg");
 	textura[1].cargarImagen("pared_piso.jpg");
@@ -232,6 +367,8 @@ void ContenedorObjetos::crearEscenario() {
 }
 
 void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
+
+	//TODO!!! dibujar suelo por separado
 
 	glShadeModel (GL_FLAT);
 
@@ -298,8 +435,54 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 
 }
 
+void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode) {
+	glPushMatrix();
+
+		float escala;
+		Vertice pos = car->recorrido->getPosicion();
+
+		glTranslatef(pos.x, pos.y, pos.z);	//ubico al cardumen en su trayectoria
+
+		//TODO!!! tendrian que rotar para mirar siempre hacia adelante!
+
+		glEnable(GL_RESCALE_NORMAL);	//habilito el reescalado de normales
+
+		for (uint i=0; i < car->cantidad; i++){
+
+			glPushMatrix();
+				pos = car->ubicacion[i];
+				escala = car->volumen[i];
+				glTranslatef(pos.x, pos.y, pos.z);	//ubico al objeto en su posicion dentro del cardumen
+				glScalef(escala,escala,escala);		//reesccalo el objeto
+				dibujarObjeto(car->IDobjeto, render_mode);
+			glPopMatrix();
+		}
+
+		glDisable(GL_RESCALE_NORMAL);
+
+	glPopMatrix();
+}
+
+
+
+
 ContenedorObjetos* ContenedorObjetos::getInstancia(){
 	if (!instancia)
 		instancia = new ContenedorObjetos();
 	return instancia;
 }
+
+Animacion* ContenedorObjetos::getAnimacion(unsigned int id) {
+	if (id < MAX_ANIMACIONES)
+		return animaciones[id];
+	return 0;
+}
+
+Cardumen* ContenedorObjetos::getCardumen(unsigned int id) {
+	if (id < MAX_CARDUMEN)
+		return cardumen[id];
+	return 0;
+}
+
+
+

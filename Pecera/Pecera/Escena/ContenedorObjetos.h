@@ -5,7 +5,8 @@
 #include "../Primitivas/Superficie/SuperficieRevolucion.h"
 #include "../Primitivas/Curva/Curva.h"
 #include "../Primitivas/Texturas/Textura.h"
-
+#include "../Primitivas/Animaciones/Animacion.h"
+#include "../Objetos/Objetos.h"
 
 /*
  * El Controlador de Objetos:
@@ -18,19 +19,26 @@
  * */
 
 #define MAX_DIBUJOS 9
+#define MAX_ANIMACIONES 1
+#define MAX_CARDUMEN 1
 
 
 
 enum _dibujos { FLORERO=0, ALGA1, ALGA2, ALGA3, PEZ1, PEZ2, PEZ3, ROCA1, ROCA2};
 
 class ContenedorObjetos {
+
 private:
+
 	static ContenedorObjetos *instancia;
 
 	Curva curva;
 	Material mat_escenario;
 
 	Superficie* superficies[MAX_DIBUJOS];
+	Animacion* animaciones[MAX_ANIMACIONES];
+	Cardumen* cardumen[MAX_CARDUMEN];
+
 	enum _dibujos _d;
 
 	Textura textura[8];	//texturas del escenario
@@ -38,6 +46,8 @@ private:
 
 
 	void crearSuperficies();
+	void crearAnimaciones();
+	void crearCardumenes();
 
 	/* solo se llaman una vez. saben dibujar los objetos */
 	Superficie* crearAlga1();
@@ -46,11 +56,16 @@ private:
 	Superficie* crearRoca1();
 	Superficie* crearFlorero();
 
+	Animacion* crearAlga3();
+
+	Cardumen* crearCardumen1();
+
 	void crearEscenario();
 
 	ContenedorObjetos();
 
 public:
+
 	~ContenedorObjetos();
 
 	static ContenedorObjetos* getInstancia();
@@ -59,6 +74,12 @@ public:
 	void dibujarObjeto(unsigned int id, unsigned int render_mode);
 
 	void dibujarEscenario(unsigned int render_mode);
+
+	void dibujarCardumen(Cardumen* car, unsigned int render_mode);
+
+	Animacion* getAnimacion(unsigned int id);
+
+	Cardumen* getCardumen(unsigned int id);
 
 };
 

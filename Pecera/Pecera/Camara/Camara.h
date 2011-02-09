@@ -18,10 +18,9 @@ private:
 	Vertice eye;//posicion
 	Vertice at;	//centro
 	Vertice up;	//vector normal
-	float zoom;	//zoom realizado
 
 	bool fueraDeEscena(Vertice &t);
-	bool anguloValido(Vertice t);
+	bool anguloValido(float angulo);
 
 public:
 	Camara();
@@ -32,9 +31,6 @@ public:
 
 	/* vuelve a la configuracion inicial */
 	void reset();
-
-	/* porcentaje para hacer zoom */
-	void zoom_in (float p);
 
 	/* mueve la camara tantas unidades en esa direccion */
 	void trasladar_f(float cant);	//forward

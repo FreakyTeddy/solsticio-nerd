@@ -22,6 +22,9 @@ private:
 
 
 	Cardumen* cardumen1;
+	ObjetoAnimado* alga1;
+	ObjetoAnimado* alga2;
+	//Animacion* alga1;
 
 
 
@@ -30,10 +33,6 @@ private:
 
 	/* realiza la transicion de frames y redibuja la escena */
 	static void animar(const int n);
-
-	void dibujarCardumen(Cardumen* car);
-	void crearCardumen();
-
 
 public:
 	ControladorEscena();
@@ -54,6 +53,11 @@ public:
 	/* cambia el estado de animacion: activa/inactiva
 	 * No requiere ReDesplay */
 	void nextAnimationMode();
+
+	/* avanza la animacion 1 frame */
+	void nextFrame(){
+		animar(0);
+	}
 
 	void nextTrackDisplayMode();
 

@@ -9,9 +9,15 @@
 #include <vector>
 
 class Superficie {
+
 private:
+
 	Material material;
+
+
 protected:
+
+
 	std::vector<Vertice> superficie;	// malla de vertices 3D de la superficie
 	std::vector<Vertice> normales;		// normales de iluminacion en cada vertice 3D
 	std::vector<Vertice2D> texCoord;	// coordenadas de textura de cada vertice 3D
@@ -54,6 +60,8 @@ public:
 	void aplicarTextura (std::string ruta);
 
 	Material* getMaterial();
+
+	void setMaterial(Material &m);
 
 };
 

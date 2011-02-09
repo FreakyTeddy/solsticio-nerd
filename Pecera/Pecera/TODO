@@ -8,7 +8,16 @@
  
  y mas xD
  
- 
  SUPERFICIES IRREGULARES.
  
  - para solucionar el tema de la iluminacion hay que asignarle al "gl_back" las normales opuestas  
+ 
+********** Issues of Implementation ****
+
+-- rotar_v de la camara.. cambia el sentido de la rotacion
+-- glblend. hace las burbujas transparentes diferente de arriba y de abajo :S
+-- draw elements con texturas
+-- superficies facetadas
+
+ 
+ 

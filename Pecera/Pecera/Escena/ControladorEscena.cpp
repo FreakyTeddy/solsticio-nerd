@@ -8,10 +8,16 @@ ControladorEscena* ControladorEscena::instancia = 0;
 
 ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia())){
 
+	//inicializo la escena
 	render_mode = RM_INICIAL;
 	ver_tray = VER_TRAYECTORIAS;
 	instancia = this;
-	crearCardumen();
+
+	//consigo los objetos animados
+	cardumen1 = objetos.getCardumen(0);
+	alga1 = new ObjetoAnimado(objetos.getAnimacion(0),false);
+	alga2 = new ObjetoAnimado(objetos.getAnimacion(0),false);
+	alga2->frame +=5;//WHAT!!!
 
 	if (animando)
 		ControladorEscena::animar(0);
@@ -19,8 +25,8 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 
 ControladorEscena::~ControladorEscena() {
 
-	delete cardumen1;
-
+	delete alga1;
+	delete alga2;
 	ContenedorTexturas::getInstancia()->vaciarContenedor();
 }
 
@@ -28,20 +34,22 @@ void ControladorEscena::generarEscena() {
 
 	glPushMatrix();
 
-		glRotatef(180,0,0,1);
-		objetos.dibujarObjeto(ALGA1, render_mode);
-		objetos.dibujarObjeto(ALGA2, render_mode);
+//		glRotatef(180,0,0,1);
+//		objetos.dibujarObjeto(ALGA1, render_mode);
+//		objetos.dibujarObjeto(ALGA2, render_mode);
 
 //		glTranslatef(5,4,0);
 //		objetos.dibujarObjeto(FLORERO, render_mode);
 //		objetos.dibujarObjeto(ROCA1,render_mode);
 
-		//test
-		dibujarCardumen(cardumen1);
-		if(ver_tray){
-			glColor3f(1,1,0);
-			cardumen1->recorrido->dibujarTrayecto();
-		}
+//		objetos.dibujarCardumen(cardumen1, render_mode);
+//		if(ver_tray){
+//			glColor3f(1,1,0);
+//			cardumen1->recorrido->dibujarTrayecto();
+//		}
+		alga1->dibujar(render_mode);
+		glTranslatef(5,4,0);
+		alga2->dibujar(render_mode);
 
 	glPopMatrix();
 	objetos.dibujarEscenario(render_mode);
@@ -52,9 +60,18 @@ void ControladorEscena::animar(int n=0){
 	//animar todos los objetos
 	std::cout<<"animando: "<<n<<std::endl;
 
-	instancia->cardumen1->recorrido->sgtePosicion();
+	//animo las superficies
+	instancia->alga1->animar();
+	instancia->alga2->animar();
+
+
+	//muevo los cardumenes
+	instancia->cardumen1->viajar();
+
+	//redibujo la escena
 	glutPostRedisplay();
 
+	//continuo con la animacion
 	if (animando)
 		glutTimerFunc(50,animar,++n);
 }
@@ -87,64 +104,3 @@ void ControladorEscena::nextAnimationMode() {
 void ControladorEscena::nextTrackDisplayMode(){
 	ver_tray = !ver_tray;
 }
-
-void ControladorEscena::dibujarCardumen(Cardumen* car) {
-	glPushMatrix();
-
-		float escala;
-		Vertice pos = car->recorrido->getPosicion();
-
-		glTranslatef(pos.x, pos.y, pos.z);	//ubico al cardumen en su trayectoria
-
-		//TODO!!! tendrian que rotar para mirar siempre hacia adelante!
-
-		glEnable(GL_RESCALE_NORMAL);	//habilito el reescalado de normales
-
-		for (uint i=0; i < car->cantidad; i++){
-
-			glPushMatrix();
-				pos = car->ubicacion[i];
-				escala = car->volumen[i];
-				glTranslatef(pos.x, pos.y, pos.z);	//ubico al objeto en su posicion dentro del cardumen
-				glScalef(escala,escala,escala);		//reesccalo el objeto
-				objetos.dibujarObjeto(car->IDobjeto, render_mode);
-			glPopMatrix();
-		}
-
-		glDisable(GL_RESCALE_NORMAL);
-
-	glPopMatrix();
-}
-
-
-void ControladorEscena::crearCardumen(){
-
-	//puntos control trayecto
-	std::vector<Vertice> control;
-	Vertice t;
-	control.push_back(t);
-	control.push_back(t);
-	control.push_back(t);
-	t.set(30,12,0);
-	control.push_back(t);
-	t.set(5,-12,24);
-	control.push_back(t);
-	t.set(-32,-52,36);
-	control.push_back(t);
-	t.set(0,0,0);
-	control.push_back(t);
-	control.push_back(t);
-	control.push_back(t);
-
-
-	cardumen1 = new Cardumen(FLORERO,1,control,true,6,false);
-
-	std::cout<<"Escalaaaaaaaaaaaaaaaa: "<<cardumen1->volumen[0]<<std::endl;
-
-}
-
-
-
-
-
-

@@ -15,7 +15,7 @@ ControladorEscena* escena;
 
 // Variables asociadas a única fuente de luz de la escena
 float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-float light_position[3] = {10.0f, 10.0f, 8.0f};
+float light_position[3] = {10.0f, 10.0f, 100.0f};
 float light_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 
 // Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
@@ -92,6 +92,8 @@ void init(void) {
   glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
   glLightfv(GL_LIGHT0, GL_SPECULAR, light_ambient);
   glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
 
@@ -137,8 +139,6 @@ void display(void)
 
 	glPushMatrix();
 	escena->getCamara()->lookAt();
-
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 	if (view_axis)
 		 glCallList(DL_AXIS);
@@ -209,6 +209,10 @@ void keyboard (unsigned char key, int x, int y) {
 		 escena->nextRenderMode();
 		 glutPostRedisplay();
         break;
+	case 's':
+	case 'S':
+		 escena->nextFrame();
+		 break;
     case 't':
 	case 'T':
 		 escena->nextTrackDisplayMode();
@@ -262,16 +266,16 @@ void mouse(int button, int state, int x, int y) {
 void mouseMotion(int x, int y) {
 	if (mouseDown) {
 		escena->getCamara()->rotar_h((xprev-x)*0.3);
-		escena->getCamara()->rotar_v((y-yprev)*0.2);
+		escena->getCamara()->rotar_v((yprev-y)*0.2);
 		xprev = x;
 		yprev = y;
 		glutPostRedisplay();
 	}
 	if (zoomOn) {
-		if (y > zprev)
-			escena->getCamara()->zoom_in(0.001*(zprev-y));
-		else if(y < zprev)
-			escena->getCamara()->zoom_in(-0.001*(y-zprev));
+//		if (y > zprev)
+//			escena->getCamara()->zoom_in(0.001*(zprev-y));
+//		else if(y < zprev)
+//			escena->getCamara()->zoom_in(-0.001*(y-zprev));
 		zprev = y;
 		glutPostRedisplay();
 	}
@@ -285,7 +289,7 @@ int main(int argc, char** argv) {
   glutInitWindowPosition(0, 0);
   glutCreateWindow("TP Final - Sistemas Graficos");
 //  glutSetIconTitle("iconsmall.png");
-  //glutFullScreen();
+  glutFullScreen();
 
   init();
   glutDisplayFunc(display);
@@ -305,11 +309,11 @@ int main(int argc, char** argv) {
   std::cout<<"C - \t reset camara"<<std::endl;
   std::cout<<"P - \t iniciar/detener animacion"<<std::endl;
   std::cout<<"R - \t render de escena"<<std::endl;
+  std::cout<<"S - \t avanzar 1 frame la animacion"<<std::endl;
   std::cout<<"T - \t trayectorias"<<std::endl;
   std::cout<<"flechas \t traslacion horizontal"<<std::endl;
   std::cout<<"'+' '-' \t traslacion vertical"<<std::endl;
   std::cout<<"boton izq \t rotacion camara"<<std::endl;
-  std::cout<<"boton der \t zoom camara"<<std::endl<<std::endl;
   std::cout.flush();
 
   /** TESTS **/

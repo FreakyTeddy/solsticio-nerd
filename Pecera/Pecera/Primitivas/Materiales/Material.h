@@ -11,10 +11,14 @@ private:
 	GLfloat mat_diffuse[4];
 	GLfloat mat_ambient[4];
 	GLfloat mat_specular[4];
+	GLfloat mat_emisividad[4];
 	GLfloat mat_shininess[1];
 public:
 
 	Material();
+
+	Material (Material &m);
+
 	~Material();
 
 	/* aplica el material */

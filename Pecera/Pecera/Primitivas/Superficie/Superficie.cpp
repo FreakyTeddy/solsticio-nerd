@@ -29,7 +29,7 @@ void Superficie::dibujar(unsigned int render_mode) {
 
 
 	//dibujo las normales
-	//dibujarNormales();
+//	dibujarNormales();
 
 }
 
@@ -108,11 +108,13 @@ void Superficie::dibujarTrianStrip(unsigned int render_mode) {
 	for(unsigned int i=0 ; i <  cols ; i++)
 		glDrawElements(GL_TRIANGLE_STRIP, tam*2, GL_UNSIGNED_INT, &(indices[i*tam*2]));
 
+	if ((render_mode == GL_TEXTURE) && tex.tieneTextura())
+			glDisableClientState(GL_TEXTURE_2D_ARRAY);
+
 	//desactivar estados
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState (GL_VERTEX_ARRAY);
-	if ((render_mode == GL_TEXTURE) && tex.tieneTextura())
-		glDisableClientState(GL_TEXTURE_2D_ARRAY);
+
 
 }
 
@@ -314,3 +316,8 @@ void Superficie::init() {
 Material* Superficie::getMaterial() {
 	return &material;
 }
+
+void Superficie::setMaterial(Material &m) {
+	material = m;
+}
+
