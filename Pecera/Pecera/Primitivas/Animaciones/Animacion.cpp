@@ -22,15 +22,12 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_in
 		temp.push_back(trasl_final[i]);
 		temp.push_back(trasl_final[i]);
 		c.Bspline(temp,res);
-		std::cout<<i<< " -- bspline"<<std::endl;
-		std::cout<<i<<" -- cant frames = "<<res.size()<<std::endl;
 		if (first) {
 			control = new std::vector<Vertice>[res.size()];
 			first = false;
 		}
 
 		for (size_t j=0; j<res.size(); j++){	//--> PUAJ!!!!!!!!! por suerte se supone que son pocos puntos
-			std::cout<<"  --- "<<j<<std::endl;
 			control[j].push_back(res[j]);		// son puntos de control nada mas.. no entrar en panico xD
 		}
 
@@ -40,7 +37,7 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_in
 	f_cant = res.size();	//WARNING! todas las bspline deben dar la misma cant de frames
 	f_act = 0;
 	f_next = (f_cant != 0);
-	m_ciclico = false;
+	m_ciclico = true;
 
 	frame = new Superficie* [f_cant];
 	//creo una superficie de barrido por cada frame
@@ -49,6 +46,18 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_in
 	}
 
 	delete[] control;
+}
+
+Animacion::Animacion(std::vector<Superficie*> frames) {
+	//inicializo la animacion
+	f_cant = frames.size();	//WARNING! todas las bspline deben dar la misma cant de frames
+	f_act = 0;
+	f_next = (f_cant != 0);
+	m_ciclico = true;
+	frame = new Superficie* [f_cant];
+	for (size_t i=0; i<f_cant;i++) {
+		frame[i] = frames[i];
+	}
 }
 
 

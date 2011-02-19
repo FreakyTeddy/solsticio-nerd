@@ -12,7 +12,8 @@ class Superficie {
 
 private:
 
-	Material material;
+	Material material;	//material con el que se dibuja la sup
+	GLuint dl_handle;	//display list que dibuja con triangulos. dl_handle+1 dibuja con texturas.
 
 
 protected:
@@ -38,11 +39,9 @@ protected:
 	void init();
 
 private:
-
-	void dibujarTrianStrip(unsigned int render_mode);
-	void dibujarMalla();
-	void dibujarTextura();
 	void dibujarNormales();
+	void generarDisplayList();
+	void generarDisplayListTextura();
 
 
 protected:

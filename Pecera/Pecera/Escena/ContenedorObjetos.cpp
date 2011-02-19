@@ -31,7 +31,7 @@ void ContenedorObjetos::crearSuperficies() {
 	superficies[FLORERO] = crearFlorero();
 	superficies[ALGA1] = crearAlga1();
 	superficies[ALGA2] = crearAlga2();
-	superficies[ROCA1] = crearRoca1();
+//	superficies[ROCA1] = crearRoca1();
 	crearEscenario();
 }
 
@@ -46,7 +46,7 @@ void ContenedorObjetos::crearCardumenes() {
 
 Superficie* ContenedorObjetos::crearFlorero() {
 
-	curva.setFactor(4);
+	curva.setFactor(5);
 	std::vector<Vertice> verts, vertb;
 	Vertice t;
 	t.set(0,0,0);
@@ -66,10 +66,10 @@ Superficie* ContenedorObjetos::crearFlorero() {
 	verts.push_back(t);
 	verts.push_back(t);
 	curva.Bspline(verts,vertb);
-//	t.set(1,0,0); con arena
-	t.set(0,0,0);
+	t.set(-1,0,0); //con arena
+//	t.set(0,0,0);
 	Vertice q(0,0,1);
-	Superficie* florero = new SuperficieRevolucion(vertb, -360,t,q);
+	Superficie* florero = new SuperficieRevolucion(vertb, -360,t,q,36);
 	florero->aplicarTextura("papel.bmp");
 
 	return florero;
@@ -364,13 +364,15 @@ void ContenedorObjetos::crearEscenario() {
 	textura[3].cargarImagen("pared_pos_y.jpg");
 	textura[4].cargarImagen("pared_neg_x.jpg");
 	textura[5].cargarImagen("pared_techo.jpg");
+	mat_escenario.setSpecular(0,0,0,0);
+	mat_escenario.setAmbient(1,1,1,1);
+	mat_escenario.setDiffuse(1,1,1,1);
+	mat_escenario.setShininess(0);
 }
 
 void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 
 	//TODO!!! dibujar suelo por separado
-
-	glShadeModel (GL_FLAT);
 
 	glFrontFace( GL_CCW );
 	glCullFace( GL_BACK );
@@ -378,14 +380,12 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 
 	mat_escenario.usarMaterial();
 
-	glDisable(GL_LIGHTING);
-
 	static GLfloat cubo[24]={CX_INF,CY_INF,CZ_INF , CX_INF,CY_INF,CZ_SUP ,
 							 CX_SUP,CY_INF,CZ_SUP , CX_SUP,CY_INF,CZ_INF ,
 							 CX_SUP,CY_SUP,CZ_INF , CX_SUP,CY_SUP,CZ_SUP ,
 							 CX_INF,CY_SUP,CZ_SUP , CX_INF,CY_SUP,CZ_INF};
 
-//	static GLfloat norm[18]={ 0,1,0, 0,0,1, -1,0,0, 0,-1,0, 1,0,0, 0,0,-1};
+	static GLfloat norm[18]={ 0,1,0, 0,0,1, -1,0,0, 0,-1,0, 1,0,0, 0,0,-1};
 
 	static GLshort idx[24] = { 0,1,2,3, 0,3,4,7, 2,5,4,3, 5,6,7,4, 0,7,6,1, 1,6,5,2 };
 
@@ -395,43 +395,41 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 		glPolygonMode( GL_FRONT, GL_FILL);
 
 
-	for (unsigned int i=0; i<24; i+=4){
+	for (unsigned int i=0, j=0; i<24; i+=4, j++){
 
-		if ((render_mode == GL_TEXTURE) && textura[i/4].tieneTextura() ) {
+		if ((render_mode == GL_TEXTURE) && textura[j].tieneTextura() ) {
 
-			glBindTexture(GL_TEXTURE_2D, textura[i/4].getID());
+			glBindTexture(GL_TEXTURE_2D, textura[j].getID());
 			glEnable(GL_TEXTURE_2D);
 			glBegin(GL_QUADS);
 
-			glTexCoord2f(0.0,0.0);
-			glVertex3f(cubo[idx[i  ]*3],cubo[idx[i  ]*3+1],cubo[idx[i  ]*3+2]);
-			glTexCoord2f(1.0,0.0);
-			glVertex3f(cubo[idx[i+1]*3],cubo[idx[i+1]*3+1],cubo[idx[i+1]*3+2]);
-			glTexCoord2f(1.0,1.0);
-			glVertex3f(cubo[idx[i+2]*3],cubo[idx[i+2]*3+1],cubo[idx[i+2]*3+2]);
-			glTexCoord2f(0.0,1.0);
-			glVertex3f(cubo[idx[i+3]*3],cubo[idx[i+3]*3+1],cubo[idx[i+3]*3+2]);
+				glNormal3fv(&norm[j]);
+				glTexCoord2f(0.0,0.0);
+				glVertex3f(cubo[idx[i  ]*3],cubo[idx[i  ]*3+1],cubo[idx[i  ]*3+2]);
+				glTexCoord2f(1.0,0.0);
+				glVertex3f(cubo[idx[i+1]*3],cubo[idx[i+1]*3+1],cubo[idx[i+1]*3+2]);
+				glTexCoord2f(1.0,1.0);
+				glVertex3f(cubo[idx[i+2]*3],cubo[idx[i+2]*3+1],cubo[idx[i+2]*3+2]);
+				glTexCoord2f(0.0,1.0);
+				glVertex3f(cubo[idx[i+3]*3],cubo[idx[i+3]*3+1],cubo[idx[i+3]*3+2]);
+
 			glEnd();
 			glDisable(GL_TEXTURE_2D);
 		}
 		else
 		{
 			glBegin(GL_QUADS);
-			glVertex3f(cubo[idx[i  ]*3],cubo[idx[i  ]*3+1],cubo[idx[i  ]*3+2]);
-			glVertex3f(cubo[idx[i+1]*3],cubo[idx[i+1]*3+1],cubo[idx[i+1]*3+2]);
-			glVertex3f(cubo[idx[i+2]*3],cubo[idx[i+2]*3+1],cubo[idx[i+2]*3+2]);
-			glVertex3f(cubo[idx[i+3]*3],cubo[idx[i+3]*3+1],cubo[idx[i+3]*3+2]);
+				glNormal3fv(&norm[j]);
+				glVertex3f(cubo[idx[i  ]*3],cubo[idx[i  ]*3+1],cubo[idx[i  ]*3+2]);
+				glVertex3f(cubo[idx[i+1]*3],cubo[idx[i+1]*3+1],cubo[idx[i+1]*3+2]);
+				glVertex3f(cubo[idx[i+2]*3],cubo[idx[i+2]*3+1],cubo[idx[i+2]*3+2]);
+				glVertex3f(cubo[idx[i+3]*3],cubo[idx[i+3]*3+1],cubo[idx[i+3]*3+2]);
 			glEnd();
 		}
 
 
 	}
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHTING);
-
 	glDisable( GL_CULL_FACE );
-
-	glShadeModel (GL_SMOOTH);
 
 }
 

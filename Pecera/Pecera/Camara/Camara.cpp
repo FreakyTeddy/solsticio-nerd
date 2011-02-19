@@ -20,6 +20,14 @@ void Camara::reset() {
 	up.set(0.0,0.0,1.0);//vector normal
 }
 
+Vertice& Camara::getAt() {
+	return at;
+}
+
+Vertice& Camara::getEye() {
+	return eye;
+}
+
 void Camara::trasladar_f(float cant) {
 	Vertice temp = at*cant;
 	eye +=temp;

@@ -30,6 +30,11 @@ public:
 	 * WARNING! deben pasarse unicamente los puntos de control :) */
 	Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_inicial, std::vector<Vertice> &trasl_final, std::vector<Vertice> &defo, u_int intervalo);
 
+
+	/* crea una animacion con los frames indicados */
+	/* WARNING!!  luego se hace delete de las sup!! */
+	Animacion(std::vector<Superficie*> frames);
+
 	~Animacion();
 
 	/* dibuja el frame correspondiente a la animacion y pasa al frame siguiente */

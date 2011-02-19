@@ -13,12 +13,19 @@ ControladorEscena* escena;
 
 /************************************/
 
-// Variables asociadas a única fuente de luz de la escena
+
+/* LUZ */
+
 float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+float light_specular[4] = {1.0, 1.0, 1.0, 1.0};
 float light_position[3] = {10.0f, 10.0f, 100.0f};
 float light_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+float linterna_pos[3];
+float linterna_dir[3];
 
-// Variable asociada al movimiento de rotación de la esfera alrededor del eje Z
+
+
+/* Mouse */
 int xprev = 0; //posicion anterior del mouse
 int yprev = 0;
 int zprev = 0;
@@ -27,8 +34,8 @@ int zprev = 0;
 bool view_grid = false;
 bool view_axis = true;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
-bool zoomOn = false;
 bool niebla = true;
+bool linterna = LUZ_INICIAL;
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -37,6 +44,15 @@ GLuint dl_handle;
 
 // Tamaño de la ventana
 GLfloat window_size[2];
+
+void posicionarLinterna() {
+	linterna_pos[0] = escena->getCamara()->getEye().x;
+	linterna_pos[1] = escena->getCamara()->getEye().y;
+	linterna_pos[2] = escena->getCamara()->getEye().z;
+	linterna_dir[0] = escena->getCamara()->getAt().x;
+	linterna_dir[1] = escena->getCamara()->getAt().y;
+	linterna_dir[2] = escena->getCamara()->getAt().z;
+}
 
 void DrawAxis() {
   glDisable(GL_LIGHTING);
@@ -89,25 +105,31 @@ void init(void) {
   glClearColor (0, 0.05, 0.10, 0.0);
   glShadeModel (GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, light_ambient);
-  glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
-  glEnable(GL_LIGHT0);
-  glEnable(GL_LIGHTING);
+  /* iluminacion */
 
-  glEnable(GL_FOG);
-    {
-       GLfloat fogColor[4] = {0, 0.05, 0.10, 1.0};
+  	  //luz ambiental
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
-       glFogi (GL_FOG_MODE, GL_EXP2);
-       glFogfv (GL_FOG_COLOR, fogColor);
-       glFogf (GL_FOG_DENSITY, 0.01);
-       glHint (GL_FOG_HINT, GL_DONT_CARE);
-       glFogf (GL_FOG_START, 20.0);
-       glFogf (GL_FOG_END, 50.0);
-    }
+	//linterna
+	posicionarLinterna();
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5);
+	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 15.0);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 0.10);
+
+	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
     Set3DEnv();
 
@@ -126,7 +148,7 @@ void salir() {
 
 	/* destruir todos los objetos */
 	delete escena;
-	std::cout<<"Gracias por usar Peces Pepe"<<std::endl;
+	std::cout<<"Fin =]"<<std::endl;
 	std::cout.flush();
 	exit(0);
 }
@@ -136,8 +158,6 @@ void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	glPushMatrix();
 	escena->getCamara()->lookAt();
 
 	if (view_axis)
@@ -147,15 +167,30 @@ void display(void)
 	if (niebla)
 		glEnable(GL_FOG);
 
+	if (linterna) {
+		glDisable(GL_LIGHT0);
+		posicionarLinterna();
+		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
+		glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
+		glEnable(GL_LIGHT1);
+
+	}else{
+		glDisable(GL_LIGHT1);
+		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+		glEnable(GL_LIGHT0);
+	}
+	glEnable(GL_LIGHTING);
 	///////////////////////////// dibujar ////////////////////////
+	glPushMatrix();
 
-	escena->generarEscena();
+		escena->generarEscena();
 
+	glPopMatrix();
 
     /////////////////////////// fin dibujar =P /////////////////////
 	if (niebla)
 		glDisable(GL_FOG);
-	glPopMatrix();
+
 
 	glutSwapBuffers();
 }
@@ -193,6 +228,11 @@ void keyboard (unsigned char key, int x, int y) {
     case 'f':
     case 'F':
       niebla = !niebla;
+      glutPostRedisplay();
+      break;
+    case 'l':
+    case 'L':
+      linterna = !linterna;
       glutPostRedisplay();
       break;
     case 'c':
@@ -257,10 +297,6 @@ void mouse(int button, int state, int x, int y) {
 	}
 	else
 		mouseDown = false;
-
-	if(!zoomOn)
-	     zprev=y;
-	(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) ? zoomOn = true : zoomOn = false;
 }
 
 void mouseMotion(int x, int y) {
@@ -269,14 +305,6 @@ void mouseMotion(int x, int y) {
 		escena->getCamara()->rotar_v((yprev-y)*0.2);
 		xprev = x;
 		yprev = y;
-		glutPostRedisplay();
-	}
-	if (zoomOn) {
-//		if (y > zprev)
-//			escena->getCamara()->zoom_in(0.001*(zprev-y));
-//		else if(y < zprev)
-//			escena->getCamara()->zoom_in(-0.001*(y-zprev));
-		zprev = y;
 		glutPostRedisplay();
 	}
 }
@@ -290,6 +318,8 @@ int main(int argc, char** argv) {
   glutCreateWindow("TP Final - Sistemas Graficos");
 //  glutSetIconTitle("iconsmall.png");
   glutFullScreen();
+
+  escena = new ControladorEscena();
 
   init();
   glutDisplayFunc(display);
@@ -307,6 +337,7 @@ int main(int argc, char** argv) {
   std::cout<<"F - \t niebla"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
   std::cout<<"C - \t reset camara"<<std::endl;
+  std::cout<<"L - \t linterna / luz ambiental"<<std::endl;
   std::cout<<"P - \t iniciar/detener animacion"<<std::endl;
   std::cout<<"R - \t render de escena"<<std::endl;
   std::cout<<"S - \t avanzar 1 frame la animacion"<<std::endl;
@@ -316,8 +347,7 @@ int main(int argc, char** argv) {
   std::cout<<"boton izq \t rotacion camara"<<std::endl;
   std::cout.flush();
 
-  /** TESTS **/
-  escena = new ControladorEscena();
+
 
   glutMainLoop();
   return 0;

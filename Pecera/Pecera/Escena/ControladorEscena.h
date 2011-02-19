@@ -26,8 +26,6 @@ private:
 	ObjetoAnimado* alga2;
 	//Animacion* alga1;
 
-
-
 	static ControladorEscena* instancia;	//quiero un timeeeeeeeeeer!!
 	static bool animando; //mutex?????
 

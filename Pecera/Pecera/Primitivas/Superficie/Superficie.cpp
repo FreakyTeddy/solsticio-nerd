@@ -1,5 +1,7 @@
 #include "Superficie.h"
 
+extern bool dibujar_normales;
+
 Superficie::Superficie() {
 	material.setDiffuse(0.85,0.85, 0.85, 1);
 	material.setSpecular(1, 1, 1, 1);
@@ -21,100 +23,26 @@ Superficie::~Superficie() {}
 
 void Superficie::dibujar(unsigned int render_mode) {
 
-	if ((render_mode != GL_TEXTURE) || (render_mode == GL_TEXTURE && !tex.tieneTextura()))
-		dibujarTrianStrip(render_mode);
+	material.usarMaterial();
 
-	if (render_mode == GL_TEXTURE && tex.tieneTextura())
-		dibujarTextura();
+	if ((render_mode != GL_TEXTURE) || (render_mode == GL_TEXTURE && !tex.tieneTextura())) {
+		glPolygonMode( GL_FRONT_AND_BACK, render_mode);
+		//llamo a la display list
+		 glCallList(dl_handle);
+	}
+
+	if (render_mode == GL_TEXTURE && tex.tieneTextura()) {
+		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+		glBindTexture(GL_TEXTURE_2D,tex.getID());
+		glEnable(GL_TEXTURE_2D);
+		//llamo a la display list
+		 glCallList(dl_handle+1);
+		glDisable(GL_TEXTURE_2D);
+	}
 
 
 	//dibujo las normales
-//	dibujarNormales();
-
-}
-
-void Superficie::dibujarMalla() {
-	std::vector<Vertice>::iterator it0, it1;
-
-	it0 = superficie.begin();
-	it1 = superficie.begin();
-	it1 += tam;
-
-	glDisable(GL_LIGHTING);
-
-	while (it1 != superficie.end()) {
-
-		for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
-
-			glBegin(GL_LINE_LOOP);
-
-			glColor3f(0,(float)pos/tam,(float)pos/tam);
-			glVertex3f(it0->x,it0->y,it0->z);
-			glVertex3f(it1->x,it1->y,it1->z);
-			it1++;
-			glVertex3f(it1->x,it1->y,it1->z);
-
-			glColor3f((float)pos/tam,1,(float)pos/tam);
-			glVertex3f(it0->x,it0->y,it0->z);
-			glVertex3f(it1->x,it1->y,it1->z);
-			it0++;
-			glVertex3f(it0->x,it0->y,it0->z);
-
-			glEnd();
-		}
-		it1++; it0++;
-	}
-	glEnable(GL_LIGHTING);
-}
-
-void Superficie::dibujarTrianStrip(unsigned int render_mode) {
-	//dibuja usando triangle strip y Vertex y Normal Pointers
-	std::vector<Vertice>::iterator it0, it1;
-
-	it0 = superficie.begin();
-	it1 = superficie.begin();
-	it1 += tam;
-
-	//caras
-	glFrontFace( GL_CCW );
-	glCullFace( GL_BACK );
-	glDisable( GL_CULL_FACE );
-
-	//material
-	material.usarMaterial();
-
-	//activar estado
-	glEnableClientState (GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	//Render Mode
-	if (render_mode == GL_TEXTURE) {
-		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
-		if (tex.tieneTextura()) {  	//TODO no anda
-			glBindTexture(GL_TEXTURE_2D,tex.getID());
-			glEnableClientState(GL_TEXTURE_2D_ARRAY);
-			glTexCoordPointer(2,GL_FLOAT,0, &(texCoord[0]));
-		}
-	}
-	else {
-		glPolygonMode( GL_FRONT_AND_BACK, render_mode);
-	}
-
-	glNormalPointer(GL_FLOAT,0, &(normales[0]));
-	glVertexPointer(3, GL_FLOAT, 0, &(superficie[0]));
-
-	//dibujar
-	unsigned int cols = (superficie.size()/tam) -1;
-	for(unsigned int i=0 ; i <  cols ; i++)
-		glDrawElements(GL_TRIANGLE_STRIP, tam*2, GL_UNSIGNED_INT, &(indices[i*tam*2]));
-
-	if ((render_mode == GL_TEXTURE) && tex.tieneTextura())
-			glDisableClientState(GL_TEXTURE_2D_ARRAY);
-
-	//desactivar estados
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState (GL_VERTEX_ARRAY);
-
+	dibujarNormales();
 
 }
 
@@ -139,45 +67,6 @@ void Superficie::dibujarNormales() {
 	glEnd();
 
 	glEnable(GL_LIGHTING);
-}
-
-void Superficie::dibujarTextura() {
-
-	GLuint it0=0, it1=0;
-	GLuint longitud = superficie.size();
-
-	material.usarMaterial();
-
-	glBindTexture(GL_TEXTURE_2D,tex.getID());
-	glEnable(GL_TEXTURE_2D);
-
-	for (it1 = tam; it1 < longitud; it0++, it1++) {
-
-		glBegin(GL_TRIANGLE_STRIP);
-
-		glTexCoord2f(texCoord[it0].x,texCoord[it0].y);
-		glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
-		glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
-
-		glTexCoord2f(texCoord[it1].x,texCoord[it1].y);
-		glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
-		glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
-
-		for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
-			it0++;
-			glTexCoord2f(texCoord[it0].x,texCoord[it0].y);
-			glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
-			glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
-
-			it1++;
-			glTexCoord2f(texCoord[it1].x,texCoord[it1].y);
-			glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
-			glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
-		}
-		glEnd();
-	}
-	glDisable(GL_TEXTURE_2D);
-
 }
 
 void Superficie::setIndices() {
@@ -302,15 +191,93 @@ void Superficie::setNormales() {
 }
 
 void Superficie::aplicarTextura(std::string ruta) {
-	if ( !tex.tieneTextura())
-		tex.generarCoordenadas(superficie, texCoord, tam);
 	tex.cargarImagen(ruta);
+}
+
+void Superficie::generarDisplayList() {
+	dl_handle = glGenLists(2);
+	glNewList(dl_handle, GL_COMPILE);
+
+		std::vector<Vertice>::iterator it0, it1;
+
+		it0 = superficie.begin();
+		it1 = superficie.begin();
+		it1 += tam;
+
+		//caras
+		glFrontFace( GL_CCW );
+		glCullFace( GL_BACK );
+		glDisable( GL_CULL_FACE );
+
+		//activar estado
+		glEnableClientState (GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+
+
+		glNormalPointer(GL_FLOAT,0, &(normales[0]));
+		glVertexPointer(3, GL_FLOAT, 0, &(superficie[0]));
+
+		//dibujar
+		unsigned int cols = (superficie.size()/tam) -1;
+		for(unsigned int i=0 ; i <  cols ; i++)
+			glDrawElements(GL_TRIANGLE_STRIP, tam*2, GL_UNSIGNED_INT, &(indices[i*tam*2]));
+
+		//desactivar estados
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState (GL_VERTEX_ARRAY);
+
+	glEndList();
+}
+
+void Superficie::generarDisplayListTextura() {
+	glNewList(dl_handle+1, GL_COMPILE);
+
+		GLuint it0=0, it1=0;
+		GLuint longitud = superficie.size();
+
+		for (it1 = tam; it1 < longitud; it0++, it1++) {
+
+			glBegin(GL_TRIANGLE_STRIP);
+
+			glTexCoord2f(texCoord[it0].x,texCoord[it0].y);
+			glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
+			glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
+
+			glTexCoord2f(texCoord[it1].x,texCoord[it1].y);
+			glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
+			glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
+
+			for(unsigned int pos=0 ; pos <  tam-1 ; pos++) {
+				it0++;
+				glTexCoord2f(texCoord[it0].x,texCoord[it0].y);
+				glNormal3d(normales[it0].x, normales[it0].y, normales[it0].z);
+				glVertex3d(superficie[it0].x, superficie[it0].y, superficie[it0].z);
+
+				it1++;
+				glTexCoord2f(texCoord[it1].x,texCoord[it1].y);
+				glNormal3d(normales[it1].x, normales[it1].y, normales[it1].z);
+				glVertex3d(superficie[it1].x, superficie[it1].y, superficie[it1].z);
+			}
+			glEnd();
+		}
+
+	glEndList();
 }
 
 void Superficie::init() {
 	
 	setIndices();
 	setNormales();
+	tex.generarCoordenadas(superficie, texCoord, tam);
+
+	generarDisplayList();
+	generarDisplayListTextura();
+
+	//WARNING!!!
+	//normales.clear();
+	indices.clear();
+	superficie.clear();
+	texCoord.clear();
 }
 
 Material* Superficie::getMaterial() {

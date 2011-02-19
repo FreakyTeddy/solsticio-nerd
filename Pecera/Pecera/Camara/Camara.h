@@ -32,6 +32,9 @@ public:
 	/* vuelve a la configuracion inicial */
 	void reset();
 
+	Vertice& getEye();
+	Vertice& getAt();
+
 	/* mueve la camara tantas unidades en esa direccion */
 	void trasladar_f(float cant);	//forward
 	void trasladar_s(float cant);	//sideways

@@ -13,6 +13,22 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 	ver_tray = VER_TRAYECTORIAS;
 	instancia = this;
 
+	//inicializo la luz de la escena
+
+	glEnable(GL_LIGHTING);
+
+	glEnable(GL_FOG);
+	{
+	   GLfloat fogColor[4] = {0, 0.05, 0.10, 1.0};
+
+	   glFogi (GL_FOG_MODE, GL_EXP2);
+	   glFogfv (GL_FOG_COLOR, fogColor);
+	   glFogf (GL_FOG_DENSITY, 0.01);
+	   glHint (GL_FOG_HINT, GL_DONT_CARE);
+	   glFogf (GL_FOG_START, 20.0);
+	   glFogf (GL_FOG_END, 50.0);
+	}
+
 	//consigo los objetos animados
 	cardumen1 = objetos.getCardumen(0);
 	alga1 = new ObjetoAnimado(objetos.getAnimacion(0),false);
@@ -34,12 +50,12 @@ void ControladorEscena::generarEscena() {
 
 	glPushMatrix();
 
-//		glRotatef(180,0,0,1);
-//		objetos.dibujarObjeto(ALGA1, render_mode);
-//		objetos.dibujarObjeto(ALGA2, render_mode);
+		glRotatef(180,0,0,1);
+		objetos.dibujarObjeto(ALGA1, render_mode);
+		objetos.dibujarObjeto(ALGA2, render_mode);
 
-//		glTranslatef(5,4,0);
-//		objetos.dibujarObjeto(FLORERO, render_mode);
+		glTranslatef(5,4,0);
+		objetos.dibujarObjeto(FLORERO, render_mode);
 //		objetos.dibujarObjeto(ROCA1,render_mode);
 
 //		objetos.dibujarCardumen(cardumen1, render_mode);
