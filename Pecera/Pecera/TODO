@@ -14,7 +14,7 @@
 
 -- rotar_v de la camara.. cambia el sentido de la rotacion
 -- glblend. hace las burbujas transparentes diferente de arriba y de abajo :S
--- superficies facetadas
-
- 
+-- textura escena
+-- linterna! no se cambia bien la luz y no ilumina bien X_X
+ --invalid read en generar texturas!
  

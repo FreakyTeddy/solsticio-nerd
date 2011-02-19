@@ -1,4 +1,5 @@
 #include "ContenedorObjetos.h"
+//#include <GL/glu.h>
 
 ContenedorObjetos* ContenedorObjetos::instancia=0;
 
@@ -7,6 +8,7 @@ ContenedorObjetos::ContenedorObjetos() {
 	crearSuperficies();
 	crearAnimaciones();
 	crearCardumenes();
+	crearBurbuja();
 }
 
 ContenedorObjetos::~ContenedorObjetos() {
@@ -16,13 +18,22 @@ ContenedorObjetos::~ContenedorObjetos() {
 		delete animaciones[i];
 	for (int i=0; i < MAX_CARDUMEN; i++)
 		delete cardumen[i];
+	glDeleteLists(handle_burbuja, 2);
 }
 
 void ContenedorObjetos::dibujarObjeto(unsigned int id, unsigned int render_mode) {
 	if (id < MAX_DIBUJOS)
 		superficies[id]->dibujar(render_mode);
-	else
+	else{
+		if (id == BURBUJA){
+			if (render_mode == GL_LINE)
+				glCallList(handle_burbuja);
+			else
+				glCallList(handle_burbuja+1);
+		}else
 		std::cout<<"id de dibujo inválido: "<<id<<" . Máximo: "<<MAX_DIBUJOS<<std::endl;
+	}
+
 }
 
 void ContenedorObjetos::crearSuperficies() {
@@ -43,6 +54,44 @@ void ContenedorObjetos::crearCardumenes() {
 	cardumen[0] = crearCardumen1();
 }
 
+void ContenedorObjetos::crearBurbuja() {
+	handle_burbuja = glGenLists(2);
+
+	GLUquadricObj *qobj;
+	qobj = gluNewQuadric();
+
+	Material m;
+	m.setDiffuse(0.85,0.85,0.96,0.3);
+	m.setAmbient(0.15,0.15,0.6,0.3);
+	m.setSpecular(1,1,1,0);
+	m.setShininess(170);
+
+	/* sin transparencia, con lineas */
+	glNewList(handle_burbuja, GL_COMPILE);
+
+		m.usarMaterial();
+	    gluQuadricDrawStyle(qobj, GLU_LINE);
+	    gluQuadricNormals(qobj, GLU_SMOOTH);
+		gluSphere(qobj, 1, 15, 10);
+
+
+	glEndList();
+
+	/* con transparencia y con relleno*/
+	glNewList(handle_burbuja+1, GL_COMPILE);
+
+		glEnable(GL_BLEND);
+			m.usarMaterial();
+		    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	//transparencia
+		    gluQuadricDrawStyle(qobj, GLU_FILL);
+		    gluQuadricNormals(qobj, GLU_SMOOTH);
+			gluSphere(qobj, 0.75, 15, 10);
+		glDisable(GL_BLEND);
+
+	glEndList();
+
+	gluDeleteQuadric(qobj);
+}
 
 Superficie* ContenedorObjetos::crearFlorero() {
 
@@ -359,11 +408,10 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 
 void ContenedorObjetos::crearEscenario() {
 	textura[0].cargarImagen("pared_neg_y.jpg");
-	textura[1].cargarImagen("pared_piso.jpg");
-	textura[2].cargarImagen("pared_pos_x.jpg");
-	textura[3].cargarImagen("pared_pos_y.jpg");
-	textura[4].cargarImagen("pared_neg_x.jpg");
-	textura[5].cargarImagen("pared_techo.jpg");
+	textura[1].cargarImagen("pared_pos_x.jpg");
+	textura[2].cargarImagen("pared_pos_y.jpg");
+	textura[3].cargarImagen("pared_neg_x.jpg");
+	textura[4].cargarImagen("pared_techo.jpg");
 	mat_escenario.setSpecular(0,0,0,0);
 	mat_escenario.setAmbient(1,1,1,1);
 	mat_escenario.setDiffuse(1,1,1,1);
@@ -385,9 +433,9 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 							 CX_SUP,CY_SUP,CZ_INF , CX_SUP,CY_SUP,CZ_SUP ,
 							 CX_INF,CY_SUP,CZ_SUP , CX_INF,CY_SUP,CZ_INF};
 
-	static GLfloat norm[18]={ 0,1,0, 0,0,1, -1,0,0, 0,-1,0, 1,0,0, 0,0,-1};
+	static GLfloat norm[15]={ 0,1,0, -1,0,0, 0,-1,0, 1,0,0, 0,0,-1};
 
-	static GLshort idx[24] = { 0,1,2,3, 0,3,4,7, 2,5,4,3, 5,6,7,4, 0,7,6,1, 1,6,5,2 };
+	static GLshort idx[20] = { 0,1,2,3, 2,5,4,3, 5,6,7,4, 0,7,6,1, 1,6,5,2 };
 
 	if ( render_mode == GL_LINE)
 		glPolygonMode( GL_FRONT, GL_LINE);
@@ -395,7 +443,7 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 		glPolygonMode( GL_FRONT, GL_FILL);
 
 
-	for (unsigned int i=0, j=0; i<24; i+=4, j++){
+	for (unsigned int i=0, j=0; i<20; i+=4, j++){
 
 		if ((render_mode == GL_TEXTURE) && textura[j].tieneTextura() ) {
 

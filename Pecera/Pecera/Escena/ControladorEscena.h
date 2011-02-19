@@ -4,6 +4,7 @@
 #include "ContenedorObjetos.h"
 #include "../Camara/Camara.h"
 #include "../Objetos/Objetos.h"
+#include "../Objetos/Terreno.h"
 /**
  *  Arma la escena: ubica la camara, los objetos, realiza animaciones.
  *
@@ -20,6 +21,7 @@ private:
 	unsigned int render_mode;
 	bool ver_tray;
 
+	Terreno terreno;
 
 	Cardumen* cardumen1;
 	ObjetoAnimado* alga1;

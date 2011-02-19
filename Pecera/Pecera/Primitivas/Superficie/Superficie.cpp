@@ -19,7 +19,9 @@ Superficie::Superficie(std::vector<Vertice> &vertices, uint tam) {
 	init();
 }
 
-Superficie::~Superficie() {}
+Superficie::~Superficie() {
+	glDeleteLists(dl_handle, 2);
+}
 
 void Superficie::dibujar(unsigned int render_mode) {
 
@@ -42,7 +44,7 @@ void Superficie::dibujar(unsigned int render_mode) {
 
 
 	//dibujo las normales
-	dibujarNormales();
+//	dibujarNormales();
 
 }
 
@@ -276,8 +278,9 @@ void Superficie::init() {
 	//WARNING!!!
 	//normales.clear();
 	indices.clear();
-	superficie.clear();
 	texCoord.clear();
+	if(!keep)
+		superficie.clear();
 }
 
 Material* Superficie::getMaterial() {

@@ -18,13 +18,13 @@
  *
  * */
 
-#define MAX_DIBUJOS 9
+#define MAX_DIBUJOS 10
 #define MAX_ANIMACIONES 1
 #define MAX_CARDUMEN 1
 
 
 
-enum _dibujos { FLORERO=0, ALGA1, ALGA2, ALGA3, PEZ1, PEZ2, PEZ3, ROCA1, ROCA2};
+enum _dibujos { FLORERO=0, ALGA1, ALGA2, ALGA3, PEZ1, PEZ2, PEZ3, ROCA1, ROCA2, ROCA3, BURBUJA};
 
 class ContenedorObjetos {
 
@@ -39,15 +39,17 @@ private:
 	Animacion* animaciones[MAX_ANIMACIONES];
 	Cardumen* cardumen[MAX_CARDUMEN];
 
+
 	enum _dibujos _d;
 
-	Textura textura[8];	//texturas del escenario
-//	GLuint dl_handle;	//handle de la Display list del Escenario
-
+	Textura textura[5];	//texturas del escenario
+	GLuint handle_burbuja;
 
 	void crearSuperficies();
 	void crearAnimaciones();
 	void crearCardumenes();
+
+	void crearBurbuja();
 
 	/* solo se llaman una vez. saben dibujar los objetos */
 	Superficie* crearAlga1();
@@ -55,6 +57,7 @@ private:
 	Superficie* crearPez1();
 	Superficie* crearRoca1();
 	Superficie* crearFlorero();
+
 
 	Animacion* crearAlga3();
 

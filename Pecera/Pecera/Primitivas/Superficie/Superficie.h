@@ -28,6 +28,7 @@ protected:
 
 	unsigned int tam;	// cantidad de vertices de la curva "forma"
 	bool cerrada;		//indica si la curva es cerrada
+	bool keep; 			//false-> borra los puntos de la superficie
 
 	/* setea los indices para dibujado con triangle strip*/
 	void setIndices();
@@ -39,7 +40,7 @@ protected:
 	void init();
 
 private:
-	void dibujarNormales();
+
 	void generarDisplayList();
 	void generarDisplayListTextura();
 
@@ -55,10 +56,19 @@ public:
 	/* dibuja la superficie segun el modo de renderizado */
 	void dibujar(unsigned int render_mode);
 
+	void dibujarNormales();
+
 	/* aplica la textura especificada a la superficie */
 	void aplicarTextura (std::string ruta);
 
 	Material* getMaterial();
+
+	std::vector<Vertice>& getMalla() {
+		return superficie;
+	}
+	unsigned int getTamanio(){
+		return tam;
+	};
 
 	void setMaterial(Material &m);
 

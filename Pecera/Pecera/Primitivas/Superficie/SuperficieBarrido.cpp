@@ -1,6 +1,6 @@
 #include "SuperficieBarrido.h"
 
-SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Vertice> &trasl) {
+SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, bool borrar) {
 
 	tam = forma.size(); //guardo la long de la curva patron
 	cerrada = false;
@@ -13,11 +13,11 @@ SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Ve
 			superficie.push_back(v);
 		}
 	}
-	
+	keep = !borrar;
 	init();
 }
 
-SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo) {
+SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo, bool borrar) {
 
 	tam = forma.size(); //guardo la long de la curva patron
 	cerrada = false;
@@ -30,7 +30,7 @@ SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Ve
 			superficie.push_back(v);
 		}
 	}
-	
+	keep = !borrar;
 	init();
 }
 

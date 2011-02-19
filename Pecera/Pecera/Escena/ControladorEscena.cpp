@@ -50,25 +50,29 @@ void ControladorEscena::generarEscena() {
 
 	glPushMatrix();
 
-		glRotatef(180,0,0,1);
-		objetos.dibujarObjeto(ALGA1, render_mode);
-		objetos.dibujarObjeto(ALGA2, render_mode);
 
+	glPushMatrix();
+		glRotatef(180,0,0,1);
 		glTranslatef(5,4,0);
 		objetos.dibujarObjeto(FLORERO, render_mode);
-//		objetos.dibujarObjeto(ROCA1,render_mode);
+		objetos.dibujarObjeto(ALGA1, render_mode);
+		objetos.dibujarObjeto(ALGA2, render_mode);
+	glPopMatrix();
+	glTranslatef(0,0,10);
+		objetos.dibujarObjeto(BURBUJA, render_mode);
 
 //		objetos.dibujarCardumen(cardumen1, render_mode);
 //		if(ver_tray){
 //			glColor3f(1,1,0);
 //			cardumen1->recorrido->dibujarTrayecto();
 //		}
-		alga1->dibujar(render_mode);
-		glTranslatef(5,4,0);
-		alga2->dibujar(render_mode);
+//		alga1->dibujar(render_mode);
+//		glTranslatef(5,4,0);
+//		alga2->dibujar(render_mode);
 
 	glPopMatrix();
 	objetos.dibujarEscenario(render_mode);
+	terreno.dibujar(render_mode);
 
 }
 

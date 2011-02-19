@@ -97,6 +97,7 @@ void Set3DEnv() {
 	glLoadIdentity ();
 	gluPerspective(60.0, (GLfloat) window_size[0]/(GLfloat) window_size[1], 0.30, 363.0);
 	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 void init(void) {
@@ -107,31 +108,30 @@ void init(void) {
   glEnable(GL_DEPTH_TEST);
 
   /* iluminacion */
-
+  Set3DEnv();
   	  //luz ambiental
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
+	glEnable(GL_LIGHT0);
 	//linterna
 	posicionarLinterna();
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
 
-	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5);
-	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5);
-	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 15.0);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 0.10);
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.005);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.010);
+	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.05);
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 25.0);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 1);
 
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
-    Set3DEnv();
+
 
   // Generación de las Display Lists
   glNewList(DL_AXIS, GL_COMPILE);
@@ -157,8 +157,15 @@ void salir() {
 void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	glPushMatrix();
 	escena->getCamara()->lookAt();
+
+	if (linterna)
+			posicionarLinterna();
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
+	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glEnable(GL_LIGHTING);
 
 	if (view_axis)
 		 glCallList(DL_AXIS);
@@ -167,30 +174,17 @@ void display(void)
 	if (niebla)
 		glEnable(GL_FOG);
 
-	if (linterna) {
-		glDisable(GL_LIGHT0);
-		posicionarLinterna();
-		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
-		glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
-		glEnable(GL_LIGHT1);
-
-	}else{
-		glDisable(GL_LIGHT1);
-		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-		glEnable(GL_LIGHT0);
-	}
-	glEnable(GL_LIGHTING);
 	///////////////////////////// dibujar ////////////////////////
-	glPushMatrix();
+
 
 		escena->generarEscena();
 
-	glPopMatrix();
+
 
     /////////////////////////// fin dibujar =P /////////////////////
 	if (niebla)
 		glDisable(GL_FOG);
-
+	glPopMatrix();
 
 	glutSwapBuffers();
 }
@@ -233,6 +227,13 @@ void keyboard (unsigned char key, int x, int y) {
     case 'l':
     case 'L':
       linterna = !linterna;
+      if (linterna) {
+    	  glDisable(GL_LIGHT0);
+    	  glEnable(GL_LIGHT1);
+      }else{
+    	  glDisable(GL_LIGHT1);
+    	  glEnable(GL_LIGHT0);
+      }
       glutPostRedisplay();
       break;
     case 'c':
@@ -317,7 +318,11 @@ int main(int argc, char** argv) {
   glutInitWindowPosition(0, 0);
   glutCreateWindow("TP Final - Sistemas Graficos");
 //  glutSetIconTitle("iconsmall.png");
-  glutFullScreen();
+//  glutFullScreen();
+  glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
+  glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR);
+
+
 
   escena = new ControladorEscena();
 
