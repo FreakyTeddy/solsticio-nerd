@@ -1,5 +1,5 @@
 #include "ContenedorObjetos.h"
-//#include <GL/glu.h>
+#include <math.h>
 
 ContenedorObjetos* ContenedorObjetos::instancia=0;
 
@@ -22,7 +22,7 @@ ContenedorObjetos::~ContenedorObjetos() {
 //	delete superficies[ALGA2];
 //	delete superficies[ALGA1];
 //	delete superficies[FLORERO];
-//	delete animaciones[0];
+	delete animaciones[0];
 	delete cardumen[0];
 	delete superficies[PEZ1];
 //	delete tray_burbujas;
@@ -57,6 +57,7 @@ void ContenedorObjetos::crearSuperficies() {
 
 void ContenedorObjetos::crearAnimaciones() {
 	//animaciones[0] = crearAlga3();
+	animaciones[0] = crearAletaPez1();
 }
 
 void ContenedorObjetos::crearCardumenes() {
@@ -394,6 +395,64 @@ Animacion* ContenedorObjetos::crearAlga3() {
 	return ani;
 }
 
+Animacion* ContenedorObjetos::crearAletaPez1() {
+
+	std::vector<Vertice> ctrol_s, t1, t2, def;
+	Vertice t(0,0,1);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	t.set(0,0,0);
+	ctrol_s.push_back(t);
+	t.set(0,0,-1);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+
+	t.set(0,0,0);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+	t.set(0.5,1,0);
+	t1.push_back(t);
+	t.set(-0.5,2,0);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+
+	t.set(0,0,0);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
+	t.set(-0.5,1,0);
+	t2.push_back(t);
+	t.set(0.5,2,0);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
+
+	t.set(0,1,0);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
+	t.set(0.7,1,0.7);
+	def.push_back(t);
+	t.set(1,1,1);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
+
+	Animacion* ani = new Animacion(ctrol_s,t1,t2,def,2);
+	ani->setModoTransicion(false);
+	ani->setTextura("dorialeta.png");
+	Material m;
+	m.setDiffuse(0,0.53,0.73,1);
+	m.setSpecular(1,1,0,1);
+	m.setShininess(120);
+	ani->setMaterial(m);
+	return ani;
+}
+
 Superficie* ContenedorObjetos::crearPez1(){
 	std::vector<Vertice> ctrol_s, curva_s, ctrol_t, curva_t, ctrol_d, curva_d;
 	Vertice t(0,0,2);
@@ -484,22 +543,21 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 	//puntos control trayecto
 	std::vector<Vertice> control;
 	Vertice t;
+	t.set(120,112,10);
 	control.push_back(t);
 	control.push_back(t);
 	control.push_back(t);
-	t.set(30,12,0);
+	t.set(100,-120,10);
 	control.push_back(t);
-	t.set(5,-12,24);
+	t.set(-102,-52,10);
 	control.push_back(t);
-	t.set(-32,-52,36);
-	control.push_back(t);
-	t.set(0,0,0);
+	t.set(120,112,10);
 	control.push_back(t);
 	control.push_back(t);
 	control.push_back(t);
 
 
-	Cardumen* cardumen1 = new Cardumen(PEZ1,1,control,true,6,false);
+	Cardumen* cardumen1 = new Cardumen(PEZ1,1,control,true,8,false);
 	return cardumen1;
 }
 
@@ -578,13 +636,38 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 
 void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode) {
 	glPushMatrix();
-
+	glFrontFace( GL_CCW );
+	glCullFace( GL_BACK );
+	glEnable(GL_CULL_FACE);
 		float escala;
 		Vertice pos = car->recorrido->getPosicion();
 
 		glTranslatef(pos.x, pos.y, pos.z);	//ubico al cardumen en su trayectoria
 
-		//TODO!!! tendrian que rotar para mirar siempre hacia adelante!
+
+		/* calculo del angulo de rotacion. */
+		Vertice dir = car->recorrido->getDireccion();
+//		double alfa=0, beta=0;
+//		if (dir.y != 0)
+//			alfa = atan2(dir.x,dir.y)*180/PI;
+//		else{
+//			alfa=90;//WARNING caso x&y = 0
+//		}
+//		if(dir.x!=0)
+//			beta = atan2(dir.z,dir.x)*180/PI;
+//		else{
+//			(dir.z != 0) ? beta=90 : beta=0;
+//		}
+//		Vertice p(dir.x,dir.y,0);
+
+//		double ang_x=0, ang_z=0;
+//		Vertice p(dir.x,dir.y,0);
+//		ang_z = acos(dir.y/p.modulo())*180/PI;
+//		ang_x = acos(p.modulo()/dir.modulo())*180/PI;
+		double alfa=0;
+		if(dir.y != 0)
+			alfa = atan2(dir.x,dir.y)*180/PI;
+		std::cout<<"Angulo "<<alfa<<std::endl;
 
 		glEnable(GL_RESCALE_NORMAL);	//habilito el reescalado de normales
 
@@ -594,12 +677,18 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 				pos = car->ubicacion[i];
 				escala = car->volumen[i];
 				glTranslatef(pos.x, pos.y, pos.z);	//ubico al objeto en su posicion dentro del cardumen
-				glScalef(escala,escala,escala);		//reesccalo el objeto
+
+//
+//				glRotatef(ang_z, 0,0,1);	//oriento al pez
+//				glRotatef(ang_x, 1,0,0);
+				glRotatef(alfa,0,0,-1);
+				glScalef(escala,escala,escala);		//reescalo el objeto
 				dibujarObjeto(car->IDobjeto, render_mode);
 			glPopMatrix();
 		}
 
 		glDisable(GL_RESCALE_NORMAL);
+		glDisable( GL_CULL_FACE );
 
 	glPopMatrix();
 }

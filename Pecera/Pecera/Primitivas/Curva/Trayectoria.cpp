@@ -42,7 +42,7 @@ void Trayectoria::dibujarTrayecto(){
 
 void Trayectoria::sgtePosicion(){
 	actual++;
-	if (actual == tam)
+	if (actual >= tam)
 		actual = 0;
 }
 
@@ -52,4 +52,9 @@ size_t Trayectoria::sgtePosicion(size_t act){
 		act = 0;
 	return act;
 }
+
+Vertice Trayectoria::getDireccion() {
+	return trayecto[sgtePosicion(actual)] - trayecto[actual];
+}
+
 

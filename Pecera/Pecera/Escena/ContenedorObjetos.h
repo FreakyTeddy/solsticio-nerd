@@ -60,8 +60,9 @@ private:
 	Superficie* crearFlorero();
 
 
-	Animacion* crearAlga3();
 
+	Animacion* crearAlga3();
+	Animacion* crearAletaPez1();
 	Cardumen* crearCardumen1();
 
 	void crearEscenario();

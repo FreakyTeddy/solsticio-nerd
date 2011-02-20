@@ -37,6 +37,9 @@ public:
 		return trayecto.size();
 	};
 
+	/* devuelve un vertice NO normalizado en la direccion del movimiento */
+	Vertice getDireccion();
+
 	void sgtePosicion();
 	size_t sgtePosicion(size_t act);
 

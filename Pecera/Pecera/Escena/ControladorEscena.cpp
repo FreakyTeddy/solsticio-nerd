@@ -40,6 +40,7 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 		}
 	}
 */
+
 	if (animando)
 		ControladorEscena::animar(0);
 }
@@ -81,12 +82,18 @@ void ControladorEscena::generarEscena() {
 				glDisable(GL_RESCALE_NORMAL);
 			glPopMatrix();
 		}
-		objetos.getTrayectoriaBurbujas()->dibujarTrayecto();
+		if (ver_tray)
+			objetos.getTrayectoriaBurbujas()->dibujarTrayecto();
 	glPopMatrix();
 */
+	/* CUERPO DORI
 	glTranslatef(0,0,10);
 	objetos.dibujarObjeto(PEZ1,render_mode);
+*/
 
+	objetos.dibujarCardumen(objetos.getCardumen(0), render_mode);
+	if (ver_tray)
+		objetos.getCardumen(0)->recorrido->dibujarTrayecto();
 	glPopMatrix();
 
 	objetos.dibujarEscenario(render_mode);
@@ -100,6 +107,7 @@ void ControladorEscena::animar(int n=0){
 //	//animo las superficies
 
 //	//muevo los cardumenes
+	instancia->objetos.getCardumen(0)->viajar();
 
 /* BURBUJAS
 	for (int i=0; i<CANT_BURBUJAS; i++) {
@@ -110,7 +118,7 @@ void ControladorEscena::animar(int n=0){
 	glutPostRedisplay();
 
 	//continuo con la animacion
-	if (animando)
+	if (animando && (n >= 0))
 		glutTimerFunc(50,animar,++n);
 }
 

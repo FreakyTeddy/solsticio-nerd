@@ -20,13 +20,11 @@ private:
 	Camara cam;
 	unsigned int render_mode;
 	bool ver_tray;
+	static bool animando;
+	static ControladorEscena* instancia;
 
 	Terreno terreno;
-
 	ObjetoViajero* burbujas[CANT_BURBUJAS];
-
-	static ControladorEscena* instancia;
-	static bool animando;
 
 	/* realiza la transicion de frames y redibuja la escena */
 	static void animar(const int n);
@@ -53,7 +51,7 @@ public:
 
 	/* avanza la animacion 1 frame */
 	void nextFrame(){
-		animar(0);
+		animar(-1);
 	}
 
 	void nextTrackDisplayMode();
