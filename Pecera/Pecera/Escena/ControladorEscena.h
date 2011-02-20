@@ -23,14 +23,10 @@ private:
 
 	Terreno terreno;
 
-	Cardumen* cardumen1;
-	ObjetoAnimado* alga1;
-	ObjetoAnimado* alga2;
-	//Animacion* alga1;
-	ObjetoViajero* burbujas[10];
+	ObjetoViajero* burbujas[CANT_BURBUJAS];
 
-	static ControladorEscena* instancia;	//quiero un timeeeeeeeeeer!!
-	static bool animando; //mutex?????
+	static ControladorEscena* instancia;
+	static bool animando;
 
 	/* realiza la transicion de frames y redibuja la escena */
 	static void animar(const int n);

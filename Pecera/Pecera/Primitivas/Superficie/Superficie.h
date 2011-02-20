@@ -14,8 +14,6 @@ private:
 
 	Material material;	//material con el que se dibuja la sup
 
-
-
 protected:
 	GLuint dl_handle;	//display list que dibuja con triangulos. dl_handle+1 dibuja con texturas.
 

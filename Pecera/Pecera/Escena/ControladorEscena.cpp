@@ -29,30 +29,28 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 	   glFogf (GL_FOG_END, 50.0);
 	}
 
-	//consigo los objetos animados
-//	cardumen1 = objetos.getCardumen(0);
-//	alga1 = new ObjetoAnimado(objetos.getAnimacion(0),false);
-//	alga2 = new ObjetoAnimado(objetos.getAnimacion(0),false);//TODO
-//	alga2->frame +=5;//WHAT!!!
+/*	BURBUJAS
 
-	for (int i=0; i<10; i++) {
+	//radio = (float)((rand()%19)+1)/20.0;
+	size_t ubicacion = objetos.getTrayectoriaBurbujas()->cantPosiciones() / CANT_BURBUJAS;
+	for (size_t i=0; i<CANT_BURBUJAS; i++) {
 		burbujas[i] = new ObjetoViajero(BURBUJA, objetos.getTrayectoriaBurbujas(),1,1,1);
-		for (int j=0; j<i+5; j++) { //las desplazo
+		for (size_t j=0; j<(i*ubicacion); j++) { //las desplazo
 			burbujas[i]->viajar();
 		}
 	}
-
+*/
 	if (animando)
 		ControladorEscena::animar(0);
 }
 
 ControladorEscena::~ControladorEscena() {
 
-//	delete alga1;
-//	delete alga2;
-	for (int i=0; i<10; i++) {
+/* BURBUJAS
+	for (int i=0; i<CANT_BURBUJAS; i++) {
 			delete burbujas[i];
 	}
+*/
 	delete ContenedorObjetos::getInstancia();
 	delete ContenedorTexturas::getInstancia();
 }
@@ -61,36 +59,34 @@ void ControladorEscena::generarEscena() {
 
 	glPushMatrix();
 
+/* FLORERO Y BURBUJAS
+
 	glPushMatrix();
 		glRotatef(180,0,0,1);
 		glTranslatef(5,4,0);
 		objetos.dibujarObjeto(FLORERO, render_mode);
-		glTranslatef(0.1,0,1.6);
+		glTranslatef(0.1,0,1.7);
 		objetos.dibujarObjeto(ALGA1, render_mode);
 		objetos.dibujarObjeto(ALGA2, render_mode);
-		glPushMatrix();
+
 		Vertice t;
-			for (int i=0; i<10; i++) {
+		for (int i=0; i<CANT_BURBUJAS; i++) {
+			glPushMatrix();
+				glEnable(GL_RESCALE_NORMAL);
 				t= burbujas[i]->getPos();
 				glTranslatef(t.x,t.y,t.z);
 				t= burbujas[i]->deformacion;
 				glScalef(t.x,t.y,t.z);
 				objetos.dibujarObjeto(BURBUJA, render_mode);
-			}
-		glPopMatrix();
+				glDisable(GL_RESCALE_NORMAL);
+			glPopMatrix();
+		}
+		objetos.getTrayectoriaBurbujas()->dibujarTrayecto();
 	glPopMatrix();
-
-	objetos.getTrayectoriaBurbujas()->dibujarTrayecto();
-//		objetos.dibujarCardumen(cardumen1, render_mode);
-//		if(ver_tray){
-//			glColor3f(1,1,0);
-//			cardumen1->recorrido->dibujarTrayecto();
-//		}
-//		alga1->dibujar(render_mode);
-//		glTranslatef(5,4,0);
-//		alga2->dibujar(render_mode);
+*/
 
 	glPopMatrix();
+
 	objetos.dibujarEscenario(render_mode);
 	terreno.dibujar(render_mode);
 
@@ -98,18 +94,16 @@ void ControladorEscena::generarEscena() {
 
 void ControladorEscena::animar(int n=0){
 	//animar todos los objetos
-	std::cout<<"animando: "<<n<<std::endl;
 
 //	//animo las superficies
-//	instancia->alga1->animar();
-//	instancia->alga2->animar();
-//
-//
+
 //	//muevo los cardumenes
-//	instancia->cardumen1->viajar();
-	for (int i=0; i<10; i++) {
+
+/* BURBUJAS
+	for (int i=0; i<CANT_BURBUJAS; i++) {
 		instancia->burbujas[i]->viajar();
 	}
+*/
 	//redibujo la escena
 	glutPostRedisplay();
 

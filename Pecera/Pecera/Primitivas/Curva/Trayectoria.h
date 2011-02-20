@@ -17,6 +17,7 @@ class Trayectoria {
 	size_t actual;
 	size_t tam;
 	float velocidad;
+	bool closed;
 
 public:
 
@@ -31,6 +32,10 @@ public:
 
 	/* dibuja la trayectoria */
 	void dibujarTrayecto();
+
+	size_t cantPosiciones() {
+		return trayecto.size();
+	};
 
 	void sgtePosicion();
 	size_t sgtePosicion(size_t act);

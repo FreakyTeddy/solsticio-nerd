@@ -8,7 +8,7 @@ ContenedorObjetos::ContenedorObjetos() {
 	crearSuperficies();
 	crearAnimaciones();
 	crearCardumenes();
-	crearBurbuja();
+	//crearBurbuja();
 }
 
 ContenedorObjetos::~ContenedorObjetos() {
@@ -18,13 +18,14 @@ ContenedorObjetos::~ContenedorObjetos() {
 //		delete animaciones[i];
 //	for (int i=0; i < MAX_CARDUMEN; i++)
 //		delete cardumen[i];
-	delete superficies[ALGA2];
-	delete superficies[ALGA1];
-	delete superficies[FLORERO];
-	delete animaciones[0];
+
+//	delete superficies[ALGA2];
+//	delete superficies[ALGA1];
+//	delete superficies[FLORERO];
+//	delete animaciones[0];
 	delete cardumen[0];
-	delete tray_burbujas;
-	glDeleteLists(handle_burbuja, 2);
+//	delete tray_burbujas;
+//	glDeleteLists(handle_burbuja, 2);
 }
 
 void ContenedorObjetos::dibujarObjeto(unsigned int id, unsigned int render_mode) {
@@ -45,15 +46,15 @@ void ContenedorObjetos::dibujarObjeto(unsigned int id, unsigned int render_mode)
 void ContenedorObjetos::crearSuperficies() {
 
 	//todo rellenar los otros espacios del vector
-	superficies[FLORERO] = crearFlorero();
-	superficies[ALGA1] = crearAlga1();
-	superficies[ALGA2] = crearAlga2();
+//	superficies[FLORERO] = crearFlorero();
+//	superficies[ALGA1] = crearAlga1();
+//	superficies[ALGA2] = crearAlga2();
 //	superficies[ROCA1] = crearRoca1();
 	crearEscenario();
 }
 
 void ContenedorObjetos::crearAnimaciones() {
-	animaciones[0] = crearAlga3();
+	//animaciones[0] = crearAlga3();
 }
 
 void ContenedorObjetos::crearCardumenes() {
@@ -104,21 +105,21 @@ void ContenedorObjetos::crearBurbuja() {
 	puntos.push_back(v);
 	puntos.push_back(v);
 	puntos.push_back(v);
-	v.x += (float)(rand()%20 - 10)/5;
-	v.y += (float)(rand()%20 - 10)/5;
-	v.z += 4;
+	v.x += (float)(rand()%20 - 10);
+	v.y += (float)(rand()%20 - 10);
+	v.z += 28;
 	puntos.push_back(v);
-	v.x += (float)(rand()%20 - 10)/5;
-	v.y += (float)(rand()%20 - 10)/5;
-	v.z += 6;
+	v.x += (float)(rand()%20 - 10);
+	v.y += (float)(rand()%20 - 10);
+	v.z += 42;
 	puntos.push_back(v);
-	v.x += (float)(rand()%20 - 10)/5;
-	v.y += (float)(rand()%20 - 10)/5;
-	v.z += 10;
+	v.x += (float)(rand()%20 - 10);
+	v.y += (float)(rand()%20 - 10);
+	v.z += 60;
 	puntos.push_back(v);
 	puntos.push_back(v);
 	puntos.push_back(v);
-	tray_burbujas = new Trayectoria(puntos,false,6,false);
+	tray_burbujas = new Trayectoria(puntos,false,8,false);
 }
 
 Superficie* ContenedorObjetos::crearFlorero() {
@@ -430,7 +431,7 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 	control.push_back(t);
 
 
-	Cardumen* cardumen1 = new Cardumen(FLORERO,1,control,true,6,false);
+	Cardumen* cardumen1 = new Cardumen(PEZ1,1,control,true,6,false);
 	return cardumen1;
 }
 
@@ -539,8 +540,9 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 
 
 ContenedorObjetos* ContenedorObjetos::getInstancia(){
-	if (!instancia)
+	if (!instancia) {
 		instancia = new ContenedorObjetos();
+	}
 	return instancia;
 }
 

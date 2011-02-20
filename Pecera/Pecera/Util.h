@@ -15,7 +15,7 @@
 #define ANIMACION_INICIAL false	/* estado inicial de la animacion */
 #define VER_TRAYECTORIAS false
 #define LUZ_INICIAL false	/* luz ambiental (false) o linterna (true) */
-
+#define CANT_BURBUJAS 20
 
 #define CX_INF -128	/* limites del cubo de escena */
 #define CX_SUP 128
