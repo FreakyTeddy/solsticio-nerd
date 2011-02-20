@@ -27,11 +27,13 @@ public:
 	~Trayectoria();
 
 	Vertice getPosicion();
+	Vertice getPosicion(size_t act);
 
 	/* dibuja la trayectoria */
 	void dibujarTrayecto();
 
 	void sgtePosicion();
+	size_t sgtePosicion(size_t act);
 
 };
 

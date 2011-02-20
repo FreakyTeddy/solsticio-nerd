@@ -8,7 +8,6 @@ Curva Burbuja::curva;
 
 Burbuja::Burbuja(float x, float y, float z) {
 	// TODO
-	//ver valores que correspondan y queden lindos (incluye transparencia) :)
 	radio = (float)((rand()%19)+1)/20.0;
 	tramo = 0;
 

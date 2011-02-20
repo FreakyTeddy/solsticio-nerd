@@ -26,7 +26,7 @@ private:
 	static ContenedorTexturas *instancia;
 
 	ContenedorTexturas();
-	~ContenedorTexturas();
+
 
 	/* carga una imagen desde el archivo bmp especificado. Devuelve su identificador de textura */
 	GLuint cargarImagenDesdeArchivo(std::string &nombre);
@@ -34,6 +34,8 @@ private:
 	void liberarImagenesCargadas();
 
 public:
+
+	~ContenedorTexturas();
 
 	static ContenedorTexturas* getInstancia();
 

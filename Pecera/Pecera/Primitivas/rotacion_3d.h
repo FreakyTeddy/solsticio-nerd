@@ -1,10 +1,3 @@
-/*
- * rotacion_3d.h
- *
- *  Created on: Jan 22, 2011
- *      Author: nicolas-pc
- */
-
 #ifndef ROTACION_3D_H_
 #define ROTACION_3D_H_
 

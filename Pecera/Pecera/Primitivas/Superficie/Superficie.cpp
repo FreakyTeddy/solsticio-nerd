@@ -1,7 +1,5 @@
 #include "Superficie.h"
 
-extern bool dibujar_normales;
-
 Superficie::Superficie() {
 	material.setDiffuse(0.85,0.85, 0.85, 1);
 	material.setSpecular(1, 1, 1, 1);
@@ -20,6 +18,8 @@ Superficie::Superficie(std::vector<Vertice> &vertices, uint tam) {
 }
 
 Superficie::~Superficie() {
+	normales.clear();
+	superficie.clear();
 	glDeleteLists(dl_handle, 2);
 }
 

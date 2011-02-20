@@ -30,10 +30,17 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 	}
 
 	//consigo los objetos animados
-	cardumen1 = objetos.getCardumen(0);
-	alga1 = new ObjetoAnimado(objetos.getAnimacion(0),false);
-	alga2 = new ObjetoAnimado(objetos.getAnimacion(0),false);
-	alga2->frame +=5;//WHAT!!!
+//	cardumen1 = objetos.getCardumen(0);
+//	alga1 = new ObjetoAnimado(objetos.getAnimacion(0),false);
+//	alga2 = new ObjetoAnimado(objetos.getAnimacion(0),false);//TODO
+//	alga2->frame +=5;//WHAT!!!
+
+	for (int i=0; i<10; i++) {
+		burbujas[i] = new ObjetoViajero(BURBUJA, objetos.getTrayectoriaBurbujas(),1,1,1);
+		for (int j=0; j<i+5; j++) { //las desplazo
+			burbujas[i]->viajar();
+		}
+	}
 
 	if (animando)
 		ControladorEscena::animar(0);
@@ -41,26 +48,39 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 
 ControladorEscena::~ControladorEscena() {
 
-	delete alga1;
-	delete alga2;
-	ContenedorTexturas::getInstancia()->vaciarContenedor();
+//	delete alga1;
+//	delete alga2;
+	for (int i=0; i<10; i++) {
+			delete burbujas[i];
+	}
+	delete ContenedorObjetos::getInstancia();
+	delete ContenedorTexturas::getInstancia();
 }
 
 void ControladorEscena::generarEscena() {
 
 	glPushMatrix();
 
-
 	glPushMatrix();
 		glRotatef(180,0,0,1);
 		glTranslatef(5,4,0);
 		objetos.dibujarObjeto(FLORERO, render_mode);
+		glTranslatef(0.1,0,1.6);
 		objetos.dibujarObjeto(ALGA1, render_mode);
 		objetos.dibujarObjeto(ALGA2, render_mode);
+		glPushMatrix();
+		Vertice t;
+			for (int i=0; i<10; i++) {
+				t= burbujas[i]->getPos();
+				glTranslatef(t.x,t.y,t.z);
+				t= burbujas[i]->deformacion;
+				glScalef(t.x,t.y,t.z);
+				objetos.dibujarObjeto(BURBUJA, render_mode);
+			}
+		glPopMatrix();
 	glPopMatrix();
-	glTranslatef(0,0,10);
-		objetos.dibujarObjeto(BURBUJA, render_mode);
 
+	objetos.getTrayectoriaBurbujas()->dibujarTrayecto();
 //		objetos.dibujarCardumen(cardumen1, render_mode);
 //		if(ver_tray){
 //			glColor3f(1,1,0);
@@ -80,14 +100,16 @@ void ControladorEscena::animar(int n=0){
 	//animar todos los objetos
 	std::cout<<"animando: "<<n<<std::endl;
 
-	//animo las superficies
-	instancia->alga1->animar();
-	instancia->alga2->animar();
-
-
-	//muevo los cardumenes
-	instancia->cardumen1->viajar();
-
+//	//animo las superficies
+//	instancia->alga1->animar();
+//	instancia->alga2->animar();
+//
+//
+//	//muevo los cardumenes
+//	instancia->cardumen1->viajar();
+	for (int i=0; i<10; i++) {
+		instancia->burbujas[i]->viajar();
+	}
 	//redibujo la escena
 	glutPostRedisplay();
 

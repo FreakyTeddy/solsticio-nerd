@@ -9,13 +9,30 @@
 struct ObjetoViajero {
 	uint IDobjeto;	//id del objeto que se quiere dibujar
 	Trayectoria* recorrido;	//puntos que recorre el objeto
+	size_t pos;
+	Vertice deformacion;
 
-	ObjetoViajero(){
-		IDobjeto = 0;
-		recorrido = 0;
-	}
+	ObjetoViajero(uint id,Trayectoria* tray, float def_x, float def_y, float def_z){
+		IDobjeto = id;
+		recorrido = tray;
+		pos=0;
+		deformacion.set(def_x,def_y,def_z);
+	};
+
+//	ObjetoViajero(uint id, std::vector<Vertice> &puntosControl,bool cerrada,uint intervalo, bool bezier){
+//		recorrido = new Trayectoria(puntosControl,cerrada,intervalo,bezier);
+//		IDobjeto = id;
+//	};
+//
+//	~ObjetoViajero() {
+//		delete recorrido;
+//	};
 	void viajar(){
-		recorrido->sgtePosicion(); //todo NULLLLLS!!
+		pos = recorrido->sgtePosicion(pos); //WARNING! NULLLLLS!!
+	};
+
+	Vertice getPos() {
+		return recorrido->getPosicion(pos);
 	}
 };
 
@@ -34,7 +51,7 @@ struct Cardumen {
 		IDobjeto = id;
 		cantidad = cant;
 		init();
-	}
+	};
 
 //	/* WARNING! hay que asignarle una trayectoria antes de viajar!  el destructor hace delete!!!*/
 //	Cardumen(uint id=0, uint cant=1) {
@@ -47,11 +64,11 @@ struct Cardumen {
 		delete[] volumen;
 		delete[] ubicacion;
 		delete recorrido;
-	}
+	};
 
 	void viajar(){
 		recorrido->sgtePosicion();
-	}
+	};
 private:
 	void init(){
 		volumen = new float [cantidad];
@@ -60,7 +77,7 @@ private:
 			volumen[i] = (rand()%3)+0.5;
 			//generar posiciones aleatorias
 		}
-	}
+	};
 };
 
 
@@ -90,7 +107,5 @@ struct ObjetoAnimado {
 	}
 
 };
-
-//TODO ver por que la textura hace efecto raro .. se ve el color pero no las rayitas en el alga.. probar en otro objeto
 
 #endif /* OBJETOS_H_ */

@@ -22,6 +22,8 @@ SuperficieRevolucion::SuperficieRevolucion(std::vector<Vertice> &forma, float an
 
 }
 
-SuperficieRevolucion::~SuperficieRevolucion() {}
+SuperficieRevolucion::~SuperficieRevolucion() {
+	glDeleteLists(dl_handle, 2);
+}
 
 

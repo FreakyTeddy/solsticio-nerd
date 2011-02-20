@@ -88,6 +88,11 @@ void Textura::generarCoordenadas(const std::vector<Vertice> &sup, std::vector<Ve
 		}
 		i--;
 	}
+
+	tall.clear();
+	side.clear();
+	acum_s.clear();
+	acum_t.clear();
 }
 
 

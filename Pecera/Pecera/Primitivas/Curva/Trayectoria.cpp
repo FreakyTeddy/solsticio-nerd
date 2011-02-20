@@ -25,6 +25,10 @@ Vertice Trayectoria::getPosicion(){
 	return trayecto[actual];
 }
 
+Vertice Trayectoria::getPosicion(size_t act){
+	return trayecto[act];
+}
+
 void Trayectoria::dibujarTrayecto(){
 
 	glBegin(GL_LINE_LOOP);
@@ -40,4 +44,10 @@ void Trayectoria::sgtePosicion(){
 		actual = 0;
 }
 
+size_t Trayectoria::sgtePosicion(size_t act){
+	act++;
+	if (act == tam)
+		act = 0;
+	return act;
+}
 

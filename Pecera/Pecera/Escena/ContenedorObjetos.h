@@ -39,6 +39,7 @@ private:
 	Animacion* animaciones[MAX_ANIMACIONES];
 	Cardumen* cardumen[MAX_CARDUMEN];
 
+	Trayectoria *tray_burbujas;
 
 	enum _dibujos _d;
 
@@ -68,6 +69,10 @@ private:
 	ContenedorObjetos();
 
 public:
+
+	Trayectoria* getTrayectoriaBurbujas() {
+		return tray_burbujas;
+	}
 
 	~ContenedorObjetos();
 

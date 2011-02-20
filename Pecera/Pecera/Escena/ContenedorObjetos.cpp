@@ -12,12 +12,18 @@ ContenedorObjetos::ContenedorObjetos() {
 }
 
 ContenedorObjetos::~ContenedorObjetos() {
-	for (int i=0; i < MAX_DIBUJOS; i++)
-		delete superficies[i];
-	for (int i=0; i < MAX_ANIMACIONES; i++)
-		delete animaciones[i];
-	for (int i=0; i < MAX_CARDUMEN; i++)
-		delete cardumen[i];
+//	for (int i=0; i < MAX_DIBUJOS; i++)
+//		delete superficies[i];	TODO
+//	for (int i=0; i < MAX_ANIMACIONES; i++)
+//		delete animaciones[i];
+//	for (int i=0; i < MAX_CARDUMEN; i++)
+//		delete cardumen[i];
+	delete superficies[ALGA2];
+	delete superficies[ALGA1];
+	delete superficies[FLORERO];
+	delete animaciones[0];
+	delete cardumen[0];
+	delete tray_burbujas;
 	glDeleteLists(handle_burbuja, 2);
 }
 
@@ -91,6 +97,28 @@ void ContenedorObjetos::crearBurbuja() {
 	glEndList();
 
 	gluDeleteQuadric(qobj);
+
+	/* trayectoria que seguira la burbuja */
+	std::vector<Vertice> puntos;
+	Vertice v;
+	puntos.push_back(v);
+	puntos.push_back(v);
+	puntos.push_back(v);
+	v.x += (float)(rand()%20 - 10)/5;
+	v.y += (float)(rand()%20 - 10)/5;
+	v.z += 4;
+	puntos.push_back(v);
+	v.x += (float)(rand()%20 - 10)/5;
+	v.y += (float)(rand()%20 - 10)/5;
+	v.z += 6;
+	puntos.push_back(v);
+	v.x += (float)(rand()%20 - 10)/5;
+	v.y += (float)(rand()%20 - 10)/5;
+	v.z += 10;
+	puntos.push_back(v);
+	puntos.push_back(v);
+	puntos.push_back(v);
+	tray_burbujas = new Trayectoria(puntos,false,6,false);
 }
 
 Superficie* ContenedorObjetos::crearFlorero() {
@@ -419,8 +447,6 @@ void ContenedorObjetos::crearEscenario() {
 }
 
 void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
-
-	//TODO!!! dibujar suelo por separado
 
 	glFrontFace( GL_CCW );
 	glCullFace( GL_BACK );

@@ -127,7 +127,10 @@ void ContenedorTexturas::liberarImagenesCargadas() {
 		 SDL_FreeSurface(bitmaps.back());
 		 bitmaps.pop_back();
 	}
+
 		glDeleteTextures(idTex.size(),&(idTex[0]));
+		idTex.clear();
+		nombreTex.clear();
 }
 
 void ContenedorTexturas::vaciarContenedor() {

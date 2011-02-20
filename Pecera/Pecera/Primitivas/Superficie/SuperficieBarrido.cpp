@@ -36,5 +36,7 @@ SuperficieBarrido::SuperficieBarrido(std::vector<Vertice> &forma, std::vector<Ve
 
 
 
-SuperficieBarrido::~SuperficieBarrido() {}
+SuperficieBarrido::~SuperficieBarrido() {
+	glDeleteLists(dl_handle, 2);
+}
 

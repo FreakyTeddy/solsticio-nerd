@@ -101,7 +101,7 @@ void Set3DEnv() {
 }
 
 void init(void) {
-  dl_handle = glGenLists(3);
+  dl_handle = glGenLists(2);
 
   glClearColor (0, 0.05, 0.10, 0.0);
   glShadeModel (GL_SMOOTH);
@@ -147,6 +147,7 @@ void init(void) {
 void salir() {
 
 	/* destruir todos los objetos */
+	glDeleteLists(dl_handle,2);
 	delete escena;
 	std::cout<<"Fin =]"<<std::endl;
 	std::cout.flush();

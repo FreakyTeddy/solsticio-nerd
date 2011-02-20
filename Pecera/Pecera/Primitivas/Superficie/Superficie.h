@@ -13,11 +13,11 @@ class Superficie {
 private:
 
 	Material material;	//material con el que se dibuja la sup
-	GLuint dl_handle;	//display list que dibuja con triangulos. dl_handle+1 dibuja con texturas.
+
 
 
 protected:
-
+	GLuint dl_handle;	//display list que dibuja con triangulos. dl_handle+1 dibuja con texturas.
 
 	std::vector<Vertice> superficie;	// malla de vertices 3D de la superficie
 	std::vector<Vertice> normales;		// normales de iluminacion en cada vertice 3D
