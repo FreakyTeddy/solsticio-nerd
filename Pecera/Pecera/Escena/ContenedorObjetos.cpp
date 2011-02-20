@@ -549,7 +549,7 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 	control.push_back(t);
 	t.set(100,-120,10);
 	control.push_back(t);
-	t.set(-102,-52,10);
+	t.set(-102,-52,50);
 	control.push_back(t);
 	t.set(120,112,10);
 	control.push_back(t);
@@ -637,7 +637,7 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode) {
 	glPushMatrix();
 	glFrontFace( GL_CCW );
-	glCullFace( GL_BACK );
+	glCullFace( GL_FRONT );
 	glEnable(GL_CULL_FACE);
 		float escala;
 		Vertice pos = car->recorrido->getPosicion();
@@ -664,10 +664,12 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 //		Vertice p(dir.x,dir.y,0);
 //		ang_z = acos(dir.y/p.modulo())*180/PI;
 //		ang_x = acos(p.modulo()/dir.modulo())*180/PI;
-		double alfa=0;
-		if(dir.y != 0)
+		double alfa=0, beta=0;
+		if(dir.y != 0){
 			alfa = atan2(dir.x,dir.y)*180/PI;
-		std::cout<<"Angulo "<<alfa<<std::endl;
+			beta = atan(dir.z/fabs(dir.y))*180/PI;
+		}
+		dir.print();
 
 		glEnable(GL_RESCALE_NORMAL);	//habilito el reescalado de normales
 
@@ -681,7 +683,9 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 //
 //				glRotatef(ang_z, 0,0,1);	//oriento al pez
 //				glRotatef(ang_x, 1,0,0);
+
 				glRotatef(alfa,0,0,-1);
+				glRotatef(beta,1,0,0);
 				glScalef(escala,escala,escala);		//reescalo el objeto
 				dibujarObjeto(car->IDobjeto, render_mode);
 			glPopMatrix();
