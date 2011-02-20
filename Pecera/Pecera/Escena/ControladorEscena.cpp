@@ -84,6 +84,8 @@ void ControladorEscena::generarEscena() {
 		objetos.getTrayectoriaBurbujas()->dibujarTrayecto();
 	glPopMatrix();
 */
+	glTranslatef(0,0,10);
+	objetos.dibujarObjeto(PEZ1,render_mode);
 
 	glPopMatrix();
 

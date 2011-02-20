@@ -24,6 +24,7 @@ ContenedorObjetos::~ContenedorObjetos() {
 //	delete superficies[FLORERO];
 //	delete animaciones[0];
 	delete cardumen[0];
+	delete superficies[PEZ1];
 //	delete tray_burbujas;
 //	glDeleteLists(handle_burbuja, 2);
 }
@@ -50,6 +51,7 @@ void ContenedorObjetos::crearSuperficies() {
 //	superficies[ALGA1] = crearAlga1();
 //	superficies[ALGA2] = crearAlga2();
 //	superficies[ROCA1] = crearRoca1();
+	superficies[PEZ1] = crearPez1();
 	crearEscenario();
 }
 
@@ -392,6 +394,72 @@ Animacion* ContenedorObjetos::crearAlga3() {
 	return ani;
 }
 
+Superficie* ContenedorObjetos::crearPez1(){
+	std::vector<Vertice> ctrol_s, curva_s, ctrol_t, curva_t, ctrol_d, curva_d;
+	Vertice t(0,0,2);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	t.set(1,0,0);
+	ctrol_s.push_back(t);
+	t.set(0,0,-2);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	t.set(-1,0,0);
+	ctrol_s.push_back(t);
+	t.set(0,0,2);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	curva.setFactor(3);
+	curva.Bspline(ctrol_s, curva_s);
+
+	t.set(0,-3,0);
+	ctrol_t.push_back(t);
+	ctrol_t.push_back(t);
+	ctrol_t.push_back(t);
+	t.set(0,-1,0);
+	ctrol_t.push_back(t);
+	t.set(0,0,0);
+	ctrol_t.push_back(t);
+	t.set(0,0.5,0);
+	ctrol_t.push_back(t);
+	t.set(0,1,0);
+	ctrol_t.push_back(t);
+	t.set(0,2,0);
+	ctrol_t.push_back(t);
+	ctrol_t.push_back(t);
+	ctrol_t.push_back(t);
+	curva.setFactor(4);
+	curva.Bspline(ctrol_t, curva_t);
+
+	t.set(0,1,0);
+	ctrol_d.push_back(t);
+	ctrol_d.push_back(t);
+	ctrol_d.push_back(t);
+	t.set(0.5,1,0.5);
+	ctrol_d.push_back(t);
+	t.set(1,1,1);
+	ctrol_d.push_back(t);
+	t.set(1,1,0.9);
+	ctrol_d.push_back(t);
+	t.set(0.9,1,0.6);
+	ctrol_d.push_back(t);
+	t.set(0,1,0);
+	ctrol_d.push_back(t);
+	ctrol_d.push_back(t);
+	ctrol_d.push_back(t);
+	curva.setFactor(4);
+	curva.Bspline(ctrol_d, curva_d);
+
+	Superficie *s = new SuperficieBarrido(curva_s,curva_t,curva_d);
+	s->getMaterial()->setDiffuse(0,0.53,0.73,1);
+	s->getMaterial()->setSpecular(1,1,0,1);
+	s->getMaterial()->setShininess(120);
+	s->aplicarTextura("dori.png");
+	return s;
+}
 
 Superficie* ContenedorObjetos::crearRoca1(){
 //	std::vector<Vertice> v;
