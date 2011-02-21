@@ -13,6 +13,7 @@ Trayectoria::Trayectoria(std::vector<Vertice> &puntosControl,bool cerrada=true, 
 
 	if (cerrada && !(trayecto.back()==trayecto.front())){
 		//TODO cerrar elegantemente
+		trayecto.push_back(trayecto.front());
 	}
 	closed = cerrada;
 	actual = 0;

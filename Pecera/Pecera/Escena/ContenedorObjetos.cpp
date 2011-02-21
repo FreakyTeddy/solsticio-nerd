@@ -6,7 +6,7 @@ ContenedorObjetos* ContenedorObjetos::instancia=0;
 ContenedorObjetos::ContenedorObjetos() {
 	//creo todas las superficies dibujables
 	crearSuperficies();
-	crearAnimaciones();
+//	crearAnimaciones();
 	crearCardumenes();
 	//crearBurbuja();
 }
@@ -18,15 +18,22 @@ ContenedorObjetos::~ContenedorObjetos() {
 //		delete animaciones[i];
 //	for (int i=0; i < MAX_CARDUMEN; i++)
 //		delete cardumen[i];
+//	for (int i=0; i < MAX_TIPO_PECES; i++){
+//		delete cuerpos[i];
+//		delete aletas[i];
+//		delete colas[i];
+//	}
+//	delete tray_burbujas;
+//	glDeleteLists(handle_burbuja, 2);
 
-//	delete superficies[ALGA2];
-//	delete superficies[ALGA1];
-//	delete superficies[FLORERO];
+	/* durante los tests */
+	delete superficies[ALGA2];
+	delete superficies[ALGA1];
+	delete superficies[FLORERO];
 	delete animaciones[0];
 	delete cardumen[0];
 	delete superficies[PEZ1];
-//	delete tray_burbujas;
-//	glDeleteLists(handle_burbuja, 2);
+
 }
 
 void ContenedorObjetos::dibujarObjeto(unsigned int id, unsigned int render_mode) {
@@ -47,17 +54,17 @@ void ContenedorObjetos::dibujarObjeto(unsigned int id, unsigned int render_mode)
 void ContenedorObjetos::crearSuperficies() {
 
 	//todo rellenar los otros espacios del vector
-//	superficies[FLORERO] = crearFlorero();
-//	superficies[ALGA1] = crearAlga1();
-//	superficies[ALGA2] = crearAlga2();
+superficies[FLORERO] = crearFlorero();
+superficies[ALGA1] = crearAlga1();
+superficies[ALGA2] = crearAlga2();
 //	superficies[ROCA1] = crearRoca1();
-	superficies[PEZ1] = crearPez1();
+	cuerpos[PEZ1] = crearPez1();
 	crearEscenario();
 }
 
 void ContenedorObjetos::crearAnimaciones() {
 	//animaciones[0] = crearAlga3();
-	animaciones[0] = crearAletaPez1();
+	aletas[PEZ1] = crearAletaPez1();
 }
 
 void ContenedorObjetos::crearCardumenes() {
@@ -127,7 +134,7 @@ void ContenedorObjetos::crearBurbuja() {
 
 Superficie* ContenedorObjetos::crearFlorero() {
 
-	curva.setFactor(5);
+	curva.setFactor(4);
 	std::vector<Vertice> verts, vertb;
 	Vertice t;
 	t.set(0,0,0);
@@ -150,7 +157,7 @@ Superficie* ContenedorObjetos::crearFlorero() {
 	t.set(-1,0,0); //con arena
 //	t.set(0,0,0);
 	Vertice q(0,0,1);
-	Superficie* florero = new SuperficieRevolucion(vertb, -360,t,q,36);
+	Superficie* florero = new SuperficieRevolucion(vertb, -360,t,q);
 	florero->aplicarTextura("papel.bmp");
 
 	return florero;
@@ -644,17 +651,14 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 
 		glTranslatef(pos.x, pos.y, pos.z);	//ubico al cardumen en su trayectoria
 
-
-		/* calculo del angulo de rotacion. */
+		/* calculo el angulo de rotacion. */
 		Vertice dir = car->recorrido->getDireccion();
 
-		double ang_x=0;
+		double ang_x=0, alfa=0;
 		Vertice p(dir.x,dir.y,0);
 		ang_x = acos(p.modulo()/dir.modulo())*180/PI;
 		if(dir.z<0)
 			ang_x = (-ang_x);
-
-		double alfa=0;
 		if(dir.y != 0)
 			alfa = atan2(dir.x,dir.y) * 180 / PI;
 
@@ -669,7 +673,7 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 				glRotatef(alfa,0,0,-1); 	//oriento al pez
 				glRotatef(ang_x,1,0,0);
 				glScalef(escala,escala,escala);		//reescalo el objeto
-				dibujarObjeto(car->IDobjeto, render_mode);
+				dibujarPez(car->IDobjeto, render_mode);
 			glPopMatrix();
 		}
 
@@ -678,9 +682,6 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 
 	glPopMatrix();
 }
-
-
-
 
 ContenedorObjetos* ContenedorObjetos::getInstancia(){
 	if (!instancia) {
@@ -701,5 +702,10 @@ Cardumen* ContenedorObjetos::getCardumen(unsigned int id) {
 	return 0;
 }
 
+void ContenedorObjetos::dibujarPez(uint id, uint render_mode) {
 
+	cuerpos[id]->dibujar(render_mode);//tengo que trasladar las aletas
+//	aletas[id]->dibujar(render_mode);
+//	colas[id]->dibujar(render_mode);
+}
 

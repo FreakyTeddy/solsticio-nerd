@@ -40,9 +40,9 @@ struct ObjetoViajero {
 /* Conjunto de objetos iguales que siguen la misma trayectoria trayectoria */
 
 struct Cardumen {
-	uint IDobjeto;	//id del objeto que se quiere dibujar
-	uint cantidad; 	//cantidad de objetos a dibujar
-	float* volumen;	//escala de cada objeto (de 1 a 4)
+	uint IDobjeto;		//id del objeto que se quiere dibujar
+	uint cantidad; 		//cantidad de objetos a dibujar
+	float* volumen;		//escala de cada objeto (de 1 a 4)
 	Vertice* ubicacion;	//ubicacion de cada objeto en el grupo
 	Trayectoria* recorrido;	//puntos que recorre el objeto
 

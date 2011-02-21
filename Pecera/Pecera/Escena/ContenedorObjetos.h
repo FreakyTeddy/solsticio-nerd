@@ -18,13 +18,30 @@
  *
  * */
 
-#define MAX_DIBUJOS 10
-#define MAX_ANIMACIONES 1
-#define MAX_CARDUMEN 1
+#define MAX_DIBUJOS 4
+#define MAX_ANIMACIONES 3
+#define MAX_CARDUMEN 3
+#define MAX_TIPO_PECES 3
 
 
+/* Superficies */
+#define FLORERO 0
+#define ROCA0 1
+#define ROCA1 2
+#define ROCA2 3
+#define BURBUJA 4
 
-enum _dibujos { FLORERO=0, ALGA1, ALGA2, ALGA3, PEZ1, PEZ2, PEZ3, ROCA1, ROCA2, ROCA3, BURBUJA};
+/* Animaciones */
+#define ALGA1 1
+#define ALGA2 2
+#define ALGA3 3
+
+
+/* Peces */
+#define PEZ0 0
+#define PEZ1 1
+#define PEZ2 2
+
 
 class ContenedorObjetos {
 
@@ -33,17 +50,18 @@ private:
 	static ContenedorObjetos *instancia;
 
 	Curva curva;
-	Material mat_escenario;
 
-	Superficie* superficies[MAX_DIBUJOS];
-	Animacion* animaciones[MAX_ANIMACIONES];
-	Cardumen* cardumen[MAX_CARDUMEN];
+	Material mat_escenario;	// Material del Escenario
+	Textura textura[5];		// Texturas del escenario
 
-	Trayectoria *tray_burbujas;
+	Superficie* superficies[MAX_DIBUJOS];		//rocas y otros
+	Animacion* animaciones[MAX_ANIMACIONES];	//algas
+	Cardumen* cardumen[MAX_CARDUMEN];			//conj de peces
+	Superficie* cuerpos[MAX_TIPO_PECES];	//cuerpo de los peces
+	Animacion* colas[MAX_TIPO_PECES];		//cola de los peces
+	Animacion* aletas[MAX_TIPO_PECES];		//aleta de los peces
 
-	enum _dibujos _d;
-
-	Textura textura[5];	//texturas del escenario
+	Trayectoria *tray_burbujas;	//burbujas
 	GLuint handle_burbuja;
 
 	void crearSuperficies();
@@ -59,8 +77,6 @@ private:
 	Superficie* crearRoca1();
 	Superficie* crearFlorero();
 
-
-
 	Animacion* crearAlga3();
 	Animacion* crearAletaPez1();
 	Cardumen* crearCardumen1();
@@ -68,6 +84,8 @@ private:
 	void crearEscenario();
 
 	ContenedorObjetos();
+
+	void dibujarPez( uint id, uint render_mode);
 
 public:
 

@@ -62,14 +62,14 @@ void ControladorEscena::generarEscena() {
 
 /* FLORERO Y BURBUJAS
 
-	glPushMatrix();
+*/	glPushMatrix();
 		glRotatef(180,0,0,1);
 		glTranslatef(5,4,0);
 		objetos.dibujarObjeto(FLORERO, render_mode);
 		glTranslatef(0.1,0,1.7);
 		objetos.dibujarObjeto(ALGA1, render_mode);
 		objetos.dibujarObjeto(ALGA2, render_mode);
-
+/*
 		Vertice t;
 		for (int i=0; i<CANT_BURBUJAS; i++) {
 			glPushMatrix();
@@ -86,19 +86,17 @@ void ControladorEscena::generarEscena() {
 			objetos.getTrayectoriaBurbujas()->dibujarTrayecto();
 	glPopMatrix();
 */
-	/* CUERPO DORI
-	glTranslatef(0,0,10);
-	objetos.dibujarObjeto(PEZ1,render_mode);
-*/
 
+	glPopMatrix();
+
+	/* CARDUMEN DORI */
 	objetos.dibujarCardumen(objetos.getCardumen(0), render_mode);
 	if (ver_tray)
 		objetos.getCardumen(0)->recorrido->dibujarTrayecto();
-	glPopMatrix();
+
 
 	objetos.dibujarEscenario(render_mode);
 	terreno.dibujar(render_mode);
-
 }
 
 void ControladorEscena::animar(int n=0){
