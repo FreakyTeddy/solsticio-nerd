@@ -547,9 +547,9 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 	control.push_back(t);
 	control.push_back(t);
 	control.push_back(t);
-	t.set(100,-120,10);
+	t.set(100,-120,50);
 	control.push_back(t);
-	t.set(-102,-52,50);
+	t.set(-102,-52,20);
 	control.push_back(t);
 	t.set(120,112,10);
 	control.push_back(t);
@@ -647,29 +647,16 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 
 		/* calculo del angulo de rotacion. */
 		Vertice dir = car->recorrido->getDireccion();
-//		double alfa=0, beta=0;
-//		if (dir.y != 0)
-//			alfa = atan2(dir.x,dir.y)*180/PI;
-//		else{
-//			alfa=90;//WARNING caso x&y = 0
-//		}
-//		if(dir.x!=0)
-//			beta = atan2(dir.z,dir.x)*180/PI;
-//		else{
-//			(dir.z != 0) ? beta=90 : beta=0;
-//		}
-//		Vertice p(dir.x,dir.y,0);
 
-//		double ang_x=0, ang_z=0;
-//		Vertice p(dir.x,dir.y,0);
-//		ang_z = acos(dir.y/p.modulo())*180/PI;
-//		ang_x = acos(p.modulo()/dir.modulo())*180/PI;
-		double alfa=0, beta=0;
-		if(dir.y != 0){
-			alfa = atan2(dir.x,dir.y)*180/PI;
-			beta = atan(dir.z/fabs(dir.y))*180/PI;
-		}
-		dir.print();
+		double ang_x=0;
+		Vertice p(dir.x,dir.y,0);
+		ang_x = acos(p.modulo()/dir.modulo())*180/PI;
+		if(dir.z<0)
+			ang_x = (-ang_x);
+
+		double alfa=0;
+		if(dir.y != 0)
+			alfa = atan2(dir.x,dir.y) * 180 / PI;
 
 		glEnable(GL_RESCALE_NORMAL);	//habilito el reescalado de normales
 
@@ -679,13 +666,8 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 				pos = car->ubicacion[i];
 				escala = car->volumen[i];
 				glTranslatef(pos.x, pos.y, pos.z);	//ubico al objeto en su posicion dentro del cardumen
-
-//
-//				glRotatef(ang_z, 0,0,1);	//oriento al pez
-//				glRotatef(ang_x, 1,0,0);
-
-				glRotatef(alfa,0,0,-1);
-				glRotatef(beta,1,0,0);
+				glRotatef(alfa,0,0,-1); 	//oriento al pez
+				glRotatef(ang_x,1,0,0);
 				glScalef(escala,escala,escala);		//reescalo el objeto
 				dibujarObjeto(car->IDobjeto, render_mode);
 			glPopMatrix();
