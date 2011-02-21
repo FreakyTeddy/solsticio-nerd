@@ -53,13 +53,6 @@ struct Cardumen {
 		init();
 	};
 
-//	/* WARNING! hay que asignarle una trayectoria antes de viajar!  el destructor hace delete!!!*/
-//	Cardumen(uint id=0, uint cant=1) {
-//		IDobjeto = id;
-//		cantidad = cant;
-//		init();
-//	}
-
 	~Cardumen(){
 		delete[] volumen;
 		delete[] ubicacion;
@@ -73,11 +66,20 @@ private:
 	void init(){
 		volumen = new float [cantidad];
 		ubicacion = new Vertice [cantidad];
-		for(uint i=0;i<cantidad;i++){
-			volumen[i] = (rand()%3)+0.5;
-			//generar posiciones aleatorias
+		Vertice u; int j=1;
+		for(uint i=0;i<cantidad;i++, j*=(-1)){
+			volumen[i] = ((rand()%30)+0.5)/10;
+			ubicacion[i].set(u.x*j,u.y,u.z);
+			nuevaUbicacion(u);
 		}
 	};
+
+	void nuevaUbicacion(Vertice &v){
+		float aux = v.y;
+		v.y = v.x;
+		v.x = v.z+6;
+		v.z = aux;
+	}
 };
 
 

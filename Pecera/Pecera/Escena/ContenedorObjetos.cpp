@@ -30,9 +30,8 @@ ContenedorObjetos::~ContenedorObjetos() {
 	delete superficies[ALGA2];
 	delete superficies[ALGA1];
 	delete superficies[FLORERO];
-	delete animaciones[0];
 	delete cardumen[0];
-	delete superficies[PEZ1];
+	delete cuerpos[PEZ1];
 
 }
 
@@ -550,21 +549,23 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 	//puntos control trayecto
 	std::vector<Vertice> control;
 	Vertice t;
-	t.set(120,112,10);
+	t.set(100,100,10);
 	control.push_back(t);
 	control.push_back(t);
 	control.push_back(t);
-	t.set(100,-120,50);
+	t.set(100,-120,60);
 	control.push_back(t);
 	t.set(-102,-52,20);
 	control.push_back(t);
-	t.set(120,112,10);
+	t.set(-50,122,30);
+	control.push_back(t);
+	t.set(100,105,10);
 	control.push_back(t);
 	control.push_back(t);
 	control.push_back(t);
 
 
-	Cardumen* cardumen1 = new Cardumen(PEZ1,1,control,true,8,false);
+	Cardumen* cardumen1 = new Cardumen(PEZ1,5,control,true,8,false);
 	return cardumen1;
 }
 
@@ -642,14 +643,6 @@ void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
 }
 
 void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode) {
-	glPushMatrix();
-	glFrontFace( GL_CCW );
-	glCullFace( GL_FRONT );
-	glEnable(GL_CULL_FACE);
-		float escala;
-		Vertice pos = car->recorrido->getPosicion();
-
-		glTranslatef(pos.x, pos.y, pos.z);	//ubico al cardumen en su trayectoria
 
 		/* calculo el angulo de rotacion. */
 		Vertice dir = car->recorrido->getDireccion();
@@ -664,12 +657,20 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 
 		glEnable(GL_RESCALE_NORMAL);	//habilito el reescalado de normales
 
+		float escala;
+		Vertice pos, pos_c = car->recorrido->getPosicion();
+
+		glPushMatrix();
+		glFrontFace( GL_CCW );
+		glCullFace( GL_FRONT );
+		glEnable(GL_CULL_FACE);
+
 		for (uint i=0; i < car->cantidad; i++){
 
 			glPushMatrix();
 				pos = car->ubicacion[i];
 				escala = car->volumen[i];
-				glTranslatef(pos.x, pos.y, pos.z);	//ubico al objeto en su posicion dentro del cardumen
+				glTranslatef(pos_c.x + pos.x,pos_c.y + pos.y,pos_c.z + pos.z);	//ubico al objeto en su posicion dentro del cardumen, sobre la tray
 				glRotatef(alfa,0,0,-1); 	//oriento al pez
 				glRotatef(ang_x,1,0,0);
 				glScalef(escala,escala,escala);		//reescalo el objeto

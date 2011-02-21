@@ -8,13 +8,12 @@
  
  SUPERFICIES IRREGULARES.
  
- - para solucionar el tema de la iluminacion hay que asignarle al "gl_back" las normales opuestas -> no se si funciona tan felizmente  
- 
 ********** Issues of Implementation ****
 
 -- rotar_v de la camara.. cambia el sentido de la rotacion
 -- glblend. hace las burbujas transparentes diferente de arriba y de abajo :S
 -- textura escena
 -- linterna! no se cambia bien la luz y no ilumina bien X_X
- --invalid read en generar texturas!
+-- invalid read en generar texturas!
+-- velocidad de recorrido de trayectorias
  
