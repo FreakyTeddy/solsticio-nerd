@@ -206,15 +206,9 @@ void Superficie::generarDisplayList() {
 		it1 = superficie.begin();
 		it1 += tam;
 
-		//caras
-		glFrontFace( GL_CCW );
-		glCullFace( GL_BACK );
-		glDisable( GL_CULL_FACE );
-
 		//activar estado
 		glEnableClientState (GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
-
 
 		glNormalPointer(GL_FLOAT,0, &(normales[0]));
 		glVertexPointer(3, GL_FLOAT, 0, &(superficie[0]));

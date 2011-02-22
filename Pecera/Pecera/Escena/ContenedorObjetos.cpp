@@ -6,7 +6,7 @@ ContenedorObjetos* ContenedorObjetos::instancia=0;
 ContenedorObjetos::ContenedorObjetos() {
 	//creo todas las superficies dibujables
 	crearSuperficies();
-//	crearAnimaciones();
+	crearAnimaciones();
 	crearCardumenes();
 	//crearBurbuja();
 }
@@ -32,6 +32,8 @@ ContenedorObjetos::~ContenedorObjetos() {
 	delete superficies[FLORERO];
 	delete cardumen[0];
 	delete cuerpos[PEZ1];
+	delete colas[PEZ1];
+	delete aletas[PEZ1];
 
 }
 
@@ -53,17 +55,21 @@ void ContenedorObjetos::dibujarObjeto(unsigned int id, unsigned int render_mode)
 void ContenedorObjetos::crearSuperficies() {
 
 	//todo rellenar los otros espacios del vector
-superficies[FLORERO] = crearFlorero();
+	superficies[FLORERO] = crearFlorero();
 superficies[ALGA1] = crearAlga1();
 superficies[ALGA2] = crearAlga2();
 //	superficies[ROCA1] = crearRoca1();
 	cuerpos[PEZ1] = crearPez1();
+
+	longitud[PEZ1].set(0.65,-2.8);	//hardcodeeeeeeeee
 	crearEscenario();
 }
 
 void ContenedorObjetos::crearAnimaciones() {
 	//animaciones[0] = crearAlga3();
 	aletas[PEZ1] = crearAletaPez1();
+	colas[PEZ1] = crearColaPez1();
+
 }
 
 void ContenedorObjetos::crearCardumenes() {
@@ -401,54 +407,126 @@ Animacion* ContenedorObjetos::crearAlga3() {
 	return ani;
 }
 
-Animacion* ContenedorObjetos::crearAletaPez1() {
+Animacion* ContenedorObjetos::crearColaPez1() {
 
-	std::vector<Vertice> ctrol_s, t1, t2, def;
-	Vertice t(0,0,1);
+	std::vector<Vertice> ctrol_s, t1, t2, t3, t4, def, def2;
+	Vertice t(0,0,0.3);
 	ctrol_s.push_back(t);
 	ctrol_s.push_back(t);
 	ctrol_s.push_back(t);
-	t.set(0,0,0);
+	t.set(0,0.3,0);
 	ctrol_s.push_back(t);
-	t.set(0,0,-1);
+	t.set(0,0,-0.3);
 	ctrol_s.push_back(t);
 	ctrol_s.push_back(t);
 	ctrol_s.push_back(t);
-
-	t.set(0,0,0);
-	t1.push_back(t);
-	t1.push_back(t);
-	t1.push_back(t);
-	t.set(0.5,1,0);
-	t1.push_back(t);
-	t.set(-0.5,2,0);
-	t1.push_back(t);
-	t1.push_back(t);
-	t1.push_back(t);
 
 	t.set(0,0,0);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+	t.set(0.5,-0.8,0);
+	t1.push_back(t);
+	t.set(-0.5,-1.2,0);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+
+	curva.setFactor(2);
+	curva.Bspline(t1,t3);
+
+	t.set(0,0,0);
 	t2.push_back(t);
 	t2.push_back(t);
 	t2.push_back(t);
-	t.set(-0.5,1,0);
+	t.set(-0.5,-0.8,0);
 	t2.push_back(t);
-	t.set(0.5,2,0);
+	t.set(0.5,-1.2,0);
 	t2.push_back(t);
 	t2.push_back(t);
 	t2.push_back(t);
+
+	curva.Bspline(t2,t4);
 
 	t.set(0,1,0);
 	def.push_back(t);
 	def.push_back(t);
 	def.push_back(t);
-	t.set(0.7,1,0.7);
-	def.push_back(t);
 	t.set(1,1,1);
+	def.push_back(t);
+	t.set(1,1,1.8);
 	def.push_back(t);
 	def.push_back(t);
 	def.push_back(t);
 
-	Animacion* ani = new Animacion(ctrol_s,t1,t2,def,2);
+	curva.Bspline(def,def2);
+
+	Animacion* ani = new Animacion(ctrol_s,t3,t4,def2,2);
+	ani->setModoTransicion(false);
+	ani->setTextura("dorialeta.png");
+	Material m;
+	m.setDiffuse(0,0.53,0.73,1);
+	m.setSpecular(1,1,0,1);
+	m.setShininess(120);
+	ani->setMaterial(m);
+	return ani;
+}
+
+Animacion* ContenedorObjetos::crearAletaPez1(){
+
+	std::vector<Vertice> ctrol_s, t1, t2, t3, t4, def, def2;
+	Vertice t(0,0,-0.2);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	t.set(0,0.2,0);
+	ctrol_s.push_back(t);
+	t.set(0,0,0.3);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+
+	t.set(0,0,0);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+	t.set(0.2,-0.3,0.5);
+	t1.push_back(t);
+	t.set(-0.1,-0.9,1);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+
+	curva.setFactor(2);
+	curva.Bspline(t1,t3);
+
+	t.set(0,0,0);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
+	t.set(-0.1,-0.3,0.5);
+	t2.push_back(t);
+	t.set(0.2,-0.9,1);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
+
+	curva.Bspline(t2,t4);
+
+	t.set(1,0.8,0.7);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
+	t.set(1,1,1);
+	def.push_back(t);
+	t.set(1,1,0);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
+
+	curva.Bspline(def,def2);
+
+	Animacion* ani = new Animacion(ctrol_s,t3,t4,def2,2);
 	ani->setModoTransicion(false);
 	ani->setTextura("dorialeta.png");
 	Material m;
@@ -657,31 +735,20 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 
 		glEnable(GL_RESCALE_NORMAL);	//habilito el reescalado de normales
 
-		float escala;
-		Vertice pos, pos_c = car->recorrido->getPosicion();
-
-		glPushMatrix();
-		glFrontFace( GL_CCW );
-		glCullFace( GL_FRONT );
-		glEnable(GL_CULL_FACE);
+		Vertice pos;
+		Vertice pos_c = car->recorrido->getPosicion();
 
 		for (uint i=0; i < car->cantidad; i++){
-
 			glPushMatrix();
 				pos = car->ubicacion[i];
-				escala = car->volumen[i];
 				glTranslatef(pos_c.x + pos.x,pos_c.y + pos.y,pos_c.z + pos.z);	//ubico al objeto en su posicion dentro del cardumen, sobre la tray
 				glRotatef(alfa,0,0,-1); 	//oriento al pez
 				glRotatef(ang_x,1,0,0);
-				glScalef(escala,escala,escala);		//reescalo el objeto
-				dibujarPez(car->IDobjeto, render_mode);
+				dibujarPez(car->IDobjeto, render_mode, car->volumen[i]);
 			glPopMatrix();
 		}
 
 		glDisable(GL_RESCALE_NORMAL);
-		glDisable( GL_CULL_FACE );
-
-	glPopMatrix();
 }
 
 ContenedorObjetos* ContenedorObjetos::getInstancia(){
@@ -703,10 +770,33 @@ Cardumen* ContenedorObjetos::getCardumen(unsigned int id) {
 	return 0;
 }
 
-void ContenedorObjetos::dibujarPez(uint id, uint render_mode) {
+void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
+	glPushMatrix();
+		glFrontFace( GL_CCW );
+		glCullFace( GL_FRONT );
+		glEnable(GL_CULL_FACE);
+		glScalef(escala,escala,escala);		//reescalo el objeto
+		cuerpos[id]->dibujar(render_mode);//tengo que trasladar las aletas
+		glDisable( GL_CULL_FACE );
+	glPopMatrix();
 
-	cuerpos[id]->dibujar(render_mode);//tengo que trasladar las aletas
-//	aletas[id]->dibujar(render_mode);
-//	colas[id]->dibujar(render_mode);
+	glPushMatrix();
+		glTranslatef(longitud[id].x*escala,0,0);
+		glScalef(escala,escala,escala);
+		aletas[id]->dibujar(render_mode);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(-longitud[id].x*escala,0,0);//"espejar" el aleta respecto del plano YZ
+		glScalef(escala,escala,escala);
+		aletas[id]->dibujar(render_mode);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(0,longitud[id].y*escala,0);
+		glScalef(escala,escala,escala);
+		colas[id]->dibujar(render_mode);
+	glPopMatrix();
+
 }
 

@@ -58,8 +58,6 @@ ControladorEscena::~ControladorEscena() {
 
 void ControladorEscena::generarEscena() {
 
-	glPushMatrix();
-
 /* FLORERO Y BURBUJAS
 
 */	glPushMatrix();
@@ -106,6 +104,7 @@ void ControladorEscena::animar(int n=0){
 
 //	//muevo los cardumenes
 	instancia->objetos.getCardumen(0)->viajar();
+	instancia->objetos.animarPeces();
 
 /* BURBUJAS
 	for (int i=0; i<CANT_BURBUJAS; i++) {

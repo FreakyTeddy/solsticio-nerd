@@ -127,7 +127,7 @@ void init(void) {
 	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.010);
 	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.05);
 	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 25.0);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 1);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 100);
 
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
@@ -158,13 +158,15 @@ void salir() {
 void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPushMatrix();
+	glLoadIdentity();
+//	glPushMatrix();
 	escena->getCamara()->lookAt();
 
-	if (linterna)
+	if (linterna){
 			posicionarLinterna();
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
-	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
+			glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
+			glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
+	}
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glEnable(GL_LIGHTING);
 
@@ -185,7 +187,7 @@ void display(void)
     /////////////////////////// fin dibujar =P /////////////////////
 	if (niebla)
 		glDisable(GL_FOG);
-	glPopMatrix();
+//	glPopMatrix();
 
 	glutSwapBuffers();
 }

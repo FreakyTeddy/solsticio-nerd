@@ -60,6 +60,7 @@ private:
 	Superficie* cuerpos[MAX_TIPO_PECES];	//cuerpo de los peces
 	Animacion* colas[MAX_TIPO_PECES];		//cola de los peces
 	Animacion* aletas[MAX_TIPO_PECES];		//aleta de los peces
+	Vertice2D longitud[MAX_TIPO_PECES];			//y =longitud del centro a la cola del pez; x = ancho del pez en el 000;
 
 	Trayectoria *tray_burbujas;	//burbujas
 	GLuint handle_burbuja;
@@ -79,13 +80,14 @@ private:
 
 	Animacion* crearAlga3();
 	Animacion* crearAletaPez1();
+	Animacion* crearColaPez1();
 	Cardumen* crearCardumen1();
 
 	void crearEscenario();
 
 	ContenedorObjetos();
 
-	void dibujarPez( uint id, uint render_mode);
+	void dibujarPez( uint id, uint render_mode, float escala);
 
 public:
 
@@ -107,6 +109,15 @@ public:
 	Animacion* getAnimacion(unsigned int id);
 
 	Cardumen* getCardumen(unsigned int id);
+
+	void animarPeces(){
+//		for(uint i=0; i< MAX_TIPO_PECES; i++){
+//			aletas[i]->animar();
+//			colas[i]->animar();
+//		}
+		colas[PEZ1]->animar();
+		aletas[PEZ1]->animar();
+	};
 
 };
 
