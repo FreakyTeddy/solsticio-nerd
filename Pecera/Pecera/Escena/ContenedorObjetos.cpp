@@ -34,6 +34,7 @@ ContenedorObjetos::~ContenedorObjetos() {
 	delete cuerpos[PEZ1];
 	delete colas[PEZ1];
 	delete aletas[PEZ1];
+	delete animaciones[ALGA1];
 
 }
 
@@ -66,7 +67,7 @@ superficies[ALGA2] = crearAlga2();
 }
 
 void ContenedorObjetos::crearAnimaciones() {
-	//animaciones[0] = crearAlga3();
+	animaciones[ALGA1] = crearAlga4();
 	aletas[PEZ1] = crearAletaPez1();
 	colas[PEZ1] = crearColaPez1();
 
@@ -407,6 +408,76 @@ Animacion* ContenedorObjetos::crearAlga3() {
 	return ani;
 }
 
+Animacion* ContenedorObjetos::crearAlga4() {
+	std::vector<Vertice> v;
+	std::vector<Vertice> trasl;
+	Vertice q;
+	curva.setFactor(3);
+
+	//puntos de control
+	std::vector<Vertice> alga_s;
+	q.set(0.5,0,0);
+	alga_s.push_back(q);
+	q.set(-0.5,0,0);
+	alga_s.push_back(q);
+
+
+	//traslacion de los puntos
+	trasl.clear();
+	q.set(0,0,0);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+
+	q.set(0,-1,1.5);
+	trasl.push_back(q);
+
+	q.set(0,0,4);
+	trasl.push_back(q);
+
+	q.set(0.5,0.5,6);
+	trasl.push_back(q);
+
+	q.set(0.5,0.8,6.5);
+	trasl.push_back(q);
+
+	q.set(0.8,0.8,7);
+	trasl.push_back(q);
+	trasl.push_back(q);
+	trasl.push_back(q);
+
+	//deformacion de los puntos
+	std::vector<Vertice> def;
+	std::vector<Vertice> def2;
+	q.set(0.1, 0.1, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	q.set(1,1,1);
+	def.push_back(q);
+	q.set(0.5,0.5,1);
+	def.push_back(q);
+	q.set(0.8,0.8,1);
+	def.push_back(q);
+	q.set(0.4,0.4,1);
+	def.push_back(q);
+	q.set(0.01, 0.01, 1);
+	def.push_back(q);
+	def.push_back(q);
+	def.push_back(q);
+	curva.Bspline(def, def2);
+	def.clear();
+
+	Animacion *ani = new Animacion(alga_s,trasl,def2,3,25, true);
+	Material m;
+	m.setDiffuse(0,1,0.5,1);
+	m.setSpecular(0,0.5,0.5,1);
+	m.setShininess(50);
+	ani->setTextura("madera2.bmp");
+	ani->setMaterial(m);
+	return ani;
+}
+
 Animacion* ContenedorObjetos::crearColaPez1() {
 
 	std::vector<Vertice> ctrol_s, t1, t2, t3, t4, def, def2;
@@ -652,7 +723,7 @@ void ContenedorObjetos::crearEscenario() {
 	textura[1].cargarImagen("pared_pos_x.jpg");
 	textura[2].cargarImagen("pared_pos_y.jpg");
 	textura[3].cargarImagen("pared_neg_x.jpg");
-	textura[4].cargarImagen("pared_techo.jpg");
+	textura[4].cargarImagen("ocean.jpg");
 	mat_escenario.setSpecular(0,0,0,0);
 	mat_escenario.setAmbient(1,1,1,1);
 	mat_escenario.setDiffuse(1,1,1,1);

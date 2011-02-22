@@ -92,7 +92,7 @@ void ControladorEscena::generarEscena() {
 	if (ver_tray)
 		objetos.getCardumen(0)->recorrido->dibujarTrayecto();
 
-
+	objetos.getAnimacion(ALGA1)->dibujar(render_mode);
 	objetos.dibujarEscenario(render_mode);
 	terreno.dibujar(render_mode);
 }
@@ -105,6 +105,7 @@ void ControladorEscena::animar(int n=0){
 //	//muevo los cardumenes
 	instancia->objetos.getCardumen(0)->viajar();
 	instancia->objetos.animarPeces();
+	instancia->objetos.getAnimacion(ALGA1)->animar();
 
 /* BURBUJAS
 	for (int i=0; i<CANT_BURBUJAS; i++) {

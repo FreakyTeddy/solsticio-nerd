@@ -48,15 +48,37 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_in
 	delete[] control; //VER!!
 }
 
-Animacion::Animacion(std::vector<Superficie*> frames) {
+Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo, u_int intervalo, uint cant_frames, bool ciclico) {
 	//inicializo la animacion
-	f_cant = frames.size();	//WARNING! todas las bspline deben dar la misma cant de frames
+//	f_cant = frames.size();	//WARNING! todas las bspline deben dar la misma cant de frames
+//	f_act = 0;
+//	f_next = (f_cant != 0);
+//	m_ciclico = true;
+//	frame = new Superficie* [f_cant];
+//	for (size_t i=0; i<f_cant;i++) {
+//		frame[i] = frames[i];
+//	}
 	f_act = 0;
-	f_next = (f_cant != 0);
-	m_ciclico = true;
+	f_cant = cant_frames;
+	m_ciclico = ciclico;
+
 	frame = new Superficie* [f_cant];
-	for (size_t i=0; i<f_cant;i++) {
-		frame[i] = frames[i];
+	std::vector<Vertice> temp, temp2;
+	Curva c;
+	c.setFactor(intervalo);
+
+	double desplazamiento = 2* PI /f_cant;		//desplazamiento en cada frame de la onda senoidal
+	Vertice v;
+	for (uint i=0; i<f_cant; i++){
+		temp.clear(); temp2.clear();
+		temp.push_back(trasl.front());
+		for (uint j=1; j<trasl.size(); j++ ){
+			v.set(trasl[j].x,trasl[j].y*sin(desplazamiento),trasl[j].z);
+			temp.push_back(v);
+		}
+		c.Bspline(temp,temp2);
+		frame[i] = new SuperficieBarrido(forma, temp2, defo);
+		desplazamiento += desplazamiento;
 	}
 }
 
@@ -79,7 +101,7 @@ void Animacion::animaryDibujar(unsigned int render_mode) {
 
 void Animacion::animar() {
 	if (m_ciclico)
-		(f_act < f_cant) ? f_act++ : f_act=0;
+		(f_act < f_cant-1) ? f_act++ : f_act=0;
 	else {
 		f_act += f_next;
 		if ((f_act == 0) || (f_act == f_cant-1))
@@ -89,7 +111,7 @@ void Animacion::animar() {
 
 void Animacion::animar(u_short &f_num, short &f_int, bool modo) {
 	if (modo)
-		(f_num < f_cant) ? f_num++ : f_num=0;
+		(f_num < f_cant-1) ? f_num++ : f_num=0;
 	else {
 		f_num += f_int;
 		if ((f_num == 0) || (f_num == f_cant-1))
@@ -99,6 +121,7 @@ void Animacion::animar(u_short &f_num, short &f_int, bool modo) {
 
 void Animacion::dibujar(unsigned int render_mode) {
 	frame[f_act]->dibujar(render_mode);
+	std::cout<<f_act<<std::endl;
 }
 
 void Animacion::dibujar(unsigned int render_mode, u_short f_num) {

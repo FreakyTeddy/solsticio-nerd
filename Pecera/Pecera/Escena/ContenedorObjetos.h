@@ -79,6 +79,7 @@ private:
 	Superficie* crearFlorero();
 
 	Animacion* crearAlga3();
+	Animacion* crearAlga4();
 	Animacion* crearAletaPez1();
 	Animacion* crearColaPez1();
 	Cardumen* crearCardumen1();

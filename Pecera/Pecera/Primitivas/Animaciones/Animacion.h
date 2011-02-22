@@ -31,9 +31,8 @@ public:
 	Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_inicial, std::vector<Vertice> &trasl_final, std::vector<Vertice> &defo, u_int intervalo);
 
 
-	/* crea una animacion con los frames indicados */
-	/* WARNING!!  luego se hace delete de las sup!! */
-	Animacion(std::vector<Superficie*> frames);
+	/* crea una animacion senoidal para una superficie de barrido */
+	Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo, u_int intervalo, uint cant_frames, bool ciclico);
 
 	~Animacion();
 

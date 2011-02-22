@@ -157,6 +157,7 @@ void salir() {
 
 void display(void)
 {
+	//glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 //	glPushMatrix();
@@ -322,7 +323,7 @@ int main(int argc, char** argv) {
   glutCreateWindow("TP Final - Sistemas Graficos");
 //  glutSetIconTitle("iconsmall.png");
 //  glutFullScreen();
-  glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
+// glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
   glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR);
 
 

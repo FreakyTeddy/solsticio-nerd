@@ -57,12 +57,12 @@ void Camara::rotar_h(float cant) {
 }
 
 void Camara::rotar_v(float cant) {
-	if ( anguloValido(cant)) {
+	//if ( anguloValido(cant)) {
 		Vertice t = at.prodVectorial(up);
 		Vertice origen;
 		Rotacion3d rot(origen, t, cant);
 		rot.rotar(at);
-	}
+	//}
 }
 
 bool Camara::fueraDeEscena(Vertice &t) {
@@ -70,7 +70,10 @@ bool Camara::fueraDeEscena(Vertice &t) {
 }
 
 bool Camara::anguloValido(float angulo) {
-	//calcular el angulo entre up y at, ver que este entre 0 y 180
-	return true;
+	if (cos(at.z) > 0.55) {
+		std::cout<<cos(at.z)<<" ";at.print();
+		return true;
+	}
+	return false;
 }
 
