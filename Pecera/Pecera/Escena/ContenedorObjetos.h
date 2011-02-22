@@ -116,8 +116,13 @@ public:
 //			aletas[i]->animar();
 //			colas[i]->animar();
 //		}
+//		for(uint i=0; i< MAX_CARDUMEN; i++){
+//			cardumen[i]->viajar();
+//		}
+
 		colas[PEZ1]->animar();
 		aletas[PEZ1]->animar();
+		cardumen[0]->viajar();
 	};
 
 };

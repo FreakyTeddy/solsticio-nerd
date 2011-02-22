@@ -32,7 +32,8 @@ public:
 
 
 	/* crea una animacion senoidal para una superficie de barrido */
-	Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo, u_int intervalo, uint cant_frames, bool ciclico);
+	/* inicial: vertice a partir del cual se aplica la funcion */
+	Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo,uint inicial, uint cant_frames, bool ciclico);
 
 	~Animacion();
 

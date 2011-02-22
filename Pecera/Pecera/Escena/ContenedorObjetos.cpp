@@ -423,28 +423,23 @@ Animacion* ContenedorObjetos::crearAlga4() {
 
 
 	//traslacion de los puntos
-	trasl.clear();
 	q.set(0,0,0);
 	trasl.push_back(q);
 	trasl.push_back(q);
 	trasl.push_back(q);
-
-	q.set(0,-1,1.5);
+	q.set(0,0,1.5);
 	trasl.push_back(q);
-
 	q.set(0,0,4);
 	trasl.push_back(q);
-
-	q.set(0.5,0.5,6);
+	q.set(0.5,0,6);
 	trasl.push_back(q);
-
-	q.set(0.5,0.8,6.5);
+	q.set(0.5,0,6.5);
 	trasl.push_back(q);
-
-	q.set(0.8,0.8,7);
+	q.set(0.8,0,7);
 	trasl.push_back(q);
 	trasl.push_back(q);
 	trasl.push_back(q);
+	curva.Bspline(trasl,v);
 
 	//deformacion de los puntos
 	std::vector<Vertice> def;
@@ -468,7 +463,7 @@ Animacion* ContenedorObjetos::crearAlga4() {
 	curva.Bspline(def, def2);
 	def.clear();
 
-	Animacion *ani = new Animacion(alga_s,trasl,def2,3,25, true);
+	Animacion *ani = new Animacion(alga_s,v,def2,3,25, true);
 	Material m;
 	m.setDiffuse(0,1,0.5,1);
 	m.setSpecular(0,0.5,0.5,1);
@@ -813,6 +808,7 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 			glPushMatrix();
 				pos = car->ubicacion[i];
 				glTranslatef(pos_c.x + pos.x,pos_c.y + pos.y,pos_c.z + pos.z);	//ubico al objeto en su posicion dentro del cardumen, sobre la tray
+				//glTranslated(0,0,10); //para test
 				glRotatef(alfa,0,0,-1); 	//oriento al pez
 				glRotatef(ang_x,1,0,0);
 				dibujarPez(car->IDobjeto, render_mode, car->volumen[i]);

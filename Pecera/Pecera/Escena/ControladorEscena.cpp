@@ -88,9 +88,9 @@ void ControladorEscena::generarEscena() {
 	glPopMatrix();
 
 	/* CARDUMEN DORI */
-	objetos.dibujarCardumen(objetos.getCardumen(0), render_mode);
-	if (ver_tray)
-		objetos.getCardumen(0)->recorrido->dibujarTrayecto();
+//	objetos.dibujarCardumen(objetos.getCardumen(0), render_mode);
+//	if (ver_tray)
+//		objetos.getCardumen(0)->recorrido->dibujarTrayecto();
 
 	objetos.getAnimacion(ALGA1)->dibujar(render_mode);
 	objetos.dibujarEscenario(render_mode);
@@ -103,8 +103,7 @@ void ControladorEscena::animar(int n=0){
 //	//animo las superficies
 
 //	//muevo los cardumenes
-	instancia->objetos.getCardumen(0)->viajar();
-	instancia->objetos.animarPeces();
+//	instancia->objetos.animarPeces();
 	instancia->objetos.getAnimacion(ALGA1)->animar();
 
 /* BURBUJAS

@@ -7,16 +7,6 @@ Superficie::Superficie() {
 	material.setShininess(70.0);
 }
 
-Superficie::Superficie(std::vector<Vertice> &vertices, uint tam) {
-	material.setDiffuse(1,0, 0, 1);
-	material.setSpecular(1, 1, 1, 1);
-	material.setAmbient(1, 0.1, 0.2, 1);
-	material.setShininess(70.0);
-	this->tam =tam;
-	superficie = vertices; //TODO se copiaaaaaaaaaaa
-	init();
-}
-
 Superficie::~Superficie() {
 	normales.clear();
 	superficie.clear();
