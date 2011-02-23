@@ -90,17 +90,22 @@ void ControladorEscena::generarEscena() {
 
 
 	/* CARDUMEN DORI */
-//	objetos.dibujarCardumen(objetos.getCardumen(0), render_mode);
+//	objetos.dibujarCardumen(objetos.getCardumen(CAR1), render_mode);
 //	if (ver_tray)
-//		objetos.getCardumen(0)->recorrido->dibujarTrayecto();
+//		objetos.getCardumen(CAR1)->recorrido->dibujarTrayecto();
+
+	/* CARDUMEN KOI */
+//	objetos.dibujarCardumen(objetos.getCardumen(CAR2), render_mode);
+//	if (ver_tray)
+//		objetos.getCardumen(CAR2)->recorrido->dibujarTrayecto();
 
 
 	objetos.dibujarEscenario(render_mode);
 	terreno.dibujar(render_mode);
 
 	/* KOI */
-	glTranslated(0,0,10);
-	objetos.dibujarPez(PEZ2,render_mode,1);
+//	glTranslated(0,0,10);
+//	objetos.dibujarPez(PEZ2,render_mode,1);
 
 }
 
@@ -111,10 +116,8 @@ void ControladorEscena::animar(int n=0){
 
 //	//muevo los cardumenes
 	instancia->objetos.animarPeces();
-//	instancia->objetos.getCardumen(0)->viajar();
 	instancia->objetos.getAnimacion(ALGA1)->animar();
 	instancia->objetos.getAnimacion(ALGA2)->animar();
-	instancia->objetos.getAnimacion(BIGOTE)->animar();
 
 /* BURBUJAS
 	for (int i=0; i<CANT_BURBUJAS; i++) {

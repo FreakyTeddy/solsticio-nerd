@@ -19,14 +19,6 @@ struct ObjetoViajero {
 		deformacion.set(def_x,def_y,def_z);
 	};
 
-//	ObjetoViajero(uint id, std::vector<Vertice> &puntosControl,bool cerrada,uint intervalo, bool bezier){
-//		recorrido = new Trayectoria(puntosControl,cerrada,intervalo,bezier);
-//		IDobjeto = id;
-//	};
-//
-//	~ObjetoViajero() {
-//		delete recorrido;
-//	};
 	void viajar(){
 		pos = recorrido->sgtePosicion(pos); //WARNING! NULLLLLS!!
 	};
@@ -68,7 +60,7 @@ private:
 		ubicacion = new Vertice [cantidad];
 		Vertice u; int j=1;
 		for(uint i=0;i<cantidad;i++, j*=(-1)){
-			volumen[i] = ((rand()%30)+0.5)/10;
+			volumen[i] = ((rand()%25)/15)+0.5;
 			ubicacion[i].set(u.x*j,u.y,u.z);
 			nuevaUbicacion(u);
 		}

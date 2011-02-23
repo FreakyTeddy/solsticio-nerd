@@ -4,7 +4,7 @@
 
 Terreno::Terreno() {
 	Curva c;
-	c.setFactor(6);
+	c.setFactor(5);
 	Vertice t(CX_INF,0,0);
 
 	//creo el perfil del terreno

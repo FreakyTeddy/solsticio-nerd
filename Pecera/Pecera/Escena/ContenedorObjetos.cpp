@@ -28,7 +28,8 @@ ContenedorObjetos::~ContenedorObjetos() {
 
 	/* durante los tests */
 	delete superficies[FLORERO];
-	delete cardumen[0];
+	delete cardumen[CAR2];
+	delete cardumen[CAR1];
 	delete cuerpos[PEZ1];
 	delete cuerpos[PEZ2];
 	delete colas[PEZ1];
@@ -38,7 +39,6 @@ ContenedorObjetos::~ContenedorObjetos() {
 	delete animaciones[ALGA1];
 	delete animaciones[ALGA2];
 	delete animaciones[BIGOTE];
-
 }
 
 void ContenedorObjetos::dibujarObjeto(unsigned int id, unsigned int render_mode) {
@@ -78,7 +78,8 @@ void ContenedorObjetos::crearAnimaciones() {
 }
 
 void ContenedorObjetos::crearCardumenes() {
-	cardumen[0] = crearCardumen1();
+	cardumen[CAR2] = crearCardumen2();
+	cardumen[CAR1] = crearCardumen1();
 }
 
 void ContenedorObjetos::crearBurbuja() {
@@ -187,7 +188,7 @@ Animacion* ContenedorObjetos::crearAlga3() {
 
 	//traslacion de los puntos
 	Curva curva;
-	curva.setFactor(3);
+	curva.setFactor(2);
 
 	trasl.clear();
 	q.set(0,0,0);
@@ -250,7 +251,7 @@ Animacion* ContenedorObjetos::crearAlga4() {
 	std::vector<Vertice> v;
 	std::vector<Vertice> trasl;
 	Vertice q;
-	curva.setFactor(3);
+	curva.setFactor(4);
 
 	//puntos de control
 	std::vector<Vertice> alga_s;
@@ -632,9 +633,8 @@ Animacion* ContenedorObjetos::crearBigote() {
 	ctrol.push_back(t);
 	ctrol.push_back(t);
 	curva.Bspline(ctrol,def);
-
-	Vertice dir(0,0,1);
-	Animacion *ani = new Animacion(bigo,tl,def,dir,3,20, true);
+	Vertice dir(0.2,0,-0.2);
+	Animacion *ani = new Animacion(bigo,tl,def,dir,4,15, true);
 	ani->setTextura("koi.png");
 	Material m;
 	m.setDiffuse(1,1,1,1);
@@ -643,6 +643,10 @@ Animacion* ContenedorObjetos::crearBigote() {
 	m.setShininess(120);
 	ani->setMaterial(m);
 	return ani;
+}
+
+Superficie* ContenedorObjetos::crearPez0() {
+
 }
 
 Superficie* ContenedorObjetos::crearPez1(){
@@ -683,7 +687,7 @@ Superficie* ContenedorObjetos::crearPez1(){
 	ctrol_t.push_back(t);
 	ctrol_t.push_back(t);
 	ctrol_t.push_back(t);
-	curva.setFactor(4);
+	curva.setFactor(3);
 	curva.Bspline(ctrol_t, curva_t);
 
 	t.set(0,1,0);
@@ -702,7 +706,7 @@ Superficie* ContenedorObjetos::crearPez1(){
 	ctrol_d.push_back(t);
 	ctrol_d.push_back(t);
 	ctrol_d.push_back(t);
-	curva.setFactor(4);
+	curva.setFactor(3);
 	curva.Bspline(ctrol_d, curva_d);
 
 	Superficie *s = new SuperficieBarrido(curva_s,curva_t,curva_d);
@@ -776,19 +780,72 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 	control.push_back(t);
 	control.push_back(t);
 	control.push_back(t);
+	t.set(50,0,30);
+	control.push_back(t);
+	t.set(0,10,20);
+	control.push_back(t);
+	t.set(100,0,70);
+	control.push_back(t);
 	t.set(100,-120,60);
+	control.push_back(t);
+	t.set(50,-70,30);
+	control.push_back(t);
+	t.set(10,10,30);
+	control.push_back(t);
+	t.set(-50,-40,60);
 	control.push_back(t);
 	t.set(-102,-52,20);
 	control.push_back(t);
-	t.set(-50,122,30);
+	t.set(50,0,30);
 	control.push_back(t);
-	t.set(100,105,10);
+	t.set(40,42,50);
+	control.push_back(t);
+	t.set(95,105,10);
+	control.push_back(t);
+	t.set(100,100,10);
 	control.push_back(t);
 	control.push_back(t);
 	control.push_back(t);
 
 
-	Cardumen* cardumen1 = new Cardumen(PEZ2,CANT_DORI,control,true,8,false);
+	Cardumen* cardumen1 = new Cardumen(PEZ1,CANT_DORI,control,true,20,false);
+	cardumen1->recorrido->setColor(0,0,1);
+	return cardumen1;
+}
+
+Cardumen* ContenedorObjetos::crearCardumen2(){
+
+	//puntos control trayecto
+	std::vector<Vertice> control;
+	Vertice t;
+	t.set(-90,-60,55);
+	control.push_back(t);
+	control.push_back(t);
+	control.push_back(t);
+	t.set(-110,0,30);
+	control.push_back(t);
+	t.set(-90,60,40);
+	control.push_back(t);
+	t.set(0,0,10);
+	control.push_back(t);
+	t.set(90,-60,60);
+	control.push_back(t);
+	t.set(110,0,50);
+	control.push_back(t);
+	t.set(90,60,30);
+	control.push_back(t);
+	t.set(0,0,100);
+	control.push_back(t);
+	t.set(-90,-75,70);
+	control.push_back(t);
+	t.set(-90,-60,55);
+	control.push_back(t);
+	control.push_back(t);
+	control.push_back(t);
+
+
+	Cardumen* cardumen1 = new Cardumen(PEZ2,CANT_KOI,control,true,20,false);
+	cardumen1->recorrido->setColor(0.8,0.5,0);
 	return cardumen1;
 }
 
@@ -877,6 +934,8 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 			ang_x = (-ang_x);
 		if(dir.y != 0)
 			alfa = atan2(dir.x,dir.y) * 180 / PI;
+		else
+			alfa=90;
 
 		glEnable(GL_RESCALE_NORMAL);	//habilito el reescalado de normales
 
@@ -931,17 +990,17 @@ void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
 	glPopMatrix();
 
 	glPushMatrix();
-		glTranslatef(longitud[id].x*escala,0.2,0);
+		glTranslatef(longitud[id].x*escala,0.2*escala,0);
 		glScalef(escala,escala,escala);
 		aletas[id]->dibujar(render_mode);
 	glPopMatrix();
 
 	glPushMatrix();
-		glTranslatef(-longitud[id].x*escala,0.2,0);
+		glTranslatef(-longitud[id].x*escala,0.2*escala,0);
 		glScalef(-escala,escala,escala); //"espejada" respecto del plano YZ
 		aletas[id]->dibujar(render_mode);
 	glPopMatrix();
-//
+
 	glPushMatrix();
 		glTranslatef(0,longitud[id].y*escala,0);
 		glScalef(escala,escala,escala);
@@ -950,7 +1009,7 @@ void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
 
 	if(id == PEZ2){
 		glPushMatrix();
-			glTranslatef(0,0,0.7);
+			glTranslatef(0,0,0.7*escala);
 			glRotatef(-90,1,0,0);
 				//cambio la orientacion
 			glScalef(-escala,escala,escala);
@@ -958,7 +1017,7 @@ void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
 		glPopMatrix();
 
 		glPushMatrix();
-			glTranslatef(0,0.4,0.7);
+			glTranslatef(0,0.4*escala,0.7*escala);
 			glRotatef(-90,1,0,0);
 				//cambio la orientacion
 			glScalef(escala,escala,escala);
@@ -969,7 +1028,7 @@ void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
 		glFrontFace( GL_CCW );
 		glCullFace( GL_BACK );
 		glEnable(GL_CULL_FACE);
-			glTranslatef(longitud[PEZ2].x-0.35,1.7,0.1);
+			glTranslatef(0.20*escala,1.85*escala,0.1*escala);
 			glScalef(escala,escala,escala);
 			animaciones[BIGOTE]->dibujar(render_mode);
 		glDisable(GL_CULL_FACE);
@@ -978,7 +1037,7 @@ void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
 		glFrontFace( GL_CCW );
 		glCullFace( GL_BACK );
 		glEnable(GL_CULL_FACE);
-			glTranslatef(longitud[PEZ2].x+0.35,1.7,0.1);
+			glTranslatef(-0.20*escala,1.85*escala,0.1*escala);
 			glScalef(-escala,escala,escala);
 			animaciones[BIGOTE]->dibujar(render_mode);
 		glDisable(GL_CULL_FACE);

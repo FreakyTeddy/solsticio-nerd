@@ -48,6 +48,7 @@ private:
 
 	/* solo se llaman una vez. saben dibujar los objetos */
 	Superficie* crearPez1();
+	Superficie* crearPez1();
 	Superficie* crearPez2();
 	Superficie* crearRoca1();
 	Superficie* crearFlorero();
@@ -62,7 +63,7 @@ private:
 
 
 	Cardumen* crearCardumen1();
-
+	Cardumen* crearCardumen2();
 	void crearEscenario();
 
 	ContenedorObjetos();
@@ -101,9 +102,12 @@ public:
 
 //		colas[PEZ1]->animar();
 //		aletas[PEZ1]->animar();
-//		cardumen[0]->viajar();
-		colas[PEZ2]->animar();
-		aletas[PEZ2]->animar();
+//		cardumen[CAR1]->viajar();
+//		cardumen[CAR0]->viajar();
+//
+//		colas[PEZ2]->animar();
+//		aletas[PEZ2]->animar();
+//		animaciones[BIGOTE]->animar();
 	};
 
 };

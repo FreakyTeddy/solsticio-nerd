@@ -16,7 +16,7 @@ class Trayectoria {
 	std::vector<Vertice> trayecto;
 	size_t actual;
 	size_t tam;
-	float velocidad;
+	GLfloat color[3];
 	bool closed;
 
 public:
@@ -42,6 +42,10 @@ public:
 
 	void sgtePosicion();
 	size_t sgtePosicion(size_t act);
+
+	void setColor(GLfloat r, GLfloat g, GLfloat b) {
+		color[0]=r;color[1]=g;color[2]=b;
+	}
 
 };
 

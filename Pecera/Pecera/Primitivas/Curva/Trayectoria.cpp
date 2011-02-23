@@ -31,6 +31,9 @@ Vertice Trayectoria::getPosicion(size_t act){
 }
 
 void Trayectoria::dibujarTrayecto(){
+  glEnable(GL_COLOR_MATERIAL);
+  glDisable(GL_LIGHTING);
+  	glColor3fv(color);
 	if (closed)
 		glBegin(GL_LINE_LOOP);
 	else
@@ -39,6 +42,8 @@ void Trayectoria::dibujarTrayecto(){
 		glVertex3f(trayecto[pos].x,trayecto[pos].y,trayecto[pos].z);
 	}
 	glEnd();
+  glEnable(GL_LIGHTING);
+  glDisable(GL_COLOR_MATERIAL);
 }
 
 void Trayectoria::sgtePosicion(){

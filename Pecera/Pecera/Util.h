@@ -63,6 +63,11 @@
 #define PEZ1 1
 #define PEZ2 2
 
+/* Cardumen */
+#define CAR0 0
+#define CAR1 1
+#define CAR2 2
+
 
 class Util {
 

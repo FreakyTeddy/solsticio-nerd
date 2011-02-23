@@ -1,5 +1,4 @@
  - Texturas: transparencia, mosaico.
- - Algas: movimiento, formas "random".
  - Peces
  - Rocas
  - Agua
@@ -10,7 +9,6 @@
  
 ********** Issues of Implementation ****
 
--- rotar_v de la camara.. cambia el sentido de la rotacion
 -- glblend. hace las burbujas transparentes diferente de arriba y de abajo :S
 -- textura escena
 -- linterna! no se cambia bien la luz y no ilumina bien X_X

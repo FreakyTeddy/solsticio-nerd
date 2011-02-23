@@ -16,13 +16,13 @@ ControladorEscena* escena;
 
 /* LUZ */
 
-float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-float light_specular[4] = {1.0, 1.0, 1.0, 1.0};
-float light_position[3] = {10.0f, 10.0f, 100.0f};
-float light_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-float linterna_ambient[4] = {0.05f, 0.05f, 0.1f, 1.0f};
-float linterna_pos[3];
-float linterna_dir[3];
+GLfloat light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+GLfloat light_specular[4] = {1.0, 1.0, 1.0, 1.0};
+GLfloat light_position[3] = {10.0f, 10.0f, 100.0f};
+GLfloat light_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+GLfloat linterna_ambient[4] = {0.05f, 0.05f, 0.1f, 1.0f};
+GLfloat linterna_pos[3]= {0, 0, 0};
+GLfloat linterna_dir[3]= {0, 1.0, 0};
 
 
 
@@ -46,12 +46,14 @@ GLuint dl_handle;
 GLfloat window_size[2];
 
 void posicionarLinterna() {
-	linterna_pos[0] = escena->getCamara()->getEye().x;
-	linterna_pos[1] = escena->getCamara()->getEye().y;
-	linterna_pos[2] = escena->getCamara()->getEye().z;
-	linterna_dir[0] = escena->getCamara()->getAt().x;
-	linterna_dir[1] = escena->getCamara()->getAt().y;
-	linterna_dir[2] = escena->getCamara()->getAt().z;
+//	linterna_pos[0] = escena->getCamara()->getEye().x;
+//	linterna_pos[1] = escena->getCamara()->getEye().y;
+//	linterna_pos[2] = escena->getCamara()->getEye().z;
+//	linterna_dir[0] = escena->getCamara()->getAt().x;
+//	linterna_dir[1] = escena->getCamara()->getAt().y;
+//	linterna_dir[2] = escena->getCamara()->getAt().z;
+//	linterna_dir[0] = 0;linterna_dir[0] = -1;linterna_dir[0] = 0;
+//	linterna_pos[0] = 0;linterna_pos[0] = 0;linterna_pos[0] = 0;
 }
 
 void DrawAxis() {
@@ -107,8 +109,10 @@ void init(void) {
   glShadeModel (GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
 
-  /* iluminacion */
   Set3DEnv();
+
+  /* iluminacion */
+
   	  //luz ambiental
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
@@ -117,22 +121,24 @@ void init(void) {
 	glEnable(GL_LIGHT0);
 
 	//linterna
-	posicionarLinterna();
+//	posicionarLinterna();
 
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, linterna_ambient);
-	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
-
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
 	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.3);
 	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0);
 	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
 	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
 	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 20.0);
-	glEnable(GL_LIGHTING);
+
+	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
+
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+
+	glEnable(GL_LIGHTING);
 
   // Generación de las Display Lists
   glNewList(DL_AXIS, GL_COMPILE);
@@ -162,13 +168,7 @@ void display(void)
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	escena->getCamara()->lookAt();
-
-	if (linterna){
-		posicionarLinterna();
-		glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
-		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
-	}else
-		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
 	glPushMatrix();
 
