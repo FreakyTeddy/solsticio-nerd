@@ -27,8 +27,6 @@ ContenedorObjetos::~ContenedorObjetos() {
 //	glDeleteLists(handle_burbuja, 2);
 
 	/* durante los tests */
-	delete superficies[ALGA2];
-	delete superficies[ALGA1];
 	delete superficies[FLORERO];
 	delete cardumen[0];
 	delete cuerpos[PEZ1];
@@ -36,8 +34,10 @@ ContenedorObjetos::~ContenedorObjetos() {
 	delete colas[PEZ1];
 	delete colas[PEZ2];
 	delete aletas[PEZ1];
+	delete aletas[PEZ2];
 	delete animaciones[ALGA1];
 	delete animaciones[ALGA2];
+	delete animaciones[BIGOTE];
 
 }
 
@@ -60,20 +60,19 @@ void ContenedorObjetos::crearSuperficies() {
 
 	//todo rellenar los otros espacios del vector
 	superficies[FLORERO] = crearFlorero();
-superficies[ALGA1] = crearAlga1();
-superficies[ALGA2] = crearAlga2();
-
 	cuerpos[PEZ1] = crearPez1();
 	cuerpos[PEZ2] = crearPez2();
 	longitud[PEZ1].set(0.65,-2.8);	//hardcodeeeeeeeee
-	longitud[PEZ2].set(0.5,-1.9);
+	longitud[PEZ2].set(0.8,-1.9);
 	crearEscenario();
 }
 
 void ContenedorObjetos::crearAnimaciones() {
 	animaciones[ALGA1] = crearAlga4();
 	animaciones[ALGA2] = crearAlga3();
+	animaciones[BIGOTE] = crearBigote();
 	aletas[PEZ1] = crearAletaPez1();
+	aletas[PEZ2] = crearAletaPez2();
 	colas[PEZ1] = crearColaPez1();
 	colas[PEZ2] = crearColaPez2();
 }
@@ -173,147 +172,6 @@ Superficie* ContenedorObjetos::crearFlorero() {
 	return florero;
 }
 
-Superficie* ContenedorObjetos::crearAlga1() {
-	std::vector<Vertice> v;
-	std::vector<Vertice> trasl;
-	Vertice q;
-	curva.setFactor(3);
-
-	//puntos de control
-	std::vector<Vertice> alga_s;
-	q.set(0.5,0,0);
-	alga_s.push_back(q);
-	q.set(-0.5,0,0);
-	alga_s.push_back(q);
-
-
-	//traslacion de los puntos
-	trasl.clear();
-	q.set(0,0,0);
-	trasl.push_back(q);
-	trasl.push_back(q);
-	trasl.push_back(q);
-
-	q.set(0,-1,1.5);
-	trasl.push_back(q);
-
-	q.set(0,0,4);
-	trasl.push_back(q);
-
-	q.set(0.5,0.5,6);
-	trasl.push_back(q);
-
-	q.set(0.5,0.8,6.5);
-	trasl.push_back(q);
-
-	q.set(0.8,0.8,7);
-	trasl.push_back(q);
-	trasl.push_back(q);
-	trasl.push_back(q);
-	curva.Bspline(trasl, v);
-
-	//deformacion de los puntos
-	std::vector<Vertice> def;
-	std::vector<Vertice> def2;
-	q.set(0.1, 0.1, 1);
-	def.push_back(q);
-	def.push_back(q);
-	def.push_back(q);
-	q.set(1,1,1);
-	def.push_back(q);
-	q.set(0.5,0.5,1);
-	def.push_back(q);
-	q.set(0.8,0.8,1);
-	def.push_back(q);
-	q.set(0.4,0.4,1);
-	def.push_back(q);
-	q.set(0.01, 0.01, 1);
-	def.push_back(q);
-	def.push_back(q);
-	def.push_back(q);
-	curva.Bspline(def, def2);
-
-	//creacion de superficie de barrido
-	Superficie* sup = new SuperficieBarrido(alga_s, v , def2);
-	sup->getMaterial()->setDiffuse(0,1,0.5,1);
-	sup->getMaterial()->setSpecular(0,1,1,1);
-	sup->getMaterial()->setShininess(50);
-	sup->aplicarTextura("madera.bmp");
-
-	return sup;
-}
-
-Superficie* ContenedorObjetos::crearAlga2() {
-	std::vector<Vertice> v;
-	std::vector<Vertice> trasl;
-	Vertice q;
-
-	//puntos de control
-	std::vector<Vertice> alga_s;
-
-	q.set(0.5,0,0);
-	alga_s.push_back(q);
-	q.set(-0.5,0,0);
-	alga_s.push_back(q);
-
-	//traslacion de los puntos
-	Curva curva;
-	curva.setFactor(3);
-
-	trasl.clear();
-	q.set(0,0,0);
-	trasl.push_back(q);
-	trasl.push_back(q);
-	trasl.push_back(q);
-
-	q.set(0.2,0.5,1);
-	trasl.push_back(q);
-
-	q.set(0.75,0.75,3);
-	trasl.push_back(q);
-
-	q.set(1.5,1.5,4);
-	trasl.push_back(q);
-
-	q.set(2,2,3);
-	trasl.push_back(q);
-
-	q.set(1.5,1.5,2.5);
-	trasl.push_back(q);
-	trasl.push_back(q);
-	trasl.push_back(q);
-	curva.Bspline(trasl, v);
-
-	//deformacion de los puntos
-	std::vector<Vertice> def;
-	std::vector<Vertice> def2;
-	q.set(0.1, 0.1, 1);
-	def.push_back(q);
-	def.push_back(q);
-	def.push_back(q);
-	q.set(1,1,1);
-	def.push_back(q);
-	q.set(1.5,1.5,1);
-	def.push_back(q);
-	q.set(0.8,0.8,1);
-	def.push_back(q);
-	q.set(1.4,1.4,1);
-	def.push_back(q);
-	q.set(0.01, 0.01, 1);
-	def.push_back(q);
-	def.push_back(q);
-	def.push_back(q);
-	curva.Bspline(def, def2);
-
-	//creacion de superficie de barrido
-	Superficie *sup = new SuperficieBarrido(alga_s, v , def2);
-	sup->getMaterial()->setDiffuse(0,1,0.5,1);
-	sup->getMaterial()->setSpecular(0,0.5,0.5,1);
-	sup->getMaterial()->setShininess(50);
-	sup->aplicarTextura("madera.bmp");
-	return sup;
-}
-
 Animacion* ContenedorObjetos::crearAlga3() {
 	std::vector<Vertice> v;
 	std::vector<Vertice> trasl;
@@ -377,7 +235,8 @@ Animacion* ContenedorObjetos::crearAlga3() {
 	curva.Bspline(def, def2);
 
 	//creacion de superficie de barrido
-	Animacion *ani = new Animacion(alga_s,v,def2,2,25, true);
+	Vertice dir(0,1,0);
+	Animacion *ani = new Animacion(alga_s,v,def2,dir,2,25, true);
 	Material m;
 	m.setDiffuse(0,1,0.5,1);
 	m.setSpecular(0,0.5,0.5,1);
@@ -442,7 +301,8 @@ Animacion* ContenedorObjetos::crearAlga4() {
 	curva.Bspline(def, def2);
 	def.clear();
 
-	Animacion *ani = new Animacion(alga_s,v,def2,2,25, true);
+	Vertice dir(0,1,0);
+	Animacion *ani = new Animacion(alga_s,v,def2,dir,2,25, true);
 	Material m;
 	m.setDiffuse(0,1,0.5,1);
 	m.setSpecular(0,0.5,0.5,1);
@@ -664,7 +524,7 @@ Animacion* ContenedorObjetos::crearAletaPez2() {
 		ctrol_s.push_back(t);
 		ctrol_s.push_back(t);
 		ctrol_s.push_back(t);
-		t.set(0,0,0);
+		t.set(0.1,0,0);
 		ctrol_s.push_back(t);
 		t.set(0,0,0.4);
 		ctrol_s.push_back(t);
@@ -723,6 +583,68 @@ Animacion* ContenedorObjetos::crearAletaPez2() {
 		return ani;
 }
 
+Animacion* ContenedorObjetos::crearBigote() {
+
+	std::vector<Vertice> ctrol, bigo, tl, def;
+
+	Vertice t(0,0,-0.2);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	t.set(0,-0.15,0);
+	ctrol.push_back(t);
+	t.set(0,0,0.2);
+	ctrol.push_back(t);
+	t.set(0,0.15,0);
+	ctrol.push_back(t);
+	t.set(0,0,-0.2);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+
+	curva.setFactor(2);
+	curva.Bspline(ctrol,bigo);
+	bigo.push_back(t);
+
+
+	ctrol.clear();
+	t.set(0,0,0);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	t.set(0.11,0.05,-0.08);
+	ctrol.push_back(t);
+	t.set(0.06,0.06,-0.33);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	curva.Bspline(ctrol,tl);
+
+	ctrol.clear();
+	t.set(0.1,0.1,0.1);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	t.set(1,1,1);
+	ctrol.push_back(t);
+	t.set(0,0,0);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	ctrol.push_back(t);
+	curva.Bspline(ctrol,def);
+
+	Vertice dir(0,0,1);
+	Animacion *ani = new Animacion(bigo,tl,def,dir,3,20, true);
+	ani->setTextura("koi.png");
+	Material m;
+	m.setDiffuse(1,1,1,1);
+	m.setSpecular(1,0.5,0,1);
+	m.setAmbient(0.1,0.1,0.1,1);
+	m.setShininess(120);
+	ani->setMaterial(m);
+	return ani;
+}
+
 Superficie* ContenedorObjetos::crearPez1(){
 	std::vector<Vertice> ctrol_s, curva_s, ctrol_t, curva_t, ctrol_d, curva_d;
 	Vertice t(0,0,2);
@@ -743,6 +665,7 @@ Superficie* ContenedorObjetos::crearPez1(){
 	ctrol_s.push_back(t);
 	curva.setFactor(3);
 	curva.Bspline(ctrol_s, curva_s);
+	curva_s.push_back(t);
 
 	t.set(0,-3,0);
 	ctrol_t.push_back(t);
@@ -822,6 +745,7 @@ Superficie* ContenedorObjetos::crearPez2() {
 	sup->getMaterial()->setSpecular(1,0.5,0,1);
 	sup->getMaterial()->setDiffuse(1,1,1,1);
 	sup->getMaterial()->setAmbient(0.1,0.1,0.1,1);
+	sup->getMaterial()->setShininess(120);
 	return sup;
 }
 
@@ -993,29 +917,30 @@ Cardumen* ContenedorObjetos::getCardumen(unsigned int id) {
 }
 
 void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
+	glEnable(GL_RESCALE_NORMAL);
 	glPushMatrix();
 		glFrontFace( GL_CCW );
 		glCullFace( GL_FRONT );
 		glEnable(GL_CULL_FACE);
 		if (id==PEZ2)
-			glScalef(escala,escala,escala*0.8);
+			glScalef(escala,escala,escala*0.8);	//"achato" el pez koi
 		else
 			glScalef(escala,escala,escala);		//reescalo el objeto
 		cuerpos[id]->dibujar(render_mode);
 		glDisable( GL_CULL_FACE );
 	glPopMatrix();
 
-//	glPushMatrix();
-//		glTranslatef(longitud[id].x*escala,0,0);
-//		glScalef(escala,escala,escala);
-//		aletas[id]->dibujar(render_mode);
-//	glPopMatrix();
-//
-//	glPushMatrix();
-//		glTranslatef(-longitud[id].x*escala,0,0); //"espejar" el aleta respecto del plano YZ
-//		glScalef(escala,escala,escala);
-//		aletas[id]->dibujar(render_mode);
-//	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(longitud[id].x*escala,0.2,0);
+		glScalef(escala,escala,escala);
+		aletas[id]->dibujar(render_mode);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(-longitud[id].x*escala,0.2,0);
+		glScalef(-escala,escala,escala); //"espejada" respecto del plano YZ
+		aletas[id]->dibujar(render_mode);
+	glPopMatrix();
 //
 	glPushMatrix();
 		glTranslatef(0,longitud[id].y*escala,0);
@@ -1023,5 +948,42 @@ void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
 		colas[id]->dibujar(render_mode);
 	glPopMatrix();
 
+	if(id == PEZ2){
+		glPushMatrix();
+			glTranslatef(0,0,0.7);
+			glRotatef(-90,1,0,0);
+				//cambio la orientacion
+			glScalef(-escala,escala,escala);
+			aletas[id]->dibujar(render_mode);
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(0,0.4,0.7);
+			glRotatef(-90,1,0,0);
+				//cambio la orientacion
+			glScalef(escala,escala,escala);
+			aletas[id]->dibujar(render_mode);
+		glPopMatrix();
+
+		glPushMatrix();
+		glFrontFace( GL_CCW );
+		glCullFace( GL_BACK );
+		glEnable(GL_CULL_FACE);
+			glTranslatef(longitud[PEZ2].x-0.35,1.7,0.1);
+			glScalef(escala,escala,escala);
+			animaciones[BIGOTE]->dibujar(render_mode);
+		glDisable(GL_CULL_FACE);
+		glPopMatrix();
+		glPushMatrix();
+		glFrontFace( GL_CCW );
+		glCullFace( GL_BACK );
+		glEnable(GL_CULL_FACE);
+			glTranslatef(longitud[PEZ2].x+0.35,1.7,0.1);
+			glScalef(-escala,escala,escala);
+			animaciones[BIGOTE]->dibujar(render_mode);
+		glDisable(GL_CULL_FACE);
+		glPopMatrix();
+	}
+	glDisable(GL_RESCALE_NORMAL);
 }
 

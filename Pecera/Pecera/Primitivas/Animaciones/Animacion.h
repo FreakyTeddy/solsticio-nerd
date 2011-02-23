@@ -10,17 +10,18 @@
 class Animacion {
 
 private:
-	u_short f_act; 		//frame actual
+
 	short f_next;		//indica cual es el siguiente frame
 	bool m_ciclico;		//modo de transicion de frames
 
 
 protected:
 	Superficie** frame;	//contiene los frames de la animacion
-	u_short f_cant; 	//cant de frames
+
 
 public:
-
+	u_short f_cant; 	//cant de frames
+	u_short f_act; 		//frame actual
 	/* TODO extenderlo a una lista de vectores si es necesario mas de un punto de control */
 
 	/* crea una animacion con una superficie de Revolucion */
@@ -33,7 +34,7 @@ public:
 
 	/* crea una animacion senoidal para una superficie de barrido */
 	/* inicial: vertice a partir del cual se aplica la funcion */
-	Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo,uint inicial, uint cant_frames, bool ciclico);
+	Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo,Vertice &dir, uint inicial, uint cant_frames, bool ciclico);
 
 	~Animacion();
 

@@ -21,8 +21,6 @@ void Camara::reset() {
 }
 
 Vertice& Camara::getAt() {
-	std::cout<<at.modulo()<<" ";at.print();
-
 	return at;
 }
 

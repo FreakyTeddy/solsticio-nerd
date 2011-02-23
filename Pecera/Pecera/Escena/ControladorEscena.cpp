@@ -60,14 +60,15 @@ void ControladorEscena::generarEscena() {
 
 /* FLORERO Y ALGAS
 */
-//	glPushMatrix();
-//		glRotatef(180,0,0,1);
-//		glTranslatef(5,4,0);
-//		objetos.dibujarObjeto(FLORERO, render_mode);
-//		glTranslatef(1.5,0,1.7);
-//		objetos.getAnimacion(ALGA1)->dibujar(render_mode);
-//		objetos.getAnimacion(ALGA2)->dibujar(render_mode);
-//	glPopMatrix();
+	glPushMatrix();
+		glRotatef(180,0,0,1);
+		glTranslatef(5,4,0);
+		objetos.dibujarObjeto(FLORERO, render_mode);
+		glTranslatef(1.5,0,1.7);
+		objetos.getAnimacion(ALGA1)->dibujar(render_mode);
+		objetos.getAnimacion(ALGA2)->dibujar(render_mode);
+	glPopMatrix();
+
 /*	BURBUJAS
 		Vertice t;
 		for (int i=0; i<CANT_BURBUJAS; i++) {
@@ -89,17 +90,17 @@ void ControladorEscena::generarEscena() {
 
 
 	/* CARDUMEN DORI */
-	objetos.dibujarCardumen(objetos.getCardumen(0), render_mode);
-	if (ver_tray)
-		objetos.getCardumen(0)->recorrido->dibujarTrayecto();
+//	objetos.dibujarCardumen(objetos.getCardumen(0), render_mode);
+//	if (ver_tray)
+//		objetos.getCardumen(0)->recorrido->dibujarTrayecto();
 
 
 	objetos.dibujarEscenario(render_mode);
 	terreno.dibujar(render_mode);
 
 	/* KOI */
-//	glTranslated(0,0,10);
-//	objetos.dibujarPez(PEZ2,render_mode,1);
+	glTranslated(0,0,10);
+	objetos.dibujarPez(PEZ2,render_mode,1);
 
 }
 
@@ -110,9 +111,10 @@ void ControladorEscena::animar(int n=0){
 
 //	//muevo los cardumenes
 	instancia->objetos.animarPeces();
-	instancia->objetos.getCardumen(0)->viajar();
-//	instancia->objetos.getAnimacion(ALGA1)->animar();
-//	instancia->objetos.getAnimacion(ALGA2)->animar();
+//	instancia->objetos.getCardumen(0)->viajar();
+	instancia->objetos.getAnimacion(ALGA1)->animar();
+	instancia->objetos.getAnimacion(ALGA2)->animar();
+	instancia->objetos.getAnimacion(BIGOTE)->animar();
 
 /* BURBUJAS
 	for (int i=0; i<CANT_BURBUJAS; i++) {

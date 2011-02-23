@@ -29,7 +29,6 @@ float linterna_dir[3];
 /* Mouse */
 int xprev = 0; //posicion anterior del mouse
 int yprev = 0;
-int zprev = 0;
 
 // Variables de control
 bool view_grid = false;
@@ -53,16 +52,6 @@ void posicionarLinterna() {
 	linterna_dir[0] = escena->getCamara()->getAt().x;
 	linterna_dir[1] = escena->getCamara()->getAt().y;
 	linterna_dir[2] = escena->getCamara()->getAt().z;
-
-	glEnable(GL_COLOR_MATERIAL);
-	glColor3f(1,1,0);
-	Vertice t;
-	glBegin(GL_LINE);
-		glVertex3f(t.x,t.y,t.z);
-		t = escena->getCamara()->getAt()*5;
-		glVertex3f(t.x,t.y,t.z);
-	glEnd();
-	glDisable(GL_COLOR_MATERIAL);
 }
 
 void DrawAxis() {
@@ -129,9 +118,10 @@ void init(void) {
 
 	//linterna
 	posicionarLinterna();
+
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, linterna_ambient);
 	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
 	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
 
@@ -140,10 +130,9 @@ void init(void) {
 	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
 	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
 	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 20.0);
-
+	glEnable(GL_LIGHTING);
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-
-
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
   // Generación de las Display Lists
   glNewList(DL_AXIS, GL_COMPILE);
@@ -171,7 +160,7 @@ void display(void)
 {
 	//glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
+
 	escena->getCamara()->lookAt();
 
 	if (linterna){
@@ -181,7 +170,7 @@ void display(void)
 	}else
 		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
-    glEnable(GL_LIGHTING);
+	glPushMatrix();
 
 	if (view_axis)
 		 glCallList(DL_AXIS);
@@ -200,6 +189,8 @@ void display(void)
     /////////////////////////// fin dibujar =P /////////////////////
 	if (niebla)
 		glDisable(GL_FOG);
+
+	glPopMatrix();
 
 	glutSwapBuffers();
 }
@@ -301,7 +292,6 @@ void specialKeys(int key,int x, int y) {
 	}
 }
 
-
 void mouse(int button, int state, int x, int y) {
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
@@ -336,12 +326,8 @@ int main(int argc, char** argv) {
 //  glutFullScreen();
 // glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
   glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR);
+  srand(time(0));
 
-
-
-  escena = new ControladorEscena();
-
-  init();
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
@@ -349,7 +335,11 @@ int main(int argc, char** argv) {
   glutMouseFunc(mouse);
   glutMotionFunc(mouseMotion);
   atexit(salir);
-  srand(time(0));
+
+  escena = new ControladorEscena();
+
+  init();
+
 
   /* Informacion */
   std::cout<<"Controles: "<<std::endl;

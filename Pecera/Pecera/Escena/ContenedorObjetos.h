@@ -18,31 +18,6 @@
  *
  * */
 
-#define MAX_DIBUJOS 4
-#define MAX_ANIMACIONES 3
-#define MAX_CARDUMEN 3
-#define MAX_TIPO_PECES 3
-
-
-/* Superficies */
-#define FLORERO 0
-#define ROCA0 1
-#define ROCA1 2
-#define ROCA2 3
-#define BURBUJA 4
-
-/* Animaciones */
-#define ALGA1 1
-#define ALGA2 2
-#define ALGA3 3
-
-
-/* Peces */
-#define PEZ0 0
-#define PEZ1 1
-#define PEZ2 2
-
-
 class ContenedorObjetos {
 
 private:
@@ -72,8 +47,6 @@ private:
 	void crearBurbuja();
 
 	/* solo se llaman una vez. saben dibujar los objetos */
-	Superficie* crearAlga1();
-	Superficie* crearAlga2();
 	Superficie* crearPez1();
 	Superficie* crearPez2();
 	Superficie* crearRoca1();
@@ -85,6 +58,9 @@ private:
 	Animacion* crearAletaPez2();
 	Animacion* crearColaPez1();
 	Animacion* crearColaPez2();
+	Animacion* crearBigote();
+
+
 	Cardumen* crearCardumen1();
 
 	void crearEscenario();
@@ -127,6 +103,7 @@ public:
 //		aletas[PEZ1]->animar();
 //		cardumen[0]->viajar();
 		colas[PEZ2]->animar();
+		aletas[PEZ2]->animar();
 	};
 
 };

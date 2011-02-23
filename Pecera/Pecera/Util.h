@@ -32,11 +32,36 @@
 #define Z_SUP 126
 
 
-/****************** CANT DE PECES ******************/
+/****************** DEFINICION DE OBJETOS ******************/
 
 #define CANT_DORI 5
 #define CANT_KOI 3
 
+#define MAX_DIBUJOS 4
+#define MAX_ANIMACIONES 5
+#define MAX_CARDUMEN 3
+#define MAX_TIPO_PECES 3
+
+
+/* Superficies */
+#define FLORERO 0
+#define ROCA0 1
+#define ROCA1 2
+#define ROCA2 3
+#define BURBUJA 4
+
+/* Animaciones */
+#define ALGA1 0
+#define ALGA2 1
+#define ALGA3 2
+#define BIGOTE 3
+#define ALETA 4
+
+
+/* Peces */
+#define PEZ0 0
+#define PEZ1 1
+#define PEZ2 2
 
 
 class Util {

@@ -48,15 +48,16 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_in
 	delete[] control; //VER!!
 }
 
-Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo, uint inicio, uint cant_frames, bool ciclico) {
+Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo,Vertice &dir, uint inicio, uint cant_frames, bool ciclico) {
 	f_act = 0;
+	f_next = (f_cant != 0);
 	f_cant = cant_frames;
 	m_ciclico = ciclico;
 
 	frame = new Superficie* [f_cant];
 
 	std::vector<Vertice> temp;
-	Vertice v;
+	Vertice v,d;
 
 	double fase = 2 * PI / f_cant;
 	double despl = 0;
@@ -71,7 +72,8 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, s
 		//aplico la funcion senoidal al resto de los puntos
 		for (uint j=inicio; j<trasl.size(); j++){
 			despl+=fabs(trasl[j].z-trasl[j-1].z);
-			v.set(trasl[j].x,trasl[j].y+j*sin(fase*i+despl)/trasl.size(),trasl[j].z);
+			d = dir * (j-inicio+1)*sin(fase*i+despl)/trasl.size();
+			v.set(trasl[j].x + d.x, trasl[j].y + d.y, trasl[j].z + d.z);
 
 			temp.push_back(v);
 		}
