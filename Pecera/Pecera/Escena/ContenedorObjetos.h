@@ -75,20 +75,21 @@ private:
 	Superficie* crearAlga1();
 	Superficie* crearAlga2();
 	Superficie* crearPez1();
+	Superficie* crearPez2();
 	Superficie* crearRoca1();
 	Superficie* crearFlorero();
 
 	Animacion* crearAlga3();
 	Animacion* crearAlga4();
 	Animacion* crearAletaPez1();
+	Animacion* crearAletaPez2();
 	Animacion* crearColaPez1();
+	Animacion* crearColaPez2();
 	Cardumen* crearCardumen1();
 
 	void crearEscenario();
 
 	ContenedorObjetos();
-
-	void dibujarPez( uint id, uint render_mode, float escala);
 
 public:
 
@@ -111,6 +112,8 @@ public:
 
 	Cardumen* getCardumen(unsigned int id);
 
+	void dibujarPez( uint id, uint render_mode, float escala);
+
 	void animarPeces(){
 //		for(uint i=0; i< MAX_TIPO_PECES; i++){
 //			aletas[i]->animar();
@@ -120,9 +123,10 @@ public:
 //			cardumen[i]->viajar();
 //		}
 
-		colas[PEZ1]->animar();
-		aletas[PEZ1]->animar();
-		cardumen[0]->viajar();
+//		colas[PEZ1]->animar();
+//		aletas[PEZ1]->animar();
+//		cardumen[0]->viajar();
+		colas[PEZ2]->animar();
 	};
 
 };

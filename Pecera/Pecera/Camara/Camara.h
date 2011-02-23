@@ -20,7 +20,7 @@ private:
 	Vertice up;	//vector normal
 
 	bool fueraDeEscena(Vertice &t);
-	bool anguloValido(float angulo);
+	bool anguloValido(Vertice &t);
 
 public:
 	Camara();

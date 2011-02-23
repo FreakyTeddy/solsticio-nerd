@@ -20,6 +20,7 @@ float light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 float light_specular[4] = {1.0, 1.0, 1.0, 1.0};
 float light_position[3] = {10.0f, 10.0f, 100.0f};
 float light_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+float linterna_ambient[4] = {0.05f, 0.05f, 0.1f, 1.0f};
 float linterna_pos[3];
 float linterna_dir[3];
 
@@ -52,6 +53,16 @@ void posicionarLinterna() {
 	linterna_dir[0] = escena->getCamara()->getAt().x;
 	linterna_dir[1] = escena->getCamara()->getAt().y;
 	linterna_dir[2] = escena->getCamara()->getAt().z;
+
+	glEnable(GL_COLOR_MATERIAL);
+	glColor3f(1,1,0);
+	Vertice t;
+	glBegin(GL_LINE);
+		glVertex3f(t.x,t.y,t.z);
+		t = escena->getCamara()->getAt()*5;
+		glVertex3f(t.x,t.y,t.z);
+	glEnd();
+	glDisable(GL_COLOR_MATERIAL);
 }
 
 void DrawAxis() {
@@ -115,6 +126,7 @@ void init(void) {
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glEnable(GL_LIGHT0);
+
 	//linterna
 	posicionarLinterna();
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
@@ -123,11 +135,11 @@ void init(void) {
 	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
 	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
 
-	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.005);
-	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.010);
-	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.05);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 25.0);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 100);
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.3);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0);
+	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 20.0);
 
 	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
@@ -160,15 +172,15 @@ void display(void)
 	//glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-//	glPushMatrix();
 	escena->getCamara()->lookAt();
 
 	if (linterna){
-			posicionarLinterna();
-			glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
-			glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
-	}
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+		posicionarLinterna();
+		glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
+		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
+	}else
+		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
     glEnable(GL_LIGHTING);
 
 	if (view_axis)
@@ -188,7 +200,6 @@ void display(void)
     /////////////////////////// fin dibujar =P /////////////////////
 	if (niebla)
 		glDisable(GL_FOG);
-//	glPopMatrix();
 
 	glutSwapBuffers();
 }

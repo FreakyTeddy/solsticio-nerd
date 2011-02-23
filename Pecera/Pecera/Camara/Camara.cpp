@@ -21,6 +21,8 @@ void Camara::reset() {
 }
 
 Vertice& Camara::getAt() {
+	std::cout<<at.modulo()<<" ";at.print();
+
 	return at;
 }
 
@@ -57,23 +59,20 @@ void Camara::rotar_h(float cant) {
 }
 
 void Camara::rotar_v(float cant) {
-	//if ( anguloValido(cant)) {
-		Vertice t = at.prodVectorial(up);
-		Vertice origen;
-		Rotacion3d rot(origen, t, cant);
-		rot.rotar(at);
-	//}
+	Vertice t = at.prodVectorial(up);
+	Vertice origen;
+	Vertice temp = at;
+	Rotacion3d rot(origen, t, cant);
+	rot.rotar(temp);
+	if (anguloValido(temp))
+		at = temp;
 }
 
 bool Camara::fueraDeEscena(Vertice &t) {
 	return ((t.x<X_INF) || (t.x>X_SUP) || (t.y<Y_INF) || (t.y>Y_SUP) || (t.z<Z_INF) || (t.z>Z_SUP));
 }
 
-bool Camara::anguloValido(float angulo) {
-	if (cos(at.z) > 0.55) {
-		std::cout<<cos(at.z)<<" ";at.print();
-		return true;
-	}
-	return false;
+bool Camara::anguloValido(Vertice &t) {
+	return (fabs(t.z)< 0.99 );
 }
 

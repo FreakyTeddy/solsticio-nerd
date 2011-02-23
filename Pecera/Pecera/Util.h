@@ -32,10 +32,10 @@
 #define Z_SUP 126
 
 
-//void rotar(Vertice &eje, float angulo, std::list<Vertice> &puntos) {
-//
-//}
+/****************** CANT DE PECES ******************/
 
+#define CANT_DORI 5
+#define CANT_KOI 3
 
 
 

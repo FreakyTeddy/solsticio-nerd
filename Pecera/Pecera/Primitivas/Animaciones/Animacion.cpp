@@ -28,7 +28,7 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_in
 		}
 
 		for (size_t j=0; j<res.size(); j++){	//--> PUAJ!!!!!!!!! por suerte se supone que son pocos puntos
-			control[j].push_back(res[j]);		// son puntos de control nada mas.. no entrar en panico xD
+			control[j].push_back(res[j]);
 		}
 
 	}
@@ -71,7 +71,7 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, s
 		//aplico la funcion senoidal al resto de los puntos
 		for (uint j=inicio; j<trasl.size(); j++){
 			despl+=fabs(trasl[j].z-trasl[j-1].z);
-			v.set(trasl[j].x,trasl[j].y+sin(fase*i+despl),trasl[j].z);
+			v.set(trasl[j].x,trasl[j].y+j*sin(fase*i+despl)/trasl.size(),trasl[j].z);
 
 			temp.push_back(v);
 		}
