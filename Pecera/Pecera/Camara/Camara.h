@@ -35,6 +35,14 @@ public:
 	Vertice& getEye();
 	Vertice& getAt();
 
+	void setEye(Vertice e){
+		eye=e;
+	};
+
+	void setAt(Vertice &a) {
+		at=a;
+	};
+
 	/* mueve la camara tantas unidades en esa direccion */
 	void trasladar_f(float cant);	//forward
 	void trasladar_s(float cant);	//sideways

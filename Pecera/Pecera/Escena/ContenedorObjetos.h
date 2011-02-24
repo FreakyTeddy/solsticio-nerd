@@ -63,7 +63,7 @@ private:
 	Animacion* crearColaPez2();
 	Animacion* crearBigote();
 
-
+	Cardumen* crearCardumen0();
 	Cardumen* crearCardumen1();
 	Cardumen* crearCardumen2();
 	void crearEscenario();
@@ -104,14 +104,16 @@ public:
 
 		colas[PEZ0]->animar();
 		aletas[PEZ0]->animar();
-//		colas[PEZ1]->animar();
-//		aletas[PEZ1]->animar();
-//		cardumen[CAR1]->viajar();
+		cardumen[CAR0]->viajar();
 
-//		cardumen[CAR2]->viajar();
-//		colas[PEZ2]->animar();
-//		aletas[PEZ2]->animar();
-//		animaciones[BIGOTE]->animar();
+		colas[PEZ1]->animar();
+		aletas[PEZ1]->animar();
+		cardumen[CAR1]->viajar();
+
+		cardumen[CAR2]->viajar();
+		colas[PEZ2]->animar();
+		aletas[PEZ2]->animar();
+		animaciones[BIGOTE]->animar();
 	};
 
 };

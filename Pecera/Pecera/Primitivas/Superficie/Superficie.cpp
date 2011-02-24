@@ -3,7 +3,7 @@
 Superficie::Superficie() {
 	material.setDiffuse(0.85,0.85, 0.85, 1);
 	material.setSpecular(1, 1, 1, 1);
-	material.setAmbient(0.0, 0.1, 0.2, 1);
+	material.setAmbient(0.0, 0.05, 0.1, 1);
 	material.setShininess(70.0);
 }
 

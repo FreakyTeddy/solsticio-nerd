@@ -4,7 +4,9 @@
 #include <stdlib.h>
 
 bool ControladorEscena::animando = ANIMACION_INICIAL;
+int ControladorEscena::cam_pez = -1;
 ControladorEscena* ControladorEscena::instancia = 0;
+const Vertice __v(3,-3,3);
 
 ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia())){
 
@@ -58,8 +60,8 @@ ControladorEscena::~ControladorEscena() {
 
 void ControladorEscena::generarEscena() {
 
-/* FLORERO Y ALGAS
-*/
+/* FLORERO Y ALGAS */
+
 	glPushMatrix();
 		glRotatef(180,0,0,1);
 		glTranslatef(5,4,0);
@@ -87,52 +89,85 @@ void ControladorEscena::generarEscena() {
 
 */
 
-
-
 	/* CARDUMEN DORI */
-//	objetos.dibujarCardumen(objetos.getCardumen(CAR1), render_mode);
-//	if (ver_tray)
-//		objetos.getCardumen(CAR1)->recorrido->dibujarTrayecto();
+	objetos.dibujarCardumen(objetos.getCardumen(CAR1), render_mode);
 
 	/* CARDUMEN KOI */
-//	objetos.dibujarCardumen(objetos.getCardumen(CAR2), render_mode);
-//	if (ver_tray)
-//		objetos.getCardumen(CAR2)->recorrido->dibujarTrayecto();
+	objetos.dibujarCardumen(objetos.getCardumen(CAR2), render_mode);
+
+	/* CARDUMEN PLATEADO */
+	objetos.dibujarCardumen(objetos.getCardumen(CAR0), render_mode);
 
 
+	/* Trayectorias */
+	if (ver_tray) {
+		objetos.getCardumen(CAR2)->recorrido->dibujarTrayecto();
+		objetos.getCardumen(CAR1)->recorrido->dibujarTrayecto();
+		objetos.getCardumen(CAR0)->recorrido->dibujarTrayecto();
+	}
+
+	/* Terreno */
 	objetos.dibujarEscenario(render_mode);
 	terreno.dibujar(render_mode);
+
+	/* Test de Peces aislados */
+//	glEnable(GL_RESCALE_NORMAL);
+
+	/* DORI */
+//	glTranslated(0,0,10);
+//	objetos.dibujarPez(PEZ1,render_mode,1);
 
 	/* KOI */
 //	glTranslated(0,0,10);
 //	objetos.dibujarPez(PEZ2,render_mode,1);
 
 	/* Plateado */
-	glTranslated(0,0,10);
-	objetos.dibujarPez(PEZ0,render_mode,1);
+//	glTranslated(0,0,10);
+//	objetos.dibujarPez(PEZ0,render_mode,1);
+
+//	glDisable(GL_RESCALE_NORMAL);
 }
 
 void ControladorEscena::animar(int n=0){
-	//animar todos los objetos
 
-//	//animo las superficies
-
-//	//muevo los cardumenes
-	instancia->objetos.animarPeces();
+	//animo las superficies
 	instancia->objetos.getAnimacion(ALGA1)->animar();
 	instancia->objetos.getAnimacion(ALGA2)->animar();
+
+	//muevo la camara si estoy en modo pez
+	if (cam_pez > -1){
+		instancia->cam.setEye(instancia->objetos.getCardumen(cam_pez)->recorrido->getPosicion()+__v);
+		instancia->cam.setAt(instancia->objetos.getCardumen(cam_pez)->recorrido->getDireccion().normalizar());
+	}
+
+	//muevo los cardumenes
+	instancia->objetos.animarPeces();
 
 /* BURBUJAS
 	for (int i=0; i<CANT_BURBUJAS; i++) {
 		instancia->burbujas[i]->viajar();
 	}
 */
+
 	//redibujo la escena
 	glutPostRedisplay();
 
 	//continuo con la animacion
 	if (animando && (n >= 0))
 		glutTimerFunc(50,animar,++n);
+}
+
+int ControladorEscena::camaraCardumen(int nro) {
+	if (nro < MAX_CARDUMEN){
+		cam_pez = nro;
+		cam.setEye(objetos.getCardumen(nro)->recorrido->getPosicion()+__v);
+		cam.setAt(objetos.getCardumen(nro)->recorrido->getDireccion().normalizar());
+		return nro;
+	}else{
+		cam_pez = -1;
+		cam.reset();
+		return -1;
+	}
 }
 
 void ControladorEscena::nextRenderMode() {

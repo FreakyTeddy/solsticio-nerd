@@ -21,6 +21,7 @@ private:
 	unsigned int render_mode;
 	bool ver_tray;
 	static bool animando;
+	static int cam_pez;
 	static ControladorEscena* instancia;
 
 	Terreno terreno;
@@ -30,8 +31,15 @@ private:
 	static void animar(const int n);
 
 public:
+
+
 	ControladorEscena();
+
 	~ControladorEscena();
+
+	bool estaAnimando(){
+		return animando;
+	};
 
 	/* dibuja la escena */
 	void generarEscena();
@@ -53,6 +61,10 @@ public:
 	void nextFrame(){
 		animar(-1);
 	}
+
+	/* posiciona la camara sobre el cardumen indicado */
+	/* si el numero es invalido devuelve -1 y resetea la camara */
+	int camaraCardumen(int nro);
 
 	void nextTrackDisplayMode();
 

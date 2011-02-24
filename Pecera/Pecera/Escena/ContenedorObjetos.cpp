@@ -16,31 +16,19 @@ ContenedorObjetos::~ContenedorObjetos() {
 //		delete superficies[i];	TODO
 //	for (int i=0; i < MAX_ANIMACIONES; i++)
 //		delete animaciones[i];
-//	for (int i=0; i < MAX_CARDUMEN; i++)
-//		delete cardumen[i];
-//	for (int i=0; i < MAX_TIPO_PECES; i++){
-//		delete cuerpos[i];
-//		delete aletas[i];
-//		delete colas[i];
-//	}
+	for (int i=0; i < MAX_CARDUMEN; i++)
+		delete cardumen[i];
+	for (int i=0; i < MAX_TIPO_PECES; i++){
+		delete cuerpos[i];
+		delete aletas[i];
+		delete colas[i];
+	}
 //	delete tray_burbujas;delete animaciones[BIGOTE];
 //	glDeleteLists(handle_burbuja, 2);
 
 	/* durante los tests */
 	delete superficies[FLORERO];
-	delete cardumen[CAR2];
-	delete cardumen[CAR1];
 
-	delete cuerpos[PEZ0];
-	delete cuerpos[PEZ1];
-	delete cuerpos[PEZ2];
-
-	delete colas[PEZ0];
-	delete colas[PEZ1];
-	delete colas[PEZ2];
-	delete aletas[PEZ0];
-	delete aletas[PEZ1];
-	delete aletas[PEZ2];
 	delete animaciones[ALGA1];
 	delete animaciones[ALGA2];
 	delete animaciones[BIGOTE];
@@ -80,6 +68,7 @@ void ContenedorObjetos::crearAnimaciones() {
 	animaciones[ALGA1] = crearAlga4();
 	animaciones[ALGA2] = crearAlga3();
 	animaciones[BIGOTE] = crearBigote();
+
 	aletas[PEZ0] = crearAletaPez0();
 	aletas[PEZ1] = crearAletaPez1();
 	aletas[PEZ2] = crearAletaPez2();
@@ -91,6 +80,7 @@ void ContenedorObjetos::crearAnimaciones() {
 void ContenedorObjetos::crearCardumenes() {
 	cardumen[CAR2] = crearCardumen2();
 	cardumen[CAR1] = crearCardumen1();
+	cardumen[CAR0] = crearCardumen0();
 }
 
 void ContenedorObjetos::crearBurbuja() {
@@ -989,6 +979,83 @@ Superficie* ContenedorObjetos::crearRoca1(){
 return 0;
 }
 
+Cardumen* ContenedorObjetos::crearCardumen0(){
+
+	//puntos control trayecto
+	std::vector<Vertice> control;
+	Vertice t;
+	t.set(0,100,10);
+	control.push_back(t);
+	control.push_back(t);
+	control.push_back(t);
+	t.set(-30,100,15);
+	control.push_back(t);
+	t.set(-30,50,10);
+	control.push_back(t);
+	t.set(-50,50,10);
+	control.push_back(t);
+	t.set(-50,60,10);
+	control.push_back(t);
+	t.set(-50,70,10);
+	control.push_back(t);
+	t.set(-100,100,10);
+	control.push_back(t);
+	t.set(-100,50,30);
+	control.push_back(t);
+	t.set(-30,0,10);
+	control.push_back(t);
+	t.set(-50,-50,20);
+	control.push_back(t);
+	t.set(-100,-50,15);
+	control.push_back(t);
+	t.set(-100,-100,30);
+	control.push_back(t);
+	t.set(-50,-100,19);
+	control.push_back(t);
+	t.set(-50,-50,10);
+	control.push_back(t);
+	t.set(0,-10,15);
+	control.push_back(t);
+	t.set(50,-50,10);
+	control.push_back(t);
+	t.set(50,-100,15);
+	control.push_back(t);
+	t.set(100,-100,10);
+	control.push_back(t);
+	t.set(100,-50,15);
+	control.push_back(t);
+	t.set(50,-50,10);
+	control.push_back(t);
+	t.set(15,0,10);
+	control.push_back(t);
+	t.set(50,50,15);
+	control.push_back(t);
+	t.set(100,50,10);
+	control.push_back(t);
+	t.set(100,100,10);
+	control.push_back(t);
+	t.set(70,100,10);
+	control.push_back(t);
+	t.set(60,70,10);
+	control.push_back(t);
+	t.set(50,50,15);
+	control.push_back(t);
+	t.set(50,70,10);
+	control.push_back(t);
+	t.set(30,100,10);
+	control.push_back(t);
+	t.set(2,100,10);
+	control.push_back(t);
+	control.push_back(t);
+	control.push_back(t);
+
+
+	Cardumen* card = new Cardumen(PEZ0,CANT_PLATEADO,control,true,20,false);
+	card->recorrido->setColor(1,1,0);
+	return card;
+
+}
+
 Cardumen* ContenedorObjetos::crearCardumen1(){
 
 	//puntos control trayecto
@@ -1027,7 +1094,7 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 
 
 	Cardumen* cardumen1 = new Cardumen(PEZ1,CANT_DORI,control,true,20,false);
-	cardumen1->recorrido->setColor(0,0,1);
+	cardumen1->recorrido->setColor(0.1,0.1,1);
 	return cardumen1;
 }
 
@@ -1063,7 +1130,7 @@ Cardumen* ContenedorObjetos::crearCardumen2(){
 
 
 	Cardumen* cardumen1 = new Cardumen(PEZ2,CANT_KOI,control,true,20,false);
-	cardumen1->recorrido->setColor(0.8,0.5,0);
+	cardumen1->recorrido->setColor(1,0.4,0.1);
 	return cardumen1;
 }
 
@@ -1152,8 +1219,9 @@ void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode)
 			ang_x = (-ang_x);
 		if(dir.y != 0)
 			alfa = atan2(dir.x,dir.y) * 180 / PI;
-		else
-			alfa=90;
+		else {
+			(dir.x > 0) ? alfa = 90 : alfa = (-90);
+		}
 
 		glEnable(GL_RESCALE_NORMAL);	//habilito el reescalado de normales
 
@@ -1194,7 +1262,7 @@ Cardumen* ContenedorObjetos::getCardumen(unsigned int id) {
 }
 
 void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
-	glEnable(GL_RESCALE_NORMAL);
+
 	glPushMatrix();
 		glFrontFace( GL_CCW );
 		glCullFace( GL_FRONT );
@@ -1261,6 +1329,5 @@ void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
 		glDisable(GL_CULL_FACE);
 		glPopMatrix();
 	}
-	glDisable(GL_RESCALE_NORMAL);	//sacar???
 }
 

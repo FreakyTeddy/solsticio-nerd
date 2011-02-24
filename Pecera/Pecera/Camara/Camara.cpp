@@ -15,7 +15,7 @@ void Camara::lookAt() {
 }
 
 void Camara::reset() {
-	eye.set(2,15,10.0);	//posicion camara
+	eye.set(2,35,20.0);	//posicion camara
 	at.set(0,-1.0,0);	//direccion mira
 	up.set(0.0,0.0,1.0);//vector normal
 }

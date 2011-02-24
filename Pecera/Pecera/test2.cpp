@@ -32,10 +32,12 @@ int yprev = 0;
 
 // Variables de control
 bool view_grid = false;
-bool view_axis = true;
+bool view_axis = false;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool niebla = true;
+bool fullscreen = PANTALLA_FULLSCREEN;
 bool linterna = LUZ_INICIAL;
+int camaraPez = -1;	//indica si la camara esta en  modo Pez
 
 // Handle para el control de las Display Lists
 GLuint dl_handle;
@@ -207,6 +209,12 @@ void keyboard (unsigned char key, int x, int y) {
     case 0x1b: //ESC
        	exit(0);
       break;
+    case 0x20: //SPACEBAR
+    	camaraPez++;
+    	camaraPez = escena->camaraCardumen(camaraPez);
+    	std::cout<<"PEZ nro = " <<camaraPez<<std::endl;
+    	glutPostRedisplay();
+    	break;
 	case 0x2B:  // '+'
 		escena->getCamara()->trasladar_u(1);
 		glutPostRedisplay();
@@ -289,6 +297,13 @@ void specialKeys(int key,int x, int y) {
 		escena->getCamara()->trasladar_f(-1);
 		glutPostRedisplay();
 		break;
+    case GLUT_KEY_F11:
+    	fullscreen = !fullscreen;
+    	if (fullscreen)
+    		glutFullScreen();
+    	else
+    		glutReshapeWindow(1024, 768);
+    	break;
 	}
 }
 
@@ -323,7 +338,7 @@ int main(int argc, char** argv) {
   glutInitWindowPosition(0, 0);
   glutCreateWindow("TP Final - Sistemas Graficos");
 //  glutSetIconTitle("iconsmall.png");
-//  glutFullScreen();
+
 // glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
   glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR);
   srand(time(0));
@@ -342,7 +357,7 @@ int main(int argc, char** argv) {
 
 
   /* Informacion */
-  std::cout<<"Controles: "<<std::endl;
+  std::cout<<"** Controles **"<<std::endl;
   std::cout<<"A - \t ejes"<<std::endl;
   std::cout<<"F - \t niebla"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
@@ -352,6 +367,8 @@ int main(int argc, char** argv) {
   std::cout<<"R - \t render de escena"<<std::endl;
   std::cout<<"S - \t avanzar 1 frame la animacion"<<std::endl;
   std::cout<<"T - \t trayectorias"<<std::endl;
+  std::cout<<"SPACEBAR - \t viajar con cardumen"<<std::endl;
+  std::cout<<"F11 - \t Pantalla Completa"<<std::endl;
   std::cout<<"flechas \t traslacion horizontal"<<std::endl;
   std::cout<<"'+' '-' \t traslacion vertical"<<std::endl;
   std::cout<<"boton izq \t rotacion camara"<<std::endl;

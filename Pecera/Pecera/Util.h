@@ -15,6 +15,7 @@
 #define ANIMACION_INICIAL false	/* estado inicial de la animacion */
 #define VER_TRAYECTORIAS false
 #define LUZ_INICIAL false	/* luz ambiental (false) o linterna (true) */
+#define PANTALLA_FULLSCREEN false
 #define CANT_BURBUJAS 20
 
 #define CX_INF -128	/* limites del cubo de escena */
@@ -36,6 +37,7 @@
 
 #define CANT_DORI 5
 #define CANT_KOI 3
+#define CANT_PLATEADO 10
 
 #define MAX_DIBUJOS 4
 #define MAX_ANIMACIONES 5
@@ -67,7 +69,6 @@
 #define CAR0 0
 #define CAR1 1
 #define CAR2 2
-
 
 class Util {
 
