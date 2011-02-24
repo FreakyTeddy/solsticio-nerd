@@ -23,17 +23,22 @@ ContenedorObjetos::~ContenedorObjetos() {
 //		delete aletas[i];
 //		delete colas[i];
 //	}
-//	delete tray_burbujas;
+//	delete tray_burbujas;delete animaciones[BIGOTE];
 //	glDeleteLists(handle_burbuja, 2);
 
 	/* durante los tests */
 	delete superficies[FLORERO];
 	delete cardumen[CAR2];
 	delete cardumen[CAR1];
+
+	delete cuerpos[PEZ0];
 	delete cuerpos[PEZ1];
 	delete cuerpos[PEZ2];
+
+	delete colas[PEZ0];
 	delete colas[PEZ1];
 	delete colas[PEZ2];
+	delete aletas[PEZ0];
 	delete aletas[PEZ1];
 	delete aletas[PEZ2];
 	delete animaciones[ALGA1];
@@ -60,10 +65,14 @@ void ContenedorObjetos::crearSuperficies() {
 
 	//todo rellenar los otros espacios del vector
 	superficies[FLORERO] = crearFlorero();
+	cuerpos[PEZ0] = crearPez0();
 	cuerpos[PEZ1] = crearPez1();
 	cuerpos[PEZ2] = crearPez2();
+
+	longitud[PEZ0].set(0.4,-1.49);
 	longitud[PEZ1].set(0.65,-2.8);	//hardcodeeeeeeeee
 	longitud[PEZ2].set(0.8,-1.9);
+
 	crearEscenario();
 }
 
@@ -71,8 +80,10 @@ void ContenedorObjetos::crearAnimaciones() {
 	animaciones[ALGA1] = crearAlga4();
 	animaciones[ALGA2] = crearAlga3();
 	animaciones[BIGOTE] = crearBigote();
+	aletas[PEZ0] = crearAletaPez0();
 	aletas[PEZ1] = crearAletaPez1();
 	aletas[PEZ2] = crearAletaPez2();
+	colas[PEZ0] = crearColaPez0();
 	colas[PEZ1] = crearColaPez1();
 	colas[PEZ2] = crearColaPez2();
 }
@@ -313,18 +324,86 @@ Animacion* ContenedorObjetos::crearAlga4() {
 	return ani;
 }
 
+Animacion* ContenedorObjetos::crearColaPez0() {
+
+	std::vector<Vertice> ctrol_c, curva_c, t1, t2, t3, t4, def, def2;
+	Vertice t(0,0,0.5);
+	ctrol_c.push_back(t);
+	ctrol_c.push_back(t);
+	ctrol_c.push_back(t);
+	t.set(0,-0.3,0.3);
+	ctrol_c.push_back(t);
+	t.set(0,0.3,0);
+	ctrol_c.push_back(t);
+	t.set(0,-0.3,-0.3);
+	ctrol_c.push_back(t);
+	t.set(0,0,-0.5);
+	ctrol_c.push_back(t);
+	ctrol_c.push_back(t);
+	ctrol_c.push_back(t);
+	curva.setFactor(2);
+	curva.Bspline(ctrol_c,curva_c);
+
+	t.set(0,0,0);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+	t.set(0.3,-0.2,0);
+	t1.push_back(t);
+	t.set(-0.3,-0.6,0);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+
+	curva.setFactor(2);
+	curva.Bspline(t1,t3);
+
+	t.set(0,0,0);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
+	t.set(-0.3,-0.2,0);
+	t2.push_back(t);
+	t.set(0.3,-0.6,0);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
+
+	curva.Bspline(t2,t4);
+
+	t.set(0,0,0.2);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
+	t.set(1,0,1);
+	def.push_back(t);
+	t.set(1,1,1);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
+
+	curva.Bspline(def,def2);
+
+	Animacion* ani = new Animacion(curva_c,t3,t4,def2,2);
+	ani->setModoTransicion(false);
+	ani->setTextura("plateadoaleta.png");
+	Material m;
+	m.setDiffuse(1,1,0.8,1);
+	m.setSpecular(1,1,0,1);
+	m.setAmbient(0.1,0.1,0.1,1);
+	m.setShininess(120);
+	ani->setMaterial(m);
+	return ani;
+}
+
 Animacion* ContenedorObjetos::crearColaPez1() {
 
 	std::vector<Vertice> ctrol_s, t1, t2, t3, t4, def, def2;
 	Vertice t(0,0,0.3);
 	ctrol_s.push_back(t);
-	ctrol_s.push_back(t);
-	ctrol_s.push_back(t);
 	t.set(0,0.3,0);
 	ctrol_s.push_back(t);
 	t.set(0,0,-0.3);
-	ctrol_s.push_back(t);
-	ctrol_s.push_back(t);
 	ctrol_s.push_back(t);
 
 	t.set(0,0,0);
@@ -454,6 +533,65 @@ Animacion* ContenedorObjetos::crearColaPez2() {
 	return ani;
 }
 
+Animacion* ContenedorObjetos::crearAletaPez0() {
+	std::vector<Vertice> ctrol_s, t1, t2, t3, t4, def, def2;
+	Vertice t(0,0,0);
+	ctrol_s.push_back(t);
+	t.set(0,-0.5,0);
+	ctrol_s.push_back(t);
+
+	t.set(0,0,-0.3);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+	t.set(0.2,-0.1,-0.55);
+	t1.push_back(t);
+	t.set(0.3,-0.2,-0.8);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+
+	curva.setFactor(2);
+	curva.Bspline(t1,t3);
+
+	t.set(0,0,-0.3);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
+	t.set(0.1,-0.1,-0.50);
+	t2.push_back(t);
+	t.set(0.3,-0.2,-0.70);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
+
+	curva.Bspline(t2,t4);
+
+	t.set(1,1,1);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
+	t.set(1,0.5,1);
+	def.push_back(t);
+	t.set(1,0,1);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
+
+	curva.Bspline(def,def2);
+
+	Animacion* ani = new Animacion(ctrol_s,t3,t4,def2,2);
+	ani->setModoTransicion(false);
+	ani->setTextura("plateadoaleta.png");
+	Material m;
+	m.setDiffuse(1,1,0.8,1);
+	m.setSpecular(1,1,0,1);
+	m.setAmbient(0.1,0.1,0.1,1);
+	m.setShininess(120);
+	ani->setMaterial(m);
+	return ani;
+}
+
 Animacion* ContenedorObjetos::crearAletaPez1(){
 
 	std::vector<Vertice> ctrol_s, t1, t2, t3, t4, def, def2;
@@ -521,67 +659,67 @@ Animacion* ContenedorObjetos::crearAletaPez1(){
 
 Animacion* ContenedorObjetos::crearAletaPez2() {
 	std::vector<Vertice> ctrol_s, t1, t2, t3, t4, def, def2;
-		Vertice t(0,0,-0.4);
-		ctrol_s.push_back(t);
-		ctrol_s.push_back(t);
-		ctrol_s.push_back(t);
-		t.set(0.1,0,0);
-		ctrol_s.push_back(t);
-		t.set(0,0,0.4);
-		ctrol_s.push_back(t);
-		ctrol_s.push_back(t);
-		ctrol_s.push_back(t);
+	Vertice t(0,0,-0.4);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	t.set(0.1,0,0);
+	ctrol_s.push_back(t);
+	t.set(0,0,0.4);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
 
-		t.set(0,0,0);
-		t1.push_back(t);
-		t1.push_back(t);
-		t1.push_back(t);
-		t.set(0.2,-0.3,0);
-		t1.push_back(t);
-		t.set(0.3,-0.6,0);
-		t1.push_back(t);
-		t1.push_back(t);
-		t1.push_back(t);
+	t.set(0,0,0);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
+	t.set(0.2,-0.3,0);
+	t1.push_back(t);
+	t.set(0.3,-0.6,0);
+	t1.push_back(t);
+	t1.push_back(t);
+	t1.push_back(t);
 
-		curva.setFactor(2);
-		curva.Bspline(t1,t3);
+	curva.setFactor(2);
+	curva.Bspline(t1,t3);
 
-		t.set(0,0,0);
-		t2.push_back(t);
-		t2.push_back(t);
-		t2.push_back(t);
-		t.set(0.1,-0.3,0);
-		t2.push_back(t);
-		t.set(0.15,-0.6,0);
-		t2.push_back(t);
-		t2.push_back(t);
-		t2.push_back(t);
+	t.set(0,0,0);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
+	t.set(0.1,-0.3,0);
+	t2.push_back(t);
+	t.set(0.15,-0.6,0);
+	t2.push_back(t);
+	t2.push_back(t);
+	t2.push_back(t);
 
-		curva.Bspline(t2,t4);
+	curva.Bspline(t2,t4);
 
-		t.set(1,1,0.2);
-		def.push_back(t);
-		def.push_back(t);
-		def.push_back(t);
-		t.set(1,1,1);
-		def.push_back(t);
-		t.set(1,1,0.4);
-		def.push_back(t);
-		def.push_back(t);
-		def.push_back(t);
+	t.set(1,1,0.2);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
+	t.set(1,1,1);
+	def.push_back(t);
+	t.set(1,1,0.4);
+	def.push_back(t);
+	def.push_back(t);
+	def.push_back(t);
 
-		curva.Bspline(def,def2);
+	curva.Bspline(def,def2);
 
-		Animacion* ani = new Animacion(ctrol_s,t3,t4,def2,2);
-		ani->setModoTransicion(false);
-		ani->setTextura("koialeta.png");
-		Material m;
-		m.setDiffuse(1,1,1,1);
-		m.setSpecular(1,0.5,0,1);
-		m.setAmbient(0.1,0.1,0.1,1);
-		m.setShininess(120);
-		ani->setMaterial(m);
-		return ani;
+	Animacion* ani = new Animacion(ctrol_s,t3,t4,def2,2);
+	ani->setModoTransicion(false);
+	ani->setTextura("koialeta.png");
+	Material m;
+	m.setDiffuse(1,1,1,1);
+	m.setSpecular(1,0.5,0,1);
+	m.setAmbient(0.1,0.1,0.1,1);
+	m.setShininess(120);
+	ani->setMaterial(m);
+	return ani;
 }
 
 Animacion* ContenedorObjetos::crearBigote() {
@@ -646,6 +784,86 @@ Animacion* ContenedorObjetos::crearBigote() {
 }
 
 Superficie* ContenedorObjetos::crearPez0() {
+	std::vector<Vertice> ctrol_s, curva_s, ctrol_t, curva_t, ctrol_d, curva_d;
+	Vertice t;
+
+	t.set(0,0,-1);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	t.set(0.2,-0.5,-0.6);
+	ctrol_s.push_back(t);
+	t.set(0.6,0,0);
+	ctrol_s.push_back(t);
+	t.set(0.2,-0.5,0.6);
+	ctrol_s.push_back(t);
+	t.set(0,0,1);
+	ctrol_s.push_back(t);
+	t.set(-0.2,-0.5,0.6);
+	ctrol_s.push_back(t);
+	t.set(-0.6,0,0);
+	ctrol_s.push_back(t);
+	t.set(-0.2,-0.5,-0.6);
+	ctrol_s.push_back(t);
+	t.set(0,0,-1);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+	ctrol_s.push_back(t);
+
+	curva.setFactor(3);
+	curva.Bspline(ctrol_s,curva_s);
+	curva_s.push_back(t);
+
+	t.set(0,1.1,-0.05);
+	ctrol_t.push_back(t);
+	ctrol_t.push_back(t);
+	ctrol_t.push_back(t);
+	t.set(0,0.7,-0.05);
+	ctrol_t.push_back(t);
+	t.set(0,0.5,0);
+	ctrol_t.push_back(t);
+	t.set(0,0,0);
+	ctrol_t.push_back(t);
+	t.set(0,-1,0);
+	ctrol_t.push_back(t);
+	t.set(0,-1.3,0);
+	ctrol_t.push_back(t);
+	ctrol_t.push_back(t);
+	ctrol_t.push_back(t);
+
+	curva.setFactor(2);
+	curva.Bspline(ctrol_t,curva_t);
+	curva_t.push_back(t);
+
+	ctrol_t.push_back(t);
+	t.set(0.1,0,0.1);
+	ctrol_d.push_back(t);
+	ctrol_d.push_back(t);
+	ctrol_d.push_back(t);
+	t.set(0.2,0,0.2);
+	ctrol_d.push_back(t);
+	t.set(1,0,0.8);
+	ctrol_d.push_back(t);
+	t.set(1,0,1);
+	ctrol_d.push_back(t);
+	t.set(1,1,1.3);
+	ctrol_d.push_back(t);
+	t.set(0,1,1.1);
+	ctrol_d.push_back(t);
+	ctrol_d.push_back(t);
+	ctrol_d.push_back(t);
+
+	curva.setFactor(2);
+	curva.Bspline(ctrol_d,curva_d);
+	curva_d.push_back(t);
+
+	Superficie *s = new SuperficieBarrido(curva_s,curva_t,curva_d);
+	s->getMaterial()->setDiffuse(1,1,0.8,1);
+	s->getMaterial()->setSpecular(1,1,0,1);
+	s->getMaterial()->setAmbient(0.1,0.1,0.1,1);
+	s->getMaterial()->setShininess(120);
+	s->aplicarTextura("plateado.png");
+	return s;
 
 }
 
@@ -1007,7 +1225,7 @@ void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
 		colas[id]->dibujar(render_mode);
 	glPopMatrix();
 
-	if(id == PEZ2){
+	if(id == PEZ2){		//el pez koi tiene cosas "extra"
 		glPushMatrix();
 			glTranslatef(0,0,0.7*escala);
 			glRotatef(-90,1,0,0);
@@ -1043,6 +1261,6 @@ void ContenedorObjetos::dibujarPez(uint id, uint render_mode, float escala) {
 		glDisable(GL_CULL_FACE);
 		glPopMatrix();
 	}
-	glDisable(GL_RESCALE_NORMAL);
+	glDisable(GL_RESCALE_NORMAL);	//sacar???
 }
 

@@ -31,10 +31,10 @@ void Textura::generarCoordenadas(const std::vector<Vertice> &sup, std::vector<Ve
 	std::vector<float> tall;	// long a lo "largo" para cada vertice de la curva patron
 	std::vector<float> acum_s, acum_t;
 
-	tall.resize(sup.size()/tam,0);
-	acum_t.resize(sup.size()/tam,0);
-	side.resize(tam,0);
-	acum_s.resize(tam,0);
+	tall.resize(sup.size()/tam+1,0);
+	acum_t.resize(sup.size()/tam+1,0);
+	side.resize(tam+1,0);
+	acum_s.resize(tam+1,0);
 
 	uint i=0,j=0,nro_curva = 0;
 	for (i=0; i < (sup.size()-tam); i++) {	//i indica donde estoy en la superficie
@@ -56,7 +56,7 @@ void Textura::generarCoordenadas(const std::vector<Vertice> &sup, std::vector<Ve
 	 * se le asigna una coordenada [0-1] en funcion del porcentaje de "distancia" recorrido en esa direccion
 	 * */
 
-	/* Es similar solo que calcula distancias ya recorridas ( resta "tam" en lugar de sumar -> sisi soy complicada y que! )*/
+	/* Es similar solo que calcula distancias ya recorridas ( resta "tam" en lugar de sumar -> sisi soy complicada X_X )*/
 
 	Vertice2D temp;
 	float acum = 0;

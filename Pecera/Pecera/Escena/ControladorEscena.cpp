@@ -107,6 +107,9 @@ void ControladorEscena::generarEscena() {
 //	glTranslated(0,0,10);
 //	objetos.dibujarPez(PEZ2,render_mode,1);
 
+	/* Plateado */
+	glTranslated(0,0,10);
+	objetos.dibujarPez(PEZ0,render_mode,1);
 }
 
 void ControladorEscena::animar(int n=0){

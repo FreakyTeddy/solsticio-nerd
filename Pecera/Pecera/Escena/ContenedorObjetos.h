@@ -47,7 +47,7 @@ private:
 	void crearBurbuja();
 
 	/* solo se llaman una vez. saben dibujar los objetos */
-	Superficie* crearPez1();
+	Superficie* crearPez0();
 	Superficie* crearPez1();
 	Superficie* crearPez2();
 	Superficie* crearRoca1();
@@ -55,8 +55,10 @@ private:
 
 	Animacion* crearAlga3();
 	Animacion* crearAlga4();
+	Animacion* crearAletaPez0();
 	Animacion* crearAletaPez1();
 	Animacion* crearAletaPez2();
+	Animacion* crearColaPez0();
 	Animacion* crearColaPez1();
 	Animacion* crearColaPez2();
 	Animacion* crearBigote();
@@ -100,11 +102,13 @@ public:
 //			cardumen[i]->viajar();
 //		}
 
+		colas[PEZ0]->animar();
+		aletas[PEZ0]->animar();
 //		colas[PEZ1]->animar();
 //		aletas[PEZ1]->animar();
 //		cardumen[CAR1]->viajar();
-//		cardumen[CAR0]->viajar();
-//
+
+//		cardumen[CAR2]->viajar();
 //		colas[PEZ2]->animar();
 //		aletas[PEZ2]->animar();
 //		animaciones[BIGOTE]->animar();
