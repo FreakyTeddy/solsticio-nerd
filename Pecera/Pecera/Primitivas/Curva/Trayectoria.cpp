@@ -26,7 +26,7 @@ Vertice Trayectoria::getPosicion(){
 	return trayecto[actual];
 }
 
-Vertice Trayectoria::getPosicion(size_t act){
+Vertice& Trayectoria::getPosicion(size_t act){
 	return trayecto[act];
 }
 

@@ -11,7 +11,7 @@
 
 /*****************  CONFIGURACION  *********************/
 
-#define RM_INICIAL GL_LINE /* render mode inicial */
+#define RM_INICIAL GL_TEXTURE /* render mode inicial */
 #define ANIMACION_INICIAL false	/* estado inicial de la animacion */
 #define VER_TRAYECTORIAS false
 #define LUZ_INICIAL false	/* luz ambiental (false) o linterna (true) */

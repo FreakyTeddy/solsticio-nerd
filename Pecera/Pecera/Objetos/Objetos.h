@@ -23,9 +23,10 @@ struct ObjetoViajero {
 		pos = recorrido->sgtePosicion(pos); //WARNING! NULLLLLS!!
 	};
 
-	Vertice getPos() {
+	Vertice& getPos() {
 		return recorrido->getPosicion(pos);
 	}
+
 };
 
 

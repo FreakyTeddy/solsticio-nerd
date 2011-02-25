@@ -28,7 +28,7 @@ public:
 	~Trayectoria();
 
 	Vertice getPosicion();
-	Vertice getPosicion(size_t act);
+	Vertice& getPosicion(size_t act);
 
 	/* dibuja la trayectoria */
 	void dibujarTrayecto();

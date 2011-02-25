@@ -31,17 +31,16 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 	   glFogf (GL_FOG_END, 50.0);
 	}
 
-/*	BURBUJAS
-
-	//radio = (float)((rand()%19)+1)/20.0;
+/*	BURBUJAS */
+	float radio=1;
 	size_t ubicacion = objetos.getTrayectoriaBurbujas()->cantPosiciones() / CANT_BURBUJAS;
 	for (size_t i=0; i<CANT_BURBUJAS; i++) {
-		burbujas[i] = new ObjetoViajero(BURBUJA, objetos.getTrayectoriaBurbujas(),1,1,1);
+		radio = (rand()%25)/20.0 + 0.2;
+		burbujas[i] = new ObjetoViajero(BURBUJA, objetos.getTrayectoriaBurbujas(),radio,radio,radio);
 		for (size_t j=0; j<(i*ubicacion); j++) { //las desplazo
 			burbujas[i]->viajar();
 		}
 	}
-*/
 
 	if (animando)
 		ControladorEscena::animar(0);
@@ -49,11 +48,11 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 
 ControladorEscena::~ControladorEscena() {
 
-/* BURBUJAS
+/* BURBUJAS */
 	for (int i=0; i<CANT_BURBUJAS; i++) {
 			delete burbujas[i];
 	}
-*/
+
 	delete ContenedorObjetos::getInstancia();
 	delete ContenedorTexturas::getInstancia();
 }
@@ -71,23 +70,6 @@ void ControladorEscena::generarEscena() {
 		objetos.getAnimacion(ALGA2)->dibujar(render_mode);
 	glPopMatrix();
 
-/*	BURBUJAS
-		Vertice t;
-		for (int i=0; i<CANT_BURBUJAS; i++) {
-			glPushMatrix();
-				glEnable(GL_RESCALE_NORMAL);
-				t= burbujas[i]->getPos();
-				glTranslatef(t.x,t.y,t.z);
-				t= burbujas[i]->deformacion;
-				glScalef(t.x,t.y,t.z);
-				objetos.dibujarObjeto(BURBUJA, render_mode);
-				glDisable(GL_RESCALE_NORMAL);
-			glPopMatrix();
-		}
-		if (ver_tray)
-			objetos.getTrayectoriaBurbujas()->dibujarTrayecto();
-
-*/
 
 	/* CARDUMEN DORI */
 	objetos.dibujarCardumen(objetos.getCardumen(CAR1), render_mode);
@@ -104,11 +86,28 @@ void ControladorEscena::generarEscena() {
 		objetos.getCardumen(CAR2)->recorrido->dibujarTrayecto();
 		objetos.getCardumen(CAR1)->recorrido->dibujarTrayecto();
 		objetos.getCardumen(CAR0)->recorrido->dibujarTrayecto();
+		objetos.getTrayectoriaBurbujas()->dibujarTrayecto();
 	}
 
 	/* Terreno */
 	objetos.dibujarEscenario(render_mode);
 	terreno.dibujar(render_mode);
+
+	/* Burbujas */
+	Vertice t;
+	for (int i=0; i<CANT_BURBUJAS; i++) {
+		glPushMatrix();
+			glEnable(GL_RESCALE_NORMAL);
+			t= burbujas[i]->getPos();
+			glTranslatef(t.x-6.2,t.y-4,t.z);
+			t= burbujas[i]->deformacion;
+			glScalef(t.x,t.y,t.z);
+			objetos.dibujarObjeto(BURBUJA, render_mode);
+			glTranslatef(0.5,0.75,-3);
+			objetos.dibujarObjeto(BURBUJA, render_mode);
+			glDisable(GL_RESCALE_NORMAL);
+		glPopMatrix();
+	}
 
 	/* Test de Peces aislados */
 //	glEnable(GL_RESCALE_NORMAL);
@@ -143,11 +142,10 @@ void ControladorEscena::animar(int n=0){
 	//muevo los cardumenes
 	instancia->objetos.animarPeces();
 
-/* BURBUJAS
+/* BURBUJAS */
 	for (int i=0; i<CANT_BURBUJAS; i++) {
 		instancia->burbujas[i]->viajar();
 	}
-*/
 
 	//redibujo la escena
 	glutPostRedisplay();

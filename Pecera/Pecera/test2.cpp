@@ -367,9 +367,9 @@ int main(int argc, char** argv) {
   std::cout<<"R - \t render de escena"<<std::endl;
   std::cout<<"S - \t avanzar 1 frame la animacion"<<std::endl;
   std::cout<<"T - \t trayectorias"<<std::endl;
-  std::cout<<"SPACEBAR - \t viajar con cardumen"<<std::endl;
-  std::cout<<"F11 - \t Pantalla Completa"<<std::endl;
-  std::cout<<"flechas \t traslacion horizontal"<<std::endl;
+  std::cout<<"SPACEBAR \t viajar con cardumen"<<std::endl;
+  std::cout<<"F11 -     \t Pantalla Completa"<<std::endl;
+  std::cout<<"flechas  \t traslacion horizontal"<<std::endl;
   std::cout<<"'+' '-' \t traslacion vertical"<<std::endl;
   std::cout<<"boton izq \t rotacion camara"<<std::endl;
   std::cout.flush();

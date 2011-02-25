@@ -8,7 +8,7 @@ ContenedorObjetos::ContenedorObjetos() {
 	crearSuperficies();
 	crearAnimaciones();
 	crearCardumenes();
-	//crearBurbuja();
+	crearBurbuja();
 }
 
 ContenedorObjetos::~ContenedorObjetos() {
@@ -23,8 +23,9 @@ ContenedorObjetos::~ContenedorObjetos() {
 		delete aletas[i];
 		delete colas[i];
 	}
-//	delete tray_burbujas;delete animaciones[BIGOTE];
-//	glDeleteLists(handle_burbuja, 2);
+
+	delete tray_burbujas;
+	glDeleteLists(handle_burbuja, 2);
 
 	/* durante los tests */
 	delete superficies[FLORERO];
@@ -91,9 +92,9 @@ void ContenedorObjetos::crearBurbuja() {
 
 	Material m;
 	m.setDiffuse(0.85,0.85,0.96,0.3);
-	m.setAmbient(0.15,0.15,0.6,0.3);
-	m.setSpecular(1,1,1,0);
-	m.setShininess(170);
+	m.setAmbient(0.01,0.05,0.1,0.3);
+	m.setSpecular(0.5,0.55,1,0.2);
+	m.setShininess(100);
 
 	/* sin transparencia, con lineas */
 	glNewList(handle_burbuja, GL_COMPILE);
@@ -109,13 +110,27 @@ void ContenedorObjetos::crearBurbuja() {
 	/* con transparencia y con relleno*/
 	glNewList(handle_burbuja+1, GL_COMPILE);
 
+		m.usarMaterial();
+	    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	//transparencia
+	    gluQuadricDrawStyle(qobj, GLU_FILL);
+	    gluQuadricNormals(qobj, GLU_SMOOTH);
+
+		glFrontFace( GL_CCW );
+		glCullFace( GL_BACK );
+		glEnable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
-			m.usarMaterial();
-		    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	//transparencia
-		    gluQuadricDrawStyle(qobj, GLU_FILL);
-		    gluQuadricNormals(qobj, GLU_SMOOTH);
-			gluSphere(qobj, 0.75, 15, 10);
+		glDepthMask(GL_FALSE);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	//transparencia
+
+				glCullFace( GL_FRONT );
+				gluSphere(qobj, 0.75, 15, 10);
+				glCullFace( GL_BACK );
+				gluSphere(qobj, 0.75, 15, 10);
+
+		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
+		glDisable(GL_CULL_FACE);
+		glEnable(GL_BLEND);
 
 	glEndList();
 
@@ -129,19 +144,40 @@ void ContenedorObjetos::crearBurbuja() {
 	puntos.push_back(v);
 	v.x += (float)(rand()%20 - 10);
 	v.y += (float)(rand()%20 - 10);
-	v.z += 28;
+	v.z = 28;
 	puntos.push_back(v);
 	v.x += (float)(rand()%20 - 10);
 	v.y += (float)(rand()%20 - 10);
-	v.z += 42;
+	v.z = 35;
 	puntos.push_back(v);
 	v.x += (float)(rand()%20 - 10);
 	v.y += (float)(rand()%20 - 10);
-	v.z += 60;
+	v.z = 46;
+	puntos.push_back(v);
+	v.x += (float)(rand()%20 - 10);
+	v.y += (float)(rand()%20 - 10);
+	v.z = 55;
+	puntos.push_back(v);
+	v.x += (float)(rand()%20 - 10);
+	v.y += (float)(rand()%20 - 10);
+	v.z = 65;
+	puntos.push_back(v);
+	v.x += (float)(rand()%20 - 10);
+	v.y += (float)(rand()%20 - 10);
+	v.z = 78;
+	puntos.push_back(v);
+	v.x += (float)(rand()%20 - 10);
+	v.y += (float)(rand()%20 - 10);
+	v.z = 98;
+	puntos.push_back(v);
+	v.x += (float)(rand()%20 - 10);
+	v.y += (float)(rand()%20 - 10);
+	v.z = 128;
 	puntos.push_back(v);
 	puntos.push_back(v);
 	puntos.push_back(v);
 	tray_burbujas = new Trayectoria(puntos,false,8,false);
+	tray_burbujas->setColor(0.5,0.8,1);
 }
 
 Superficie* ContenedorObjetos::crearFlorero() {
@@ -1135,14 +1171,14 @@ Cardumen* ContenedorObjetos::crearCardumen2(){
 }
 
 void ContenedorObjetos::crearEscenario() {
-	textura[0].cargarImagen("pared_neg_y.jpg");
-	textura[1].cargarImagen("pared_pos_x.jpg");
-	textura[2].cargarImagen("pared_pos_y.jpg");
-	textura[3].cargarImagen("pared_neg_x.jpg");
+//	textura[0].cargarImagen("pared_neg_y.jpg");
+//	textura[1].cargarImagen("pared_pos_x.jpg");
+//	textura[2].cargarImagen("pared_pos_y.jpg");
+//	textura[3].cargarImagen("pared_neg_x.jpg");
 	textura[4].cargarImagen("ocean.jpg");
 	mat_escenario.setSpecular(0,0,0,0);
-	mat_escenario.setAmbient(1,1,1,1);
-	mat_escenario.setDiffuse(1,1,1,1);
+	mat_escenario.setAmbient(0,0.05,0.1,1);
+	mat_escenario.setDiffuse(0,0.1,0.2,1);
 	mat_escenario.setShininess(0);
 }
 
