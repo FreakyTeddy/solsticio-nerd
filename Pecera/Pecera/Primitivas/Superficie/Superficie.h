@@ -59,6 +59,10 @@ public:
 	/* aplica la textura especificada a la superficie */
 	void aplicarTextura (std::string ruta);
 
+	void aplicarTextura (GLuint id) {
+		tex.setID(id);
+	}
+
 	Material* getMaterial();
 
 	std::vector<Vertice>& getMalla() {

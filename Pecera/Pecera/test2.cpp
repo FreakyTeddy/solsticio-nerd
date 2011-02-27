@@ -20,11 +20,6 @@ GLfloat light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat light_specular[4] = {1.0, 1.0, 1.0, 1.0};
 GLfloat light_position[3] = {10.0f, 10.0f, 100.0f};
 GLfloat light_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-//GLfloat linterna_ambient[4] = {0.05f, 0.05f, 0.1f, 1.0f};
-//GLfloat linterna_pos[3]= {0, 0, 0};
-//GLfloat linterna_dir[3]= {0, 1.0, 0};
-
-
 
 /* Mouse */
 int xprev = 0; //posicion anterior del mouse
@@ -36,7 +31,6 @@ bool view_axis = false;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool niebla = true;
 bool fullscreen = PANTALLA_FULLSCREEN;
-//bool linterna = LUZ_INICIAL;
 int camaraPez = -1;	//indica si la camara esta en  modo Pez
 
 // Handle para el control de las Display Lists
@@ -46,28 +40,6 @@ GLuint dl_handle;
 
 // Tamaño de la ventana
 GLfloat window_size[2];
-
-//void posicionarLinterna() {
-////	linterna_pos[0] = escena->getCamara()->getEye().x;
-////	linterna_pos[1] = escena->getCamara()->getEye().y;
-////	linterna_pos[2] = escena->getCamara()->getEye().z;
-////	linterna_dir[0] = escena->getCamara()->getAt().x;
-////	linterna_dir[1] = escena->getCamara()->getAt().y;
-////	linterna_dir[2] = escena->getCamara()->getAt().z;
-////	escena->getCamara()->getAt().print();
-////
-////	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
-////	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
-//	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.3);
-//	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0);
-//	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
-//	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
-//	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 20.0);
-//	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
-//	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-//	glLightfv(GL_LIGHT1, GL_AMBIENT, linterna_ambient);
-//
-//}
 
 void DrawAxis() {
   glDisable(GL_LIGHTING);
@@ -134,9 +106,6 @@ void init(void) {
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glEnable(GL_LIGHT0);
-
-	//linterna
-//	posicionarLinterna();
 
 	glEnable(GL_LIGHTING);
 

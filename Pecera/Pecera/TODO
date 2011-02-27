@@ -4,8 +4,6 @@
 
 -- textura escena-> skycube
 -- linterna! no se cambia bien la luz y no ilumina bien X_X
--- velocidad de recorrido de trayectorias
--- memory leak... checkear destructores y metodos que hacen new
 -- hay un bug cuando se ponen 25 en bspline en la trayectoria, puede ser el angulo z que esta mal (o el x)
 -- bug textura aleta dori.. la mitad de la cola queda sin textura, textura plateada mapea mal en aleta
 -- cuando se llega al final de la curva la camara pez "parpadea"

@@ -26,11 +26,6 @@ private:
 
 	Curva curva;
 
-	Material mat_escenario;	// Material del Escenario
-	Textura textura[5];		// Texturas del escenario
-
-
-
 	Superficie* superficies[MAX_DIBUJOS];		//rocas y otros
 	Animacion* animaciones[MAX_ANIMACIONES];	//algas
 	Cardumen* cardumen[MAX_CARDUMEN];			//conj de peces
@@ -41,6 +36,9 @@ private:
 
 	Trayectoria *tray_burbujas;	//burbujas
 	GLuint handle_burbuja;
+
+	GLuint handle_agua;
+	GLuint idTexAgua;
 
 	void crearSuperficies();
 	void crearAnimaciones();
@@ -72,7 +70,7 @@ private:
 	Cardumen* crearCardumen0();
 	Cardumen* crearCardumen1();
 	Cardumen* crearCardumen2();
-	void crearEscenario();
+	void crearAgua();
 
 	ContenedorObjetos();
 
@@ -89,7 +87,7 @@ public:
 	// dibuja el objeto indicado por id
 	void dibujarObjeto(unsigned int id, unsigned int render_mode);
 
-	void dibujarEscenario(unsigned int render_mode);
+	void dibujarAgua(unsigned int render_mode);
 
 	void dibujarCardumen(Cardumen* car, unsigned int render_mode);
 
@@ -103,10 +101,10 @@ public:
 		superficies[FLORERO]->dibujar(render_mode);
 	}
 
-	void cambiarTexturaRoca(std::string nombre) {
-		superficies[ROCA0]->aplicarTextura(nombre);
-		superficies[ROCA1]->aplicarTextura(nombre);
-		superficies[ROCA2]->aplicarTextura(nombre);
+	void cambiarTexturaRoca(GLuint id) {
+		superficies[ROCA0]->aplicarTextura(id);
+		superficies[ROCA1]->aplicarTextura(id);
+		superficies[ROCA2]->aplicarTextura(id);
 	}
 
 	void animarPeces(){

@@ -24,6 +24,8 @@ private:
 	static int cam_pez;
 	static ControladorEscena* instancia;
 
+	GLuint idTexRocas[4];
+
 	Terreno terreno;
 	ObjetoViajero* burbujas[CANT_BURBUJAS];
 
@@ -34,6 +36,8 @@ private:
 	void grupoAlgasRocas(float x, float y, float z);
 
 	void grupoRocas(float x, float y, float z);
+
+	void grupoAlgas(float x, float y, float z);
 
 public:
 

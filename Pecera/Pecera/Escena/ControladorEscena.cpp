@@ -46,6 +46,12 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 
 	if (animando)
 		ControladorEscena::animar(0);
+
+	idTexRocas[0] = ContenedorTexturas::getInstancia()->cargarImagen("roca2.jpg");
+	idTexRocas[1] = ContenedorTexturas::getInstancia()->cargarImagen("roca3.jpg");
+	idTexRocas[2] = ContenedorTexturas::getInstancia()->cargarImagen("roca6.jpg");
+	idTexRocas[3] = ContenedorTexturas::getInstancia()->cargarImagen("roca.jpg");
+
 }
 
 ControladorEscena::~ControladorEscena() {
@@ -72,61 +78,26 @@ void ControladorEscena::generarEscena() {
 		objetos.getAnimacion(ALGA2)->dibujar(render_mode);
 	glPopMatrix();
 
-//	glPushMatrix();
-//		glTranslatef(0,0,5);
-//		objetos.dibujarObjeto(ROCA2, render_mode);
-//		objetos.getAnimacion(ALGA0)->dibujar(render_mode);
-//		glPushMatrix();
-//			glRotatef(90,0,0,1);
-//			glTranslatef(0,2,0);
-//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
-//		glPopMatrix();
-//		glPushMatrix();
-//			glRotatef(45,0,0,1);
-//			glTranslatef(0,2,0);
-//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
-//		glPopMatrix();
-//		glPushMatrix();
-//			glRotatef(180,0,0,1);
-//			glTranslatef(0,2,0);
-//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
-//		glPopMatrix();
-//		glPushMatrix();
-//			glRotatef(270,0,0,1);
-//			glTranslatef(0,2,0);
-//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
-//		glPopMatrix();
-//		glPushMatrix();
-//			glRotatef(225,0,0,1);
-//			glTranslatef(0,2,0);
-//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
-//		glPopMatrix();
-//		glPushMatrix();
-//			glRotatef(315,0,0,1);
-//			glTranslatef(0,2,0);
-//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
-//		glPopMatrix();
-//		glPushMatrix();
-//			glRotatef(135,0,0,1);
-//			glTranslatef(0,2,0);
-//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
-//		glPopMatrix();
-//	glPopMatrix();
+	objetos.cambiarTexturaRoca(idTexRocas[3]);
+	grupoAlgasRocas(5,4,2.2);
+	grupoAlgasRocas(-42,60,4);
+	grupoAlgasRocas(-35,45,2.9);
+	grupoAlgasRocas(-35,-35,2.22);
+	grupoAlgasRocas(60,-10,6.7);
 
-	objetos.cambiarTexturaRoca("roca.jpg");
-	grupoAlgasRocas(5,4,2.9);
-	grupoAlgasRocas(-42,60,5.1);
-	grupoAlgasRocas(-35,45,4.8);
-	grupoAlgasRocas(-35,-35,2.42);
-	grupoAlgasRocas(60,-10,7.1);
+	objetos.cambiarTexturaRoca(idTexRocas[0]);
+	grupoRocas(20,20,4);
+	objetos.cambiarTexturaRoca(idTexRocas[1]);
+	grupoRocas(30,-20,4.5);
+	objetos.cambiarTexturaRoca(idTexRocas[2]);
+	grupoRocas(-50,0,2.1);
+
+	grupoAlgas(80,84,9.8);
+	grupoAlgas(-60,78,5);
+	grupoAlgas(-80,-98,3);
+	grupoAlgas(60,-78,8);
 
 
-	objetos.cambiarTexturaRoca("roca2.jpg");
-	grupoRocas(20,20,6.2);
-	objetos.cambiarTexturaRoca("roca3.jpg");
-	grupoRocas(30,-20,6.1);
-	objetos.cambiarTexturaRoca("roca6.jpg");
-	grupoRocas(-50,0,2.52);
 	/* CARDUMEN DORI */
 	objetos.dibujarCardumen(objetos.getCardumen(CAR1), render_mode);
 
@@ -146,8 +117,8 @@ void ControladorEscena::generarEscena() {
 	}
 
 	/* Terreno */
-//	objetos.dibujarEscenario(render_mode);
 	terreno.dibujar(render_mode);
+	objetos.dibujarAgua(render_mode);
 
 	/* Burbujas */
 	Vertice t;
@@ -165,22 +136,6 @@ void ControladorEscena::generarEscena() {
 		glPopMatrix();
 	}
 
-	/* Test de Peces aislados */
-//	glEnable(GL_RESCALE_NORMAL);
-
-	/* DORI */
-//	glTranslated(0,0,10);
-//	objetos.dibujarPez(PEZ1,render_mode,1);
-
-	/* KOI */
-//	glTranslated(0,0,10);
-//	objetos.dibujarPez(PEZ2,render_mode,1);
-
-	/* Plateado */
-//	glTranslated(0,0,10);
-//	objetos.dibujarPez(PEZ0,render_mode,1);
-
-//	glDisable(GL_RESCALE_NORMAL);
 }
 
 void ControladorEscena::grupoAlgasRocas(float x, float y, float z) {
@@ -212,7 +167,6 @@ void ControladorEscena::grupoAlgasRocas(float x, float y, float z) {
 
 void ControladorEscena::grupoRocas(float x, float y, float z) {
 	glPushMatrix();
-
 		glTranslatef(x,y,z);
 		objetos.dibujarObjeto(ROCA0,render_mode);
 		glTranslatef(-2,0,0);
@@ -226,6 +180,51 @@ void ControladorEscena::grupoRocas(float x, float y, float z) {
 		glScalef(5,5,3);
 			objetos.dibujarObjeto(ROCA1,render_mode);
 		glDisable(GL_RESCALE_NORMAL);
+	glPopMatrix();
+}
+
+void ControladorEscena::grupoAlgas(float x, float y, float z) {
+	glPushMatrix();
+	glEnable(GL_NORMALIZE);
+		glTranslatef(x,y,z);
+			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+
+		glPushMatrix();
+			glTranslatef(1,-1.3,0);
+			objetos.cambiarTexturaRoca(idTexRocas[1]);
+			objetos.dibujarObjeto(ROCA1,render_mode);
+			glTranslatef(0,1.5,0);
+			glScalef(1,0.3,0.3);
+			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(0.6,1,0);
+			glScalef(0.5,0.5,0.5);
+			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(-0.6,-0.8,0);
+			glScalef(0.7,0.3,0.7);
+			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(-1.9,3.2,0);
+			objetos.cambiarTexturaRoca(idTexRocas[0]);
+			objetos.dibujarObjeto(ROCA2,render_mode);
+
+		glPopMatrix();
+
+		glTranslatef(-1.3,-1.3,0);
+		glScalef(0.7,0.7,0.4);
+			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+
+		glTranslatef(0.6,-1,0);
+			objetos.cambiarTexturaRoca(idTexRocas[3]);
+			objetos.dibujarObjeto(ROCA0,render_mode);
+		glDisable(GL_NORMALIZE);
 	glPopMatrix();
 }
 

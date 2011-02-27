@@ -14,7 +14,6 @@
 #define RM_INICIAL GL_TEXTURE /* render mode inicial */
 #define ANIMACION_INICIAL true	/* estado inicial de la animacion */
 #define VER_TRAYECTORIAS false
-//#define LUZ_INICIAL false	/* luz ambiental (false) o linterna (true) */
 #define PANTALLA_FULLSCREEN true
 #define CANT_BURBUJAS 20
 

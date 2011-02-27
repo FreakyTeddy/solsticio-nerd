@@ -26,6 +26,7 @@ ContenedorObjetos::~ContenedorObjetos() {
 
 	delete tray_burbujas;
 	glDeleteLists(handle_burbuja, 2);
+	glDeleteLists(handle_agua, 1);
 }
 
 void ContenedorObjetos::dibujarObjeto(unsigned int id, unsigned int render_mode) {
@@ -56,7 +57,7 @@ void ContenedorObjetos::crearSuperficies() {
 	longitud[PEZ1].set(0.65,-2.8);	//hardcodeeeeeeeee
 	longitud[PEZ2].set(0.8,-1.9);
 
-	crearEscenario();
+	crearAgua();
 }
 
 void ContenedorObjetos::crearAnimaciones() {
@@ -68,6 +69,7 @@ void ContenedorObjetos::crearAnimaciones() {
 	aletas[PEZ0] = crearAletaPez0();
 	aletas[PEZ1] = crearAletaPez1();
 	aletas[PEZ2] = crearAletaPez2();
+
 	colas[PEZ0] = crearColaPez0();
 	colas[PEZ1] = crearColaPez1();
 	colas[PEZ2] = crearColaPez2();
@@ -343,7 +345,7 @@ Animacion* ContenedorObjetos::crearAlga1() {
 }
 
 Animacion* ContenedorObjetos::crearAlga0() {
-	std::vector<Vertice> v;
+	std::vector<Vertice> v; /* alga "serpiente" */
 	std::vector<Vertice> trasl;
 	Vertice q;
 	curva.setFactor(3);
@@ -1388,77 +1390,53 @@ Cardumen* ContenedorObjetos::crearCardumen2(){
 	return cardumen1;
 }
 
-void ContenedorObjetos::crearEscenario() {
-//	textura[1].cargarImagen("fondo-mar-2.jpg");
-//	textura[1].cargarImagen("pared_pos_x.jpg");
-//	textura[2].cargarImagen("pared_pos_y.jpg");
-//	textura[3].cargarImagen("pared_neg_x.jpg");
-	textura[4].cargarImagen("ocean.jpg");
-	mat_escenario.setSpecular(0,0,0,0);
-	mat_escenario.setAmbient(0,0.05,0.1,1);
-	mat_escenario.setDiffuse(0,0.1,0.2,1);
-	mat_escenario.setShininess(0);
+void ContenedorObjetos::crearAgua() {
+	handle_agua = glGenLists(1);
+
+	Material mat_agua;
+	mat_agua.setSpecular(0,0,0,0);
+	mat_agua.setAmbient(0,0.05,0.1,1);
+	mat_agua.setDiffuse(0.1,0.2,0.3,1);
+	mat_agua.setShininess(0);
+
+	idTexAgua = ContenedorTexturas::getInstancia()->cargarImagen("ocean.jpg");
+
+	glNewList(handle_agua, GL_COMPILE);
+
+		glFrontFace( GL_CCW );
+		glCullFace( GL_FRONT );
+		glEnable(GL_CULL_FACE);
+		mat_agua.usarMaterial();
+
+		glBegin(GL_QUADS);
+			glNormal3f(0,0,-1);
+			glTexCoord2f(0,0);
+			glVertex3f(CX_INF,CY_INF,CZ_SUP);
+			glTexCoord2f(1,0);
+			glVertex3f(CX_SUP,CY_INF,CZ_SUP);
+			glTexCoord2f(1,1);
+			glVertex3f(CX_SUP,CY_SUP,CZ_SUP);
+			glTexCoord2f(0,1);
+			glVertex3f(CX_INF,CY_SUP,CZ_SUP);
+		glEnd();
+
+		glDisable( GL_CULL_FACE );
+	glEndList();
 }
 
-void ContenedorObjetos::dibujarEscenario(unsigned int render_mode) {
+void ContenedorObjetos::dibujarAgua(unsigned int render_mode) {
 
-	glFrontFace( GL_CCW );
-	glCullFace( GL_BACK );
-	glEnable(GL_CULL_FACE);
-
-	mat_escenario.usarMaterial();
-
-	static GLfloat cubo[24]={CX_INF,CY_INF,CZ_INF , CX_INF,CY_INF,CZ_SUP ,
-							 CX_SUP,CY_INF,CZ_SUP , CX_SUP,CY_INF,CZ_INF ,
-							 CX_SUP,CY_SUP,CZ_INF , CX_SUP,CY_SUP,CZ_SUP ,
-							 CX_INF,CY_SUP,CZ_SUP , CX_INF,CY_SUP,CZ_INF};
-
-	static GLfloat norm[15]={ 0,1,0, -1,0,0, 0,-1,0, 1,0,0, 0,0,-1};
-
-	static GLshort idx[20] = { 0,1,2,3, 2,5,4,3, 5,6,7,4, 0,7,6,1, 1,6,5,2 };
-
-	if ( render_mode == GL_LINE)
-		glPolygonMode( GL_FRONT, GL_LINE);
-	else
-		glPolygonMode( GL_FRONT, GL_FILL);
-
-
-	for (unsigned int i=0, j=0; i<20; i+=4, j++){
-
-		if ((render_mode == GL_TEXTURE) && textura[j].tieneTextura() ) {
-
-			glBindTexture(GL_TEXTURE_2D, textura[j].getID());
-			glEnable(GL_TEXTURE_2D);
-			glBegin(GL_QUADS);
-
-				glNormal3fv(&norm[j]);
-				glTexCoord2f(0.0,0.0);
-				glVertex3f(cubo[idx[i  ]*3],cubo[idx[i  ]*3+1],cubo[idx[i  ]*3+2]);
-				glTexCoord2f(1.0,0.0);
-				glVertex3f(cubo[idx[i+1]*3],cubo[idx[i+1]*3+1],cubo[idx[i+1]*3+2]);
-				glTexCoord2f(1.0,1.0);
-				glVertex3f(cubo[idx[i+2]*3],cubo[idx[i+2]*3+1],cubo[idx[i+2]*3+2]);
-				glTexCoord2f(0.0,1.0);
-				glVertex3f(cubo[idx[i+3]*3],cubo[idx[i+3]*3+1],cubo[idx[i+3]*3+2]);
-
-			glEnd();
-			glDisable(GL_TEXTURE_2D);
-		}
-		else
-		{
-			glBegin(GL_QUADS);
-				glNormal3fv(&norm[j]);
-				glVertex3f(cubo[idx[i  ]*3],cubo[idx[i  ]*3+1],cubo[idx[i  ]*3+2]);
-				glVertex3f(cubo[idx[i+1]*3],cubo[idx[i+1]*3+1],cubo[idx[i+1]*3+2]);
-				glVertex3f(cubo[idx[i+2]*3],cubo[idx[i+2]*3+1],cubo[idx[i+2]*3+2]);
-				glVertex3f(cubo[idx[i+3]*3],cubo[idx[i+3]*3+1],cubo[idx[i+3]*3+2]);
-			glEnd();
-		}
-
-
+	if (render_mode == GL_TEXTURE){
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glBindTexture(GL_TEXTURE_2D, idTexAgua);
+		glEnable(GL_TEXTURE_2D);
+			glCallList(handle_agua);
+		glDisable(GL_TEXTURE_2D);
 	}
-	glDisable( GL_CULL_FACE );
-
+	else {
+		glPolygonMode(GL_FRONT_AND_BACK, render_mode);
+		glCallList(handle_agua);
+	}
 }
 
 void ContenedorObjetos::dibujarCardumen(Cardumen* car, unsigned int render_mode) {
