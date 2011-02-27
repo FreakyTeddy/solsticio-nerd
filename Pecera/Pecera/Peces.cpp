@@ -133,7 +133,6 @@ void salir() {
 void display(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//	posicionarLinterna();
 	escena->getCamara()->lookAt();
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
@@ -150,8 +149,6 @@ void display(void)
 
 
 		escena->generarEscena();
-escena->getCamara()->getEye().print();
-
 
     /////////////////////////// fin dibujar =P /////////////////////
 	if (niebla)
@@ -202,18 +199,6 @@ void keyboard (unsigned char key, int x, int y) {
       niebla = !niebla;
       glutPostRedisplay();
       break;
-//    case 'l':
-//    case 'L':
-//      linterna = !linterna;
-//      if (linterna) {
-//    	  glDisable(GL_LIGHT0);
-//    	  glEnable(GL_LIGHT1);
-//      }else{
-//    	  glDisable(GL_LIGHT1);
-//    	  glEnable(GL_LIGHT0);
-//      }
-//      glutPostRedisplay();
-//      break;
     case 'c':
     case 'C':
       escena->getCamara()->reset();
@@ -325,7 +310,6 @@ int main(int argc, char** argv) {
   std::cout<<"F - \t niebla"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
   std::cout<<"C - \t reset camara"<<std::endl;
-//  std::cout<<"L - \t linterna / luz ambiental"<<std::endl;
   std::cout<<"P - \t iniciar/detener animacion"<<std::endl;
   std::cout<<"R - \t render de escena"<<std::endl;
   std::cout<<"S - \t avanzar 1 frame la animacion"<<std::endl;
