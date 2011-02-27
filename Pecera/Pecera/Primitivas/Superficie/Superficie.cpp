@@ -19,6 +19,8 @@ void Superficie::dibujar(unsigned int render_mode) {
 
 	if ((render_mode != GL_TEXTURE) || (render_mode == GL_TEXTURE && !tex.tieneTextura())) {
 		glPolygonMode( GL_FRONT_AND_BACK, render_mode);
+		glFrontFace( GL_CCW );
+		glCullFace(cull);
 		//llamo a la display list
 		 glCallList(dl_handle);
 	}
@@ -27,6 +29,8 @@ void Superficie::dibujar(unsigned int render_mode) {
 		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
 		glBindTexture(GL_TEXTURE_2D,tex.getID());
 		glEnable(GL_TEXTURE_2D);
+		glFrontFace( GL_CCW );
+		glCullFace(cull);
 		//llamo a la display list
 		 glCallList(dl_handle+1);
 		glDisable(GL_TEXTURE_2D);
@@ -252,6 +256,8 @@ void Superficie::generarDisplayListTextura() {
 
 void Superficie::init() {
 	
+	cull = GL_FRONT;
+
 	setIndices();
 	setNormales();
 	tex.generarCoordenadas(superficie, texCoord, tam);
@@ -259,8 +265,6 @@ void Superficie::init() {
 	generarDisplayList();
 	generarDisplayListTextura();
 
-	//WARNING!!!
-	//normales.clear();
 	indices.clear();
 	texCoord.clear();
 	if(!keep)

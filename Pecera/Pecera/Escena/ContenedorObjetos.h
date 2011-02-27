@@ -29,6 +29,8 @@ private:
 	Material mat_escenario;	// Material del Escenario
 	Textura textura[5];		// Texturas del escenario
 
+
+
 	Superficie* superficies[MAX_DIBUJOS];		//rocas y otros
 	Animacion* animaciones[MAX_ANIMACIONES];	//algas
 	Cardumen* cardumen[MAX_CARDUMEN];			//conj de peces
@@ -50,11 +52,15 @@ private:
 	Superficie* crearPez0();
 	Superficie* crearPez1();
 	Superficie* crearPez2();
+
+	Superficie* crearRoca0();
 	Superficie* crearRoca1();
+	Superficie* crearRoca2();
 	Superficie* crearFlorero();
 
-	Animacion* crearAlga3();
-	Animacion* crearAlga4();
+	Animacion* crearAlga0();
+	Animacion* crearAlga1();
+	Animacion* crearAlga2();
 	Animacion* crearAletaPez0();
 	Animacion* crearAletaPez1();
 	Animacion* crearAletaPez2();
@@ -93,27 +99,30 @@ public:
 
 	void dibujarPez( uint id, uint render_mode, float escala);
 
+	void dibujarFlorero(uint render_mode){
+		superficies[FLORERO]->dibujar(render_mode);
+	}
+
+	void cambiarTexturaRoca(std::string nombre) {
+		superficies[ROCA0]->aplicarTextura(nombre);
+		superficies[ROCA1]->aplicarTextura(nombre);
+		superficies[ROCA2]->aplicarTextura(nombre);
+	}
+
 	void animarPeces(){
-//		for(uint i=0; i< MAX_TIPO_PECES; i++){
-//			aletas[i]->animar();
-//			colas[i]->animar();
-//		}
-//		for(uint i=0; i< MAX_CARDUMEN; i++){
-//			cardumen[i]->viajar();
-//		}
+		for(uint i=0; i< MAX_TIPO_PECES; i++){
+			aletas[i]->animar();
+			colas[i]->animar();
+		}
+		for(uint i=0; i< MAX_CARDUMEN; i++){
+			cardumen[i]->viajar();
+		}
+	};
 
-		colas[PEZ0]->animar();
-		aletas[PEZ0]->animar();
-		cardumen[CAR0]->viajar();
-
-		colas[PEZ1]->animar();
-		aletas[PEZ1]->animar();
-		cardumen[CAR1]->viajar();
-
-		cardumen[CAR2]->viajar();
-		colas[PEZ2]->animar();
-		aletas[PEZ2]->animar();
-		animaciones[BIGOTE]->animar();
+	void animarAlgas(){
+		for(uint i=0; i< MAX_ANIMACIONES; i++){
+			animaciones[i]->animar();
+		}
 	};
 
 };

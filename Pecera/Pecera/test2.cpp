@@ -20,9 +20,9 @@ GLfloat light_color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat light_specular[4] = {1.0, 1.0, 1.0, 1.0};
 GLfloat light_position[3] = {10.0f, 10.0f, 100.0f};
 GLfloat light_ambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-GLfloat linterna_ambient[4] = {0.05f, 0.05f, 0.1f, 1.0f};
-GLfloat linterna_pos[3]= {0, 0, 0};
-GLfloat linterna_dir[3]= {0, 1.0, 0};
+//GLfloat linterna_ambient[4] = {0.05f, 0.05f, 0.1f, 1.0f};
+//GLfloat linterna_pos[3]= {0, 0, 0};
+//GLfloat linterna_dir[3]= {0, 1.0, 0};
 
 
 
@@ -36,7 +36,7 @@ bool view_axis = false;
 bool mouseDown = false; 	//indica si se apreta el boton izquierdo del mouse
 bool niebla = true;
 bool fullscreen = PANTALLA_FULLSCREEN;
-bool linterna = LUZ_INICIAL;
+//bool linterna = LUZ_INICIAL;
 int camaraPez = -1;	//indica si la camara esta en  modo Pez
 
 // Handle para el control de las Display Lists
@@ -47,16 +47,27 @@ GLuint dl_handle;
 // Tamaño de la ventana
 GLfloat window_size[2];
 
-void posicionarLinterna() {
-//	linterna_pos[0] = escena->getCamara()->getEye().x;
-//	linterna_pos[1] = escena->getCamara()->getEye().y;
-//	linterna_pos[2] = escena->getCamara()->getEye().z;
-//	linterna_dir[0] = escena->getCamara()->getAt().x;
-//	linterna_dir[1] = escena->getCamara()->getAt().y;
-//	linterna_dir[2] = escena->getCamara()->getAt().z;
-//	linterna_dir[0] = 0;linterna_dir[0] = -1;linterna_dir[0] = 0;
-//	linterna_pos[0] = 0;linterna_pos[0] = 0;linterna_pos[0] = 0;
-}
+//void posicionarLinterna() {
+////	linterna_pos[0] = escena->getCamara()->getEye().x;
+////	linterna_pos[1] = escena->getCamara()->getEye().y;
+////	linterna_pos[2] = escena->getCamara()->getEye().z;
+////	linterna_dir[0] = escena->getCamara()->getAt().x;
+////	linterna_dir[1] = escena->getCamara()->getAt().y;
+////	linterna_dir[2] = escena->getCamara()->getAt().z;
+////	escena->getCamara()->getAt().print();
+////
+////	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
+////	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
+//	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.3);
+//	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0);
+//	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
+//	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
+//	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 20.0);
+//	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
+//	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
+//	glLightfv(GL_LIGHT1, GL_AMBIENT, linterna_ambient);
+//
+//}
 
 void DrawAxis() {
   glDisable(GL_LIGHTING);
@@ -115,30 +126,17 @@ void init(void) {
 
   /* iluminacion */
 
+	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+
   	  //luz ambiental
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_color);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glEnable(GL_LIGHT0);
 
 	//linterna
 //	posicionarLinterna();
-
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
-	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.3);
-	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0);
-	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 20.0);
-
-	glLightfv(GL_LIGHT1, GL_POSITION, linterna_pos);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, linterna_dir);
-
-	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
 	glEnable(GL_LIGHTING);
 
@@ -163,12 +161,10 @@ void salir() {
 	exit(0);
 }
 
-
 void display(void)
 {
-	//glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+//	posicionarLinterna();
 	escena->getCamara()->lookAt();
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
@@ -185,7 +181,7 @@ void display(void)
 
 
 		escena->generarEscena();
-
+escena->getCamara()->getEye().print();
 
 
     /////////////////////////// fin dibujar =P /////////////////////
@@ -212,7 +208,6 @@ void keyboard (unsigned char key, int x, int y) {
     case 0x20: //SPACEBAR
     	camaraPez++;
     	camaraPez = escena->camaraCardumen(camaraPez);
-    	std::cout<<"PEZ nro = " <<camaraPez<<std::endl;
     	glutPostRedisplay();
     	break;
 	case 0x2B:  // '+'
@@ -238,18 +233,18 @@ void keyboard (unsigned char key, int x, int y) {
       niebla = !niebla;
       glutPostRedisplay();
       break;
-    case 'l':
-    case 'L':
-      linterna = !linterna;
-      if (linterna) {
-    	  glDisable(GL_LIGHT0);
-    	  glEnable(GL_LIGHT1);
-      }else{
-    	  glDisable(GL_LIGHT1);
-    	  glEnable(GL_LIGHT0);
-      }
-      glutPostRedisplay();
-      break;
+//    case 'l':
+//    case 'L':
+//      linterna = !linterna;
+//      if (linterna) {
+//    	  glDisable(GL_LIGHT0);
+//    	  glEnable(GL_LIGHT1);
+//      }else{
+//    	  glDisable(GL_LIGHT1);
+//    	  glEnable(GL_LIGHT0);
+//      }
+//      glutPostRedisplay();
+//      break;
     case 'c':
     case 'C':
       escena->getCamara()->reset();
@@ -337,10 +332,9 @@ int main(int argc, char** argv) {
   glutInitWindowSize(1024, 768);
   glutInitWindowPosition(0, 0);
   glutCreateWindow("TP Final - Sistemas Graficos");
-//  glutSetIconTitle("iconsmall.png");
-
-// glutWarpPointer(window_size[0] / 2, window_size[1] / 2);
+  glutSetIconTitle("iconsmall.png");
   glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR);
+
   srand(time(0));
 
   glutDisplayFunc(display);
@@ -362,7 +356,7 @@ int main(int argc, char** argv) {
   std::cout<<"F - \t niebla"<<std::endl;
   std::cout<<"G - \t grilla"<<std::endl;
   std::cout<<"C - \t reset camara"<<std::endl;
-  std::cout<<"L - \t linterna / luz ambiental"<<std::endl;
+//  std::cout<<"L - \t linterna / luz ambiental"<<std::endl;
   std::cout<<"P - \t iniciar/detener animacion"<<std::endl;
   std::cout<<"R - \t render de escena"<<std::endl;
   std::cout<<"S - \t avanzar 1 frame la animacion"<<std::endl;

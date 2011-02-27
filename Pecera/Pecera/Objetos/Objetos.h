@@ -55,6 +55,7 @@ struct Cardumen {
 	void viajar(){
 		recorrido->sgtePosicion();
 	};
+
 private:
 	void init(){
 		volumen = new float [cantidad];

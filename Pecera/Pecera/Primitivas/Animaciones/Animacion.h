@@ -22,10 +22,6 @@ protected:
 public:
 	u_short f_cant; 	//cant de frames
 	u_short f_act; 		//frame actual
-	/* TODO extenderlo a una lista de vectores si es necesario mas de un punto de control */
-
-	/* crea una animacion con una superficie de Revolucion */
-//	Animacion(std::vector<Vertice> &forma_inicial, std::vector<Vertice> &forma_final, float angulo,Vertice eje1, Vertice eje2, uint pasos = 20);
 
 	/* crea una animacion con una superficie de Barrido donde Cambia la traslacion
 	 * WARNING! deben pasarse unicamente los puntos de control :) */
@@ -60,6 +56,11 @@ public:
 	void setModoTransicion(bool ciclico);
 
 	void setMaterial(Material &m);
+
+	void setCull(GLenum x){
+		for (u_short i=0; i < f_cant; i++)
+			frame[i]->setCullFace(x);
+	};
 
 	void setTextura(std::string name);
 

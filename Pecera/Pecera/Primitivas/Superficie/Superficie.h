@@ -16,6 +16,7 @@ private:
 
 protected:
 	GLuint dl_handle;	//display list que dibuja con triangulos. dl_handle+1 dibuja con texturas.
+	GLenum cull;
 
 	std::vector<Vertice> superficie;	// malla de vertices 3D de la superficie
 	std::vector<Vertice> normales;		// normales de iluminacion en cada vertice 3D
@@ -68,6 +69,10 @@ public:
 	};
 
 	void setMaterial(Material &m);
+
+	void setCullFace(GLenum x) {
+		cull=x;
+	}
 
 };
 

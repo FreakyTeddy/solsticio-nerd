@@ -1,7 +1,8 @@
 #include "Camara.h"
 #include <math.h>
 #include "../Primitivas/rotacion_3d.h"
-
+//GLfloat _linterna_pos[3]= {0, 1, 0};
+//GLfloat _linterna_dir[3]= {0, 0, -0.2};
 Camara::Camara() {
 	reset();
 }
@@ -11,7 +12,11 @@ Camara::~Camara() {}
 
 void Camara::lookAt() {
 	glLoadIdentity();
+
 	gluLookAt (eye.x, eye.y, eye.z, eye.x+ at.x, eye.y + at.y, eye.z + at.z, up.x, up.y, up.z);
+//	_linterna_pos[0]=eye.x;_linterna_pos[1]=eye.y;_linterna_pos[2]=eye.z;
+//	glLightfv(GL_LIGHT1, GL_POSITION, _linterna_pos);
+//	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, _linterna_dir);
 }
 
 void Camara::reset() {

@@ -4,7 +4,7 @@
 
 Terreno::Terreno() {
 	Curva c;
-	c.setFactor(5);
+	c.setFactor(4);
 	Vertice t(CX_INF,0,0);
 
 	//creo el perfil del terreno
@@ -13,7 +13,10 @@ Terreno::Terreno() {
 	perfil.push_back(t);
 	perfil.push_back(t);
 
-	t.set(CX_INF*2/3, 0, 3);
+	t.set(CX_INF*3/4, 0, 3);
+	perfil.push_back(t);
+
+	t.set(CX_INF*2/3, 0, 0);
 	perfil.push_back(t);
 
 	t.set(CX_INF/3, 0, 3);
@@ -25,7 +28,10 @@ Terreno::Terreno() {
 	t.set(CX_SUP/3, 0, 9);
 	perfil.push_back(t);
 
-	t.set(CX_SUP*2/3, 0, 6);
+	t.set(CX_SUP*2/3, 0, 4);
+	perfil.push_back(t);
+
+	t.set(CX_SUP*3/4, 0, -1);
 	perfil.push_back(t);
 
 	t.set(CX_SUP,0,0);
@@ -110,6 +116,7 @@ Terreno::Terreno() {
 	m.setShininess(0);
 	m.setSpecular(0,0,0,1);
 	sup->setMaterial(m);
+	sup->setCullFace(GL_FRONT);
 
 }
 

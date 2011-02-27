@@ -30,6 +30,11 @@ private:
 	/* realiza la transicion de frames y redibuja la escena */
 	static void animar(const int n);
 
+	/* dibuja el grupo de algas y rocas en la posicion (xyz) */
+	void grupoAlgasRocas(float x, float y, float z);
+
+	void grupoRocas(float x, float y, float z);
+
 public:
 
 

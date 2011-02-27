@@ -133,7 +133,7 @@ void ContenedorTexturas::liberarImagenesCargadas() {
 }
 
 void ContenedorTexturas::vaciarContenedor() {
-	mostrarImagenesCargadas();
+	//mostrarImagenesCargadas();
 	liberarImagenesCargadas();
 }
 

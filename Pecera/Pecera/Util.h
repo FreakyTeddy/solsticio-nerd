@@ -12,18 +12,18 @@
 /*****************  CONFIGURACION  *********************/
 
 #define RM_INICIAL GL_TEXTURE /* render mode inicial */
-#define ANIMACION_INICIAL false	/* estado inicial de la animacion */
+#define ANIMACION_INICIAL true	/* estado inicial de la animacion */
 #define VER_TRAYECTORIAS false
-#define LUZ_INICIAL false	/* luz ambiental (false) o linterna (true) */
-#define PANTALLA_FULLSCREEN false
+//#define LUZ_INICIAL false	/* luz ambiental (false) o linterna (true) */
+#define PANTALLA_FULLSCREEN true
 #define CANT_BURBUJAS 20
 
-#define CX_INF -128	/* limites del cubo de escena */
-#define CX_SUP 128
-#define CY_INF -128
-#define CY_SUP 128
+#define CX_INF -178	/* limites del cubo de escena */
+#define CX_SUP 178
+#define CY_INF -178
+#define CY_SUP 178
 #define CZ_INF 0
-#define CZ_SUP 128
+#define CZ_SUP 178
 
 #define X_INF -126	/* limites de la camara */
 #define X_SUP 126
@@ -40,7 +40,7 @@
 #define CANT_PLATEADO 10
 
 #define MAX_DIBUJOS 4
-#define MAX_ANIMACIONES 5
+#define MAX_ANIMACIONES 4
 #define MAX_CARDUMEN 3
 #define MAX_TIPO_PECES 3
 
@@ -53,12 +53,10 @@
 #define BURBUJA 4
 
 /* Animaciones */
-#define ALGA1 0
-#define ALGA2 1
-#define ALGA3 2
+#define ALGA0 0
+#define ALGA1 1
+#define ALGA2 2
 #define BIGOTE 3
-#define ALETA 4
-
 
 /* Peces */
 #define PEZ0 0

@@ -27,6 +27,8 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 	   glFogfv (GL_FOG_COLOR, fogColor);
 	   glFogf (GL_FOG_DENSITY, 0.01);
 	   glHint (GL_FOG_HINT, GL_DONT_CARE);
+//	   glHint (GL_FOG_HINT, GL_NICEST);
+//	   glHint (GL_FOG_HINT, GL_FASTEST);
 	   glFogf (GL_FOG_START, 20.0);
 	   glFogf (GL_FOG_END, 50.0);
 	}
@@ -64,13 +66,67 @@ void ControladorEscena::generarEscena() {
 	glPushMatrix();
 		glRotatef(180,0,0,1);
 		glTranslatef(5,4,0);
-		objetos.dibujarObjeto(FLORERO, render_mode);
+		objetos.dibujarFlorero(render_mode);
 		glTranslatef(1.5,0,1.7);
 		objetos.getAnimacion(ALGA1)->dibujar(render_mode);
 		objetos.getAnimacion(ALGA2)->dibujar(render_mode);
 	glPopMatrix();
 
+//	glPushMatrix();
+//		glTranslatef(0,0,5);
+//		objetos.dibujarObjeto(ROCA2, render_mode);
+//		objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+//		glPushMatrix();
+//			glRotatef(90,0,0,1);
+//			glTranslatef(0,2,0);
+//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+//		glPopMatrix();
+//		glPushMatrix();
+//			glRotatef(45,0,0,1);
+//			glTranslatef(0,2,0);
+//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+//		glPopMatrix();
+//		glPushMatrix();
+//			glRotatef(180,0,0,1);
+//			glTranslatef(0,2,0);
+//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+//		glPopMatrix();
+//		glPushMatrix();
+//			glRotatef(270,0,0,1);
+//			glTranslatef(0,2,0);
+//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+//		glPopMatrix();
+//		glPushMatrix();
+//			glRotatef(225,0,0,1);
+//			glTranslatef(0,2,0);
+//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+//		glPopMatrix();
+//		glPushMatrix();
+//			glRotatef(315,0,0,1);
+//			glTranslatef(0,2,0);
+//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+//		glPopMatrix();
+//		glPushMatrix();
+//			glRotatef(135,0,0,1);
+//			glTranslatef(0,2,0);
+//			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+//		glPopMatrix();
+//	glPopMatrix();
 
+	objetos.cambiarTexturaRoca("roca.jpg");
+	grupoAlgasRocas(5,4,2.9);
+	grupoAlgasRocas(-42,60,5.1);
+	grupoAlgasRocas(-35,45,4.8);
+	grupoAlgasRocas(-35,-35,2.42);
+	grupoAlgasRocas(60,-10,7.1);
+
+
+	objetos.cambiarTexturaRoca("roca2.jpg");
+	grupoRocas(20,20,6.2);
+	objetos.cambiarTexturaRoca("roca3.jpg");
+	grupoRocas(30,-20,6.1);
+	objetos.cambiarTexturaRoca("roca6.jpg");
+	grupoRocas(-50,0,2.52);
 	/* CARDUMEN DORI */
 	objetos.dibujarCardumen(objetos.getCardumen(CAR1), render_mode);
 
@@ -90,7 +146,7 @@ void ControladorEscena::generarEscena() {
 	}
 
 	/* Terreno */
-	objetos.dibujarEscenario(render_mode);
+//	objetos.dibujarEscenario(render_mode);
 	terreno.dibujar(render_mode);
 
 	/* Burbujas */
@@ -99,7 +155,7 @@ void ControladorEscena::generarEscena() {
 		glPushMatrix();
 			glEnable(GL_RESCALE_NORMAL);
 			t= burbujas[i]->getPos();
-			glTranslatef(t.x-6.2,t.y-4,t.z);
+			glTranslatef(t.x-6.3,t.y-4.2,t.z);
 			t= burbujas[i]->deformacion;
 			glScalef(t.x,t.y,t.z);
 			objetos.dibujarObjeto(BURBUJA, render_mode);
@@ -127,11 +183,57 @@ void ControladorEscena::generarEscena() {
 //	glDisable(GL_RESCALE_NORMAL);
 }
 
+void ControladorEscena::grupoAlgasRocas(float x, float y, float z) {
+	glPushMatrix();
+		glTranslatef(x,y,z);
+		objetos.getAnimacion(ALGA1)->dibujar(render_mode);
+		glPushMatrix();
+			glRotatef(-35,0,0,1);
+			objetos.getAnimacion(ALGA2)->dibujar(render_mode);
+		glPopMatrix();
+		glPushMatrix();
+			glRotatef(45,0,0,1);
+			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+			glTranslatef(0.5,-0.5,0);
+			glRotatef(160,0,0,1);
+			objetos.getAnimacion(ALGA0)->dibujar(render_mode);
+		glPopMatrix();
+		glTranslatef(0,-2,0);
+		objetos.dibujarObjeto(ROCA2,render_mode);
+		glTranslatef(2.2,1.5,0);
+		glEnable(GL_RESCALE_NORMAL);
+		glScalef(2,2,2);
+		objetos.dibujarObjeto(ROCA1,render_mode);
+		glTranslatef(-1.8,0.3,0);
+		objetos.dibujarObjeto(ROCA0,render_mode);
+		glDisable(GL_RESCALE_NORMAL);
+	glPopMatrix();
+}
+
+void ControladorEscena::grupoRocas(float x, float y, float z) {
+	glPushMatrix();
+
+		glTranslatef(x,y,z);
+		objetos.dibujarObjeto(ROCA0,render_mode);
+		glTranslatef(-2,0,0);
+		objetos.dibujarObjeto(ROCA1,render_mode);
+		glTranslatef(4,4,0);
+		objetos.dibujarObjeto(ROCA2,render_mode);
+		glTranslatef(0,-5,0);
+		objetos.dibujarObjeto(ROCA0,render_mode);
+		glEnable(GL_RESCALE_NORMAL);
+		glTranslatef(3,-3,0);
+		glScalef(5,5,3);
+			objetos.dibujarObjeto(ROCA1,render_mode);
+		glDisable(GL_RESCALE_NORMAL);
+	glPopMatrix();
+}
+
+
 void ControladorEscena::animar(int n=0){
 
 	//animo las superficies
-	instancia->objetos.getAnimacion(ALGA1)->animar();
-	instancia->objetos.getAnimacion(ALGA2)->animar();
+	instancia->objetos.animarAlgas();
 
 	//muevo la camara si estoy en modo pez
 	if (cam_pez > -1){

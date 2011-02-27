@@ -41,6 +41,7 @@ public:
 	Vertice getDireccion();
 
 	void sgtePosicion();
+
 	size_t sgtePosicion(size_t act);
 
 	void setColor(GLfloat r, GLfloat g, GLfloat b) {

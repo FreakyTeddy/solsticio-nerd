@@ -45,7 +45,7 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_in
 		frame[i] = new SuperficieBarrido(forma, control[i], defo);
 	}
 
-	delete[] control; //VER!!
+	delete[] control;
 }
 
 Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl, std::vector<Vertice> &defo,Vertice &dir, uint inicio, uint cant_frames, bool ciclico) {
