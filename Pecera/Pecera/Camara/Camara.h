@@ -10,7 +10,6 @@
 
 /*
  * Clase que controla la camara
- * Por ejemplo, controla el seguimiento de peces, rotaciones, posicion
  */
 
 class Camara {

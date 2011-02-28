@@ -59,12 +59,15 @@ private:
 	Animacion* crearAlga0();
 	Animacion* crearAlga1();
 	Animacion* crearAlga2();
+
 	Animacion* crearAletaPez0();
 	Animacion* crearAletaPez1();
 	Animacion* crearAletaPez2();
+
 	Animacion* crearColaPez0();
 	Animacion* crearColaPez1();
 	Animacion* crearColaPez2();
+
 	Animacion* crearBigote();
 
 	Cardumen* crearCardumen0();
@@ -75,10 +78,6 @@ private:
 	ContenedorObjetos();
 
 public:
-
-	Trayectoria* getTrayectoriaBurbujas() {
-		return tray_burbujas;
-	}
 
 	~ContenedorObjetos();
 
@@ -122,6 +121,10 @@ public:
 			animaciones[i]->animar();
 		}
 	};
+
+	Trayectoria* getTrayectoriaBurbujas() {
+		return tray_burbujas;
+	}
 
 };
 

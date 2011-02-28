@@ -61,6 +61,7 @@
 #define PEZ0 0
 #define PEZ1 1
 #define PEZ2 2
+#define PEZLUZ 3
 
 /* Cardumen */
 #define CAR0 0

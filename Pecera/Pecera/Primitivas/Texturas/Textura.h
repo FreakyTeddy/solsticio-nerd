@@ -15,27 +15,16 @@ class Textura {
 private:
 
 	GLuint tex;	// identificador de textura
-	int modo;	// modo de aplicacion de textura
 	ContenedorTexturas *contenedorTex;
 
 public:
 
 	Textura();
 
-	/* crea el objeto textura con el modo especificado */
-	Textura(int modo);
-
-	/* crea el objeto textura con el modo e imagen especificada */
-	Textura (std::string path_imagen, int modo);
-
 	~Textura();
 
 	/* carga el bmp de textura a aplicar a una superficie */
 	void cargarImagen(std::string ruta);
-
-	/* setea el modo de aplicado de textura */
-	void setModoMosaico();
-	void setModoExpandida();
 
 	/* indica si hay una imagen cargada */
 	bool tieneTextura();

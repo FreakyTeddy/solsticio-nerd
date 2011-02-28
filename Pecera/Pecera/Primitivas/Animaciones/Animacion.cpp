@@ -27,7 +27,7 @@ Animacion::Animacion(std::vector<Vertice> &forma, std::vector<Vertice> &trasl_in
 			first = false;
 		}
 
-		for (size_t j=0; j<res.size(); j++){	//--> PUAJ!!!!!!!!! por suerte se supone que son pocos puntos
+		for (size_t j=0; j<res.size(); j++){
 			control[j].push_back(res[j]);
 		}
 

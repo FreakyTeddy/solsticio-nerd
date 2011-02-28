@@ -1053,8 +1053,7 @@ Superficie* ContenedorObjetos::crearPez2() {
 	ctrol_p.push_back(t);
 	ctrol_p.push_back(t);
 
-	Curva c;
-	c.Bspline(ctrol_p, curva_p);
+	curva.Bspline(ctrol_p, curva_p);
 	t.set(0,1,0);
 	Vertice q;
 	Superficie* sup = new SuperficieRevolucion(curva_p, -360, q,t) ;
@@ -1226,8 +1225,6 @@ Cardumen* ContenedorObjetos::crearCardumen0(){
 	Vertice t;
 	t.set(0,100,10);
 	control.push_back(t);
-	control.push_back(t);
-	control.push_back(t);
 	t.set(-30,100,15);
 	control.push_back(t);
 	t.set(-30,50,10);
@@ -1284,11 +1281,12 @@ Cardumen* ContenedorObjetos::crearCardumen0(){
 	control.push_back(t);
 	t.set(30,100,10);
 	control.push_back(t);
-	t.set(2,100,10);
+	t.set(0,100,10);
 	control.push_back(t);
+	t.set(-30,100,15);
 	control.push_back(t);
+	t.set(-30,50,10);
 	control.push_back(t);
-
 
 	Cardumen* card = new Cardumen(PEZ0,CANT_PLATEADO,control,true,20,false);
 	card->recorrido->setColor(1,1,0);
@@ -1302,8 +1300,6 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 	std::vector<Vertice> control;
 	Vertice t;
 	t.set(90,90,20);
-	control.push_back(t);
-	control.push_back(t);
 	control.push_back(t);
 	t.set(90,50,20);
 	control.push_back(t);
@@ -1331,9 +1327,11 @@ Cardumen* ContenedorObjetos::crearCardumen1(){
 	control.push_back(t);
 	t.set(90,97,20);
 	control.push_back(t);
-	t.set(90,92,20);
+	t.set(90,90,20);
 	control.push_back(t);
+	t.set(90,50,20);
 	control.push_back(t);
+	t.set(30,30,50);
 	control.push_back(t);
 
 
@@ -1348,8 +1346,6 @@ Cardumen* ContenedorObjetos::crearCardumen2(){
 	std::vector<Vertice> control;
 	Vertice t;
 	t.set(-110,-60,55);
-	control.push_back(t);
-	control.push_back(t);
 	control.push_back(t);
 	t.set(-110,0,55);
 	control.push_back(t);
@@ -1381,9 +1377,12 @@ Cardumen* ContenedorObjetos::crearCardumen2(){
 	control.push_back(t);
 	t.set(-110,-62,55);
 	control.push_back(t);
+	t.set(-110,-60,55);
 	control.push_back(t);
+	t.set(-110,0,55);
 	control.push_back(t);
-
+	t.set(-90,60,40);
+	control.push_back(t);
 
 	Cardumen* cardumen1 = new Cardumen(PEZ2,CANT_KOI,control,true,20,false);
 	cardumen1->recorrido->setColor(1,0.4,0.1);

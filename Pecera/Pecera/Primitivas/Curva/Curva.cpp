@@ -1,7 +1,7 @@
 #include "Curva.h"
 
 
-Curva::Curva(): factorBezier(FACTOR_INICIAL), factorBspline(FACTOR_INICIAL) { };
+Curva::Curva(): factorBezier(FACTOR_INICIAL), factorBspline(FACTOR_INICIAL) { }
 
 Vertice& find(std::vector<Vertice> vertices, unsigned int position) {
 

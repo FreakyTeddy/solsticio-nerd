@@ -20,7 +20,7 @@ struct ObjetoViajero {
 	};
 
 	void viajar(){
-		pos = recorrido->sgtePosicion(pos); //WARNING! NULLLLLS!!
+		pos = recorrido->sgtePosicion(pos);
 	};
 
 	Vertice& getPos() {
@@ -35,7 +35,7 @@ struct ObjetoViajero {
 struct Cardumen {
 	uint IDobjeto;		//id del objeto que se quiere dibujar
 	uint cantidad; 		//cantidad de objetos a dibujar
-	float* volumen;		//escala de cada objeto (de 1 a 4)
+	float* volumen;		//escala de cada objeto
 	Vertice* ubicacion;	//ubicacion de cada objeto en el grupo
 	Trayectoria* recorrido;	//puntos que recorre el objeto
 
@@ -90,7 +90,7 @@ struct ObjetoAnimado {
 	ObjetoAnimado(Animacion* ani, bool ciclico=false){
 		animacion = ani;
 		frame=0;
-		nextFrame=1;	//WARNING! nulls y nextFrame
+		nextFrame=1;
 		modo=ciclico;
 	};
 

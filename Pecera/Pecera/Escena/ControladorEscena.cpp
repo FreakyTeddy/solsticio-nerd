@@ -27,8 +27,6 @@ ControladorEscena::ControladorEscena():objetos(*(ContenedorObjetos::getInstancia
 	   glFogfv (GL_FOG_COLOR, fogColor);
 	   glFogf (GL_FOG_DENSITY, 0.01);
 	   glHint (GL_FOG_HINT, GL_DONT_CARE);
-//	   glHint (GL_FOG_HINT, GL_NICEST);
-//	   glHint (GL_FOG_HINT, GL_FASTEST);
 	   glFogf (GL_FOG_START, 20.0);
 	   glFogf (GL_FOG_END, 50.0);
 	}

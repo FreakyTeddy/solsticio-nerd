@@ -1,0 +1,21 @@
+Compilar con:
+
+g++ -o Peces -lglut -lGLU -lSDL -lSDL_image $(find Camara Escena Objetos Primitivas  -name '*.cpp') Peces.cpp
+
+Es necesario contar con las librerias de opengl: GL GLU GLUT y SDL
+
+
+** Controles **
+A - 	 ejes
+F - 	 niebla
+G - 	 grilla
+C - 	 reset camara
+P - 	 iniciar/detener animacion
+R - 	 render de escena
+S - 	 avanzar 1 frame la animacion
+T - 	 trayectorias
+SPACEBAR 	 viajar con cardumen
+F11 -     	 Pantalla Completa
+flechas  	 traslacion horizontal
+'+' '-' 	 traslacion vertical
+boton izq 	 rotacion camara
